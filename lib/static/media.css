@@ -1,0 +1,205 @@
+@media only screen and (max-width: 825px) {
+    * {
+        box-sizing: border-box !important;
+        -webkit-box-sizing: border-box !important;
+    }
+
+	.grid_3{
+	    width: 100% !important;
+	}
+
+	.announce_null_msg{
+	    color: #005c99;
+	    font-size: 30px !important;
+	    font-weight: bold;
+	}
+
+	.grid_4{
+	    width: 100% !important;
+	}
+	.div_content{
+		overflow-x: auto;
+		width: 100% !important;
+	}
+	.tabol{
+		width: 1500px !important;
+	}
+	.dataTables_length{
+		width: 50%;
+		font-size: 10px !important;
+		padding: 0px 0px 0px 0px !important;
+		float: left;
+		text-align: left !important;
+	}
+	.dataTables_filter{
+		width: 50%;
+		font-size: 10px !important;
+		padding: 0px 0px 0px 0px !important;
+		float: left;
+	}
+	.drawerindex{
+		display: block !important;
+		float: right;
+		padding: 0px 20px 0px 0px;
+		cursor: pointer;
+	}
+	.title_bar{
+	    padding-top: 80px !important;
+	    width: 100%;
+	}
+
+	.loginform{
+	    background-color: #1250a1 !important;
+	    width: 100% !important;
+	    height: 100% !important;
+	    padding: 0px 40px 0px 40px !important;
+	    border-radius: 0px !important;
+	    bottom: 0px !important;
+	    position: fixed;
+	}
+	.loginform_div{
+	    padding: 0px 0px 0px 0px !important;
+	    position: static !important;
+	    height: 100% !important;
+	    top: 0% !important;
+	    left: 0% !important;
+	    transform: translate(0%, 0%) !important;
+	}
+	.loginlogo{
+	    width: 50% !important;
+	    padding: 0px 0px 0px 0px !important;
+	    margin: 120px 0px 40px 0px;
+	}
+
+}
+
+@media only screen and (max-width: 688px) {
+
+	* {
+        box-sizing: border-box !important;
+        -webkit-box-sizing: border-box !important;
+    }
+
+	.grid3_master{
+	    width: 100% !important;
+	    float: left;
+	    margin: 0px 0px 5px 0px;
+	}
+}
+
+@media only screen and (min-width: 826px) and (max-width: 1250px) {
+    * {
+        box-sizing: border-box !important;
+        -webkit-box-sizing: border-box !important;
+    }
+
+	.grid_3{
+	    width: 50% !important;
+	}
+
+	.grid_4{
+	    width: 50% !important;
+	}
+    
+}
+
+@media only screen and (min-width: 1251px) and (max-width: 1550px) {
+
+	* {
+        box-sizing: border-box !important;
+        -webkit-box-sizing: border-box !important;
+    }
+
+	.grid_3{
+	    width: 33.33% !important;
+	}
+
+	.grid_4{
+	    width: 33.33% !important;
+	}
+
+}
+
+@media only screen and (max-width: 1090px) {
+	* {
+        box-sizing: border-box !important;
+        -webkit-box-sizing: border-box !important;
+    }
+
+    .sidenavigation{
+	    position: fixed;
+	    height: auto !important;
+	    background-color: #0d3e7c;
+	    width: 100% !important;
+	    z-index: 2 !important;
+	}
+	.sidenavigation>.navnavnav{
+		display: none;
+		margin-top: 50px;
+		margin-bottom: 50px;
+	}
+	.navtabs{
+	    margin-left: 0px !important;
+	    background-color: white;
+	    position: fixed;
+	    margin-top: 10px;
+	    width: 100%;
+	    z-index: 1 !important;
+	}
+	.navcontainer{
+	    padding: 150px 60px 100px 60px !important;
+	}
+	.drawer{
+		display: block !important;
+		float: right;
+		padding: 0px 20px 0px 0px;
+		cursor: pointer;
+	}
+
+	.tab_header{
+	    color: white;
+	    padding: 20px 0px 20px 0px;
+	    background-color: transparent;
+	    margin: 0px 0px 0px 20px !important;
+	}
+	.tab_header_db{
+	    color: white;
+	    padding: 20px 0px 20px 0px;
+	    background-color: transparent;
+	    margin: 0px 0px 0px 20px !important;
+	}
+	.col-md-7{
+	    z-index: 1;
+	}
+
+}
+
+@media only screen and (min-width: 1551px){
+	* {
+        box-sizing: border-box !important;
+        -webkit-box-sizing: border-box !important;
+    }
+}
+
+@media only screen and (min-width: 1091px){
+	* {
+        box-sizing: border-box !important;
+        -webkit-box-sizing: border-box !important;
+    }
+
+	.sidenavigation>.navnavnav{
+		display: block !important;
+	}
+}
+
+@media only screen and (min-width: 1350px) and (max-width: 1366px){
+
+	.loginform_div{
+		position: static !important;
+	    top: 0% !important;
+	    left: 0% !important;
+	    transform: translate(0%, 0%) !important;
+	    padding: 60px 0px 0px 0px !important;
+	}
+
+}
