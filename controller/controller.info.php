@@ -124,6 +124,119 @@ class crud extends db_conn_mysql
       $query->execute();
 
     }
+
+    function addDocuments() {
+      try {
+        $employeeno = $_POST['employeeno'];
+        if (($_FILES['profile']['name']!="")){
+
+          // Where the file is going to be stored
+  
+          $target_dir = "../personal_picture/";
+          $file = $_FILES['profile']['name'];
+          $path = pathinfo($file);
+          $filename = $path['filename'];
+          $ext = $path['extension'];
+          $attachfile = $filename.".".$ext;
+          $temp_name = $_FILES['profile']['tmp_name'];
+          $path_filename_ext = $target_dir.$filename.".".$ext;
+  
+          $lto_upload = $target_dir.$attachfile;
+          unlink($lto_upload);
+  
+          //  Check if file already exists
+          if (file_exists($path_filename_ext)) {
+          echo "Sorry, file already exists.";
+          }else{
+  
+            move_uploaded_file($temp_name,$path_filename_ext);
+  
+            $conn=$this->connect_mysql();
+            $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$attachfile' WHERE employeeno='$employeeno'");
+            $sql->execute();
+  
+          }
+        }
+
+        if(!empty($_FILES["marriageContract"]["name"])) {
+          $target_dir = "../documents/";
+          $file = $_FILES['marriageContract']['name'];
+          $path = pathinfo($file);
+          $ext = $path['extension'];
+          $temp_name = $_FILES['marriageContract']['tmp_name'];
+          $today = date("Ymd");
+          $name = explode(".", $file);
+          $marriageContract = $name[0]."-".$today.".".$ext;
+          $path_filename_ext = $target_dir.$marriageContract;
+    
+          move_uploaded_file($temp_name,$path_filename_ext);
+    
+        } else {
+          $marriageContract = '';
+        }
+    
+        if(!empty($_FILES["dependent"]["name"])) {
+          $target_dir = "../documents";
+          $file = $_FILES['dependent']['name'];
+          $path = pathinfo($file);
+          $ext = $path['extension'];
+          $temp_name = $_FILES['dependent']['tmp_name'];
+          $today = date("Ymd");
+          $name = explode(".", $file);
+          $dependent = $name[0]."-".$today.".".$ext;
+          $path_filename_ext = $target_dir.$dependent;
+    
+          move_uploaded_file($temp_name,$path_filename_ext);
+    
+        } else {
+          $dependent = '';
+        }
+    
+        if(!empty($_FILES["additionalId"]["name"])) {
+          $target_dir = "../documents";
+          $file = $_FILES['additionalId']['name'];
+          $path = pathinfo($file);
+          $ext = $path['extension'];
+          $temp_name = $_FILES['additionalId']['tmp_name'];
+          $today = date("Ymd");
+          $name = explode(".", $file);
+          $additionalId = $name[0]."-".$today.".".$ext;
+          $path_filename_ext = $target_dir.$additionalId;
+    
+          move_uploaded_file($temp_name,$path_filename_ext);
+    
+        } else {
+          $additionalId = '';
+        }
+    
+        if(!empty($_FILES["proofOFBilling"]["name"])) {
+          $target_dir = "../documents";
+          $file = $_FILES['proofOFBilling']['name'];
+          $path = pathinfo($file);
+          $ext = $path['extension'];
+          $temp_name = $_FILES['proofOFBilling']['tmp_name'];
+          $today = date("Ymd");
+          $name = explode(".", $file);
+          $proofOFBilling = $name[0]."-".$today.".".$ext;
+          $path_filename_ext = $target_dir.$proofOFBilling;
+    
+          move_uploaded_file($temp_name,$path_filename_ext);
+    
+        } else {
+          $proofOFBilling = '';
+        }
+
+        $conn = $this->connect_mysql();
+        $query = $conn->prepare("INSERT INTO employee_documents (employee_number, marriage_contract, dependent, additional_id, proof_of_billing) VALUES ('$employeeno', '$marriageContract', '$dependent', '$additionalId', '$proofOFBilling')");
+        $query->execute();
+      } catch (Exception $e) {
+        echo 'Message: ' .$e->getMessage();
+      }
+      // print_r($_POST['employeeno']);
+      // print_r($_FILES);
+      // header("Location: https://google.com");
+      header("location:../myinfo.php");
+    }
 }
 
 $x = new crud();
@@ -151,6 +264,9 @@ if(isset($_GET['readleave'])){
 }
 if(isset($_GET['readpayslip'])){
   $x->readpayslip();
+}
+if(isset($_GET['addDocuments'])){
+  $x->addDocuments();
 }
 
  ?>

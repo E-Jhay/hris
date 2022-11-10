@@ -54,7 +54,7 @@ $(document).ready(function(){
                     { "data" : "job_title"},
                     { "data" : "employment_status"},
                     { "data" : "company"},
-                    { "data" : "action"}
+                    { "data" : "action"},
 
                 ],
          });
