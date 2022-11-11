@@ -17,6 +17,21 @@ $(document).ready(function(){
 			}
 
 		});
+		
+		$('#personal_image').css('cursor','pointer');
+		$('#personal_image').on('click', function(){
+			$('#profile').click();
+		});
+
+		$('#profile').on('change',function(){
+			if (this.files && this.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					$('#personal_image').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(this.files[0]);
+			}
+		});
 
 		$('#employment_status').load('controller/controller.employee.php?demp_stat');
 		$('#company').load('controller/controller.employee.php?dcompany');

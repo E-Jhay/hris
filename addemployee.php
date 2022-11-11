@@ -29,7 +29,8 @@ require_once "header.php";
     <form>
 		<table class="table-condensed grid3_master">
 			<tr>
-				<td class="text-center"><img src="" id="personal_image"></td>
+				<td class="text-center"><img style="border: 1px dashed #a7a7a7; cursor: pointer;" src="usera.png" id="personal_image"></td>
+				<td class="d-none"><input id="profile" type="file" name="profile"></td>
 			</tr>
 			<tr>
 				<td>
@@ -61,16 +62,16 @@ require_once "header.php";
 			</tr>
 			<tr>
 				<td>
-					<b>Last name: </b>
-					<input type="text" class="form-control" placeholder="Middlename" name="middlename">
-				</td>
-			</tr>
-			<tr>
-				<td>
 					<b>Middle name: </b>
 					<input type="text" class="form-control" placeholder="Lastname" name="lastname" required="">
 				</td>
 			</tr>		
+			<tr>
+				<td>
+					<b>Last name: </b>
+					<input type="text" class="form-control" placeholder="Middlename" name="middlename">
+				</td>
+			</tr>
 		</table>
 
 		<table class="table-condensed grid3_master">
@@ -98,18 +99,48 @@ require_once "header.php";
 
 		<table class="table-condensed grid12_master">
 			<tr>
+				<td style="width: 33.33%">
+					<b>Job Title: </b>
+					<select class="form-control" id="company" name="company"></select>
+				</td>
+				<td style="width: 33.33%">
+					<b>Job Category: </b>
+					<select class="form-control" id="company" name="company"></select>
+				</td>
+				<td style="width: 33.33%">
+					<b>Department: </b>
+					<select class="form-control" id="company" name="company"></select>
+				</td>
+			</tr>
+			<tr>
 				<td>
 					<b>Corp Email: </b>
 					<input type="text" class="form-control" placeholder="Corp Email" name="corp_email" required="">
 				</td>
-			</tr>
-			<tr>
 				<td>
 					<b>Contact Number: </b>
 					<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
 				</td>
 			</tr>
 		</table>
+		<!-- <div class="row">
+			<div class="col">
+				<b>Contact Number: </b>
+				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
+				<b>Contact Number: </b>
+				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
+				<b>Contact Number: </b>
+				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
+			</div>
+			<div class="col">
+				<b>Contact Number: </b>
+				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
+				<b>Contact Number: </b>
+				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
+				<b>Contact Number: </b>
+				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
+			</div>
+		</div> -->
 
 		<center>
 			<button type="submit" class="btn btn-success btn-md"><i class="fas fa-sm fa-save"></i> Save Employee</button>
