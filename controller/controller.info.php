@@ -1,4 +1,4 @@
-<?php  
+<?php
 include 'controller.db.php';
 
 class crud extends db_conn_mysql
@@ -131,7 +131,7 @@ class crud extends db_conn_mysql
         if (($_FILES['profile']['name']!="")){
 
           // Where the file is going to be stored
-  
+
           $target_dir = "../personal_picture/";
           $file = $_FILES['profile']['name'];
           $path = pathinfo($file);
@@ -140,26 +140,26 @@ class crud extends db_conn_mysql
           $attachfile = $filename.".".$ext;
           $temp_name = $_FILES['profile']['tmp_name'];
           $path_filename_ext = $target_dir.$filename.".".$ext;
-  
+
           $lto_upload = $target_dir.$attachfile;
           unlink($lto_upload);
-  
+
           //  Check if file already exists
           if (file_exists($path_filename_ext)) {
           echo "Sorry, file already exists.";
           }else{
-  
+
             move_uploaded_file($temp_name,$path_filename_ext);
-  
+
             $conn=$this->connect_mysql();
             $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$attachfile' WHERE employeeno='$employeeno'");
             $sql->execute();
-  
+
           }
         }
 
         if(!empty($_FILES["marriageContract"]["name"])) {
-          $target_dir = "../documents/";
+          $target_dir = "../documents/".$employeeno."/";
           $file = $_FILES['marriageContract']['name'];
           $path = pathinfo($file);
           $ext = $path['extension'];
@@ -167,16 +167,20 @@ class crud extends db_conn_mysql
           $today = date("Ymd");
           $name = explode(".", $file);
           $marriageContract = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir.$marriageContract;
-    
+          $path_filename_ext = $target_dir;
+          if(!is_dir($path_filename_ext)){
+            mkdir($path_filename_ext, 0755);
+          }
+          $path_filename_ext .= $marriageContract.".".$ext;
+
           move_uploaded_file($temp_name,$path_filename_ext);
-    
+
         } else {
           $marriageContract = '';
         }
-    
+
         if(!empty($_FILES["dependent"]["name"])) {
-          $target_dir = "../documents";
+          $target_dir = "../documents/".$employeeno."/";
           $file = $_FILES['dependent']['name'];
           $path = pathinfo($file);
           $ext = $path['extension'];
@@ -184,16 +188,20 @@ class crud extends db_conn_mysql
           $today = date("Ymd");
           $name = explode(".", $file);
           $dependent = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir.$dependent;
-    
+          $path_filename_ext = $target_dir;
+          if(!is_dir($path_filename_ext)){
+            mkdir($path_filename_ext, 0755);
+          }
+          $path_filename_ext .= $dependent.".".$ext;
+
           move_uploaded_file($temp_name,$path_filename_ext);
-    
+
         } else {
           $dependent = '';
         }
-    
+
         if(!empty($_FILES["additionalId"]["name"])) {
-          $target_dir = "../documents";
+          $target_dir = "../documents/".$employeeno."/";
           $file = $_FILES['additionalId']['name'];
           $path = pathinfo($file);
           $ext = $path['extension'];
@@ -201,27 +209,37 @@ class crud extends db_conn_mysql
           $today = date("Ymd");
           $name = explode(".", $file);
           $additionalId = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir.$additionalId;
-    
+          $path_filename_ext = $target_dir;
+          if(!is_dir($path_filename_ext)){
+            mkdir($path_filename_ext, 0755);
+          }
+          $path_filename_ext .= $additionalId.".".$ext;
+
           move_uploaded_file($temp_name,$path_filename_ext);
-    
+
         } else {
           $additionalId = '';
         }
-    
+
         if(!empty($_FILES["proofOFBilling"]["name"])) {
-          $target_dir = "../documents";
+          $target_dir = "../documents/".$employeeno."/";
           $file = $_FILES['proofOFBilling']['name'];
           $path = pathinfo($file);
+          // $proofOFBilling = $path['filename'];
           $ext = $path['extension'];
+          // $attachfile = $filename.".".$ext;
           $temp_name = $_FILES['proofOFBilling']['tmp_name'];
           $today = date("Ymd");
           $name = explode(".", $file);
           $proofOFBilling = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir.$proofOFBilling;
-    
+          $path_filename_ext = $target_dir;
+          if(!is_dir($path_filename_ext)){
+            mkdir($path_filename_ext, 0755);
+          }
+          $path_filename_ext .= $proofOFBilling.".".$ext;
+
           move_uploaded_file($temp_name,$path_filename_ext);
-    
+
         } else {
           $proofOFBilling = '';
         }

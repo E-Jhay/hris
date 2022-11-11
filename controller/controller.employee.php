@@ -171,7 +171,7 @@ class crud extends db_conn_mysql
     $password = $_POST['password'];
 
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("INSERT INTO tbl_employee SET employeeno='$employeeno', lastname='$lastname', firstname='$firstname', middlename='$middlename', rank='',statuss='Active' ,employment_status='$employment_status', company='$company',reimbursement_bal='3500'");
+    $query = $conn->prepare("INSERT INTO tbl_employee SET employeeno='$employeeno', lastname='$lastname', firstname='$firstname', middlename='$middlename', rank='',statuss='Active' ,employment_status='$employment_status', company='$company',reimbursement_bal='3500', imagepic='usera.png', leave_balance='0', job_title='', job_category='', department=''");
     $query->execute();
 
     $id = $conn->lastInsertId();

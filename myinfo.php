@@ -122,7 +122,7 @@ $count = $leaves->countLeaves($empno);
                   <button type="button" id="removeImage" class="btn btn-danger btn-sm">Remove</button>
                 </div>
               <!-- <input type="hidden" name="employee_number" id="employee_number"> -->
-              <input class="d-none" id="profile" type="file" name="profile" accept="image/png, image/gif, image/jpeg">
+              <input class="d-none" id="profile" type="file" name="profile" accept="image/png, image/gif, image/jpeg, application/pdf">
             </div>
           </div>
           <div class="row" style="margin-bottom: 4em;">
@@ -132,7 +132,7 @@ $count = $leaves->countLeaves($empno);
                   <span style="font-size: 18px;">Civil Status Change<span style="font-size: 12px; opacity: .8;"> Marriage Contract</span></span><br />
                   <button type="button" id="removeMarriageContract" onclick="removeFile('#removeMarriageContract', '#marriage_contract_image')" class="btn btn-danger btn-sm">Remove</button>
                 </div>
-              <input class="d-none" id="marriageContract" type="file" name="marriageContract" accept="image/png, image/gif, image/jpeg">
+              <input class="d-none" id="marriageContract" type="file" name="marriageContract" accept="image/png, image/gif, image/jpeg, application/pdf">
             </div>
             <div class="col d-flex justify-content-center">
                 <div class="text-center" style="height: 120px; width: 160px; border: 1px dashed #a7a7a7; cursor: pointer; margin-bottom: 4em">
@@ -140,7 +140,7 @@ $count = $leaves->countLeaves($empno);
                   <span style="font-size: 18px;">Dependent <span style="font-size: 12px; opacity: .8;">(Birth Certificate)</span></span><br />
                   <button type="button" id="removeDependent" onclick="removeFile('#removeDependent', '#dependent_image')" class="btn btn-danger btn-sm">Remove</button>
                 </div>
-              <input class="d-none" id="dependent" type="file" name="dependent" accept="image/png, image/gif, image/jpeg">
+              <input class="d-none" id="dependent" type="file" name="dependent" accept="image/png, image/gif, image/jpeg, application/pdf">
             </div>
           </div>
           <div class="row mb-4">
@@ -150,7 +150,7 @@ $count = $leaves->countLeaves($empno);
                   <span style="font-size: 18px;">ID <span style="font-size: 12px; opacity: .8;">(Solo Parent ID / National ID or other types)</span></span><br />
                   <button type="button" id="removeAdditionalId" onclick="removeFile('#removeAdditionalId', '#additional_id_image')" class="btn btn-danger btn-sm">Remove</button>
                 </div>
-              <input class="d-none" id="additionalId" type="file" name="additionalId" accept="image/png, image/gif, image/jpeg">
+              <input class="d-none" id="additionalId" type="file" name="additionalId" accept="image/png, image/gif, image/jpeg, application/pdf">
             </div>
             <div class="col d-flex justify-content-center">
                 <div class="text-center" style="height: 120px; width: 160px; border: 1px dashed #a7a7a7; cursor: pointer; margin-bottom: 4em">
@@ -158,7 +158,7 @@ $count = $leaves->countLeaves($empno);
                   <span style="font-size: 18px;">Address Update <span style="font-size: 12px; opacity: .8;">(Proof of Billing)</span></span><br />
                   <button type="button" id="removeProofOfBilling" onclick="removeFile('#removeProofOfBilling', '#proofOFBilling_image')" onclick="removeFile('#removeImage')" class="btn btn-danger btn-sm">Remove</button>
                 </div>
-              <input class="d-none" id="proofOFBilling" type="file" name="proofOFBilling" accept="image/png, image/gif, image/jpeg">
+              <input class="d-none" id="proofOFBilling" type="file" name="proofOFBilling" accept="image/png, image/gif, image/jpeg, application/pdf">
             </div>
           </div>
         </div>

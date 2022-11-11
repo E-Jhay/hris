@@ -16,7 +16,7 @@ class crud extends db_conn_mysql
     $ot_date_to = $_POST['ot_date_to'];
 
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("INSERT INTO tbl_overtime SET employeeno='$employeeno', reasons='$reasons', date_filed='$date_filed', ot_from='$ot_from', ot_to='$ot_to', no_of_hrs='$no_of_hrs', ot_date='$ot_date', statuss='Pending', approved_by='',ot_date_to='$ot_date_to'");
+    $query = $conn->prepare("INSERT INTO tbl_overtime SET employeeno='$employeeno', reasons='$reasons', date_filed='$date_filed', ot_from='$ot_from', ot_to='$ot_to', no_of_hrs='$no_of_hrs', ot_date='$ot_date', statuss='Pending', approved_by='',ot_date_to='$ot_date_to', remarks=''");
     $query->execute();
 
 
