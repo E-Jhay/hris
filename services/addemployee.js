@@ -20,6 +20,17 @@ $(document).ready(function(){
 
 		$('#employment_status').load('controller/controller.employee.php?demp_stat');
 		$('#company').load('controller/controller.employee.php?dcompany');
+		$.ajax({
+			url:"controller/controller.employee.php?generateEmployeeNumber",
+			method:"GET",
+			success:function(data){
+				$('#employeeno').val(data);
+				$('#employeenoProxy').val(data);
+				console.log(data)
+			}
+
+		});
+		
 
     	$('form').on('submit', function (e) {
     		e.preventDefault();
@@ -35,9 +46,11 @@ $(document).ready(function(){
 		        	url:"controller/controller.employee.php?addnewemployee",
 		        	method:"POST",
 		        	data: $('form').serialize(),
-		        	success:function(){
+		        	success:function(data){
 		        		$.Toast("Successfully Saved", successToast);
-		        		window.location.href="employee.php";
+						setTimeout(() => {
+							window.location.href="employee.php";
+						}, 1000)
 		        	}
 		        });
 	}

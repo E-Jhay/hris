@@ -167,7 +167,7 @@ class crud extends db_conn_mysql
           $today = date("Ymd");
           $name = explode(".", $file);
           $marriageContract = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir;
+          $path_filename_ext = $target_dir."marriage_contract/";
           if(!is_dir($path_filename_ext)){
             mkdir($path_filename_ext, 0755);
           }

@@ -158,6 +158,21 @@ class crud extends db_conn_mysql
       echo $option;
   }
 
+  // Auto generate employee number
+  function generateEmployeeNumber() {
+    $conn=$this->connect_mysql();
+    $sql = $conn->prepare("SELECT MAX(employeeno) AS latestNumber FROM tbl_employee");
+    $sql->execute();
+    while($row=$sql->fetch()){
+      $latestNumber = $row['latestNumber'];
+    }
+    $latestNumber = explode("-", $latestNumber);
+    $latestNumber[1] = $latestNumber[1] + 1;
+    $latestEmployeeNumber = implode("-", $latestNumber);
+
+    echo $latestEmployeeNumber;
+  }
+
   function addnewemployee(){
    
     $employeeno = $_POST['employeeno'];
@@ -327,6 +342,9 @@ if(isset($_GET['dcompany'])){
 }
 if(isset($_GET['addnewemployee'])){
   $x->addnewemployee();
+}
+if(isset($_GET['generateEmployeeNumber'])){
+  $x->generateEmployeeNumber();
 }
 
 

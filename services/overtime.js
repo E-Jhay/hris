@@ -94,7 +94,6 @@ $(document).ready(function(){
 					}
 				});
 			}
-			console.log(employeeno, reasons, date_filed, ot_from, ot_to, no_of_hrs, ot_date, ot_date_to)
 	}
 
 	// function lb(){

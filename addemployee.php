@@ -26,46 +26,95 @@ require_once "header.php";
 <div class="navcontainer">
 
   <div id="div_newemployee" class="div_content">
-    <form action="">
-				 <table class="table table-striped w-100">
-				 	<tr>
-				 		<td><input type="text" class="form-control" placeholder="Employee number" name="employeeno" required=""></td>
-				 		<td>
-				 			<input type="text" class="form-control" placeholder="Firstname" name="firstname" required="">
-				 			
-				 		</td>
-				 	</tr>
-				 	<tr>
-				 		<td>
-				 		<input type="text" class="form-control" placeholder="Middlename" name="middlename"></td>
-				 		<td>
-				 			<input type="text" class="form-control" placeholder="Lastname" name="lastname" required="">
-				 			
-				 		</td>
-				 	</tr>
-				 	<tr>
-				 		<td><select class="form-control" id="employment_status" name="employment_status"></select></td>
-				 		<td>
-				 			<select class="form-control" id="company" name="company"></select>
-				 		</td>
-				 	</tr>
-				 	<tr>
-				 		<td><input type="text" class="form-control" placeholder="Corp Email" name="corp_email" required=""></td>
-				 		<td>
-				 			<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
-				 			
-				 		</td>
-				 	</tr>
-				 	<tr style="display: none;">
-				 		<td><input type="hidden" id="password" name="password"></td>
-				 		<td></td>
-				 	</tr>
-				 </table>
-				 <center>
-					 <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-sm fa-save"></i> Save Employee</button>
-				 </center>
+    <form>
+		<table class="table-condensed grid3_master">
+			<tr>
+				<td class="text-center"><img src="" id="personal_image"></td>
+			</tr>
+			<tr>
+				<td>
+					<b>Employee no: </b>
+					<input type="text" class="form-control" name="employeenoProxy" required="" id="employeenoProxy" disabled>
+					<input type="hidden" class="form-control" placeholder="Employee number" name="employeeno" required="" id="employeeno">
+					<input type="hidden" id="password" name="password">
+				</td>
+			</tr>
+			<!-- <tr class="d-none">
+				<td><b>Rank: </b><input type="text" class="form-control" id="rank" name="rank"></td>
+			</tr>
+				
+			<tr class="d-none">
+				<td><b>Company: </b><select class="form-control" id="company" name="company"></select></td>
+			</tr>
+				
+			<tr class="d-none">
+				<td><b>Leave Balance: </b><input type="text" class="form-control" id="leave_balance" name="leave_balance"></td>
+			</tr> -->
+		</table>
 
-			 </form>
+		<table class="table-condensed grid3_master">
+			<tr>
+				<td>
+					<b>First name: </b>
+					<input type="text" class="form-control" placeholder="Firstname" name="firstname" required="">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Last name: </b>
+					<input type="text" class="form-control" placeholder="Middlename" name="middlename">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Middle name: </b>
+					<input type="text" class="form-control" placeholder="Lastname" name="lastname" required="">
+				</td>
+			</tr>		
+		</table>
+
+		<table class="table-condensed grid3_master">
+			<tr>
+				<td><b>Status: </b>
+					<select class="form-control" id="statuss" name="statuss">
+						<option value="Active">Active</option>
+						<option value="Inactive">Inactive</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Employment Status: </b>
+					<select class="form-control" id="employment_status" name="employment_status"></select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Company: </b>
+					<select class="form-control" id="company" name="company"></select>
+				</td>
+			</tr>		
+		</table>
+
+		<table class="table-condensed grid12_master">
+			<tr>
+				<td>
+					<b>Corp Email: </b>
+					<input type="text" class="form-control" placeholder="Corp Email" name="corp_email" required="">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Contact Number: </b>
+					<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
+				</td>
+			</tr>
+		</table>
+
+		<center>
+			<button type="submit" class="btn btn-success btn-md"><i class="fas fa-sm fa-save"></i> Save Employee</button>
+		</center>
+	</form>
   </div>
  
 </div>
