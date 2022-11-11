@@ -42,7 +42,7 @@ $count = $leaves->countLeaves($empno);
     		<tr>
 					<td>
 						<label>Reason(s) / Justification:</label>
-						<textarea class="form-control" id="reasons"></textarea>
+						<textarea class="form-control" id="reasons" required></textarea>
 					</td>
 				</tr>
 
@@ -175,14 +175,14 @@ $count = $leaves->countLeaves($empno);
 				<tr>
 					<td>
 						<label>OT Date From:</label>
-						<input type="date" id="ot_date" class="form-control" name="">
+						<input type="date" id="ot_date" class="form-control" name="" required>
 					</td>
 				</tr>
 
 				<tr>
 					<td>
 						<label>OT Date To:</label>
-						<input type="date" id="ot_date_to" class="form-control" name="">
+						<input type="date" id="ot_date_to" class="form-control" name="" required>
 					</td>
 				</tr>
 

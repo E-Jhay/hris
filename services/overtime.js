@@ -69,6 +69,10 @@ $(document).ready(function(){
 				$.Toast("Please input the reason of your Overtime.", errorToast);
 			}else if(no_of_hrs=="" || no_of_hrs==null){
 				$.Toast("Invalid Transaction", errorToast);
+			} else if(ot_date=="" || ot_date==null){
+				$.Toast("Overtime date should not be empty", errorToast);
+			} else if(ot_date_to=="" || ot_date_to==null){
+				$.Toast("Overtime date To should not be empty", errorToast);
 			}else{
 				$.ajax({
 					url:"controller/controller.overtime.php?apply_overtime",
@@ -83,11 +87,14 @@ $(document).ready(function(){
 						ot_date: ot_date,
 						ot_date_to: ot_date_to
 					},success:function(){
-						window.location.href="overtime.php";
+						$.Toast("Successfully applied for overtime", successToast);
+						setTimeout(() => {
+							window.location.href="overtime.php";
+						}, 1000)
 					}
 				});
 			}
-			// console.log(employeeno, reasons, date_filed, ot_from, ot_to, no_of_hrs, ot_date, ot_date_to)
+			console.log(employeeno, reasons, date_filed, ot_from, ot_to, no_of_hrs, ot_date, ot_date_to)
 	}
 
 	// function lb(){
@@ -187,7 +194,7 @@ $(document).ready(function(){
   			data:{
   				id:id
   			},success:function(){
-  				$.Toast("Successfully Deleted", errorToast);
+  				$.Toast("Successfully Deleted", successToast);
   				$('#tbl_myot').DataTable().destroy();
   				var employeeno = $('#employeeno').val();
   				loadmyot(employeeno);

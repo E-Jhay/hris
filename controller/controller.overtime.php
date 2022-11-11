@@ -34,30 +34,30 @@ class crud extends db_conn_mysql
       $row2 = $qry3->fetch();
 
 
-            // require 'Exception.php';
-            // require 'PHPMailer.php';
-            // require 'SMTP.php';
-            // require 'PHPMailerAutoload.php';
+      // require 'Exception.php';
+      // require 'PHPMailer.php';
+      // require 'SMTP.php';
+      // require 'PHPMailerAutoload.php';
 
-            // $mail = new PHPMailer();
-            // $mail->IsSMTP();
-            // $mail->SMTPDebug = 0;
-            // $mail->SMTPAuth = true;
-            // $mail->Host = "mail.panamed.com.ph";
-            // $mail->IsHTML(true);
-            // $mail->Username = "no-reply@panamed.com.ph";
-            // $mail->Password = "Unimex123!";
-            // $mail->SetFrom("no-reply@panamed.com.ph", "");
-            // $mail->Subject = "Overtime Application";
-            // $msg = $firstname." ".$lastname." applied Overtime From: ".$ot_date." (".$ot_from.") To: ".$ot_date_to." (".$ot_to.")\n\nReason: ".$reasons;
-            // $mail->Body = $msg;
-            // $dept_head_email = $row2['dept_head_email'];
-            // $mail->AddAddress($dept_head_email);
-            // if(!$mail->Send()) {
-            //     echo "Mailer Error: " . $mail->ErrorInfo;
-            // } else {
-            //     echo "success";
-            // }
+      // $mail = new PHPMailer();
+      // $mail->IsSMTP();
+      // $mail->SMTPDebug = 0;
+      // $mail->SMTPAuth = true;
+      // $mail->Host = "mail.panamed.com.ph";
+      // $mail->IsHTML(true);
+      // $mail->Username = "no-reply@panamed.com.ph";
+      // $mail->Password = "Unimex123!";
+      // $mail->SetFrom("no-reply@panamed.com.ph", "");
+      // $mail->Subject = "Overtime Application";
+      // $msg = $firstname." ".$lastname." applied Overtime From: ".$ot_date." (".$ot_from.") To: ".$ot_date_to." (".$ot_to.")\n\nReason: ".$reasons;
+      // $mail->Body = $msg;
+      // $dept_head_email = $row2['dept_head_email'];
+      // $mail->AddAddress($dept_head_email);
+      // if(!$mail->Send()) {
+      //     echo "Mailer Error: " . $mail->ErrorInfo;
+      // } else {
+      //     echo "success";
+      // }
 
   }
 
