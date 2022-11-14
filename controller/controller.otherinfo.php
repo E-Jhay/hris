@@ -90,11 +90,12 @@ class crud extends db_conn_mysql
        $target_dir = "../personal_picture/";
        $file = $_FILES['profile']['name'];
        $path = pathinfo($file);
-       $filename = $path['filename'];
+       $filename = str_replace(' ', '', $path['filename']);
        $ext = $path['extension'];
-       $attachfile = $filename.".".$ext;
+       $attachfile = $filename."-".$today.".".$ext;
        $temp_name = $_FILES['profile']['tmp_name'];
-       $path_filename_ext = $target_dir.$filename.".".$ext;
+       $today = date("Ymd");
+       $path_filename_ext = $target_dir.$attachfile;
 
        $lto_upload = $target_dir.$attachfile;
        unlink($lto_upload);

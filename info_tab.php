@@ -5,7 +5,7 @@
 <input type="hidden" id="emp_id" value="<?php echo $_GET['id']; ?>" name="emp_id">
 <table class="table-condensed grid3_master master_input">
    	<tr>
-   		<td class="text-center"><img src="" id="personal_image"></td>
+   		<td class="text-center"><img  style="border: 1px dashed #a7a7a7; cursor: pointer;" src="" id="personal_image"></td>
    	</tr>
    	<tr>
 		<td><b>Employee no: </b><input type="text" class="form-control" id="emp_no" name="emp_no"></td>

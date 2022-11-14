@@ -26,11 +26,11 @@ require_once "header.php";
 <div class="navcontainer">
 
   <div id="div_newemployee" class="div_content">
-    <form>
+    <form id="form" enctype="multipart/form-data">
 		<table class="table-condensed grid3_master">
 			<tr>
 				<td class="text-center"><img style="border: 1px dashed #a7a7a7; cursor: pointer;" src="usera.png" id="personal_image"></td>
-				<td class="d-none"><input id="profile" type="file" name="profile"></td>
+				<input class="d-none" id="profile" type="file" name="profile" accept="image/png, image/gif, image/jpeg">
 			</tr>
 			<tr>
 				<td>
@@ -56,20 +56,20 @@ require_once "header.php";
 		<table class="table-condensed grid3_master">
 			<tr>
 				<td>
-					<b>First name: </b>
-					<input type="text" class="form-control" placeholder="Firstname" name="firstname" required="">
+					<b>Job Title: </b>
+					<select class="form-control" id="job_title" name="job_title"></select>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<b>Middle name: </b>
-					<input type="text" class="form-control" placeholder="Lastname" name="lastname" required="">
+					<b>Job Category: </b>
+					<select class="form-control" id="job_category" name="job_category"></select>
 				</td>
 			</tr>		
 			<tr>
 				<td>
-					<b>Last name: </b>
-					<input type="text" class="form-control" placeholder="Middlename" name="middlename">
+					<b>Department: </b>
+					<select class="form-control" id="department" name="department"></select>
 				</td>
 			</tr>
 		</table>
@@ -97,19 +97,24 @@ require_once "header.php";
 			</tr>		
 		</table>
 
-		<table class="table-condensed grid12_master">
+		<table class="table-condensed gridCustom_master">
 			<tr>
-				<td style="width: 33.33%">
-					<b>Job Title: </b>
-					<select class="form-control" id="company" name="company"></select>
+				<td>
+					<h4>Personal Information</h4>
 				</td>
-				<td style="width: 33.33%">
-					<b>Job Category: </b>
-					<select class="form-control" id="company" name="company"></select>
+			</tr>
+			<tr>
+				<td>
+					<b>First name: </b>
+					<input type="text" class="form-control" placeholder="Firstname" name="firstname" required="">
 				</td>
-				<td style="width: 33.33%">
-					<b>Department: </b>
-					<select class="form-control" id="company" name="company"></select>
+				<td>
+					<b>Middle name: </b>
+					<input type="text" class="form-control" placeholder="Middlename" name="middlename" required="">
+				</td>
+				<td>
+					<b>Last name: </b>
+					<input type="text" class="form-control" placeholder="Lastname" name="lastname">
 				</td>
 			</tr>
 			<tr>
@@ -121,26 +126,141 @@ require_once "header.php";
 					<b>Contact Number: </b>
 					<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
 				</td>
+				<td>
+					<b>Gender: </b>
+					<select class="form-control" id="gender" name="gender">
+						<option selected="" value="" disabled="">-- Select gender --</option>
+						<option value="Male"> Male </option>
+						<option value="Female"> Female </option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Birthday: </b>
+					<input type="date" class="form-control" id="dateofbirth" name="dateofbirth">
+					<input type="hidden" class="form-control" id="age" name="age">
+				</td>
+				<td>
+					<b>Birth Place: </b>
+					<input type="text" class="form-control" id="birth_place" name="birth_place" placeholder="Birth place">
+				</td>
+				<td>
+					<b>Marital Status: </b>
+					<select class="form-control" id="marital_status" name="marital_status">
+						<option selected="" value="" disabled="">-- Select Status --</option>
+						<option value="Single"> Single </option>
+						<option value="Married"> Married </option>
+						<option value="Widowed"> Widowed </option>
+						<option value="Annulled"> Annulled </option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Nationality: </b>
+					<input type="text" class="form-control" id="nationality" name="nationality" placeholder="Nationality">
+				</td>
+				<td>
+					<b>Personal Email: </b>
+					<input type="text" class="form-control" id="personal_email" name="personal_email" placeholder="personal@gmail.com">
+				</td>
+				<td>
+					<b>Dept Head Email: </b>
+					<input type="text" class="form-control" id="dept_head_email" name="dept_head_email" placeholder="depthead@gmail.com">
+				</td>
+			</tr>
+			<tr>
+				<td><h4>Address</h4></td>
+			</tr>
+			<tr>
+				<td>
+					<b>Street: </b>
+					<input type="text" class="form-control" id="street" name="street" placeholder="Street">
+				</td>
+				<td>
+					<b>Municipality: </b>
+					<input type="text" class="form-control" id="municipality" name="municipality" placeholder="Municipality">
+				</td>
+				<td>
+					<b>Province: </b>
+					<input type="text" class="form-control" id="province" name="province" placeholder="Province">
+				</td>
+			</tr>
+			<tr>
+				<td><h4>Contract Information</h4></td>
+			</tr>
+			<tr>
+				<td>
+					<b>Date hired: </b>
+					<input type="date" class="form-control" id="date_hired" name="date_hired">
+				</td>
+				<td>
+					<b>End of contract: </b>
+					<input type="date" class="form-control" id="end_of_contract" name="end_of_contract">
+				</td>
+				<td>
+					<b>Regularized: </b>
+					<input type="date" class="form-control" id="regularized" name="regularized">
+				</td>
+			</tr>
+			<tr>
+				<td><h4>Government ID's / ATM</h4></td>
+			</tr>
+			<tr>
+				<td>
+					<b>TIN#: </b>
+					<input type="text" class="form-control" id="tin" name="tin" placeholder="TIN #">
+				</td>
+				<td>
+					<b>SSS#: </b>
+					<input type="text" class="form-control" id="sss" name="sss" placeholder="SSS Number">
+				</td>
+				<td>
+					<b>PHIC#: </b>
+					<input type="text" class="form-control" id="phic" name="phic" placeholder="PHIC Number">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>HDMF#: </b>
+					<input type="text" class="form-control" id="hdmf" name="hdmf" placeholder="HDMF Number">
+				</td>
+				<td>
+					<b>ATM#: </b>
+					<input type="text" class="form-control" id="atm" name="atm" placeholder="ATM Number">
+				</td>
+				<td>
+					<b>Bank Name: </b>
+					<input type="text" class="form-control" id="bank_name" name="bank_name" placeholder="Bank Name">
+				</td>
 			</tr>
 		</table>
-		<!-- <div class="row">
-			<div class="col">
-				<b>Contact Number: </b>
-				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
-				<b>Contact Number: </b>
-				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
-				<b>Contact Number: </b>
-				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
-			</div>
-			<div class="col">
-				<b>Contact Number: </b>
-				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
-				<b>Contact Number: </b>
-				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
-				<b>Contact Number: </b>
-				<input type="text" class="form-control" placeholder="0000-0000000" maxlength="12" minlength="12" id="contactno" name="contact_no">
-			</div>
-		</div> -->
+		<table class="table-condensed gridCustom_master">
+			<tr>
+				<h4>Additional Documents</h4>
+			</tr>
+			<tr>
+				<td>
+					<b>Marriage Contract: </b><br />
+					<input id="marriageContract" type="file" name="marriageContract" accept="image/png, image/gif, image/jpeg, application/pdf">
+				</td>
+				<td>
+					<b>Dependent (Birth Certificate): </b><br />
+					<input id="dependent" type="file" name="dependent" accept="image/png, image/gif, image/jpeg, application/pdf">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Additional ID (Solo Parent ID/National ID or other types): </b><br />
+					<input id="additionalId" type="file" name="additionalId" accept="image/png, image/gif, image/jpeg, application/pdf">
+				</td>
+				<td>
+					<b>Proof of Billing: </b><br />
+					<input id="proofOFBilling" type="file" name="proofOFBilling" accept="image/png, image/gif, image/jpeg, application/pdf">
+				</td>
+			</tr>
+		</table>
 
 		<center>
 			<button type="submit" class="btn btn-success btn-md"><i class="fas fa-sm fa-save"></i> Save Employee</button>

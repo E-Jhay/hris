@@ -37,7 +37,6 @@ $(document).ready(function(){
 		$('#ot_from').on('change',function(){
 			var ot_from = $('#ot_from').val();
 			var ot_to = $('#ot_to').val();
-			console.log(ot_from, ot_to)
 			var hours = ( new Date("1970-1-1 " + ot_to) - new Date("1970-1-1 " + ot_from) ) / 1000 / 60 / 60;
 			
 			if(hours < 0){

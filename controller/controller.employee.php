@@ -157,6 +157,32 @@ class crud extends db_conn_mysql
       while($row=$sql->fetch()){ $option.='<option value="'.$row['name'].'">'.$row['name'].'</option>';}
       echo $option;
   }
+  function department() {
+    $conn=$this->connect_mysql();
+    $sql = $conn->prepare("SELECT * FROM department ORDER BY department ASC");
+    $sql->execute();
+    $option = '<option value="" disabled="" selected="">--Select Department--</option>';
+    while($row=$sql->fetch()){ $option.='<option value="'.$row['department'].'">'.$row['department'].'</option>';}
+    echo $option;
+  }
+
+  function job_title() {
+    $conn=$this->connect_mysql();
+    $sql = $conn->prepare("SELECT * FROM job_titles ORDER BY job_title ASC");
+    $sql->execute();
+    $option = '<option value="" disabled="" selected="">--Select Job title--</option>';
+    while($row=$sql->fetch()){ $option.='<option value="'.$row['job_title'].'">'.$row['job_title'].'</option>';}
+    echo $option;
+  }
+
+  function job_category() {
+    $conn=$this->connect_mysql();
+    $sql = $conn->prepare("SELECT * FROM job_categories ORDER BY job_category ASC");
+    $sql->execute();
+    $option = '<option value="" disabled="" selected="">--Select Job Category--</option>';
+    while($row=$sql->fetch()){ $option.='<option value="'.$row['job_category'].'">'.$row['job_category'].'</option>';}
+    echo $option;
+  }
 
   // Auto generate employee number
   function generateEmployeeNumber() {
@@ -181,12 +207,142 @@ class crud extends db_conn_mysql
     $middlename = $_POST['middlename'];
     $employment_status = $_POST['employment_status'];
     $company = $_POST['company'];
+    $statuss = $_POST['statuss'];
+    $job_title = $_POST['job_title'];
+    $job_category = $_POST['job_category'];
+    $department = $_POST['department'];
     $corp_email = $_POST['corp_email'];
     $contact_no = $_POST['contact_no'];
     $password = $_POST['password'];
+    $gender = $_POST['gender'];
+    $dateofbirth = $_POST['dateofbirth'];
+    $age = $_POST['age'];
+    $birth_place = $_POST['birth_place'];
+    $marital_status = $_POST['marital_status'];
+    $street = $_POST['street'];
+    $municipality = $_POST['municipality'];
+    $province = $_POST['province'];
+    $tin = $_POST['tin'];
+    $sss = $_POST['sss'];
+    $phic = $_POST['phic'];
+    $hdmf = $_POST['hdmf'];
+    $atm = $_POST['atm'];
+    $bank_name = $_POST['bank_name'];
+    $nationality = $_POST['nationality'];
+    $personal_email = $_POST['personal_email'];
+    $dept_head_email = $_POST['dept_head_email'];
+    $date_hired = $_POST['date_hired'];
+    $end_of_contract = $_POST['end_of_contract'];
+    $regularized = $_POST['regularized'];
+    // $marriageContract = $_POST['marriageContract'];
+    // $dependent = $_POST['dependent'];
+    // $additionalId = $_POST['additionalId'];
+    // $proofOFBilling = $_POST['proofOFBilling'];
+    if(!empty($_FILES["profile"]["name"])) {
+      $target_dir = "../personal_picture/";
+      $file = $_FILES['profile']['name'];
+      $path = pathinfo($file);
+      $ext = $path['extension'];
+      $temp_name = $_FILES['profile']['tmp_name'];
+      $today = date("Ymd");
+      $name = explode(".", $file);
+      $profile = str_replace(' ', '', $name[0])."-".$today.".".$ext;
+      $path_filename_ext = $target_dir.$profile;
+
+      move_uploaded_file($temp_name,$path_filename_ext);
+
+    } else {
+      $profile = 'usera.png';
+    }
+
+    if(!empty($_FILES["marriageContract"]["name"])) {
+      $target_dir = "../documents/".$employeeno."/";
+      $file = $_FILES['marriageContract']['name'];
+      $path = pathinfo($file);
+      $ext = $path['extension'];
+      $temp_name = $_FILES['marriageContract']['tmp_name'];
+      $today = date("Ymd");
+      $name = explode(".", $file);
+      $marriageContract = $name[0]."-".$today.".".$ext;
+      $path_filename_ext = $target_dir;
+      if(!is_dir($path_filename_ext)){
+        mkdir($path_filename_ext, 0755);
+      }
+      $path_filename_ext .= $marriageContract.".".$ext;
+
+      move_uploaded_file($temp_name,$path_filename_ext);
+
+    } else {
+      $marriageContract = '';
+    }
+
+    if(!empty($_FILES["dependent"]["name"])) {
+      $target_dir = "../documents/".$employeeno."/";
+      $file = $_FILES['dependent']['name'];
+      $path = pathinfo($file);
+      $ext = $path['extension'];
+      $temp_name = $_FILES['dependent']['tmp_name'];
+      $today = date("Ymd");
+      $name = explode(".", $file);
+      $dependent = $name[0]."-".$today.".".$ext;
+      $path_filename_ext = $target_dir;
+      if(!is_dir($path_filename_ext)){
+        mkdir($path_filename_ext, 0755);
+      }
+      $path_filename_ext .= $dependent.".".$ext;
+
+      move_uploaded_file($temp_name,$path_filename_ext);
+
+    } else {
+      $dependent = '';
+    }
+
+    if(!empty($_FILES["additionalId"]["name"])) {
+      $target_dir = "../documents/".$employeeno."/";
+      $file = $_FILES['additionalId']['name'];
+      $path = pathinfo($file);
+      $ext = $path['extension'];
+      $temp_name = $_FILES['additionalId']['tmp_name'];
+      $today = date("Ymd");
+      $name = explode(".", $file);
+      $additionalId = $name[0]."-".$today.".".$ext;
+      $path_filename_ext = $target_dir;
+      if(!is_dir($path_filename_ext)){
+        mkdir($path_filename_ext, 0755);
+      }
+      $path_filename_ext .= $additionalId.".".$ext;
+
+      move_uploaded_file($temp_name,$path_filename_ext);
+
+    } else {
+      $additionalId = '';
+    }
+
+    if(!empty($_FILES["proofOFBilling"]["name"])) {
+      $target_dir = "../documents/".$employeeno."/";
+      $file = $_FILES['proofOFBilling']['name'];
+      $path = pathinfo($file);
+      // $proofOFBilling = $path['filename'];
+      $ext = $path['extension'];
+      // $attachfile = $filename.".".$ext;
+      $temp_name = $_FILES['proofOFBilling']['tmp_name'];
+      $today = date("Ymd");
+      $name = explode(".", $file);
+      $proofOFBilling = $name[0]."-".$today.".".$ext;
+      $path_filename_ext = $target_dir;
+      if(!is_dir($path_filename_ext)){
+        mkdir($path_filename_ext, 0755);
+      }
+      $path_filename_ext .= $proofOFBilling.".".$ext;
+
+      move_uploaded_file($temp_name,$path_filename_ext);
+
+    } else {
+      $proofOFBilling = '';
+    }
 
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("INSERT INTO tbl_employee SET employeeno='$employeeno', lastname='$lastname', firstname='$firstname', middlename='$middlename', rank='',statuss='Active' ,employment_status='$employment_status', company='$company',reimbursement_bal='3500', imagepic='usera.png', leave_balance='0', job_title='', job_category='', department=''");
+    $query = $conn->prepare("INSERT INTO tbl_employee SET employeeno='$employeeno', lastname='$lastname', firstname='$firstname', middlename='$middlename', rank='',statuss='$statuss' ,employment_status='$employment_status', company='$company',reimbursement_bal='3500', imagepic='$profile', leave_balance='0', job_title='$job_title', job_category='$job_category', department='$department'");
     $query->execute();
 
     $id = $conn->lastInsertId();
@@ -196,32 +352,35 @@ class crud extends db_conn_mysql
 
     $squery = $conn->prepare("INSERT INTO user_account SET employeeno='$employeeno', fullname='$fullname', username='$username', password='$password', empstatus='active', usertype='employee', userrole='3',approver='no'");
     $squery->execute();
-    $qry1 = $conn->prepare("INSERT INTO contactinfo SET emp_id='$id', street='', municipality='', province='', contactno='$contact_no', telephoneno='', corp_email='$corp_email', personal_email=''");
+    $qry1 = $conn->prepare("INSERT INTO contactinfo SET emp_id='$id', street='$street', municipality='$municipality', province='$province', contactno='$contact_no', telephoneno='', corp_email='$corp_email', personal_email='$personal_email', nationality='$nationality', driver_license='', driver_expdate='0000-00-00', dept_head_email='$dept_head_email'");
     $qry1->execute();
 
-    $qry2 = $conn->prepare("INSERT INTO contractinfo SET emp_id='$id', date_hired='0000-00-00', eoc='0000-00-00', regularized='0000-00-00', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
+    $qry2 = $conn->prepare("INSERT INTO contractinfo SET emp_id='$id', date_hired='$date_hired', eoc='$end_of_contract', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
     $qry2->execute();
 
-    $qry3 = $conn->prepare("INSERT INTO govtidinfo SET emp_id='$id', tin_no='', sss_no='', phic_no='', hdmf_no='', atm_no='', bank_name='', sss_remarks='', phic_remarks='', hdmf_remarks=''");
+    $qry3 = $conn->prepare("INSERT INTO govtidinfo SET emp_id='$id', tin_no='$tin', sss_no='$sss', phic_no='$phic', hdmf_no='$hdmf', atm_no='$atm', bank_name='$bank_name', sss_remarks='', phic_remarks='', hdmf_remarks=''");
     $qry3->execute();
 
-    $qry4 = $conn->prepare("INSERT INTO otherpersonalinfo SET emp_id='$id', nickname='', dateofbirth='0000-00-00', gender='', height='', weight='', marital_status='', birth_place='', blood_type='', contact_name='', contact_address='', contact_telno='', contact_celno=''");
+    $qry4 = $conn->prepare("INSERT INTO otherpersonalinfo SET emp_id='$id', nickname='', dateofbirth='$dateofbirth', gender='$gender', height='', weight='', marital_status='$marital_status', birth_place='$birth_place', blood_type='', contact_name='', contact_address='', contact_telno='', contact_celno='', contact_relation=''");
     $qry4->execute();
 
-    $qry5 = $conn->prepare("INSERT INTO benefitsinfo SET emp_id='$id', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5=''");
+    $qry5 = $conn->prepare("INSERT INTO benefitsinfo SET emp_id='$id', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5='', relation1='', relation2='', relation3='', relation4='', relation5=''");
     $qry5->execute();
 
     $qry6 = $conn->prepare("INSERT INTO disciplinarytracking SET emp_id='$id', violation='', specifc_offense='', of_offense='', dateissued='0000-00-00', datecommitted='0000-00-00', action=''");
     $qry6->execute();
 
-    $qry7 = $conn->prepare("INSERT INTO otheridinfo SET emp_id='$id', comp_id_dateissue='0000-00-00', comp_id_vdate='0000-00-00', fac_ap_dateissue='0000-00-00', fac_ap_vdate='0000-00-00'");
+    $qry7 = $conn->prepare("INSERT INTO otheridinfo SET emp_id='$id', comp_id_dateissue='0000-00-00', comp_id_vdate='0000-00-00', fac_ap_dateissue='0000-00-00', fac_ap_vdate='0000-00-00', card_number='', driver_id='', driver_exp='0000-00-00', prc_number='', prc_exp='0000-00-00', civil_service=''");
     $qry7->execute();
 
-    $qry8 = $conn->prepare("INSERT INTO previous_empinfo SET emp_id='$id', company1='', naturebusiness1='', year1='', position1='', rate1='', company2='', naturebusiness2='', year2='', position2='', rate2=''");
+    $qry8 = $conn->prepare("INSERT INTO previous_empinfo SET emp_id='$id', company1='', naturebusiness1='', year1='', position1='', rate1='', company2='', naturebusiness2='', year2='', position2='', rate2='', yearend1='', yearend2=''");
     $qry8->execute();
 
     $qry9 = $conn->prepare("INSERT INTO medicalinfo SET emp_id='$id', type1='', classification1='', status1='', dateofexam1='0000-00-00', remarks1='', type2='', classification2='', status2='', dateofexam2='0000-00-00', remarks2='', type3='', classification3='', status3='', dateofexam3='0000-00-00', remarks3=''");
     $qry9->execute();
+
+    $qry10 = $conn->prepare("INSERT INTO employee_documents (employee_number, marriage_contract, dependent, additional_id, proof_of_billing) VALUES ('$employeeno', '$marriageContract', '$dependent', '$additionalId', '$proofOFBilling')");
+    $qry10->execute();
 
     session_start();
     $useraction = $_SESSION['fullname'];
@@ -339,6 +498,15 @@ if(isset($_GET['demp_stat'])){
 }
 if(isset($_GET['dcompany'])){
   $x->dcompany();
+}
+if(isset($_GET['department'])){
+  $x->department();
+}
+if(isset($_GET['job_title'])){
+  $x->job_title();
+}
+if(isset($_GET['job_category'])){
+  $x->job_category();
 }
 if(isset($_GET['addnewemployee'])){
   $x->addnewemployee();

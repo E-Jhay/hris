@@ -33,8 +33,22 @@ $(document).ready(function(){
 			}
 		});
 
+		$('#dateofbirth').on('change',function(){
+			var dateofbirth = new Date($('#dateofbirth').val());
+			var today = new Date();
+			var age = today.getFullYear() - dateofbirth.getFullYear();
+			var m = today.getMonth() - dateofbirth.getMonth();
+			if (m < 0 || (m === 0 && today.getDate() < dateofbirth.getDate())) {
+				age--;
+			}
+			$('#age').val(age);
+		});
+
 		$('#employment_status').load('controller/controller.employee.php?demp_stat');
 		$('#company').load('controller/controller.employee.php?dcompany');
+		$('#department').load('controller/controller.employee.php?department');
+		$('#job_title').load('controller/controller.employee.php?job_title');
+		$('#job_category').load('controller/controller.employee.php?job_category');
 		$.ajax({
 			url:"controller/controller.employee.php?generateEmployeeNumber",
 			method:"GET",
@@ -57,17 +71,20 @@ $(document).ready(function(){
 	});
 	
 	function save_callback(){
-					$.ajax({
-		        	url:"controller/controller.employee.php?addnewemployee",
-		        	method:"POST",
-		        	data: $('form').serialize(),
-		        	success:function(data){
-		        		$.Toast("Successfully Saved", successToast);
-						setTimeout(() => {
-							window.location.href="employee.php";
-						}, 1000)
-		        	}
-		        });
+		var formData = new FormData($("#form")[0]);
+		$.ajax({
+			url:"controller/controller.employee.php?addnewemployee",
+			method:"POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success:function(){
+				$.Toast("Successfully Saved", successToast);
+				setTimeout(() => {
+					window.location.href="employee.php";
+				}, 1000)
+			}
+		});
 	}
 
   // function lb(){

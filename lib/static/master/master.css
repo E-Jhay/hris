@@ -55,10 +55,10 @@ select.form-control:focus{
     float: left;
     margin: 10px 0px 100px 0px;
 }
-.grid5_master{
-    width: 50%;
+.gridCustom_master{
+    width: 100%;
     float: left;
-    margin: 10px 0px 100px 0px;
+    margin: 10px 0px 10px 0px;
 }
 .txtbox{
     border: 1px solid lightgray !important;
