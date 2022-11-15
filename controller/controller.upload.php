@@ -111,7 +111,7 @@ class crud extends db_conn_mysql
 
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT b.lastname,b.firstname,a.* FROM payslips a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno");
+                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno ORDER BY a.process_date DESC");
     $query->execute();
     $row = $query->fetchAll();
     $return = array();

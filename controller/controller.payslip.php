@@ -8,7 +8,7 @@ class crud extends db_conn_mysql
 
     $employeeno = $_GET['employeeno'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeeno'");
+    $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeeno' ORDER BY process_date DESC");
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
