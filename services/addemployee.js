@@ -53,9 +53,11 @@ $(document).ready(function(){
 			url:"controller/controller.employee.php?generateEmployeeNumber",
 			method:"GET",
 			success:function(data){
-				$('#employeeno').val(data);
-				$('#employeenoProxy').val(data);
-				console.log(data)
+				var parseData = $.parseJSON(data);
+				$('#employeeno').val(parseData.data.generatedEmployeeId);
+				$('#employeenoProxy').val(parseData.data.generatedEmployeeId);
+				$('#id_number').val(parseData.data.latestIdNumber);
+				// console.log(parseData.data.generatedEmployeeId, parseData.data.latestIdNumber)
 			}
 
 		});

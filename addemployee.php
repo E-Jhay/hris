@@ -37,6 +37,7 @@ require_once "header.php";
 					<b>Employee no: </b>
 					<input type="text" class="form-control" name="employeenoProxy" required="" id="employeenoProxy" disabled>
 					<input type="hidden" class="form-control" placeholder="Employee number" name="employeeno" required="" id="employeeno">
+					<input type="hidden" class="form-control" placeholder="Employee ID number" name="id_number" required="" id="id_number">
 					<input type="hidden" id="password" name="password">
 				</td>
 			</tr>

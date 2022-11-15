@@ -187,21 +187,32 @@ class crud extends db_conn_mysql
   // Auto generate employee number
   function generateEmployeeNumber() {
     $conn=$this->connect_mysql();
-    $sql = $conn->prepare("SELECT MAX(employeeno) AS latestNumber FROM tbl_employee");
+    $sql = $conn->prepare("SELECT MAX(id_number) AS latestIdNumber, MAX(employeeno) AS latestEmployeeNumber FROM tbl_employee");
     $sql->execute();
     while($row=$sql->fetch()){
-      $latestNumber = $row['latestNumber'];
+      $latestEmployeeNumber = $row['latestEmployeeNumber'];
+      $latestIdNumber = $row['latestIdNumber'] + 1;
     }
-    $latestNumber = explode("-", $latestNumber);
-    $latestNumber[1] = $latestNumber[1] + 1;
-    $latestEmployeeNumber = implode("-", $latestNumber);
+    $latestEmployeeNumber = explode("-", $latestEmployeeNumber);
+    $separator = "-";
+    if($latestIdNumber < 100) {
+      $separator = "-0";
+    }
+    if($latestIdNumber < 10) {
+      $separator = "-00";
+    }
+    $generatedEmployeeId = $latestEmployeeNumber[0]. $separator .$latestIdNumber;
 
-    echo $latestEmployeeNumber;
+    $data = array();
+    $data['generatedEmployeeId'] = $generatedEmployeeId;
+    $data['latestIdNumber'] = $latestIdNumber;
+    echo json_encode(array('data'=>$data));
   }
 
   function addnewemployee(){
    
     $employeeno = $_POST['employeeno'];
+    $id_number = $_POST['id_number'];
     $lastname = $_POST['lastname'];
     $firstname = $_POST['firstname'];
     $middlename = $_POST['middlename'];
@@ -342,7 +353,7 @@ class crud extends db_conn_mysql
     }
 
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("INSERT INTO tbl_employee SET employeeno='$employeeno', lastname='$lastname', firstname='$firstname', middlename='$middlename', rank='',statuss='$statuss' ,employment_status='$employment_status', company='$company',reimbursement_bal='3500', imagepic='$profile', leave_balance='0', job_title='$job_title', job_category='$job_category', department='$department'");
+    $query = $conn->prepare("INSERT INTO tbl_employee SET employeeno='$employeeno', id_number='$id_number', lastname='$lastname', firstname='$firstname', middlename='$middlename', rank='',statuss='$statuss' ,employment_status='$employment_status', company='$company',reimbursement_bal='3500', imagepic='$profile', leave_balance='0', job_title='$job_title', job_category='$job_category', department='$department'");
     $query->execute();
 
     $id = $conn->lastInsertId();
