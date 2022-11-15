@@ -92,9 +92,9 @@ class crud extends db_conn_mysql
        $path = pathinfo($file);
        $filename = str_replace(' ', '', $path['filename']);
        $ext = $path['extension'];
+       $today = date("Ymd");
        $attachfile = $filename."-".$today.".".$ext;
        $temp_name = $_FILES['profile']['tmp_name'];
-       $today = date("Ymd");
        $path_filename_ext = $target_dir.$attachfile;
 
        $lto_upload = $target_dir.$attachfile;

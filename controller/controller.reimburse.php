@@ -38,15 +38,15 @@ class crud extends db_conn_mysql
       $statuss = $_GET['statuss'];
       if($statuss==""){
         $query = $conn->prepare("SELECT a.*,b.lastname,b.firstname,b.reimbursement_bal FROM tbl_reimbursement a
-                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno");
+                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno ORDER BY a.datee DESC");
       }else{
         $query = $conn->prepare("SELECT a.*,b.lastname,b.firstname,b.reimbursement_bal FROM tbl_reimbursement a
-                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.statuss='$statuss'");
+                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.statuss='$statuss' ORDER BY a.datee DESC");
       }
       
     }else if($type="personal"){
       $query = $conn->prepare("SELECT a.*,b.lastname,b.firstname,b.reimbursement_bal FROM tbl_reimbursement a
-                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.employeeno='$employeeno'");
+                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.employeeno='$employeeno' ORDER BY a.datee DESC");
     }
     $query->execute();
     $row = $query->fetchAll();

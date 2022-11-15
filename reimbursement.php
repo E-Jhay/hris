@@ -82,7 +82,7 @@ $count = $leaves->countLeaves($empno);
 
 				<tr>
 					<td>
-						<label>File:</label>
+						<label>Receipt:</label>
 						<input class="form-control" id="empfile" required="" type="file" name="empfile" />
 					</td>
 				</tr>
