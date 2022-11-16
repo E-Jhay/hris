@@ -79,7 +79,7 @@ require_once "header.php";
 			<tr>
 				<td><b>Status: </b>
 					<select class="form-control" id="statuss" name="statuss">
-						<option value="Active">Active</option>
+						<option value="Active" selected>Active</option>
 						<option value="Inactive">Inactive</option>
 					</select>
 				</td>

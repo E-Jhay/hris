@@ -245,10 +245,6 @@ class crud extends db_conn_mysql
     $date_hired = $_POST['date_hired'];
     $end_of_contract = $_POST['end_of_contract'];
     $regularized = $_POST['regularized'];
-    // $marriageContract = $_POST['marriageContract'];
-    // $dependent = $_POST['dependent'];
-    // $additionalId = $_POST['additionalId'];
-    // $proofOFBilling = $_POST['proofOFBilling'];
     if(!empty($_FILES["profile"]["name"])) {
       $target_dir = "../personal_picture/";
       $file = $_FILES['profile']['name'];
@@ -491,6 +487,36 @@ class crud extends db_conn_mysql
       $stmt->execute();
       $row = $stmt->fetchAll();
       return $row;
+  }
+
+  public function importEmployee() {
+    // ajsc
+
+    if(isset($_POST["Import"])){
+      echo $filename=$_FILES["file"]["tmp_name"];
+      if($_FILES["file"]["size"] > 0){
+          $file = fopen($filename, "r");
+          while (($emapData = fgetcsv($file, 10000, ",")) !== FALSE){
+            //It wiil insert a row to our subject table from our csv file`
+            $sql = "INSERT INTO subject (`SUBJ_CODE`, `SUBJ_DESCRIPTION`, `UNIT`, `PRE_REQUISITE`,COURSE_ID, `AY`, `SEMESTER`) VALUES ('$emapData[1]','$emapData[2]','$emapData[3]','$emapData[4]','$emapData[5]','$emapData[6]','$emapData[7]')";
+            //we are using mysql_query function. it returns a resource on true else False on error
+            $result = mysqli_query( $conn, $sql );
+            if(! $result ){
+              echo `<script type="text/javascript">
+                      alert(\"Invalid File:Please Upload CSV File.\");
+                      window.location = "employee.php"
+                    </script>`;
+            }
+          }
+          fclose($file);
+          //throws a message if data successfully imported to mysql database from excel file
+          echo "<script type=\"text/javascript\">
+          alert(\"CSV File has been successfully Imported.\");
+          window.location = \"index.php\"
+          </script>";
+      }
+    }	 
+    // anas
   }
 
 

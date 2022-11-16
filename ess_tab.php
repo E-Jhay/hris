@@ -9,12 +9,12 @@
   <?php if ($usertype=="admin"): ?>
   <h6 class="admin_tab" id="ess_overtimereports" onclick="goto('ot_application.php')"><i class="fas fa-md fa-print"></i><span class="admin_tab_name">Overtime Reports</span> <span id="ot_app_number" class="notif_val"></span></h6>
   <?php endif ?>
-  <h6 class="admin_tab" id="ess_omnibus" onclick="goto('reimbursement.php?balance=yes')"><i class="fas fa-md fa-file-contract"></i><span class="admin_tab_name">Omnibus Reimbursement</span>
-    <?php if ($usertype=="admin" && $approver=="yes"): ?>
-      <span id="reim_app_number" class="notif_val"></span>
-    <?php endif ?></h6>
+  <h6 class="admin_tab" id="ess_omnibus" onclick="goto('reimbursement.php?balance=yes')"><i class="fas fa-md fa-file-contract"></i><span class="admin_tab_name">Omnibus Reimbursement</span></h6>
   <?php if ($usertype=="admin"): ?>
   <h6 class="admin_tab" id="ess_omnibus_report" onclick="goto('reimbursement_report.php?balance=yes')"><i class="fas fa-md fa-print"></i><span class="admin_tab_name">Omnibus Reports</span>
+  <?php if ($usertype=="admin" && $approver=="yes"): ?>
+      <span id="reim_app_number" class="notif_val"></span>
+    <?php endif ?>
   <?php endif ?>
   <h6 class="admin_tab" id="ess_notif" onclick="goto('notification.php')"><i class="fas fa-md fa-globe-asia"></i><span class="admin_tab_name">Notifications</span> <span id="notif_number" class="notif_val"><?php echo $count; ?></span></h6>
   <h6 class="admin_tab" id="ess_payslip" onclick="goto('ess_payslip.php')"><i class="fas fa-md fa-file-alt"></i><span class="admin_tab_name">My Payslip</span> <span id="payslip_number" class="notif_val"></span></h6>
