@@ -4,6 +4,7 @@ session_start();
 $usertype = $_SESSION['usertype'];
 $empno = $_SESSION['employeeno'];
 $approver = $_SESSION['approver'];
+$department = $_SESSION['department'];
 if(!isset($_SESSION['fullname'])){
   header("location:index.php");
 }
@@ -24,7 +25,10 @@ $count = $leaves->countLeaves($empno);
       
       <ul class="nav nav-tabs bb-none">
         <li class="nav-item">
-          <a class="nav-link active" id="" href="#">Memorandum</a>
+          <a class="nav-link active" id="personal_memo" href="#" onclick="btnPersonalMemo()">Personal Memorandum</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="inter_office_memo" href="#" onclick="btnInterOfficeMemo()">Department Memorandum</a>
         </li>
       </ul>
 
@@ -32,7 +36,7 @@ $count = $leaves->countLeaves($empno);
 
 <div class="navcontainer">
 
-  <div id="div_timesheets" class="div_content">
+  <div id="div_memo" class="div_content">
       <table class="table table-striped w-100" id="tbl_memo">
         <thead>
           <th>Employee no</th>
@@ -45,11 +49,25 @@ $count = $leaves->countLeaves($empno);
         </tbody>
       </table>
   </div>
+  <div id="div_inter_office_memo" class="div_content">
+      <table class="table table-striped w-100" id="tbl_inter_office_memo">
+        <thead>
+          <th>Department Name</th>
+          <th>Memo Name</th>
+          <th>Date</th>
+          <th>Action</th>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+  </div>
 
 </div>
 
 <input type="hidden" id="employeenum" value="<?php echo $empno ?>" name="">
 <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="">
+<input type="text" id="department" value="<?php echo $_SESSION['department'] ?>" name="">
 
 </body>
 <script src="services/essmemo.js"></script> 

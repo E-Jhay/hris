@@ -38,7 +38,6 @@ foreach ($birthday as $x) {
 	$countbday++;
 }
 ?>
-
 <div class="sidenavigation">
 	<h3 class="tab_header_db">HRIS <span class="drawer"><i class="fas fa-sm fa-bars"></i></span></h3>
 	<div class="navnavnav">

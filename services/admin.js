@@ -8,9 +8,14 @@ $(document).ready(function(){
         var usertype = $('#usertype').val();
         if(usertype=="admin"){
           $('#approverr').show();
+          $('#1').prop('checked', true)
+          $('#2').prop('checked', true)
+          $('#3').prop('checked', true)
         }else{
           $('#approverr').hide();
           $('#approverr').val("no");
+          $('#1').prop('checked', false)
+          $('#2').prop('checked', false)
         }
      });
      $('#div_user_role').hide();
@@ -233,12 +238,11 @@ $(document).ready(function(){
 	var active_status =	$('#active_status').val();
   var approverr = $('#approverr').val();
   var roles = [];
-    $.each($("input[name='role']:checked"), function(){
-      roles.push($(this).val());
-    });
+
+  $.each($("input[name='role']:checked"), function(){
+    roles.push($(this).val());
+  });
   var userrole = roles.join(",");
-
-
 	$.ajax({
 		url:"controller/controller.admin.php?updateuser",
 		method:"POST",

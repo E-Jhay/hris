@@ -28,11 +28,12 @@ class crud extends db_conn_mysql
           $_SESSION['password'] = $row['password'];
 
           $employeeno = $row['employeeno'];
-          $q = $conn->prepare("SELECT employment_status,id FROM tbl_employee wHERE employeeno='$employeeno'");
+          $q = $conn->prepare("SELECT employment_status,id,department FROM tbl_employee WHERE employeeno='$employeeno'");
           $q->execute();
           $rw = $q->fetch();
           $empid = $rw['id'];
           $_SESSION['employment_status'] = $rw['employment_status'];
+          $_SESSION['department'] = $rw['department'];
 
           $q2 = $conn->prepare("SELECT date_hired FROM contractinfo WHERE emp_id='$empid'");
           $q2->execute();

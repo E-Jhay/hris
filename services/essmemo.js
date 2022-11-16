@@ -14,6 +14,7 @@ $(document).ready(function(){
     }else{
       $('#notif_number').hide();
     }
+    $('#div_inter_office_memo').hide();
 
 	});
 
@@ -41,6 +42,7 @@ $(document).ready(function(){
 
   function load_memo(){
       var employeeno = $('#employeeno').val();
+      var department = $('#department').val();
       $('#tbl_memo').DataTable({  
               "aaSorting": [],
               "bSearching": true,
@@ -49,10 +51,28 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
-              "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno,
+              "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno + "&department=" + department + "&memo=employee",
               "columns" : [
                     
                     { "data" : "employeeno"},
+                    { "data" : "memo"},
+                    { "data" : "date"},
+                    { "data" : "action"}
+
+                ],
+         });
+      $('#tbl_inter_office_memo').DataTable({  
+              "aaSorting": [],
+              "bSearching": true,
+              "bFilter": true,
+              "bInfo": true,
+              "bPaginate": true,
+              "bLengthChange": true,
+              "pagination": true,
+              "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno + "&department=" + department + "&memo=department",
+              "columns" : [
+                    
+                    { "data" : "department"},
                     { "data" : "memo"},
                     { "data" : "date"},
                     { "data" : "action"}
@@ -189,3 +209,17 @@ $(document).ready(function(){
     });
   }
   count_reimbursement();
+
+  function btnPersonalMemo(){
+    $('#div_memo').show();
+    $('#div_inter_office_memo').hide();
+    $("#personal_memo").addClass("active");
+    $("#inter_office_memo").removeClass("active");
+  }
+
+ function btnInterOfficeMemo(){
+   $('#div_memo').hide();
+    $('#div_inter_office_memo').show();
+    $("#personal_memo").removeClass("active");
+    $("#inter_office_memo").addClass("active");
+ }

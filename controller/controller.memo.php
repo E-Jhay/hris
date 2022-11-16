@@ -50,7 +50,7 @@ class crud extends db_conn_mysql
 
     $conn = $this->connect_mysql();
     if ($memo == 'employee'){
-      $query = $conn->prepare("SELECT a.*, b.fullname FROM tbl_memo a LEFT JOIN user_account b ON a.employee_no = b.employeeno WHERE a.employee_no != ''");
+      $query = $conn->prepare("SELECT a.*, b.fullname FROM tbl_memo a LEFT JOIN user_account b ON a.employee_no = b.employeeno WHERE a.employee_no != '' ORDER BY a.datee DESC");
       $query->execute();
       $row = $query->fetchAll();
       $return = array();
@@ -74,7 +74,7 @@ class crud extends db_conn_mysql
       
       echo json_encode(array('data'=>$return));
     } else if ($memo == 'department') {
-        $query = $conn->prepare("SELECT a.*, b.department FROM tbl_memo a LEFT JOIN department b ON a.department = b.department WHERE a.department != ''");
+        $query = $conn->prepare("SELECT a.*, b.department FROM tbl_memo a LEFT JOIN department b ON a.department = b.department WHERE a.department != '' ORDER BY a.datee DESC");
         $query->execute();
         $row = $query->fetchAll();
         $return = array();
@@ -138,7 +138,7 @@ class crud extends db_conn_mysql
           session_start();
           $useraction = $_SESSION['fullname'];
           $dateaction = date('Y-m-d');
-          $auditaction = "Added new memo for ".$employeeddown;
+          $auditaction = "Added new memo for ".$departmentList. "department.";
           $audittype = "ADD";
           $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
           $q->execute();
