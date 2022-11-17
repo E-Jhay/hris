@@ -75,7 +75,7 @@ foreach ($birthday as $x) {
 					
 				<?php foreach ($announcements as $x) { ?>
 					<div class="grid_3">
-							<p class="announcement_name" onclick="view(<?= $x['id'] ?>)" ><?= $x['topic'] ?> <span class="announce_btn"><i class="fa fa-chevron-circle-right "></i> View</span></p>
+							<p class="announcement_name" onclick="view(<?= $x['id'] ?>)" ><?= substr($x['topic'], 0, 20); if(strlen($x['topic']) > 20) echo "..." ?> <span class="announce_btn"><i class="fa fa-chevron-circle-right "></i> View</span></p>
 					</div>
 				<?php } ?>
 

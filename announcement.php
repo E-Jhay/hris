@@ -17,7 +17,10 @@ require_once "header.php";
       
       <ul class="nav nav-tabs bb-none">
         <li class="nav-item">
-          <a class="nav-link active" id="" href="#">Announcements</a>
+          <a class="nav-link active" id="announcement" href="#" onclick="btnAnnouncement()" href="#">Announcements</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="inter_office_announcement" href="#" onclick="btnInterOfficeAnnouncement()" href="#">Department Announcements</a>
         </li>
       </ul>
 
@@ -25,9 +28,25 @@ require_once "header.php";
 
 <div class="navcontainer">
   <div id="div_news" class="div_content">
-  	<button type="button" class="btn btn-sm btn-success" onclick="btnaddnews()"><i class="fa fa-plus"></i> Add New</button><br><br>
+  	<button type="button" class="btn btn-sm btn-success" onclick="btnaddnews('all')"><i class="fa fa-plus"></i> Add New Announcement</button><br><br>
     <table class="table table-striped w-100" id="tbl_news">
             <thead>
+              <th>Topic</th>
+							<th>Published Date</th>
+							<th>End Date</th>
+							<th>Acknowledgment Status</th>
+							<th>Action</th>
+            </thead>
+            <tbody>
+              
+            </tbody>
+    </table>
+  </div>
+  <div id="div_inter_office_news" class="div_content">
+  	<button type="button" class="btn btn-sm btn-success" onclick="btnaddnews('department')"><i class="fa fa-plus"></i> Add New Inter Office Announcement</button><br><br>
+    <table class="table table-striped w-100" id="tbl_inter_office_news">
+            <thead>
+              <th>Department</th>
               <th>Topic</th>
 							<th>Published Date</th>
 							<th>End Date</th>
@@ -52,7 +71,11 @@ require_once "header.php";
         </button>
       </div>
       <div class="modal-body">
-      	<form name="form" method="post" action="controller/controller.announcement.php?newsfile" enctype="multipart/form-data">
+      	<form name="form" id="form" enctype="multipart/form-data">
+          <div class="form-group" id="department_div">
+            <label for="exampleInputEmail1">Department</label>
+            <select class="form-control" id="departmentList" name="departmentList"></select>
+          </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Topic</label>
             <input type="hidden" id="modal_newsid" name="modal_newsid">

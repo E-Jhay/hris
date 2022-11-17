@@ -6,6 +6,36 @@ $(document).ready(function(){
      $('.drawer').on('click',function(){
       $('.navnavnav').slideToggle();
      });
+	 
+	 $('#departmentList').load('controller/controller.memo.php?departmentList');
+	 $('#div_inter_office_news').hide();
+	 $('#department_div').hide()
+
+	 $('#form').on('submit', (e) => {
+		e.preventDefault()
+		var formData = new FormData($("#form")[0]);
+		$.ajax({
+			url:"controller/controller.announcement.php?newsfile",
+			method:"POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success:function(data){
+				$.Toast(data, successToast);
+				console.log(data)
+				$('#tbl_news').DataTable().destroy();
+				$('#tbl_inter_office_news').DataTable().destroy();
+				load_news();
+				$('#news_modal').modal('hide');
+				$('#modal_newsid').val("");
+				$('#modal_topic').val("");
+				$('#departmentList').val("");
+				$('#modal_date').val("");
+				$('#modal_end_date').val("");
+				$('#news_file').val("");
+			}
+		});
+	 })
 	});
 
 	// function lb(){
@@ -23,7 +53,12 @@ $(document).ready(function(){
 	// }
 	// lb();
 
-	function btnaddnews(){
+	function btnaddnews(type){
+		if(type == "department") {
+			$('#department_div').show()
+		} else {
+			$('#department_div').hide()
+		}
 
 		$('#modal_newsid').val("");
 		$('#modal_topic').val("");
@@ -41,24 +76,27 @@ $(document).ready(function(){
 	function btn_savenews(){
 		var modal_newsid = $('#modal_newsid').val();
 		var modal_topic = $('#modal_topic').val();
+		var departmentList = $('#departmentList').val();
 		var modal_date = $('#modal_date').val();
 		var modal_end_date = $('#modal_end_date').val();
 
-		$.ajax({
-			url:"controller/controller.announcement.php?addnews",
-			method:"POST",
-			data:{
-				modal_newsid: modal_newsid,
-				modal_topic: modal_topic,
-				modal_date: modal_date,
-				modal_end_date: modal_end_date
-			},success:function(){
-				$.Toast("Successfully Saved", successToast);
-				$('#tbl_news').DataTable().destroy();
-				load_news();
-				$('#news_modal').modal('hide');
-			}
-		});
+		// $.ajax({
+		// 	url:"controller/controller.announcement.php?newsfile",
+		// 	method:"POST",
+		// 	data:{
+		// 		modal_newsid: modal_newsid,
+		// 		modal_topic: modal_topic,
+		// 		departmentList: departmentList,
+		// 		modal_date: modal_date,
+		// 		modal_end_date: modal_end_date
+		// 	},success:function(){
+		// 		$.Toast("Successfully Saved", successToast);
+		// 		$('#tbl_news').DataTable().destroy();
+		// 		load_news();
+		// 		$('#news_modal').modal('hide');
+		// 	}
+		// });
+		console.log(departmentList,modal_topic)
 	}
 	function btn_updatenews(){
 
@@ -80,6 +118,7 @@ $(document).ready(function(){
 			},success:function(){
 				$.Toast("Successfully Saved", successToast);
 				$('#tbl_news').DataTable().destroy();
+				$('#tbl_inter_office_news').DataTable().destroy();
 				load_news();
 				$('#news_modal').modal('hide');
 			}
@@ -124,6 +163,7 @@ $(document).ready(function(){
 				},success:function(){
 					$.Toast("Successfully Deleted", errorToast);
 					$('#tbl_news').DataTable().destroy();
+					$('#tbl_inter_office_news').DataTable().destroy();
 					load_news();
 				}
 			});
@@ -141,6 +181,7 @@ $(document).ready(function(){
 		 			$.Toast("Successfully Saved", successToast);
 		 			setTimeout(function(){
 		 				$('#tbl_news').DataTable().destroy();
+						$('#tbl_inter_office_news').DataTable().destroy();
 						load_news();
 					}, 100);
 		 			
@@ -159,9 +200,29 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
-              "ajax" : "controller/controller.announcement.php?load_news",
+              "ajax" : "controller/controller.announcement.php?load_news&news=all",
               "columns" : [
                     
+                    { "data" : "topic"},
+                    { "data" : "publish_date"},
+                    { "data" : "end_date"},
+                    { "data" : "ack_status"},
+                    { "data" : "action"}
+
+                ],
+         });
+    $('#tbl_inter_office_news').DataTable({  
+              "aaSorting": [],
+              "bSearching": true,
+              "bFilter": true,
+              "bInfo": true,
+              "bPaginate": true,
+              "bLengthChange": true,
+              "pagination": true,
+              "ajax" : "controller/controller.announcement.php?load_news&news=department",
+              "columns" : [
+                    
+                    { "data" : "department"},
                     { "data" : "topic"},
                     { "data" : "publish_date"},
                     { "data" : "end_date"},
@@ -180,3 +241,17 @@ $(document).ready(function(){
   function goto(linkk){
 	window.location.href=linkk;
   }
+
+  function btnAnnouncement(){
+    $('#div_news').show();
+    $('#div_inter_office_news').hide();
+    $("#announcement").addClass("active");
+    $("#inter_office_announcement").removeClass("active");
+  }
+
+ function btnInterOfficeAnnouncement(){
+   $('#div_news').hide();
+    $('#div_inter_office_news').show();
+    $("#announcement").removeClass("active");
+    $("#inter_office_announcement").addClass("active");
+ }

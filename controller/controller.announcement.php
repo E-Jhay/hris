@@ -61,8 +61,13 @@ class crud extends db_conn_mysql
   }
 
   function load_news(){
+    $news = $_GET['news'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM announce_news");
+    if($news == "all"){
+      $query = $conn->prepare("SELECT * FROM announce_news WHERE department IS NULL OR department = ''");
+    } else {
+      $query = $conn->prepare("SELECT * FROM announce_news WHERE department != '' OR department != NULL");
+    }
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
@@ -76,6 +81,7 @@ class crud extends db_conn_mysql
           $data = array();
           $data['action'] = '<button onclick="dl_news(\''.$x['file_name'].'\')" class="btn btn-sm btn-success"><i class="fa fa-eye"></i> View</button>
           <button onclick="delete_news('.$x['id'].',\''.$x['file_name'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>';
+          $data['department'] = $x['department'];
           $data['topic'] = $x['topic'];
           $data['publish_date'] = date('F d, Y',strtotime($x['publish_date']));
           $data['end_date'] = date('F d, Y',strtotime($x['end_date']));
@@ -105,6 +111,11 @@ class crud extends db_conn_mysql
       $modal_topic = $_POST['modal_topic'];
       $modal_date = $_POST['modal_date'];
       $modal_end_date = $_POST['modal_end_date'];
+      if(isset($_POST['departmentList'])){
+        $department = $_POST['departmentList'];
+      } else {
+        $department = "";
+      }
 
       // Where the file is going to be stored
        $target_dir = "../news/";
@@ -117,16 +128,17 @@ class crud extends db_conn_mysql
        $path_filename_ext = $target_dir.$filename.".".$ext;
       // Check if file already exists
        if (file_exists($path_filename_ext)) {
-        echo "Sorry, file already exists.";
+        // echo "Sorry, file already exists.";
+        echo ('Sorry, file already exists.');
        }else{
         
         $file_upload = $target_dir.$attachfile;
-        unlink($file_upload);
+        // unlink($file_upload);
 
           move_uploaded_file($temp_name,$path_filename_ext);
 
           $conn=$this->connect_mysql();
-          $sql = $conn->prepare("INSERT INTO announce_news SET topic='$modal_topic', publish_date='$modal_date', end_date='$modal_end_date', file_name='$attachfile', ack_status='active'");
+          $sql = $conn->prepare("INSERT INTO announce_news SET topic='$modal_topic', publish_date='$modal_date', end_date='$modal_end_date', file_name='$attachfile', ack_status='active', department='$department'");
           $sql->execute();
 
           session_start();
@@ -137,7 +149,8 @@ class crud extends db_conn_mysql
           $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
           $q->execute();
 
-          header("location:../announcement.php");
+          // header("location:../announcement.php");
+          echo ('Announcement Added Successfully');
           
        }
     }
