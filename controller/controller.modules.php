@@ -20,14 +20,22 @@ class crud extends db_conn_mysql
     ));
   }
 
-  public function getAnnouncements(){
+  public function getAnnouncements($department){
     $datenow = date('Y-m-d');
     $conn = $this->connect_mysql();
-    $stmt = $conn->prepare("SELECT * FROM announce_news WHERE publish_date <= '$datenow' AND end_date >= '$datenow' AND ack_status='active'");
+    $stmt = $conn->prepare("SELECT * FROM announce_news WHERE (publish_date <= '$datenow' AND end_date >= '$datenow' AND ack_status='active') AND (department IS NULL OR department = '' OR department = '$department') ORDER BY department DESC");
     $stmt->execute();
     $row = $stmt->fetchAll();
     return $row;
   }
+  // public function departmentAnnouncements($department){
+  //   $datenow = date('Y-m-d');
+  //   $conn = $this->connect_mysql();
+  //   $stmt = $conn->prepare("SELECT * FROM announce_news WHERE publish_date <= '$datenow' AND end_date >= '$datenow' AND ack_status='active' WHERE department = '$department' AND department IS NULL");
+  //   $stmt->execute();
+  //   $row = $stmt->fetchAll();
+  //   return $row;
+  // }
 
   public function getBirthdaycelebrators(){
     $m = date('m');

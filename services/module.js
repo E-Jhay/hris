@@ -54,7 +54,7 @@ function deleteCLient_callback(){
 	function view(id){
 		$.ajax({
 			url:"controller/controller.modules.php?view_announce",
-			method:"POsT",
+			method:"POST",
 			data:{
 				id: id
 			},success:function(data){

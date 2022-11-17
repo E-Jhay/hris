@@ -2,6 +2,7 @@
 session_start();
 $usertype = $_SESSION['usertype'];
 $userrole = $_SESSION['userrole'];
+$department = $_SESSION['department'];
 
 
 $role = explode(",",$userrole);
@@ -27,7 +28,8 @@ if(!isset($_SESSION['fullname'])){
 require_once "header.php";
 require_once "controller/controller.modules.php";
 $modules = new crud();
-$announcements = $modules->getAnnouncements();
+$announcements = $modules->getAnnouncements($department);
+// $departmentAnnouncements = $modules->departmentAnnouncements($department);
 $birthday = $modules->getBirthdaycelebrators();
 $count_announce = 0;
 $countbday = 0;
@@ -71,14 +73,14 @@ foreach ($birthday as $x) {
   <div id="div_dashboard" class="">
   			
 				<h4 class=""><i class="fas fa-sm fa-bullhorn"></i> Announcements <span><b>(<?= $count_announce ?>)</b></span></h4>
-				<div class="row">
-					
-				<?php foreach ($announcements as $x) { ?>
-					<div class="grid_3">
-							<p class="announcement_name" onclick="view(<?= $x['id'] ?>)" ><?= substr($x['topic'], 0, 20); if(strlen($x['topic']) > 20) echo "..." ?> <span class="announce_btn"><i class="fa fa-chevron-circle-right "></i> View</span></p>
+				<div class = "container-fluid">
+					<div class = "row">
+						<?php foreach ($announcements as $x) { ?>
+							<div class="col-sm-3 col-md-6 col-lg-4">
+									<p class="announcement_name" onclick="view(<?= $x['id'] ?>)" ><?= '<strong style="letter-spacing: 1px; font-size: 1.5rem;">'.substr($x['topic'], 0, 20).'</strong>'; if(strlen($x['topic']) > 20) echo "..."; if($x['department'] != '' || $x['department'] != NULL) echo '<br /><span>For '.$x['department'].'</span>'; else {echo '<br /><span>For Everyone</span>';} ?><span class="announce_btn"><i class="fa fa-chevron-circle-right "></i> View</span></p>
+							</div>
+						<?php } ?>
 					</div>
-				<?php } ?>
-
 				</div>
 
 				<?php if ($count_announce <=0): ?>
@@ -138,22 +140,22 @@ foreach ($birthday as $x) {
       	<form>
 				  <div class="form-group">
 				    <label for="exampleInputEmail1">Topic</label>
-				    <input type="text" class="form-control txtbox" id="topic" aria-describedby="emailHelp">
+				    <input disabled type="text" class="form-control txtbox" id="topic" aria-describedby="emailHelp">
 				  </div>
 					<div class="form-group">
 				    <label for="exampleInputEmail1">Published Date</label>
-				    <input type="text" class="form-control" id="publish_date" aria-describedby="emailHelp">
+				    <input disabled type="text" class="form-control" id="publish_date" aria-describedby="emailHelp">
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleInputEmail1">End Date</label>
-				    <input type="text" class="form-control" id="end_date" aria-describedby="emailHelp">
+				    <input disabled type="text" class="form-control" id="end_date" aria-describedby="emailHelp">
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleInputEmail1">Acknowledgement Status</label>
-				    <input type="text" class="form-control" id="ack_status" aria-describedby="emailHelp">
+				    <input disabled type="text" class="form-control" id="ack_status" aria-describedby="emailHelp">
 				  </div>
 				  <center>
-				  <input type="hidden" id="news_filename" name="">
+				  <input disabled type="hidden" id="news_filename" name="">
        		<button class="btn btn-sm btn-success" type="button" onclick="open_file_news()">open file</button>
        		</center>
 				</form>

@@ -4,9 +4,9 @@
         -webkit-box-sizing: border-box !important;
     }
 
-	.grid_3{
+	/* .grid_3{
 	    width: 100% !important;
-	}
+	} */
 
 	.announce_null_msg{
 	    color: #005c99;
@@ -93,9 +93,9 @@
         -webkit-box-sizing: border-box !important;
     }
 
-	.grid_3{
+	/* .grid_3{
 	    width: 50% !important;
-	}
+	} */
 
 	.grid_4{
 	    width: 50% !important;
@@ -110,9 +110,9 @@
         -webkit-box-sizing: border-box !important;
     }
 
-	.grid_3{
+	/* .grid_3{
 	    width: 33.33% !important;
-	}
+	} */
 
 	.grid_4{
 	    width: 33.33% !important;
