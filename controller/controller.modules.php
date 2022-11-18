@@ -20,10 +20,14 @@ class crud extends db_conn_mysql
     ));
   }
 
-  public function getAnnouncements($department){
+  public function getAnnouncements($department, $usertype){
     $datenow = date('Y-m-d');
     $conn = $this->connect_mysql();
-    $stmt = $conn->prepare("SELECT * FROM announce_news WHERE (publish_date <= '$datenow' AND end_date >= '$datenow' AND ack_status='active') AND (department IS NULL OR department = '' OR department = '$department') ORDER BY department DESC");
+    if($usertype != 'admin'){
+      $stmt = $conn->prepare("SELECT * FROM announce_news WHERE (publish_date <= '$datenow' AND end_date >= '$datenow' AND ack_status='active') AND (department IS NULL OR department = '' OR department = '$department') ORDER BY department DESC");
+    } else {
+      $stmt = $conn->prepare("SELECT * FROM announce_news WHERE (publish_date <= '$datenow' AND end_date >= '$datenow' AND ack_status='active')");
+    }
     $stmt->execute();
     $row = $stmt->fetchAll();
     return $row;

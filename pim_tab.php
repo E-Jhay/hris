@@ -15,7 +15,8 @@
 
   <h6 class="admin_tab" id="ess_uploadpayslip" onclick="goto('uplo.php')"><i class="fas fa-md fa-file-upload"></i><span class="admin_tab_name">Upload Payslip</span></h6>
 
-  <h6 class="admin_tab" id="ess_memo" onclick="goto('ess_memo.php')"><i class="fas fa-md fa-file-word"></i><span class="admin_tab_name">Memorandum</span></h6>
+  <h6 class="admin_tab" id="admin_announce" onclick="goto('announcement.php')"><i class="fas fa-md fa-microphone-alt"></i><span class="admin_tab_name">Announcements</span></h6>
+  <h6 class="admin_tab" id="admin_memo" onclick="goto('memo.php')"><i class="fas fa-md fa-file-pdf"></i><span class="admin_tab_name">Memorandum</span></h6>
 
   <br><br>
   <h6 class="admin_tab" id="admin_dashboard" onclick="goto('module.php')"><i class="fas fa-md fa-clipboard"></i><span class="admin_tab_name">Back to Dashboard</span></h6>

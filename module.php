@@ -28,7 +28,7 @@ if(!isset($_SESSION['fullname'])){
 require_once "header.php";
 require_once "controller/controller.modules.php";
 $modules = new crud();
-$announcements = $modules->getAnnouncements($department);
+$announcements = $modules->getAnnouncements($department, $usertype);
 // $departmentAnnouncements = $modules->departmentAnnouncements($department);
 $birthday = $modules->getBirthdaycelebrators();
 $count_announce = 0;
