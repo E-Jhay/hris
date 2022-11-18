@@ -6,6 +6,7 @@ $empno = $_SESSION['employeeno'];
 $approver = $_SESSION['approver'];
 $employment_status = $_SESSION['employment_status'];
 $employee_month = $_SESSION['employee_month'];
+$userrole = $_SESSION['userrole'];
 
 
 if(!isset($_SESSION['fullname'])){
@@ -18,7 +19,7 @@ $count = $leaves->countLeaves($empno);
  ?>
 <div class="sidenavigation">
   <?php 
-  require_once "ess_tab.php";
+  require_once "pim_tab.php";
    ?>
 </div>
 

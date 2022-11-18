@@ -1,0 +1,213 @@
+<table align="center" width="100%">
+			
+			<tr>
+				<td style="width:100%"><h4><b>EMPLOYEE LIST</h4></b></td>
+			</tr>
+		</table>			
+		
+			<br><br><br><table cellpadding="3" width="100%">
+					<tr>
+						<td><p><b>Date/Time Generated:</b> <span>November 17, 2022 </span> </p></td>
+						
+					</tr>
+				  </table>
+		
+
+				  
+		 <table cellpadding="1" width="100%">
+
+		 	<br>
+		 	<br>
+		 	
+			<tr align="center" style="font-size:10px">
+				<th style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;border-top-width:0px;"><b>EMPLOYEE NO</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>LAST NAME</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>FIRST NAME</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>MIDDLE NAME</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>DATE OF BIRTH</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>AGE</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>GENDER</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>JOB TITLE</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>JOB CATEGORY</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>EMPLOYMENT STATUS</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>COMPANY</b></th>
+				
+			
+			</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-679</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Guillermo</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Abigail</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Ravana</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1985-09-01</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">37</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Female</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Area Sales Manager</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Managerial</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-681</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Galut</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Patricia Kaye</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Alvaro</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1997-10-05</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">25</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Female</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Accounting Assistant</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Rank and file</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-682</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Ga</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Hazel</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Aviles</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1997-08-22</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">25</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Female</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Sales Assistant</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Rank and file</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-678</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Selgas</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Meriam</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Requiso</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1993-12-04</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">29</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Female</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Collector</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Rank and file</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-686</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Urmatam</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Cheene Meryll</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Israel</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1996-11-26</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">26</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Female</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Regulatory Affairs Pharmacist</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Rank and file</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-687</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Rosas</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Jerry</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Regla</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1975-01-04</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">47</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Male</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Electrician</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Rank and file</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-688</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Santos</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Famela</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Diaz</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1996-11-22</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">26</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Female</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">HR Assistant - Payroll</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Rank and file</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-689</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Coralde</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Jocelyn</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Elorde</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1986-01-02</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">36</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Female</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Healthcare Product Specialist</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Rank and file</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-690</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Cruz</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Chriza Louise</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Edrosolam</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1996-11-13</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">26</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Female</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Accounting Assistant</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Rank and file</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">2065</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Santos</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Cathy</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;"></td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">0000-00-00</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">2022</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;"></td>
+							<td style="border-right-width:1px;border-bottom-width:0px;"></td>
+							<td style="border-right-width:1px;border-bottom-width:0px;"></td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-694</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Boyle</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Lilah</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Hilda Cote</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1982-04-28</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">40</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Male</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Sales Assistant</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Supervisory</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Probationary</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PROGRESSIVE MEDICAL CORP</td>
+							
+							
+																																			
+				</tr></table><br><br>
+ <p><b>Total records:</b> <span>11</span> </p>

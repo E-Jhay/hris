@@ -19,6 +19,24 @@ $(document).ready(function(){
 			$.Toast("Insufficient balance", errorToast);
 		}
 
+		$('#form').on('submit', (e) => {
+			e.preventDefault()
+			var formData = new FormData($("#form")[0]);
+			$.ajax({
+				url:"controller/controller.reimburse.php?uploadreimbursement",
+				method:"POST",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success:function(data){
+					$.Toast(data, successToast);
+					$('#form')[0].reset()
+					$('#tbl_reimburse').DataTable().destroy();
+					load_myreimburse('');
+				}
+			});
+		 })
+
 });
 
 function get_reimbal(){
@@ -278,3 +296,26 @@ function myFunction(item, index){
   	});
   }
   count_payslip();
+
+	// function submitReimbursement(e){
+	// 	e.preventDefault()
+	// 	confirmed("save",submitReimbursementCallback, "Do you really want to submit this?", "Yes", "No");
+	// }
+
+	// function submitReimbursementCallback(){
+	// 	var formData = new FormData($("#form")[0]);
+	// 	$.ajax({
+	// 		url:"controller/controller.reimburse.php?uploadreimbursement",
+	// 		method:"POST",
+	// 		data: formData,
+	// 		processData: false,
+	// 		contentType: false,
+	// 		success:function(){
+	// 			$.Toast("Successfully Saved", successToast);
+	// 			setTimeout(() => {
+	// 				window.location.href="reimbursement.php";
+	// 			}, 1000)
+	// 		}
+	// 	});
+	// 	console.log(formData)
+	// }

@@ -189,7 +189,7 @@ class crud extends db_conn_mysql
         $description = $_POST['description'];
         $nature = $_POST['nature'];
         $amount = $_POST['amount'];
-        $empfile = $_POST['empfile'];
+        // $empfile = $_POST['empfile'];
         $emp_no = $_POST['emp_no'];
         $datenow = date('Y-m-d');
         // Where the file is going to be stored
@@ -205,7 +205,9 @@ class crud extends db_conn_mysql
          if (file_exists($path_filename_ext)) {
           echo "Sorry, file already exists.";
          }else{
-          mkdir("../reimbursement/".$emp_no);
+          if(!file_exists("../reimbursement/".$emp_no)){
+            mkdir("../reimbursement/".$emp_no);
+          }
           // $lto_upload = $target_dir.$attachfile;
           // unlink($lto_upload);
             move_uploaded_file($temp_name,$path_filename_ext);
@@ -214,7 +216,8 @@ class crud extends db_conn_mysql
             $sql = $conn->prepare("INSERT INTO tbl_reimbursement SET employeeno='$emp_no', description='$description', nature='$nature', datee='$datenow', amount='$amount', file_name='$attachfile', statuss='Pending', remarks='',orig_amount='$amount'");
             $sql->execute();
 
-            header("location:../reimbursement.php?balance=yes");
+            // header("location:../reimbursement.php?balance=yes");
+            echo "Successfully requested reimbursement";
          }    
       }
     }

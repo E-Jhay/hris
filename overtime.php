@@ -4,6 +4,7 @@ session_start();
 $usertype = $_SESSION['usertype'];
 $empno = $_SESSION['employeeno'];
 $approver = $_SESSION['approver'];
+$userrole = $_SESSION['userrole'];
 
 
 if(!isset($_SESSION['fullname'])){
@@ -16,7 +17,11 @@ $count = $leaves->countLeaves($empno);
  ?>
 <div class="sidenavigation">
   <?php 
-  require_once "ess_tab.php";
+  if($userrole == '1'){
+    require_once "pim_tab.php";
+  }else{
+    require_once "ess_tab.php";
+  }
    ?>
 </div>
 

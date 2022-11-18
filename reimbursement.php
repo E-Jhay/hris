@@ -6,6 +6,7 @@ $empno = $_SESSION['employeeno'];
 $approver = $_SESSION['approver'];
 $employment_status = $_SESSION['employment_status'];
 $employee_month = $_SESSION['employee_month'];
+$userrole = $_SESSION['userrole'];
 
 
 if(!isset($_SESSION['fullname'])){
@@ -18,7 +19,11 @@ $count = $leaves->countLeaves($empno);
  ?>
 <div class="sidenavigation">
   <?php 
-  require_once "ess_tab.php";
+  if($userrole == '1'){
+    require_once "pim_tab.php";
+  }else{
+    require_once "ess_tab.php";
+  }
    ?>
 </div>
 
@@ -48,7 +53,7 @@ $count = $leaves->countLeaves($empno);
 	<?php if ($employment_status != "Probationary"): ?>
 
 	<div id="div_apply" class="div_content">
-		<form name="form" method="post" action="controller/controller.reimburse.php?uploadreimbursement" enctype="multipart/form-data">
+		<form name="form" id="form" method="post" enctype="multipart/form-data">
 			<label>Available Credits: <span id="rem_bal"></span></label>
 			<table class="table table-condensed w-100">
 				<input type="hidden" id="emp_no" value="<?php echo $_SESSION['employeeno'] ?>" name="emp_no">

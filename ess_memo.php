@@ -5,6 +5,7 @@ $usertype = $_SESSION['usertype'];
 $empno = $_SESSION['employeeno'];
 $approver = $_SESSION['approver'];
 $department = $_SESSION['department'];
+$userrole = $_SESSION['userrole'];
 if(!isset($_SESSION['fullname'])){
   header("location:index.php");
 }
@@ -17,7 +18,11 @@ $count = $leaves->countLeaves($empno);
 
 <div class="sidenavigation">
   <?php 
-  require_once "ess_tab.php";
+  if($userrole == '1'){
+    require_once "pim_tab.php";
+  }else{
+    require_once "ess_tab.php";
+  }
    ?>
 </div>
 
@@ -28,7 +33,7 @@ $count = $leaves->countLeaves($empno);
           <a class="nav-link active" id="personal_memo" href="#" onclick="btnPersonalMemo()">Personal Memorandum</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="inter_office_memo" href="#" onclick="btnInterOfficeMemo()">Department Memorandum</a>
+          <a class="nav-link" id="inter_office_memo" href="#" onclick="btnInterOfficeMemo()">Inter Office Memorandum</a>
         </li>
       </ul>
 

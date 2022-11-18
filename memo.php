@@ -9,7 +9,7 @@ require_once "header.php";
  ?>
 <div class="sidenavigation">
   <?php 
-  require_once "admin_tab.php";
+  require_once "pim_tab.php";
    ?>
 </div>
 

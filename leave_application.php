@@ -4,6 +4,7 @@ session_start();
 $usertype = $_SESSION['usertype'];
 $approver = $_SESSION['approver'];
 $empno = $_SESSION['employeeno'];
+$userrole = $_SESSION['userrole'];
 
 if(!isset($_SESSION['fullname'])){
   header("location:index.php");
@@ -15,7 +16,7 @@ $count = $leaves->countLeaves($empno);
  ?>
 <div class="sidenavigation">
   <?php 
-  require_once "ess_tab.php";
+  require_once "pim_tab.php";
    ?>
 </div>
 

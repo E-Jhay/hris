@@ -9,7 +9,7 @@ require_once "header.php";
  ?>
 <div class="sidenavigation">
   <?php 
-  require_once "admin_tab.php";
+  require_once "pim_tab.php";
    ?>
 </div>
 
@@ -20,7 +20,7 @@ require_once "header.php";
           <a class="nav-link active" id="announcement" href="#" onclick="btnAnnouncement()" href="#">Announcements</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="inter_office_announcement" href="#" onclick="btnInterOfficeAnnouncement()" href="#">Department Announcements</a>
+          <a class="nav-link" id="inter_office_announcement" href="#" onclick="btnInterOfficeAnnouncement()" href="#">Inter Office Announcements</a>
         </li>
       </ul>
 
