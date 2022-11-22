@@ -39,16 +39,16 @@ $(document).ready(function(){
 					$('#department').val(b.department);
 				});
 
-				$('#comp_id_dateissue').val(b.comp_id_dateissue);
-				$('#comp_id_vdate').val(b.comp_id_vdate);
-				$('#fac_ap_dateissue').val(b.fac_ap_dateissue);
-				$('#fac_ap_vdate').val(b.fac_ap_vdate);
+				$('#comp_id_dateissue').val(b.comp_id_dateissue !== '0000-00-00' ? b.comp_id_dateissue : '');
+				$('#comp_id_vdate').val(b.comp_id_vdate !== '0000-00-00' ? b.comp_id_vdate : '');
+				$('#fac_ap_dateissue').val(b.fac_ap_dateissue !== '0000-00-00' ? b.fac_ap_dateissue : '');
+				$('#fac_ap_vdate').val(b.fac_ap_vdate !== '0000-00-00' ? b.fac_ap_vdate : '');
 				$('#leave_balance').val(b.leave_balance);
 				$('#fac_card_number').val(b.card_number);
 				$('#driver_id').val(b.driver_id);
-				$('#driver_exp').val(b.driver_exp);
+				$('#driver_exp').val(b.driver_exp !== '0000-00-00' ? b.driver_exp : '');
 				$('#prc_number').val(b.prc_number);
-				$('#prc_exp').val(b.prc_exp);
+				$('#prc_exp').val(b.prc_exp !== '0000-00-00' ? b.prc_exp : '');
 				$('#civil_service').val(b.civil_service);
 
 			}
@@ -80,9 +80,12 @@ function save_callback(){
 	        	method:"POST",
 	        	data: $('form').serialize(),
 	        	success:function(data){
-	        		var b = $.parseJSON(data);
-	        		var id = b.id;
-	        		window.location.href="otherid.php?id="+id;
+					$.Toast("Successfully Saved", successToast);
+					setTimeout(() => {
+						var b = $.parseJSON(data);
+						var id = b.id;
+						window.location.href="otherid.php?id="+id;
+					}, 1000)
 	        		
 	        	}
 	        });

@@ -150,10 +150,12 @@ function save_callback(){
 	 	method:"POST",
 	 	data: $('form').serialize(),
 	 	success:function(data){
-	 		var b = $.parseJSON(data);
-	 		var id = b.id;
-	 		window.location.href="govtid.php?id="+id;
-	 		
+	 		$.Toast("Successfully Saved", successToast);
+			setTimeout(() => {
+				var b = $.parseJSON(data);
+				var id = b.id;
+				window.location.href="govtid.php?id="+id;
+			}, 1000)
 	 	}
 	});
 }

@@ -98,7 +98,7 @@ class crud extends db_conn_mysql
        $path_filename_ext = $target_dir.$attachfile;
 
        $lto_upload = $target_dir.$attachfile;
-       unlink($lto_upload);
+      //  unlink($lto_upload);
 
       // Check if file already exists
        if (file_exists($path_filename_ext)) {
@@ -156,9 +156,9 @@ class crud extends db_conn_mysql
       $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
       $q->execute();
 
-      // echo json_encode(array("id"=>$empid));
+      echo json_encode(array("id"=>$empid));
 
-      header("location:../otherinfo.php?id=".$empid);
+      // header("location:../otherinfo.php?id=".$empid);
   }
 
 

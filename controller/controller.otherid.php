@@ -61,17 +61,17 @@ class crud extends db_conn_mysql
       $company = $_POST['company'];
 
       $empid = $_POST['emp_id'];
-      $comp_id_dateissue = $_POST['comp_id_dateissue'];
-      $comp_id_vdate = $_POST['comp_id_vdate'];
-      $fac_ap_dateissue = $_POST['fac_ap_dateissue'];
-      $fac_ap_vdate = $_POST['fac_ap_vdate'];
+      $comp_id_dateissue = $_POST['comp_id_dateissue'] != '' ? $_POST['comp_id_dateissue'] : '0000-00-00';
+      $comp_id_vdate = $_POST['comp_id_vdate'] != '' ? $_POST['comp_id_vdate'] : '0000-00-00';
+      $fac_ap_dateissue = $_POST['fac_ap_dateissue']  != '' ? $_POST['fac_ap_dateissue'] : '0000-00-00';
+      $fac_ap_vdate = $_POST['fac_ap_vdate'] != '' ? $_POST['fac_ap_vdate'] : '0000-00-00';
       $leave_balance = $_POST['leave_balance'];
       $department = $_POST['department'];
       $fac_card_number = $_POST['fac_card_number'];
       $driver_id = $_POST['driver_id'];
-      $driver_exp = $_POST['driver_exp'];
+      $driver_exp = $_POST['driver_exp'] != '' ? $_POST['driver_exp'] : '0000-00-00';
       $prc_number = $_POST['prc_number'];
-      $prc_exp = $_POST['prc_exp'];
+      $prc_exp = $_POST['prc_exp'] != '' ? $_POST['prc_exp'] : '0000-00-00';
       $civil_service = $_POST['civil_service'];
 
       $conn = $this->connect_mysql();

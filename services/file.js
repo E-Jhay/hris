@@ -54,6 +54,34 @@ $(document).ready(function(){
 
 	});
 
+$('form').on('submit', function (e) {
+	e.preventDefault();
+	confirmed("save",save_callback, "Do you really want to save this?", "Yes", "No");
+});
+
+function save_callback(){
+	var formData = new FormData($("#form")[0]);
+	$.ajax({
+		url:"controller/controller.file.php?uploadfile",
+		method:"POST",
+		data: formData,
+		processData: false,
+		contentType: false,
+		success:function(data){
+			const response = $.parseJSON(data)
+			if(response.error){
+				$.Toast(response.message, errorToast);
+			}else {
+				$.Toast(response.message, successToast);
+				setTimeout(() => {
+					window.location.href="file_attach.php?id="+response.id;
+				}, 1000)
+			}
+			
+		}
+	})
+}
+
 	// function lb(){
 
  //       $.ajax({
@@ -74,7 +102,7 @@ $(document).ready(function(){
         var $fileUpload = $("input[type='file']");
         if (parseInt($fileUpload.get(0).files.length)>10){
          alert("You can only upload a maximum of 10 files");
-         $('#submitsumbit').hide();
+        //  $('#submitsumbit').hide();
         }else{ 
         	var employeeno = $('#emp_no').val();
         	var fp = $('#empfile');
@@ -105,7 +133,7 @@ $(document).ready(function(){
 		    }
 
 
-         	$('#submitsumbit').show();
+         	// $('#submitsumbit').show();
         }
       
 	}

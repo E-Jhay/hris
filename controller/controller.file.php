@@ -126,7 +126,7 @@ class crud extends db_conn_mysql
 
     $employeeno = $_GET['employeeno'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM file_attach WHERE employeeno='$employeeno'");
+    $query = $conn->prepare("SELECT * FROM file_attach WHERE employeeno='$employeeno' ORDER BY id DESC");
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
@@ -176,13 +176,16 @@ class crud extends db_conn_mysql
 
           // Check if file already exists
            if (file_exists($path_filename_ext)) {
-            echo "Sorry, file already exists.";
+            echo json_encode(array("id"=>$employeeid, "error" => true, "message" => "Sorry, file already exists."));
+            exit;
            }else{
             
-            mkdir('../attach_file/'.$employeeno);
+            if (!file_exists($target_dir)) {
+              mkdir('../attach_file/'.$employeeno);
+            }
 
             $lto_upload = $target_dir.$attachfile;
-            unlink($lto_upload);
+            // unlink($lto_upload);
 
             move_uploaded_file($temp_name,$path_filename_ext);
 
@@ -197,10 +200,11 @@ class crud extends db_conn_mysql
             $audittype = "ADD";
             $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
             $q->execute();
+
            }
       }
+      echo json_encode(array("id"=>$employeeid, "error" => false, "message" => "Successfully Saved"));
 
-      header("location:file_attach.php?id=".$employeeid);
 
     }
 

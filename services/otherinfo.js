@@ -114,6 +114,32 @@ $(document).ready(function(){
 
 	});
 
+	$('form').on('submit', function (e) {
+
+		e.preventDefault();
+		confirmed("save",save_callback, "Do you really want to save this?", "Yes", "No");
+		
+});
+
+function save_callback(){
+	var formData = new FormData($("#form")[0]);
+	$.ajax({
+		url:"controller/controller.otherinfo.php?editotherinfo",
+		method:"POST",
+		data: formData,
+		processData: false,
+		contentType: false,
+		success:function(data){
+			$.Toast("Successfully Saved", successToast);
+			setTimeout(() => {
+				var b = $.parseJSON(data);
+				var id = b.id;
+				window.location.href="otherinfo.php?id="+id;
+			}, 1000)
+		}
+	});
+}
+
 
 // function lb(){
 

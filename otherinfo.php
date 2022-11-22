@@ -27,7 +27,7 @@ require_once "header.php";
 
   <div id="div_myinfo" class="div_content">
 
-  	<form action="controller/controller.otherinfo.php?editotherinfo" method="post" enctype="multipart/form-data">
+  	<form action="" id="form" enctype="multipart/form-data">
 			<?php 
 		  require_once "info_tab.php";
 		  ?>

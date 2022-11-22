@@ -42,17 +42,17 @@ $(document).ready(function(){
 				$('#type1').val(b.type1);
 				$('#classification1').val(b.classification1);
 				$('#status1').val(b.status1);
-				$('#dateofexam1').val(b.dateofexam1);
+				$('#dateofexam1').val(b.dateofexam1 !== '0000-00-00' ? b.dateofexam1 : '');
 				$('#remarks1').val(b.remarks1);
 				$('#type2').val(b.type2);
 				$('#classification2').val(b.classification2);
 				$('#status2').val(b.status2);
-				$('#dateofexam2').val(b.dateofexam2);
+				$('#dateofexam2').val(b.dateofexam2 !== '0000-00-00' ? b.dateofexam2 : '');
 				$('#remarks2').val(b.remarks2);
 				$('#type3').val(b.type3);
 				$('#classification3').val(b.classification3);
 				$('#status3').val(b.status3);
-				$('#dateofexam3').val(b.dateofexam3);
+				$('#dateofexam3').val(b.dateofexam3 !== '0000-00-00' ? b.dateofexam3 : '');
 				$('#remarks3').val(b.remarks3);
 				$('#leave_balance').val(b.leave_balance);
 			}
@@ -83,9 +83,12 @@ function save_callback(){
 	        	method:"POST",
 	        	data: $('form').serialize(),
 	        	success:function(data){
-	        		var b = $.parseJSON(data);
-	        		var id = b.id;
-	        		window.location.href="medical.php?id="+id;
+					$.Toast("Successfully Saved", successToast);
+					setTimeout(() => {
+						var b = $.parseJSON(data);
+						var id = b.id;
+						window.location.href="medical.php?id="+id;
+					}, 1000)
 	        		
 	        	}
 	        });
