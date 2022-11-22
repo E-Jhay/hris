@@ -93,13 +93,13 @@ class crud extends db_conn_mysql
       $statusemp = $_POST['statusemp'];
       $datehiredemp = $_POST['datehiredemp'];
       $salarytype = $_POST['salarytype'];
-      $salaryemp = $_POST['salaryemp'];
+      $salaryemp = $_POST['salaryemp'] != '' ? $_POST['salaryemp'] : '0';
       $salarytype2 = $_POST['salarytype2'];
-      $salaryemp2 = $_POST['salaryemp2'];
+      $salaryemp2 = $_POST['salaryemp2']  != '' ? $_POST['salaryemp2'] : '0';
       $salarytype3 = $_POST['salarytype3'];
-      $salaryemp3 = $_POST['salaryemp3'];
+      $salaryemp3 = $_POST['salaryemp3']  != '' ? $_POST['salaryemp3'] : '0';
       $salarytype4 = $_POST['salarytype4'];
-      $salaryemp4 = $_POST['salaryemp4'];
+      $salaryemp4 = $_POST['salaryemp4']  != '' ? $_POST['salaryemp4'] : '0';
       $effectdateemp = $_POST['effectdateemp'];
       $basic_salary = $_POST['basic_salary'];
       $remarks = $_POST['remarks'];

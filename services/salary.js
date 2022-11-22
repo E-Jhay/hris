@@ -79,7 +79,12 @@ $(document).ready(function(){
 //   }
 //   lb();
 	function savesalary(){
-		confirmed("save",savesalary_callback, "Do you really want to save this?", "Yes", "No");
+		var effectdateemp = $('#effectdateemp').val();
+		if(!effectdateemp) {
+			$('#error').removeClass('d-none')
+		} else {
+			confirmed("save",savesalary_callback, "Do you really want to save this?", "Yes", "No");
+		}
 	}
 
 	function savesalary_callback(){
@@ -120,9 +125,12 @@ $(document).ready(function(){
 				basic_salary:basic_salary,
 				remarks: remarks
 			},success:function(data){
+				$.Toast("Successfully Saved", successToast);
 				var b = $.parseJSON(data);
 				var employeeno = b.employeeno;
+				clearFields()
 				$('#salarymodal').modal('hide');
+				$('#error').addClass('d-none')
 				$('#tbl_salaryhistory').DataTable().destroy();
 				loadsalary(employeeno);
 			}
@@ -173,8 +181,10 @@ $(document).ready(function(){
 				basic_salary: basic_salary,
 				remarks: remarks
 			},success:function(data){
+				$.Toast("Successfully Saved", successToast);
 				var b = $.parseJSON(data);
 				var employeeno = b.employeeno;
+				clearFields()
 				$('#salarymodal').modal('hide');
 				$('#tbl_salaryhistory').DataTable().destroy();
 				loadsalary(employeeno);
@@ -185,8 +195,13 @@ $(document).ready(function(){
 	function salary_adjust(){
 		$('#salarymodal').modal('show');
 
-
+		clearFields()
+		
+	}
+	
+	function clearFields() {
 		$('#idsalary').val("");
+		$('#basic_salary').val("");
 		$('#salarytype').val("");
 		$('#salaryemp').val("");
 		$('#salarytype2').val("");
@@ -237,6 +252,7 @@ $(document).ready(function(){
               "bInfo": true,
               "bPaginate": true,
               "bLengthChange": true,
+			  "scrollX": true,
               "pagination": true,
               "pageLength": 5,
               "ajax" : "controller/controller.salary.php?loadsalary_history&employeeno="+employeeno,
@@ -299,6 +315,7 @@ $(document).ready(function(){
 	  		data:{
 	  			id:id
 	  		},success:function(){
+				$.Toast("Deleted Successfully", successToast);
 				$('#tbl_salaryhistory').DataTable().destroy();
 				loadsalary(employeeno);
 	  		}
