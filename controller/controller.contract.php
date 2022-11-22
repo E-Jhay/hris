@@ -111,11 +111,11 @@ class crud extends db_conn_mysql
     $date_hired = $_POST['date_hired'];
     $eoc = $_POST['eoc'];
     $regularized = $_POST['regularized'];
-    $preterm = $_POST['preterm'];
-    $resigned = $_POST['resigned'];
-    $retired = $_POST['retired'];
-    $terminated = $_POST['terminated'];
-    $lastpay = $_POST['lastpay'];
+    $preterm = $_POST['preterm'] != '' ? $_POST['preterm'] : '0000-00-00';
+    $resigned = $_POST['resigned'] != '' ? $_POST['resigned'] : '0000-00-00';
+    $retired = $_POST['retired'] != '' ? $_POST['retired'] : '0000-00-00';
+    $terminated = $_POST['terminated'] != '' ? $_POST['terminated'] : '0000-00-00';
+    $lastpay = $_POST['lastpay'] != '' ? $_POST['lastpay'] : '0000-00-00';
     $remarks = $_POST['remarks'];
     $leave_balance = $_POST['leave_balance'];
     $job_title = $_POST['job_title'];
@@ -126,7 +126,7 @@ class crud extends db_conn_mysql
     $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',job_title='$job_title', job_category='$job_category',department='$department' WHERE id='$empid'");
     $qry1->execute();
 
-    $qry = $conn->prepare("UPDATE contractinfo SET date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='$preterm', resigned='$resigned', retired='$retired', terminatedd='terminated', lastpay='$lastpay', remarks='$remarks' WHERE emp_id='$empid'");
+    $qry = $conn->prepare("UPDATE contractinfo SET date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='$preterm', resigned='$resigned', retired='$retired', terminatedd='$terminated', lastpay='$lastpay', remarks='$remarks' WHERE emp_id='$empid'");
     $qry->execute();
 
     session_start();

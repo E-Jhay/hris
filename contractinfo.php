@@ -63,7 +63,7 @@ require_once "header.php";
 					<tr>
 						<td><b>Remarks: </b><textarea class="form-control" id="remarks" name="remarks"></textarea></td>
 					</tr>
-					<input type="hidden" class="inpinfo" id="preterm" name="preterm">
+					<input type="date" class="inpinfo d-none" id="preterm" name="preterm">
 			</table>
 
 		</form>

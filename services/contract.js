@@ -47,16 +47,16 @@ $(document).ready(function(){
 					$('#job_category').val(b.job_category);
 				});
 
-				$('#date_hired').val(b.date_hired);
-				$('#eoc').val(b.eoc);
-				$('#regularized').val(b.regularized);
-				$('#preterm').val(b.preterm);
-				$('#resigned').val(b.resigned);
-				$('#retired').val(b.retired);
-				$('#terminated').val(b.terminated);
-				$('#lastpay').val(b.lastpay);
-				$('#remarks').val(b.remarks);
-				$('#leave_balance').val(b.leave_balance);
+				$('#date_hired').val(b.date_hired !== '0000-00-00' ? b.date_hired : '');
+				$('#eoc').val(b.eoc !== '0000-00-00' ? b.eoc : '');
+				$('#regularized').val(b.regularized !== '0000-00-00' ? b.regularized : '');
+				$('#preterm').val(b.preterm !== '0000-00-00' ? b.preterm : '');
+				$('#resigned').val(b.resigned !== '0000-00-00' ? b.resigned : '');
+				$('#retired').val(b.retired !== '0000-00-00' ? b.retired : '');
+				$('#terminated').val(b.terminated !== '0000-00-00' ? b.terminated : '');
+				$('#lastpay').val(b.lastpay !== '0000-00-00' ? b.lastpay : '');
+				$('#remarks').val(b.remarks !== '0000-00-00' ? b.remarks : '');
+				$('#leave_balance').val(b.leave_balance !== '0000-00-00' ? b.leave_balance : '');
 			}
 		});
 
@@ -87,10 +87,12 @@ $(document).ready(function(){
 	        	method:"POST",
 	        	data: $('form').serialize(),
 	        	success:function(data){
-	        		var b = $.parseJSON(data);
-	        		var id = b.id;
-	        		window.location.href="contractinfo.php?id="+id;
-	        		
+					$.Toast("Successfully Saved", successToast);
+					setTimeout(() => {
+						var b = $.parseJSON(data);
+						var id = b.id;
+						window.location.href="contractinfo.php?id="+id;
+					}, 1000)
 	        	}
 	    });
 	}

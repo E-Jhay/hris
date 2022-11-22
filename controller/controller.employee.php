@@ -275,7 +275,7 @@ class crud extends db_conn_mysql
       if(!is_dir($path_filename_ext)){
         mkdir($path_filename_ext, 0755);
       }
-      $path_filename_ext .= $marriageContract.".".$ext;
+      $path_filename_ext .= $marriageContract;
 
       move_uploaded_file($temp_name,$path_filename_ext);
 
@@ -296,7 +296,7 @@ class crud extends db_conn_mysql
       if(!is_dir($path_filename_ext)){
         mkdir($path_filename_ext, 0755);
       }
-      $path_filename_ext .= $dependent.".".$ext;
+      $path_filename_ext .= $dependent;
 
       move_uploaded_file($temp_name,$path_filename_ext);
 
@@ -317,7 +317,7 @@ class crud extends db_conn_mysql
       if(!is_dir($path_filename_ext)){
         mkdir($path_filename_ext, 0755);
       }
-      $path_filename_ext .= $additionalId.".".$ext;
+      $path_filename_ext .= $additionalId;
 
       move_uploaded_file($temp_name,$path_filename_ext);
 
@@ -340,7 +340,7 @@ class crud extends db_conn_mysql
       if(!is_dir($path_filename_ext)){
         mkdir($path_filename_ext, 0755);
       }
-      $path_filename_ext .= $proofOFBilling.".".$ext;
+      $path_filename_ext .= $proofOFBilling;
 
       move_uploaded_file($temp_name,$path_filename_ext);
 
@@ -386,8 +386,17 @@ class crud extends db_conn_mysql
     $qry9 = $conn->prepare("INSERT INTO medicalinfo SET emp_id='$id', type1='', classification1='', status1='', dateofexam1='0000-00-00', remarks1='', type2='', classification2='', status2='', dateofexam2='0000-00-00', remarks2='', type3='', classification3='', status3='', dateofexam3='0000-00-00', remarks3=''");
     $qry9->execute();
 
-    $qry10 = $conn->prepare("INSERT INTO employee_documents (employee_number, marriage_contract, dependent, additional_id, proof_of_billing) VALUES ('$employeeno', '$marriageContract', '$dependent', '$additionalId', '$proofOFBilling')");
-    $qry10->execute();
+    // $qry10 = $conn->prepare("INSERT INTO employee_documents (employee_number, marriage_contract, dependent, additional_id, proof_of_billing) VALUES ('$employeeno', '$marriageContract', '$dependent', '$additionalId', '$proofOFBilling')");
+    // $qry10->execute();
+
+    $query10 = $conn->prepare("INSERT INTO marriage_contract (employee_number, marriage_contract) VALUES ('$employeeno', '$marriageContract')");
+    $query10->execute();
+    $query11 = $conn->prepare("INSERT INTO dependents (employee_number, dependent) VALUES ('$employeeno', '$dependent')");
+    $query11->execute();
+    $query12 = $conn->prepare("INSERT INTO additional_id (employee_number, additional_id) VALUES ('$employeeno', '$additionalId')");
+    $query12->execute();
+    $query13 = $conn->prepare("INSERT INTO proof_of_billing (employee_number, proof_of_billing) VALUES ('$employeeno', '$proofOFBilling')");
+    $query13->execute();
 
     session_start();
     $useraction = $_SESSION['fullname'];

@@ -158,6 +158,9 @@ class crud extends db_conn_mysql
           }
         }
 
+        
+        $conn = $this->connect_mysql();
+
         if(!empty($_FILES["marriageContract"]["name"])) {
           $target_dir = "../documents/".$employeeno."/";
           $file = $_FILES['marriageContract']['name'];
@@ -167,14 +170,16 @@ class crud extends db_conn_mysql
           $today = date("Ymd");
           $name = explode(".", $file);
           $marriageContract = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir."marriage_contract/";
+          $path_filename_ext = $target_dir;
           if(!is_dir($path_filename_ext)){
             mkdir($path_filename_ext, 0755);
           }
-          $path_filename_ext .= $marriageContract.".".$ext;
+          $path_filename_ext .= $marriageContract;
 
-          move_uploaded_file($temp_name,$path_filename_ext);
-
+          if(move_uploaded_file($temp_name,$path_filename_ext)) {
+            $query = $conn->prepare("UPDATE marriage_contract SET marriage_contract = '$marriageContract' WHERE employee_number = '$employeeno'");
+            $query->execute();
+          }
         } else {
           $marriageContract = '';
         }
@@ -192,9 +197,12 @@ class crud extends db_conn_mysql
           if(!is_dir($path_filename_ext)){
             mkdir($path_filename_ext, 0755);
           }
-          $path_filename_ext .= $dependent.".".$ext;
+          $path_filename_ext .= $dependent;
 
-          move_uploaded_file($temp_name,$path_filename_ext);
+          if(move_uploaded_file($temp_name,$path_filename_ext)) {
+            $query2 = $conn->prepare("UPDATE dependents SET dependent = '$dependent' WHERE employee_number = '$employeeno'");
+            $query2->execute();
+          }
 
         } else {
           $dependent = '';
@@ -213,9 +221,12 @@ class crud extends db_conn_mysql
           if(!is_dir($path_filename_ext)){
             mkdir($path_filename_ext, 0755);
           }
-          $path_filename_ext .= $additionalId.".".$ext;
+          $path_filename_ext .= $additionalId;
 
-          move_uploaded_file($temp_name,$path_filename_ext);
+          if(move_uploaded_file($temp_name,$path_filename_ext)) {
+            $query3 = $conn->prepare("UPDATE additional_id SET additional_id = '$additionalId' WHERE employee_number = '$employeeno'");
+            $query3->execute();
+          }
 
         } else {
           $additionalId = '';
@@ -236,17 +247,17 @@ class crud extends db_conn_mysql
           if(!is_dir($path_filename_ext)){
             mkdir($path_filename_ext, 0755);
           }
-          $path_filename_ext .= $proofOFBilling.".".$ext;
+          $path_filename_ext .= $proofOFBilling;
 
-          move_uploaded_file($temp_name,$path_filename_ext);
+          if(move_uploaded_file($temp_name,$path_filename_ext)) {
+            $query4 = $conn->prepare("UPDATE proof_of_billing SET proof_of_billing = '$proofOFBilling' WHERE employee_number = '$employeeno'");
+            $query4->execute();
+          }
 
         } else {
           $proofOFBilling = '';
         }
 
-        $conn = $this->connect_mysql();
-        $query = $conn->prepare("INSERT INTO employee_documents (employee_number, marriage_contract, dependent, additional_id, proof_of_billing) VALUES ('$employeeno', '$marriageContract', '$dependent', '$additionalId', '$proofOFBilling')");
-        $query->execute();
       } catch (Exception $e) {
         echo 'Message: ' .$e->getMessage();
       }
