@@ -337,7 +337,7 @@ class crud extends db_conn_mysql
       $points_todeduct = $_POST['points_todeduct'];
       $dayss = $_POST['dayss'];
       $date_from = $_POST['date_from'];
-      // $leave_bal = $_POST['leave_bal'];
+      $leave_bal = $_POST['leave_bal'];
       $pay_leave = $_POST['pay_leave'];
 
       if($application_type=="Whole Day"){
@@ -354,8 +354,30 @@ class crud extends db_conn_mysql
         $dateto = $from_time ." - ". $to_time;
       }
 
+      if(!empty($_FILES["leaveForm"]["name"])) {
+        $target_dir = "../static/leave_form/";
+        $file = $_FILES['leaveForm']['name'];
+        $path = pathinfo($file);
+        $ext = $path['extension'];
+        $temp_name = $_FILES['leaveForm']['tmp_name'];
+        $today = date("Ymd");
+        $name = explode(".", $file);
+        $leaveForm = $name[0]."-".$today.".".$ext;
+        $path_filename_ext = $target_dir;
+        if(!is_dir($path_filename_ext)){
+          mkdir($path_filename_ext, 0755);
+        }
+        $path_filename_ext .= $leaveForm;
+      
+        move_uploaded_file($temp_name,$path_filename_ext);
+      } else {
+        $leaveForm = '';
+      }
+
+
+
       $conn = $this->connect_mysql();
-      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$date_from', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', date_applied='$date_applied',previous_bal='$updatedbalance', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='$dayss',date_from='$date_from',pay_leave='$pay_leave'");
+      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$datefrom', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', date_applied='$date_applied',previous_bal='$leave_bal', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='$dayss',date_from='$date_from',pay_leave='$pay_leave', remarks='', approved_by='', readd='', last_update='0000-00-00', last_update_time='2017-08-15 19:30:10', leave_form='$leaveForm'");
       $qry->execute();
 
       $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");

@@ -241,7 +241,7 @@ class crud extends db_conn_mysql
       $employeeno = $_POST['employeeno'];
       $date_applied = $_POST['date_applied'];
       $no_days = $_POST['no_days'];
-      $updatedbalance = $_POST['updatedbalance'];
+      // $updatedbalance = $_POST['updatedbalance'];
       $application_type = $_POST['application_type'];
       $points_todeduct = $_POST['points_todeduct'];
       $dayss = $_POST['dayss'];
@@ -252,29 +252,49 @@ class crud extends db_conn_mysql
         $date_from = $datefrom;
       }
       $conn = $this->connect_mysql();
-      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$datefrom', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', date_applied='$date_applied',previous_bal='$leave_bal', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='$dayss',date_from='$date_from',pay_leave='$pay_leave'");
+
+      if(!empty($_FILES["leaveForm"]["name"])) {
+        $target_dir = "../static/leave_form/";
+        $file = $_FILES['leaveForm']['name'];
+        $path = pathinfo($file);
+        $ext = $path['extension'];
+        $temp_name = $_FILES['leaveForm']['tmp_name'];
+        $today = date("Ymd");
+        $name = explode(".", $file);
+        $leaveForm = $name[0]."-".$today.".".$ext;
+        $path_filename_ext = $target_dir;
+        if(!is_dir($path_filename_ext)){
+          mkdir($path_filename_ext, 0755);
+        }
+        $path_filename_ext .= $leaveForm;
+      
+        move_uploaded_file($temp_name,$path_filename_ext);
+      } else {
+        $leaveForm = '';
+      }
+      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$datefrom', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', date_applied='$date_applied',previous_bal='$leave_bal', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='$dayss',date_from='$date_from',pay_leave='$pay_leave', remarks='', approved_by='', readd='', last_update='0000-00-00', last_update_time='2017-08-15 19:30:10', leave_form='$leaveForm'");
       $qry->execute();
 
-      $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
-      $qry2->execute();
-      $row = $qry2->fetch();
+      // $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
+      // $qry2->execute();
+      // $row = $qry2->fetch();
 
-      $department = $row['department'];
-      $firstname = $row['firstname'];
-      $lastname = $row['lastname'];
-      $id = $row['id'];
+      // $department = $row['department'];
+      // $firstname = $row['firstname'];
+      // $lastname = $row['lastname'];
+      // $id = $row['id'];
 
-      $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
-      $qry3->execute();
-      $row2 = $qry3->fetch();
+      // $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
+      // $qry3->execute();
+      // $row2 = $qry3->fetch();
 
 
           /////////////////////////////////////////////////////////////////////
 
-          require 'Exception.php';
-          require 'PHPMailer.php';
-          require 'SMTP.php';
-          require 'PHPMailerAutoload.php';
+          // require 'Exception.php';
+          // require 'PHPMailer.php';
+          // require 'SMTP.php';
+          // require 'PHPMailerAutoload.php';
 
           // $mail = new PHPMailer();
           // $mail->IsSMTP();
@@ -296,27 +316,27 @@ class crud extends db_conn_mysql
           //     echo "success";
           // }
 
-          $mail = new PHPMailer();
-          $mail->IsSMTP();
-          $mail->SMTPDebug = 0;
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl';
-          $mail->Host = "smtp.gmail.com";
-          $mail->Port = 465;
-          $mail->IsHTML(true);
-          $mail->Username = "pmcmailchimp@gmail.com";
-          $mail->Password = "qyegdvkzvbjihbou";
-          $mail->SetFrom("no-reply@panamed.com.ph", "");
-          $mail->Subject = "Leave Application";
-          $msg = $firstname.' '.$lastname.' applied '.$leave_type.' From: '.$datefrom.' To: '.$dateto;
-          $mail->Body = $msg;
-          $dept_head_email = $row2['dept_head_email'];
-          $mail->AddAddress($dept_head_email);
-          if(!$mail->Send()) {
-            echo "Mailer Error: " . $mail->ErrorInfo;
-          } else {
-            echo "success";
-          }
+          // $mail = new PHPMailer();
+          // $mail->IsSMTP();
+          // $mail->SMTPDebug = 0;
+          // $mail->SMTPAuth = true;
+          // $mail->SMTPSecure = 'ssl';
+          // $mail->Host = "smtp.gmail.com";
+          // $mail->Port = 465;
+          // $mail->IsHTML(true);
+          // $mail->Username = "pmcmailchimp@gmail.com";
+          // $mail->Password = "qyegdvkzvbjihbou";
+          // $mail->SetFrom("no-reply@panamed.com.ph", "");
+          // $mail->Subject = "Leave Application";
+          // $msg = $firstname.' '.$lastname.' applied '.$leave_type.' From: '.$datefrom.' To: '.$dateto;
+          // $mail->Body = $msg;
+          // $dept_head_email = $row2['dept_head_email'];
+          // $mail->AddAddress($dept_head_email);
+          // if(!$mail->Send()) {
+          //   echo "Mailer Error: " . $mail->ErrorInfo;
+          // } else {
+          //   echo "success";
+          // }
 
           /////////////////////////////////////////////////////////////////////
 
@@ -465,7 +485,9 @@ class crud extends db_conn_mysql
           }
           
           $data['active_status'] = $x['status'];
-
+          $data['leave_form'] = '<center>
+                                <button class="btn btn-sm btn-success" onclick="viewLeaveForm('.'\''.$x['leave_form'].'\')"><i class="fas fa-sm fa-eye"></i> Leave Form</button> 
+                                </center>';
         $return[] = $data;
       }
     

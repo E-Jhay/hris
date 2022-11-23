@@ -43,5 +43,3 @@
   <h6 class="admin_tab" id="admin_dashboard" onclick="goto('module.php')"><i class="fas fa-md fa-clipboard"></i><span class="admin_tab_name">Back to Dashboard</span></h6>
 </div> 
 
-
-<script src="services/pim_tab.js"></script>

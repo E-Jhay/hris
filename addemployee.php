@@ -2,6 +2,7 @@
 session_start();
 $usertype = $_SESSION['usertype'];
 $userrole = $_SESSION['userrole'];
+$empno = $_SESSION['employeeno'];
 if(!isset($_SESSION['fullname'])){
   header("location:index.php");
 }
@@ -271,6 +272,9 @@ require_once "header.php";
  
 </div>
 
+<input type="text" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
+<input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">
 </body>
 <script src="services/addemployee.js"></script>
+<script src="services/pim_tab.js"></script>
 </html>

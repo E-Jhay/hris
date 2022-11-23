@@ -51,7 +51,9 @@ require_once "header.php";
 
 </div>
 
-
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
+<input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">
 </body>
 <script src="services/employee.js"></script>
+<script src="services/pim_tab.js"></script>
 </html>

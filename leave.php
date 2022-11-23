@@ -48,110 +48,109 @@ $balance = $leaves->getleavebalance($empno);
 				<span class="mr-5"> <b><?= $a['leave_type']; ?> =</b> <span><?= $a['balance']; ?></span></span>
 		  <?php } ?>
 		  <br><br>
-			<table class="table w-100">
-								
-				<tr>
-					<td>
-						<label>Application Type:</label>
-						<select class="form-control" id="application_type">
-							<option disabled="" selected="">-- Select Application type--</option>
-							<option value="Whole Day">Whole Day</option>
-							<option value="Half Day">Half Day</option>
-							<option value="Under Time">Under Time</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>Leave Type:</label>
-						<select class="form-control" id="leave_type"></select>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<label>Balance:</label>
-						<input type="hidden" id="points_todeduct" name="">
-						<input type="number" disabled="" class="form-control" id="leave_bal" name="">
-						<select class="form-control" id="pay_leave">
-							<option value="With Pay" selected=""> WITH PAY </option>
-							<option value="Without Pay"> WITHOUT PAY</option>	
-						</select>
-					</td>
-				</tr>
-
-				<tr style="display: none;" id="date_column">
-					<td>
-						<label> Date:</label>
-						<input type="date" class="form-control" id="halfdate" name="">
-					</td>
-				</tr>
-
-				<tr style="display: none;" id="ampm_column">
-					<td>
-						<input type="radio" value="AM" onclick="ampm()" checked="" name="leaveampm"> AM <input type="radio" value="PM" onclick="ampm()" name="leaveampm"> PM 
-						<select class="form-control" id="amchoice">
-							<option selected="" disabled="" value="">-- Select Time --</option>	
-							<option value="0.5">8:00 AM - 12:00 PM</option>	
-							<option value="0.63">8:00 AM - 2:00 PM</option>	
-						</select>
-
-						<select class="form-control" id="pmchoice" style="display: none;">
-							<option selected="" disabled="" value="">-- Select Time --</option>
-							<option value="sixpm">12:00 PM - 6:00 PM</option>
-							<option value="twopm">2:00 PM - 6:00 PM</option>
-							<option value="fivepm">12:00 PM - 5:00 PM</option>
-						</select>
-					</td>
-				</tr>
-
-				<tr style="display: none;" id="timefrom_column">
-					<td>
-						<label>From Time:</label>
-						<input type="time" value="15:00" class="form-control" id="timefrom" name="">
-					</td>
-				</tr>
-				<tr style="display: none;" id="timeto_column">
-					<td>
-						<label>To Time:</label>
-						<select class="form-control" id="timeto">
-							<option value="17:00">05:00 PM</option>
-							<option value="18:00">06:00 PM</option>
-						</select>
-					</td>
-				</tr>
-
-				<tr id="datefrom_column">
-					<td>
-						<label>From Date:</label>
-						<input type="date" class="form-control" id="datefrom" name="">
-					</td>
-				</tr>
-
-				<tr id="dateto_column">
-					<td>
-						<label>To Date:</label>
-						<input type="date" class="form-control" id="dateto" name="">
-					</td>
-				</tr>
-
-				<tr style="display: none;">
-					<td>
-						<label>No. of Days(credits to deduct):</label>
-						<input disabled="" type="number" class="form-control" id="no_days" name="">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>Reason:</label>
-						<textarea id="comment" class="form-control"></textarea>
-					</td>
-				</tr>
-			</table>
+			<form action="" id="form" enctype="multipart/form-data">
+        <table class="table w-100">
+          <tr>
+            <td>
+              <label>Application Type:</label>
+              <select class="form-control" id="application_type">
+                <option disabled="" selected="">-- Select Application type--</option>
+                <option value="Whole Day">Whole Day</option>
+                <option value="Half Day">Half Day</option>
+                <option value="Under Time">Under Time</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Leave Type:</label>
+              <select class="form-control" id="leave_type"></select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Balance:</label>
+              <input type="hidden" id="points_todeduct" name="">
+              <input type="number" disabled="" class="form-control" id="leave_bal" name="">
+              <select class="form-control" id="pay_leave">
+                <option value="With Pay" selected=""> WITH PAY </option>
+                <option value="Without Pay"> WITHOUT PAY</option>
+              </select>
+            </td>
+          </tr>
+          <tr style="display: none;" id="date_column">
+            <td>
+              <label> Date:</label>
+              <input type="date" class="form-control" id="halfdate" name="">
+            </td>
+          </tr>
+          <tr style="display: none;" id="ampm_column">
+            <td>
+              <input type="radio" value="AM" onclick="ampm()" checked="" name="leaveampm"> AM <input type="radio" value="PM" onclick="ampm()" name="leaveampm"> PM
+              <select class="form-control" id="amchoice">
+                <option selected="" disabled="" value="">-- Select Time --</option>
+                <option value="0.5">8:00 AM - 12:00 PM</option>
+                <option value="0.63">8:00 AM - 2:00 PM</option>
+              </select>
+              <select class="form-control" id="pmchoice" style="display: none;">
+                <option selected="" disabled="" value="">-- Select Time --</option>
+                <option value="sixpm">12:00 PM - 6:00 PM</option>
+                <option value="twopm">2:00 PM - 6:00 PM</option>
+                <option value="fivepm">12:00 PM - 5:00 PM</option>
+              </select>
+            </td>
+          </tr>
+          <tr style="display: none;" id="timefrom_column">
+            <td>
+              <label>From Time:</label>
+              <input type="time" value="15:00" class="form-control" id="timefrom" name="">
+            </td>
+          </tr>
+          <tr style="display: none;" id="timeto_column">
+            <td>
+              <label>To Time:</label>
+              <select class="form-control" id="timeto">
+                <option value="17:00">05:00 PM</option>
+                <option value="18:00">06:00 PM</option>
+              </select>
+            </td>
+          </tr>
+          <tr id="datefrom_column">
+            <td>
+              <label>From Date:</label>
+              <input type="date" class="form-control" id="datefrom" name="">
+            </td>
+          </tr>
+          <tr id="dateto_column">
+            <td>
+              <label>To Date:</label>
+              <input type="date" class="form-control" id="dateto" name="">
+            </td>
+          </tr>
+          <tr style="display: none;">
+            <td>
+              <label>No. of Days(credits to deduct):</label>
+              <input disabled="" type="number" class="form-control" id="no_days" name="">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Reason:</label>
+              <textarea id="comment" class="form-control"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Upload Leave Form:</label>
+              <input type="file" class="form-control" id="leaveForm" name"leaveForm">
+            </td>
+          </tr>
+        </table>
+      </form>
 
 			<center>
 				<button type="button" class="btn btn-sm btn-success" onclick="submitleave()"><i class="fas fa-sm fa-save"></i> Submit</button>
-        <button type="button" class="btn btn-sm btn-success" onclick="leaveUploadBtn()"><i class="fas fa-sm fa-upload"></i> Upload</button>
+        <!-- <button type="button" class="btn btn-sm btn-success" onclick="leaveUploadBtn()"><i class="fas fa-sm fa-upload"></i> Upload</button> -->
 			</center>
   </div>
 
@@ -296,7 +295,7 @@ $balance = $leaves->getleavebalance($empno);
   </div>
 </div>
 
-<div class="modal fade" id="uploadform" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabeltwo" aria-hidden="true">
+<!-- <div class="modal fade" id="uploadform" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabeltwo" aria-hidden="true">
   <form action="" id="leaveUploadForm" class="ajax-form" enctype="multipart/form-data">
     <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
@@ -326,7 +325,7 @@ $balance = $leaves->getleavebalance($empno);
       </div>
     </div>
   </form>
-</div>
+</div> -->
 
 <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 <input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">

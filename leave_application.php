@@ -40,137 +40,132 @@ $count = $leaves->countLeaves($empno);
 
 <div class="navcontainer">
 
-	<div id="div_assignleave" class="div_content">
-		<br>
-		<table class="table table-condensed">
-				<tr>
-					<td>
-						<label>Employee:</label>
-						<select class="form-control" id="employeeddown"></select>
-					</td>
-				</tr>
-				<tr style="visibility: collapse;">
-					<td>
-						<label>Total leave balance:</label>
-						<input disabled="" type="number" class="form-control" id="assignremaininglb">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>Application Type:</label>
-						<select class="form-control" id="assign_application_type">
-							<option disabled="" selected="">-- Select Application type--</option>
-							<option value="Whole Day">Whole Day</option>
-							<option value="Half Day">Half Day</option>
-							<option value="Under Time">Under Time</option>
-						</select>
-					</td>
-				</tr>
-
-				<tr style="display: none;">
-					<td>
-						<label>Balance Per L Type:</label>
-						<div id="bal_pertype_parent">
-								<span id="bal_pertype_child"></span>
-						</div>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<label>Leave Type:</label>
-						<select class="form-control" id="assignlt"></select>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<label>Balance:</label>
-						<input type="hidden" id="assign_points_todeduct" name="">
-						<input type="number" disabled="" class="form-control" id="assignleavebal" name="">
-						<select class="form-control" id="pay_leave">
-							<option value="With Pay" selected=""> WITH PAY </option>
-							<option value="Without Pay"> WITHOUT PAY</option>	
-						</select>
-					</td>
-				</tr>
-
-				<tr style="display: none;" id="assign_date_column">
-					<td>
-						<label> Date:</label>
-						<input type="date" class="form-control" id="assign_halfdate" name="">
-					</td>
-				</tr>
-
-				<tr style="display: none;" id="assign_ampm_column">
-					<td>
-						<input type="radio" value="AM" onclick="assign_ampm()" checked="" name="assign_leaveampm"> AM <input type="radio" value="PM" onclick="assign_ampm()" name="assign_leaveampm"> PM 
-						<select class="form-control" id="assign_amchoice">
-							<option selected="" disabled="" value="">-- Select Time --</option>	
-							<option value="0.5">8:00 AM - 12:00 PM</option>	
-							<option value="0.63">8:00 AM - 2:00 PM</option>	
-						</select>
-
-						<select class="form-control" id="assign_pmchoice" style="display: none;">
-							<option selected="" disabled="" value="">-- Select Time --</option>	
-							<option value="sixpm">12:00 PM - 6:00 PM</option>	
-							<option value="twopm">2:00 PM - 6:00 PM</option>
-							<option value="fivepm">12:00 PM - 5:00 PM</option>	
-						</select>
-					</td>
-				</tr>
-
-				<tr style="display: none;" id="assign_timefrom_column">
-					<td>
-						<label>From Time:</label>
-						<input type="time" value="15:00" class="form-control" id="assign_timefrom" name="">
-					</td>
-				</tr>
-
-				<tr style="display: none;" id="assign_timeto_column">
-					<td>
-						<label>To Time:</label>
-						<select class="form-control" id="assign_timeto">
-							<option value="17:00">05:00 PM</option>
-							<option value="18:00">06:00 PM</option>
-						</select>
-					</td>
-				</tr>
-
-
-				<tr id="assign_datefrom_column">
-					<td>
-						<label>From Date:</label>
-						<input type="date" class="form-control" id="asssignfromdate" name="">
-					</td>
-				</tr>
-
-				<tr id="assign_dateto_column">
-					<td>
-						<label>To Date:</label>
-						<input type="date" class="form-control" id="asssigntodate" name="">
-					</td>
-				</tr>
-
-				<tr style="display: none;">
-					<td>
-						<label>No Days:</label>
-						<input disabled="" type="number" id="assigno_days" class="form-control" name="">
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<label>Reason:</label>
-						<textarea class="form-control" id="assigncomment"></textarea>
-					</td>
-				</tr>
-							
-		</table>
-		<center>
-			<button class="btn btn-sm btn-success" type="button" onclick="submitassignleave()"><i class="fas fa-sm fa-save"></i> Submit</button>
-		</center>
-	</div>
+	<form action="" id="form" enctype="multipart\form-data">
+		<div id="div_assignleave" class="div_content">
+			<br>
+			<table class="table table-condensed">
+					<tr>
+						<td>
+							<label>Employee:</label>
+							<select class="form-control" id="employeeddown"></select>
+						</td>
+					</tr>
+					<tr style="visibility: collapse;">
+						<td>
+							<label>Total leave balance:</label>
+							<input disabled="" type="number" class="form-control" id="assignremaininglb">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Application Type:</label>
+							<select class="form-control" id="assign_application_type">
+								<option disabled="" selected="">-- Select Application type--</option>
+								<option value="Whole Day">Whole Day</option>
+								<option value="Half Day">Half Day</option>
+								<option value="Under Time">Under Time</option>
+							</select>
+						</td>
+					</tr>
+					<tr style="display: none;">
+						<td>
+							<label>Balance Per L Type:</label>
+							<div id="bal_pertype_parent">
+									<span id="bal_pertype_child"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Leave Type:</label>
+							<select class="form-control" id="assignlt"></select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Balance:</label>
+							<input type="hidden" id="assign_points_todeduct" name="">
+							<input type="number" disabled="" class="form-control" id="assignleavebal" name="">
+							<select class="form-control" id="pay_leave">
+								<option value="With Pay" selected=""> WITH PAY </option>
+								<option value="Without Pay"> WITHOUT PAY</option>
+							</select>
+						</td>
+					</tr>
+					<tr style="display: none;" id="assign_date_column">
+						<td>
+							<label> Date:</label>
+							<input type="date" class="form-control" id="assign_halfdate" name="">
+						</td>
+					</tr>
+					<tr style="display: none;" id="assign_ampm_column">
+						<td>
+							<input type="radio" value="AM" onclick="assign_ampm()" checked="" name="assign_leaveampm"> AM <input type="radio" value="PM" onclick="assign_ampm()" name="assign_leaveampm"> PM
+							<select class="form-control" id="assign_amchoice">
+								<option selected="" disabled="" value="">-- Select Time --</option>
+								<option value="0.5">8:00 AM - 12:00 PM</option>
+								<option value="0.63">8:00 AM - 2:00 PM</option>
+							</select>
+							<select class="form-control" id="assign_pmchoice" style="display: none;">
+								<option selected="" disabled="" value="">-- Select Time --</option>
+								<option value="sixpm">12:00 PM - 6:00 PM</option>
+								<option value="twopm">2:00 PM - 6:00 PM</option>
+								<option value="fivepm">12:00 PM - 5:00 PM</option>
+							</select>
+						</td>
+					</tr>
+					<tr style="display: none;" id="assign_timefrom_column">
+						<td>
+							<label>From Time:</label>
+							<input type="time" value="15:00" class="form-control" id="assign_timefrom" name="">
+						</td>
+					</tr>
+					<tr style="display: none;" id="assign_timeto_column">
+						<td>
+							<label>To Time:</label>
+							<select class="form-control" id="assign_timeto">
+								<option value="17:00">05:00 PM</option>
+								<option value="18:00">06:00 PM</option>
+							</select>
+						</td>
+					</tr>
+					<tr id="assign_datefrom_column">
+						<td>
+							<label>From Date:</label>
+							<input type="date" class="form-control" id="asssignfromdate" name="">
+						</td>
+					</tr>
+					<tr id="assign_dateto_column">
+						<td>
+							<label>To Date:</label>
+							<input type="date" class="form-control" id="asssigntodate" name="">
+						</td>
+					</tr>
+					<tr style="display: none;">
+						<td>
+							<label>No Days:</label>
+							<input disabled="" type="number" id="assigno_days" class="form-control" name="">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Reason:</label>
+							<textarea class="form-control" id="assigncomment"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<label>Upload Leave Form:</label>
+						<input type="file" class="form-control" id="leaveForm" name"leaveForm">
+						</td>
+					</tr>
+		
+			</table>
+			<center>
+				<button class="btn btn-sm btn-success" type="button" onclick="submitassignleave()"><i class="fas fa-sm fa-save"></i> Submit</button>
+			</center>
+		</div>
+	</form>
 
 	<div id="div_leavelist" class="div_content" style="display: none;">
 		<label>Status:</label>
@@ -182,13 +177,14 @@ $count = $leaves->countLeaves($empno);
 			</select><br>
 			<table class="table table-striped w-100" id="tbl_leavelist">
 				<thead>
-				<th>Employee Name</th>
-								<th>Date Applied</th>
-								<th>Leave Type</th>
-								<th>Leave Balance</th>
-								<th>Credits to Deduct</th>
-								<th>Status</th>
-								<th>Action</th>
+					<th>Employee Name</th>
+					<th>Date Applied</th>
+					<th>Leave Type</th>
+					<th>Leave Balance</th>
+					<th>Credits to Deduct</th>
+					<th>Status</th>
+					<th>Leave Form</th>
+					<th>Action</th>
 				</thead>
 				<tbody>
 				</tbody>

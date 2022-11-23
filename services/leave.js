@@ -209,8 +209,8 @@ $(document).ready(function(){
 			localStorage.clear();
 		}
 
-		leaveForm();
-		uploadLeaveForm();
+		// leaveForm();
+		// uploadLeaveForm();
 
 		
 	});
@@ -440,12 +440,13 @@ $(document).ready(function(){
 			alert("Please input the reason of your leave.");
 		}else{
 
-			var updatedbalance = leave_bal - no_days;
+			// var updatedbalance = leave_bal - no_days;
 
 			if(application_type=="Under Time"){
 				datefrom = timefrom;
 				dateto = timeto;
 				points_todeduct = no_days;
+				dayss = 0
 
 				if(datefrom >= dateto) {
 					$.Toast("Invalid time", errorToast);
@@ -454,6 +455,7 @@ $(document).ready(function(){
 			if(application_type=="Half Day"){
 
 				var leaveampm = $("input[name='leaveampm']:checked").val();
+				dayss = 0
 				if(leaveampm=="AM"){
 					// datefrom = "AM";
 					var amchoice = $('#amchoice').val();
@@ -482,85 +484,94 @@ $(document).ready(function(){
 				
 			}
 
-			$.Toast("Success", errorToast);
-			// $.ajax({
-			// 	url:"controller/controller.leave.php?addleave",
-			// 	method:"POST",
-			// 	data:{
-			// 		leave_type : leave_type,
-			// 		datefrom : datefrom,
-			// 		dateto : dateto,
-			// 		comment : comment,
-			// 		stat : stat,
-			// 		employeeno : employeeno,
-			// 		date_applied : date_applied,
-			// 		no_days : no_days,
-			// 		updatedbalance : updatedbalance,
-			// 		application_type: application_type,
-			// 		points_todeduct: points_todeduct,
-			// 		dayss: dayss,
-			// 		date_from: halfdate,
-			// 		pay_leave: pay_leave
-			// 	},success:function(){
-			// 		window.localStorage.setItem("status", "success");
-			// 		// window.location.href="leave.php";
-			// 	}
-			// });
+			// var updatedbalance = leave_value - no_days;
+			var form_data = new FormData();
+			var leaveForm = $("#leaveForm").prop("files")[0];
+			form_data.append("leaveForm", leaveForm)
+			form_data.append("leave_type", leave_type)
+			form_data.append("datefrom", datefrom)
+			form_data.append("dateto", dateto)
+			form_data.append("comment", comment)
+			form_data.append("stat", stat)
+			form_data.append("employeeno", employeeno)
+			form_data.append("date_applied", date_applied)
+			form_data.append("no_days", no_days)
+			// form_data.append("updatedbalance", updatedbalance)
+			form_data.append("application_type", application_type)
+			form_data.append("points_todeduct", points_todeduct)
+			form_data.append("dayss", dayss)
+			form_data.append("date_from", halfdate)
+			form_data.append("leave_bal", leave_bal)
+			form_data.append("pay_leave", pay_leave)
+			$.ajax({
+				url:"controller/controller.leave.php?addleave",
+				method:"POST",
+				data: form_data,
+				processData: false,
+				contentType: false,
+				success:function(){
+					$.Toast("Successfully Saved", successToast);
+					setTimeout(() => {	
+						window.location.href="leave.php";
+					}, 1000)
+					// window.location.href="leave.php";
+				}
+			});
 		}
 
 	}
 
-	function leaveUploadBtn() {
-		$('#uploadform').modal('show');
-	}
+	// function leaveUploadBtn() {
+	// 	$('#uploadform').modal('show');
+	// }
 
-	function leaveForm() {
-		$('.image-area').on('click', function() {
-			var dataTarget = $(this).data('target');
-			$('#'+dataTarget).trigger('click');
-		});
-	}
+	// function leaveForm() {
+	// 	$('.image-area').on('click', function() {
+	// 		var dataTarget = $(this).data('target');
+	// 		$('#'+dataTarget).trigger('click');
+	// 	});
+	// }
 
-	function uploadLeaveForm() {
-		$('#leaveUploadForm').on('submit', function(e){
-			e.preventDefault();
-			var formData = new FormData(this);
+	// function uploadLeaveForm() {
+	// 	$('#leaveUploadForm').on('submit', function(e){
+	// 		e.preventDefault();
+	// 		var formData = new FormData(this);
 
-			$.ajax({
-				type: "POST",
-				url: 'controller/controller.leave.php?uploadLeaveForm',
-				data: formData,
-				cache: false,
-				contentType: false,
-				processData: false,
-				success:function(data){
-					alert(data);
-				}
-			});
-		});
-	}
+	// 		$.ajax({
+	// 			type: "POST",
+	// 			url: 'controller/controller.leave.php?uploadLeaveForm',
+	// 			data: formData,
+	// 			cache: false,
+	// 			contentType: false,
+	// 			processData: false,
+	// 			success:function(data){
+	// 				alert(data);
+	// 			}
+	// 		});
+	// 	});
+	// }
 
-	function findImage(name) {
-		$.ajax({
-			url:'http://localhost/hris/static/leave_form/'+name,
-			type:'HEAD',
-			error: function()
-			{
-				$('#prev').attr("src","static/default-placeholder.png");
-				//file does not exist
-			},
-			success: function()
-			{
-				$('#prev').attr("src","http://localhost/hris/static/leave_form/"+name);
-				//file exists do something here
-			}
-		});
-	}
+	// function findImage(name) {
+	// 	$.ajax({
+	// 		url:'http://localhost/hris/static/leave_form/'+name,
+	// 		type:'HEAD',
+	// 		error: function()
+	// 		{
+	// 			$('#prev').attr("src","static/default-placeholder.png");
+	// 			//file does not exist
+	// 		},
+	// 		success: function()
+	// 		{
+	// 			$('#prev').attr("src","http://localhost/hris/static/leave_form/"+name);
+	// 			//file exists do something here
+	// 		}
+	// 	});
+	// }
 
-	function previewImage(){
-		prev.src=URL.createObjectURL(event.target.files[0]);
-		return
-	}
+	// function previewImage(){
+	// 	prev.src=URL.createObjectURL(event.target.files[0]);
+	// 	return
+	// }
 
 	///////////////////////////////////////////////////////////////////
 

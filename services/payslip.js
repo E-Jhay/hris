@@ -143,6 +143,30 @@ $(document).ready(function(){
   }
   count_reimbursement();
 
+  function count_payslip(){
+    const employeenoo = $('#employeeno').val();
+      $.ajax({
+          url:"controller/controller.info.php?count_payslip",
+          method:"POST",
+          data:{
+        employeenoo:employeenoo
+      },
+          success:function(data){
+              var b = $.parseJSON(data);
+              
+            if(b.count > 0){
+                $('#payslip_number').show();
+                $('#payslip_number').html(b.count);
+            }else{
+                $('#payslip_number').hide();
+            }
+          console.log(b.count)
+  
+          }
+      });
+  }
+  count_payslip();
+
   function dl_payslip(filename,employeeno){
     var link = "payslips/"+employeeno+"/"+filename;
     window.open(link);

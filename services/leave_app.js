@@ -452,6 +452,7 @@ $(document).ready(function(){
 		var points_todeduct = $('#assign_points_todeduct').val();
 		var halfdate = $('#assign_halfdate').val();
 		var pay_leave = $('#pay_leave').val();
+		// var leaveForm = $('#leaveForm').prop('files');
 
 		const date1 = new Date(dateto);
 		const date2 = new Date(datefrom);
@@ -470,11 +471,13 @@ $(document).ready(function(){
 			if(application_type=="Under Time"){
 				datefrom = timefrom;
 				dateto = timeto;
+				dayss = 0
 			}
 
 			if(application_type=="Half Day"){
 
 				var leaveampm = $("input[name='assign_leaveampm']:checked").val();
+				dayss = 0
 				if(leaveampm=="AM"){
 					datefrom = "AM";
 					var amchoice = $('#assign_amchoice').val();
@@ -499,28 +502,39 @@ $(document).ready(function(){
 					
 			}
 			var updatedbalance = leave_value - no_days;
+			var form_data = new FormData();
+			var leaveForm = $("#leaveForm").prop("files")[0];
+			form_data.append("leaveForm", leaveForm)
+			form_data.append("leave_type", leave_type)
+			form_data.append("datefrom", datefrom)
+			form_data.append("dateto", dateto)
+			form_data.append("comment", comment)
+			form_data.append("stat", stat)
+			form_data.append("employeeno", employeeno)
+			form_data.append("date_applied", date_applied)
+			form_data.append("no_days", no_days)
+			form_data.append("updatedbalance", updatedbalance)
+			form_data.append("application_type", application_type)
+			form_data.append("points_todeduct", points_todeduct)
+			form_data.append("dayss", dayss)
+			form_data.append("date_from", halfdate)
+			form_data.append("leave_bal", leave_bal)
+			form_data.append("pay_leave", pay_leave)
+			// console.log(form_data)
+			// for (var pair of form_data.entries()) {
+			// 	console.log(pair[0]+ ', ' + pair[1]); 
+			// }
 			$.ajax({
 				url:"controller/controller.leave_app.php?addleave",
 				method:"POST",
-				data:{
-					leave_type : leave_type,
-					datefrom : datefrom,
-					dateto : dateto,
-					comment : comment,
-					stat : stat,
-					employeeno : employeeno,
-					date_applied : date_applied,
-					no_days : no_days,
-					updatedbalance : updatedbalance,
-					application_type: application_type,
-					points_todeduct: points_todeduct,
-					dayss: dayss,
-					date_from: halfdate,
-					leave_bal: leave_bal,
-					pay_leave: pay_leave
-				},success:function(){
-					window.localStorage.setItem("status", "success");
-					window.location.href="leave_application.php";
+				data: form_data,
+				processData: false,
+				contentType: false,
+				success:function(data){
+					$.Toast("Successfully Saved", successToast);
+					setTimeout(() => {	
+						window.location.href="leave_application.php";
+					}, 1000)
 				}
 			});
 
@@ -603,7 +617,7 @@ $(document).ready(function(){
 	}
 
 
-	function edit_leave(id,fname,employeeno,leave_type,date_applied,leave_balance,datefrom,dateto,no_days,status,comment,remarks,application_type,deduct_rate,fivepm,sixpm,balanse,pay_leave){               
+	function edit_leave(id,fname,employeeno,leave_type,date_applied,leave_balance,datefrom,dateto,no_days,status,comment,remarks,application_type,deduct_rate,fivepm,sixpm,balanse,pay_leave, leaveForm){               
 
 		const date1 = new Date(dateto);
 		const date2 = new Date(datefrom);
@@ -637,6 +651,11 @@ $(document).ready(function(){
 		$('#emp_application_type').html(application_type);
 		$('#emp_rate').val(deduct_rate);
 		$('#pay_leave_span').html(pay_leave);
+		$('#pay_leave_span').html(pay_leave);
+		// $('#leaveFormButton').on(leaveForm);
+		// $('#leaveFormButton').on('click', () => {
+		// 	viewLeaveForm(leaveForm)
+		// });
 
 		if(status=="Disapproved"){
 			$('#btnapprove').hide();
@@ -757,7 +776,8 @@ $(document).ready(function(){
 					{ "data" : "leavebalance"},
 					{ "data" : "numberofdays"},
 					{ "data" : "active_status"},
-					{ "data" : "action"}
+					{ "data" : "leave_form"},
+					{ "data" : "action"},
 
 				],
 			});
@@ -882,3 +902,8 @@ $(document).ready(function(){
 	var filter_from = $('#filter_from').val();
 	var filter_to = $('#filter_to').val();
   loadleavelistreport(filter_type,filter_from,filter_to);
+
+  function viewLeaveForm(filename){
+    var link = "static/leave_form/" + filename;
+    window.open(link);
+  }

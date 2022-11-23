@@ -1,28 +1,32 @@
 function count_leaveapp(){
-
-    $.ajax({
-        url:"controller/controller.info.php?count_leaveapp",
-        method:"POST",
-        success:function(data){
-            var b = $.parseJSON(data);
-            
-          if(b.count > 0){
-              $('#leave_app_number').show();
-              $('#leave_app_number').html(b.count);
-          }else{
-              $('#leave_app_number').hide();
-          }
-
-        }
-    });
+	const employeenoo = $('#currentUser').val();
+	$.ajax({
+		url:"controller/controller.info.php?count_leaveapp",
+		method:"POST",
+		data:{
+			employeenoo:employeenoo
+		},success:function(data){
+			var b = $.parseJSON(data);
+			
+			if(b.count > 0){
+				$('#leave_app_number').show();
+				$('#leave_app_number').html(b.count);
+			}else{
+				$('#leave_app_number').hide();
+			}
+		}
+	});
 }
 count_leaveapp();
 
 function count_otapp(){
-
+	const employeenoo = $('#currentUser').val();
     $.ajax({
         url:"controller/controller.info.php?count_otapp",
         method:"POST",
+        data:{
+			employeenoo:employeenoo
+		},
         success:function(data){
             var b = $.parseJSON(data);
             
@@ -39,10 +43,13 @@ function count_otapp(){
 count_otapp();
 
 function count_payslip(){
-
+	const employeenoo = $('#currentUser').val();
     $.ajax({
         url:"controller/controller.info.php?count_payslip",
         method:"POST",
+        data:{
+			employeenoo:employeenoo
+		},
         success:function(data){
             var b = $.parseJSON(data);
             
@@ -52,6 +59,7 @@ function count_payslip(){
           }else{
               $('#payslip_number').hide();
           }
+        console.log(b.count)
 
         }
     });
@@ -59,10 +67,13 @@ function count_payslip(){
 count_payslip();
 
 function count_reimbursement(){
-
+	var employeenoo = $('#currentUser').val();
     $.ajax({
         url:"controller/controller.info.php?count_reimbursement",
         method:"POST",
+        data:{
+			employeenoo:employeenoo
+		},
         success:function(data){
             var b = $.parseJSON(data);
           if(b.count > 0){
