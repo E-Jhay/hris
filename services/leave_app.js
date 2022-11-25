@@ -907,3 +907,19 @@ $(document).ready(function(){
     var link = "static/leave_form/" + filename;
     window.open(link);
   }
+
+  
+	function lb(){
+
+		$.ajax({
+			url:"controller/controller.leavebalance.php?leave_credits_load",
+			method:"POST",
+			data:{
+			id:""
+			},success:function(){
+
+			}
+		});
+		
+	}
+	lb();

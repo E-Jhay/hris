@@ -59,7 +59,6 @@ function count_payslip(){
           }else{
               $('#payslip_number').hide();
           }
-        console.log(b.count)
 
         }
     });

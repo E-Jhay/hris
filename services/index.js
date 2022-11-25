@@ -4,21 +4,6 @@ $(document).ready(function(){
 
 });
 
-	// function lb(){
-
- //       $.ajax({
- //        url:"controller/controller.leavebalance.php?leave_credits_load",
- //        method:"POST",
- //        data:{
- //          id:""
- //        },success:function(){
-
- //        }
- //      });
-       
- //  }
- //  lb();
-
 	function login(){
 
 		var username = $('#username').val();

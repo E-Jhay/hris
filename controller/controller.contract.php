@@ -108,9 +108,9 @@ class crud extends db_conn_mysql
     $company = $_POST['company'];
 
     $empid = $_POST['emp_id'];
-    $date_hired = $_POST['date_hired'];
-    $eoc = $_POST['eoc'];
-    $regularized = $_POST['regularized'];
+    $date_hired = $_POST['date_hired'] != '' ? $_POST['date_hired'] : '0000-00-00';
+    $eoc = $_POST['eoc'] != '' ? $_POST['eoc'] : '0000-00-00';
+    $regularized = $_POST['regularized'] != '' ? $_POST['regularized'] : '0000-00-00';
     $preterm = $_POST['preterm'] != '' ? $_POST['preterm'] : '0000-00-00';
     $resigned = $_POST['resigned'] != '' ? $_POST['resigned'] : '0000-00-00';
     $retired = $_POST['retired'] != '' ? $_POST['retired'] : '0000-00-00';

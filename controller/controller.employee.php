@@ -242,9 +242,9 @@ class crud extends db_conn_mysql
     $nationality = $_POST['nationality'];
     $personal_email = $_POST['personal_email'];
     $dept_head_email = $_POST['dept_head_email'];
-    $date_hired = $_POST['date_hired'];
-    $end_of_contract = $_POST['end_of_contract'];
-    $regularized = $_POST['regularized'];
+    $date_hired = $_POST['date_hired'] != '' ? $_POST['date_hired'] : '0000-00-00';
+    $eoc = $_POST['eoc'] != '' ? $_POST['eoc'] : '0000-00-00';
+    $regularized = $_POST['regularized'] != '' ? $_POST['regularized'] : '0000-00-00';
     if(!empty($_FILES["profile"]["name"])) {
       $target_dir = "../personal_picture/";
       $file = $_FILES['profile']['name'];
@@ -362,7 +362,7 @@ class crud extends db_conn_mysql
     $qry1 = $conn->prepare("INSERT INTO contactinfo SET emp_id='$id', street='$street', municipality='$municipality', province='$province', contactno='$contact_no', telephoneno='', corp_email='$corp_email', personal_email='$personal_email', nationality='$nationality', driver_license='', driver_expdate='0000-00-00', dept_head_email='$dept_head_email'");
     $qry1->execute();
 
-    $qry2 = $conn->prepare("INSERT INTO contractinfo SET emp_id='$id', date_hired='$date_hired', eoc='$end_of_contract', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
+    $qry2 = $conn->prepare("INSERT INTO contractinfo SET emp_id='$id', date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
     $qry2->execute();
 
     $qry3 = $conn->prepare("INSERT INTO govtidinfo SET emp_id='$id', tin_no='$tin', sss_no='$sss', phic_no='$phic', hdmf_no='$hdmf', atm_no='$atm', bank_name='$bank_name', sss_remarks='', phic_remarks='', hdmf_remarks=''");
@@ -386,8 +386,8 @@ class crud extends db_conn_mysql
     $qry9 = $conn->prepare("INSERT INTO medicalinfo SET emp_id='$id', type1='', classification1='', status1='', dateofexam1='0000-00-00', remarks1='', type2='', classification2='', status2='', dateofexam2='0000-00-00', remarks2='', type3='', classification3='', status3='', dateofexam3='0000-00-00', remarks3=''");
     $qry9->execute();
 
-    // $qry10 = $conn->prepare("INSERT INTO employee_documents (employee_number, marriage_contract, dependent, additional_id, proof_of_billing) VALUES ('$employeeno', '$marriageContract', '$dependent', '$additionalId', '$proofOFBilling')");
-    // $qry10->execute();
+    // // $qry10 = $conn->prepare("INSERT INTO employee_documents (employee_number, marriage_contract, dependent, additional_id, proof_of_billing) VALUES ('$employeeno', '$marriageContract', '$dependent', '$additionalId', '$proofOFBilling')");
+    // // $qry10->execute();
 
     $query10 = $conn->prepare("INSERT INTO marriage_contract (employee_number, marriage_contract) VALUES ('$employeeno', '$marriageContract')");
     $query10->execute();
@@ -398,10 +398,16 @@ class crud extends db_conn_mysql
     $query13 = $conn->prepare("INSERT INTO proof_of_billing (employee_number, proof_of_billing) VALUES ('$employeeno', '$proofOFBilling')");
     $query13->execute();
 
+    $query14 = $conn->prepare("INSERT INTO leave_balance SET employee_no='$employeeno',leave_type='SL',balance='0',earned='no',what_month='0', stat='', decem=''");
+    $query14->execute();
+
+    $query15 = $conn->prepare("INSERT INTO leave_balance SET employee_no='$employeeno',leave_type='VL',balance='0',earned='no',what_month='0', stat='', decem=''");
+    $query15->execute();
+
     session_start();
     $useraction = $_SESSION['fullname'];
     $dateaction = date('Y-m-d');
-    $auditaction = "Added new Employee";
+    $auditaction = "Added new Employee. Employee no ".$employeeno;
     $audittype = "Add";
     $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
     $q->execute();

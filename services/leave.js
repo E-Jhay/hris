@@ -153,7 +153,7 @@ $(document).ready(function(){
 			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 			var points_todeduct = $('#points_todeduct').val();
 			if(datefrom > dateto){
-				alert("Invalid date range");
+				$.Toast("Invalid date range", errorToast);
 				$('#dateto').val("0000-00-00");
 				$('#no_days').val("");
 			}else{
@@ -432,12 +432,12 @@ $(document).ready(function(){
 		var dayss = diffDays+1;
 
 		if(leave_bal=="" || leave_bal==null){
-			alert("Invalid transaction");
+			$.Toast("No available leave credits", errorToast);
 		}
 		else if(no_days=="" || no_days==null){
-			alert("Invalid transaction");
+			$.Toast("Invalid transaction", errorToast);
 		}else if(comment=="" || comment==null){
-			alert("Please input the reason of your leave.");
+			$.Toast("Please input the reason of your leave.", errorToast);
 		}else{
 
 			// var updatedbalance = leave_bal - no_days;
@@ -883,3 +883,19 @@ $(document).ready(function(){
 		});
 	}
 	count_reimbursement();
+
+	
+	function lb(){
+
+		$.ajax({
+		 url:"controller/controller.leavebalance.php?leave_credits_load",
+		 method:"POST",
+		 data:{
+		   id:""
+		 },success:function(){
+ 
+		 }
+	   });
+		
+   }
+   lb();
