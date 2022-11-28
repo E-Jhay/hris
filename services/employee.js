@@ -14,8 +14,32 @@ $(document).ready(function(){
 			loademployee(statusdd);
 		});
 
+		$('#formModal').on('submit', function (e) {
+    		e.preventDefault();
+    		confirmed("save",save_callback, "Do you really want to save this?", "Yes", "No");
+      	});
+
 
 	});
+
+	function save_callback(){
+		var formData = new FormData($("#formModal")[0]);
+		$.ajax({
+			url:"controller/controller.employee.php?updateEmployeeMasterfile",
+			method:"POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success:function(data){
+				// var b = $.parseJSON(data);
+				// $.Toast("Successfully Saved", successToast);
+				// setTimeout(() => {
+				// 	window.location.href="employee.php";
+				// }, 1000)
+				console.log(data)
+			}
+		});
+	}
 
 	// function lb(){
 
@@ -178,3 +202,7 @@ $(document).ready(function(){
 // 	});
 // }
 // count_reimbursement();
+
+function updateEmployees(){
+	$('#update_modal').modal('show');
+  }

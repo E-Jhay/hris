@@ -504,34 +504,43 @@ class crud extends db_conn_mysql
       return $row;
   }
 
-  public function importEmployee() {
-    // ajsc
+  function updateEmployeeMasterfile() {
+    require('../PHPExcel/PHPExcel.php');
+    require('../PHPExcel/PHPExcel/IOFactory.php');
+    $file = $_FILES['file']['tmp_name'];
+    $obj = PHPExcel_IOFactory::load($file);
+    foreach($obj->getWorksheetIterator() as $sheet) {
+        $getHighestRow = $sheet->getHighestRow();
+        $getHighestColumn = $sheet->getHighestDataColumn();
+        $getHighestColumnIndex = PHPExcel_Cell::columnIndexFromString($getHighestColumn);
+        
+        $conn = $this->connect_mysql();
+        $sql = "INSERT INTO tbl_employee (employeeno, id_number, lastname, firstname,	middlename, rank, statuss, employment_status, company, imagepic, leave_balance, job_title, job_category, department, reimbursement_bal) VALUES ";
+        $values = array();
 
-    if(isset($_POST["Import"])){
-      echo $filename=$_FILES["file"]["tmp_name"];
-      if($_FILES["file"]["size"] > 0){
-          $file = fopen($filename, "r");
-          while (($emapData = fgetcsv($file, 10000, ",")) !== FALSE){
-            //It wiil insert a row to our subject table from our csv file`
-            $sql = "INSERT INTO subject (`SUBJ_CODE`, `SUBJ_DESCRIPTION`, `UNIT`, `PRE_REQUISITE`,COURSE_ID, `AY`, `SEMESTER`) VALUES ('$emapData[1]','$emapData[2]','$emapData[3]','$emapData[4]','$emapData[5]','$emapData[6]','$emapData[7]')";
-            //we are using mysql_query function. it returns a resource on true else False on error
-            $result = mysqli_query( $conn, $sql );
-            if(! $result ){
-              echo `<script type="text/javascript">
-                      alert(\"Invalid File:Please Upload CSV File.\");
-                      window.location = "employee.php"
-                    </script>`;
-            }
-          }
-          fclose($file);
-          //throws a message if data successfully imported to mysql database from excel file
-          echo "<script type=\"text/javascript\">
-          alert(\"CSV File has been successfully Imported.\");
-          window.location = \"index.php\"
-          </script>";
-      }
-    }	 
-    // anas
+        for ($row = 2; $row <= $getHighestRow; $row++) {
+            $employeeno = $sheet->getCellByColumnAndRow(0, $row)->getValue();
+            $id_number = (int)$sheet->getCellByColumnAndRow(1, $row)->getValue();
+            $lastname = $sheet->getCellByColumnAndRow(2, $row)->getValue();
+            $firstname = $sheet->getCellByColumnAndRow(3, $row)->getValue();
+            $middlename = $sheet->getCellByColumnAndRow(4, $row)->getValue();
+            $rank = $sheet->getCellByColumnAndRow(5, $row)->getValue();
+            $statuss = $sheet->getCellByColumnAndRow(6, $row)->getValue();
+            $employment_status = $sheet->getCellByColumnAndRow(7, $row)->getValue();
+            $company = $sheet->getCellByColumnAndRow(8, $row)->getValue();
+            $imagepic = 'usera.png';
+            $job_title = $sheet->getCellByColumnAndRow(9, $row)->getValue();
+            $job_category = $sheet->getCellByColumnAndRow(10, $row)->getValue();
+            $department = $sheet->getCellByColumnAndRow(11, $row)->getValue();
+            $values[] = "('$employeeno', '$id_number', '$lastname', '$firstname', '$middlename', '$rank', '$statuss', '$employment_status', '$company', '$imagepic', '0', '$job_title', '$job_category', '$department', '3500')";
+        }
+        // print_r(implode(',', $values));
+        $sql .= implode(',', $values);
+        
+        $query = $conn->prepare($sql);
+        $query->execute();
+        echo 'success';
+    }
   }
 
 
@@ -565,6 +574,9 @@ if(isset($_GET['addnewemployee'])){
 }
 if(isset($_GET['generateEmployeeNumber'])){
   $x->generateEmployeeNumber();
+}
+if(isset($_GET['updateEmployeeMasterfile'])){
+  $x->updateEmployeeMasterfile();
 }
 
 

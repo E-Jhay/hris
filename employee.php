@@ -31,6 +31,8 @@ require_once "header.php";
 			<option value="Inactive"> Inactive </option>
 			<option value="All"> All </option>
 		</select><br><br>
+    <div class="text-right"><button onclick="updateEmployees()" id="updatedEmployeesBtn" class="btn btn-success btn-md">Update Employees</button></div>
+    <br />
     <table class="table table-striped w-100" id="tbl_employee">
             <thead>
               <th></th>
@@ -49,6 +51,33 @@ require_once "header.php";
     </table>
   </div>
 
+</div>
+
+<div class="modal fade" id="update_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Upload Employee Masterfile</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formModal" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Upload File:</label>
+            <input type="file" class="form-control" required="" id="file" name="file" accept=".xlsx,.xls">
+          </div>
+          
+          <center>
+            <button type="submit" class="btn btn-sm btn-success">Upload</button>
+          </center>
+        </form>
+
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
