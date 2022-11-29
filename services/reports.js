@@ -28,6 +28,45 @@ $(document).ready(function(){
        
  //  }
  //  lb();
+
+	function btnMonthsEvaluation() {
+		
+		$('#div_evaluation').show();
+		$('#div_newly').hide();
+		$('#div_bday').hide();
+		$('#div_age').hide();
+		$('#div_department').hide();
+		$('#div_gender').hide();
+		$('#div_employment').hide();
+
+		$('#lmonths').addClass("active");
+		$('#lbirthday').removeClass("active");
+		$('#lage').removeClass("active");
+		$('#ldept').removeClass("active");
+		$('#lgender').removeClass("active");
+		$('#lemployment').removeClass("active");
+		$('#ldivision').removeClass("active");
+		$('#lnewly').removeClass("active");
+		$('#div_division').hide();
+
+		// var month = $('#evaluationMonth').val();
+		// var a = "";
+		// var report_type = "evaluation";
+		// $('#tbl_employee').DataTable().destroy();
+		// loademployee(month,a,report_type);
+		// $.ajax({
+		// 	url:"controller/controller.reports.php?monthsEvaluation",
+		// 	method:"POST",
+		// 	success:function(data){
+		// 		// var b = $.parseJSON(data);
+		// 		// $.Toast("Successfully Saved", successToast);
+		// 		// setTimeout(() => {
+		// 		// 	window.location.href="employee.php";
+		// 		// }, 1000)
+		// 		console.log(data)
+		// 	}
+		// });
+	}
  
 	function btnnewly(){
 		$('#div_newly').show();
@@ -36,6 +75,7 @@ $(document).ready(function(){
 		$('#div_department').hide();
 		$('#div_gender').hide();
 		$('#div_employment').hide();
+		$('#div_evaluation').hide();
 
 		$('#lnewly').addClass("active");
 		$('#lbirthday').removeClass("active");
@@ -44,7 +84,14 @@ $(document).ready(function(){
 		$('#lgender').removeClass("active");
 		$('#lemployment').removeClass("active");
 		$('#ldivision').removeClass("active");
+		$('#lmonths').removeClass("active");
 		$('#div_division').hide();
+
+		var newlyfrom = $('#newlyfrom').val();
+		var newlyto = new Date().toISOString().slice(0, 10);
+		var report_type = "newly";
+		$('#tbl_employee').DataTable().destroy();
+		loademployee(newlyfrom,newlyto,report_type);
 
 	}
 	function btnbirthday(){
@@ -54,6 +101,7 @@ $(document).ready(function(){
 		$('#div_department').hide();
 		$('#div_gender').hide();
 		$('#div_employment').hide();
+		$('#div_evaluation').hide();
 
 		$('#lnewly').removeClass("active");
 		$('#lbirthday').addClass("active");
@@ -62,6 +110,7 @@ $(document).ready(function(){
 		$('#lgender').removeClass("active");
 		$('#lemployment').removeClass("active");
 		$('#ldivision').removeClass("active");
+		$('#lmonths').removeClass("active");
 		$('#div_division').hide();
 	}
 	function btnage(){
@@ -71,6 +120,7 @@ $(document).ready(function(){
 		$('#div_department').hide();
 		$('#div_gender').hide();
 		$('#div_employment').hide();
+		$('#div_evaluation').hide();
 
 		$('#lnewly').removeClass("active");
 		$('#lbirthday').removeClass("active");
@@ -79,6 +129,7 @@ $(document).ready(function(){
 		$('#lgender').removeClass("active");
 		$('#lemployment').removeClass("active");
 		$('#ldivision').removeClass("active");
+		$('#lmonths').removeClass("active");
 		$('#div_division').hide();
 	}
 	function btndept(){
@@ -88,6 +139,7 @@ $(document).ready(function(){
 		$('#div_department').show();
 		$('#div_gender').hide();
 		$('#div_employment').hide();
+		$('#div_evaluation').hide();
 
 		$('#lnewly').removeClass("active");
 		$('#lbirthday').removeClass("active");
@@ -96,6 +148,7 @@ $(document).ready(function(){
 		$('#lgender').removeClass("active");
 		$('#lemployment').removeClass("active");
 		$('#ldivision').removeClass("active");
+		$('#lmonths').removeClass("active");
 		$('#div_division').hide();
 	}
 	function btngender(){
@@ -105,6 +158,7 @@ $(document).ready(function(){
 		$('#div_department').hide();
 		$('#div_gender').show();
 		$('#div_employment').hide();
+		$('#div_evaluation').hide();
 
 		$('#lnewly').removeClass("active");
 		$('#lbirthday').removeClass("active");
@@ -113,6 +167,7 @@ $(document).ready(function(){
 		$('#lgender').addClass("active");
 		$('#lemployment').removeClass("active");
 		$('#ldivision').removeClass("active");
+		$('#lmonths').removeClass("active");
 		$('#div_division').hide();
 	}
 	function btnemployment(){
@@ -122,6 +177,7 @@ $(document).ready(function(){
 		$('#div_department').hide();
 		$('#div_gender').hide();
 		$('#div_employment').show();
+		$('#div_evaluation').hide();
 
 		$('#lnewly').removeClass("active");
 		$('#lbirthday').removeClass("active");
@@ -130,6 +186,7 @@ $(document).ready(function(){
 		$('#lgender').removeClass("active");
 		$('#lemployment').addClass("active");
 		$('#ldivision').removeClass("active");
+		$('#lmonths').removeClass("active");
 		$('#div_division').hide();
 	}
 
@@ -142,6 +199,7 @@ $(document).ready(function(){
 		$('#div_gender').hide();
 		$('#div_employment').hide();
 		$('#div_division').show();
+		$('#div_evaluation').hide();
 
 		$('#lnewly').removeClass("active");
 		$('#lbirthday').removeClass("active");
@@ -149,6 +207,7 @@ $(document).ready(function(){
 		$('#ldept').removeClass("active");
 		$('#lgender').removeClass("active");
 		$('#lemployment').removeClass("active");
+		$('#lmonths').removeClass("active");
 		$('#ldivision').addClass("active");
 
 	}
@@ -267,6 +326,22 @@ $(document).ready(function(){
   	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+job_category+"&to="+a;
   }
 
+  function searchEvaluation(){
+	var month = $('#evaluationMonth').val();
+	var a = "";
+	var report_type = "evaluation";
+	$('#tbl_employee').DataTable().destroy();
+  loademployee(month,a,report_type);
+} 
+
+function exportEvaluation(){
+	var month = $('#evaluationMonth').val();
+	var a = "";
+	var report_type = "evaluation";
+	$('#tbl_employee').DataTable().destroy();
+	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+month+"&to="+a;
+}
+
   function loademployee(from,to,type){
     // alert(type);
     $('#tbl_employee').DataTable({  
@@ -293,7 +368,7 @@ $(document).ready(function(){
          });
   }
   var from = "";
-  var to = "";
+  var to = new Date().toISOString().slice(0, 10);
   var type = "all";
   loademployee(from,to,type);
 

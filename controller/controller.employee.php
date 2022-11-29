@@ -491,7 +491,14 @@ class crud extends db_conn_mysql
                              LEFT JOIN contractinfo b ON a.id=b.emp_id
                              LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
           WHERE YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) BETWEEN '$from' AND '$to'";
-      }else{
+      }else if($type=="evaluation"){
+        
+        $query = "SELECT a.*,b.*,c.*,
+           YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
+                            LEFT JOIN contractinfo b ON a.id=b.emp_id
+                            LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
+         WHERE (YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5))) AND (YEAR(date_hired) = YEAR(DATE(NOW() - INTERVAL '$from' MONTH)) AND MONTH(date_hired) = MONTH(DATE(NOW() - INTERVAL '$from' MONTH)) AND DAY(date_hired) >= DAY(DATE(NOW() - INTERVAL '$from' MONTH))) ORDER BY a.lastname ASC";
+     }else{
         
          $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a

@@ -84,7 +84,9 @@ $pdf->SetFont('dejavusans', '', 9);
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>JOB TITLE</b></th>
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>JOB CATEGORY</b></th>
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>EMPLOYMENT STATUS</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>DEPARTMENT</b></th>
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>COMPANY</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>DATE HIRED</b></th>
 				
 			
 			</tr>';
@@ -112,7 +114,9 @@ $pdf->SetFont('dejavusans', '', 9);
 							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['job_title'].'</td>
 							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['job_category'].'</td>
 							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['employment_status'].'</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['department'].'</td>
 							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['company'].'</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['date_hired'].'</td>
 							
 							
 																																			

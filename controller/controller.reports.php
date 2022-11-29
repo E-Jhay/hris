@@ -89,7 +89,14 @@ class crud extends db_conn_mysql
                              LEFT JOIN contractinfo b ON a.id=b.emp_id
                              LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
         WHERE YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) BETWEEN '$from' AND '$to' ORDER BY a.lastname ASC");
-    }else{
+    }else if($type=="evaluation"){
+      
+      $query = $conn->prepare("SELECT a.*,b.*,c.*,
+           YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
+                            LEFT JOIN contractinfo b ON a.id=b.emp_id
+                            LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
+       WHERE (YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5))) AND (YEAR(date_hired) = YEAR(DATE(NOW() - INTERVAL '$from' MONTH)) AND MONTH(date_hired) = MONTH(DATE(NOW() - INTERVAL '$from' MONTH)) AND DAY(date_hired) >= DAY(DATE(NOW() - INTERVAL '$from' MONTH))) ORDER BY a.lastname ASC");
+   }else{
       
        $query = $conn->prepare("SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
@@ -142,6 +149,22 @@ class crud extends db_conn_mysql
     echo json_encode(array('data'=>$return));
   }
 
+  public function monthsEvaluation(){
+    $date_hired = new DateTime('2020-10-01');
+    $target = new DateTime('2020-12-25');
+    $interval = $date_hired->diff($target);
+    echo $interval->format('%y years, %m month, %d days until Christmas.');
+    // $date1 = '2022-07-28';
+    // // $dateNow = '2010-02-20';
+    // $d1 = strtotime(date1); 
+    // $d2=new DateTime();                                  
+    // $Months = $d2->diff($d1); 
+    // $howeverManyMonths = (($Months->y) * 12) + ($Months->m);
+    // // $days = ($d2 - $d1) / (60*60*24);
+
+    // var_dump($howeverManyMonths, $days);
+  }
+
 
 }
 
@@ -158,6 +181,9 @@ if(isset($_GET['d_jobcategory'])){
 }
 if(isset($_GET['loademployeereport'])){
   $x->loademployeereport();
+}
+if(isset($_GET['monthsEvaluation'])){
+  $x->monthsEvaluation();
 }
 
  ?>

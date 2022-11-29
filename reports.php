@@ -37,12 +37,14 @@ require_once "header.php";
         <li class="nav-item">
           <a class="nav-link" id="ldivision" href="#" onclick="btndivision()">Department</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" id="lmonths" href="#" onclick="btnMonthsEvaluation()">Evaluation</a>
+        </li>
       </ul>
 
 </div>
 
 <div class="navcontainer">
-
   <div id="div_newly" class="div_content">
   	<span>From: </span><input type="date" id="newlyfrom" class="form-control" name="">
 		<span>To: </span><input type="date" id="newlyto" name="" class="form-control">
@@ -133,6 +135,20 @@ require_once "header.php";
 			<button type="button" class="btn btn-sm btn-success" onclick="searchdivision()"><i class="fas fa-sm fa-search"></i> Generate List</button>
 		</div><br />
 		<button class="btn btn-sm btn-info" type="button" onclick="exportdivision()"><i class="fas fa-sm fa-file-excel"></i> Export to excel</button><br><br>
+  </div>
+  <div id="div_evaluation" class="div_content" style="display: none;">
+		<span>Number of Months: </span>
+		<select class="form-control" id="evaluationMonth">
+			<option value="" disabled selected>--Select Months--</option>
+			<option value="3"> 3rd Month Evaluation </option>
+			<option value="5"> 5th Month Evaluation </option>
+			<option value="18"> 18th Month Evaluation </option>
+		</select>
+		<div class="text-center">
+			<button type="button" class="btn btn-sm btn-success" onclick="searchEvaluation()"><i class="fas fa-sm fa-search"></i> Generate List</button>
+		</div>
+		<br />
+		<button class="btn btn-sm btn-info" type="button" onclick="exportEvaluation()"><i class="fas fa-sm fa-file-excel"></i> Export to excel</button><br><br>
   </div>
 
   <table class="table table-striped w-100" id="tbl_employee">
