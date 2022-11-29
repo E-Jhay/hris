@@ -124,7 +124,7 @@ class crud extends db_conn_mysql
 
           $data = array();
           $data['action'] = '<center>
-          <button onclick="dl_payslip(\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> Download</button>
+          <button onclick="dl_payslip(\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
           <button onclick="delete_payslip('.$x['id'].',\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
           
           </center>

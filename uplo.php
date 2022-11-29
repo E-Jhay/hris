@@ -42,7 +42,7 @@ $count = $leaves->countLeaves($empno);
           <th>File Name</th>
           <th>Payroll Period</th>
           <th>Process Date</th>
-          <th>Action</th>
+          <th class="text-center">Action</th>
         </thead>
         <tbody>
                 
@@ -111,8 +111,9 @@ $count = $leaves->countLeaves($empno);
 </div>
 
 <input type="hidden" id="employeenum" value="<?php echo $empno ?>" name="">
-<input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="">
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 
 </body>
 <script src="services/upload.js"></script>
+<script src="services/pim_tab.js"></script>
 </html>

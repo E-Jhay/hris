@@ -88,7 +88,7 @@ class crud extends db_conn_mysql
           $data = array();
                   
           $data['action'] = '<center>
-          <button onclick="open_ot('.$x['id'].',\''.$x['firstname'].'\',\''.$x['lastname'].'\',\''.$x['job_title'].'\',\''.$x['reasons'].'\',\''.$x['date_filed'].'\',\''.$x['ot_from'].'\',\''.$x['ot_to'].'\',\''.$x['no_of_hrs'].'\',\''.$x['ot_date'].'\',\''.$x['statuss'].'\',\''.$x['remarks'].'\')" class="btn btn-sm btn-success"><i class="fas fa-eye fa-eye"></i> View</button>
+          <button title="View" onclick="open_ot('.$x['id'].',\''.$x['firstname'].'\',\''.$x['lastname'].'\',\''.$x['job_title'].'\',\''.$x['reasons'].'\',\''.$x['date_filed'].'\',\''.$x['ot_from'].'\',\''.$x['ot_to'].'\',\''.$x['no_of_hrs'].'\',\''.$x['ot_date'].'\',\''.$x['statuss'].'\',\''.$x['remarks'].'\')" class="btn btn-sm btn-success"><i class="fas fa-eye fa-eye"></i></button>
           
           </center>
           ';

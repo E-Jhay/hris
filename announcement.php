@@ -35,7 +35,7 @@ require_once "header.php";
 							<th>Published Date</th>
 							<th>End Date</th>
 							<th>Acknowledgment Status</th>
-							<th>Action</th>
+							<th class="text-center">Action</th>
             </thead>
             <tbody>
               
@@ -51,7 +51,7 @@ require_once "header.php";
 							<th>Published Date</th>
 							<th>End Date</th>
 							<th>Acknowledgment Status</th>
-							<th>Action</th>
+							<th class="text-center">Action</th>
             </thead>
             <tbody>
               
@@ -112,6 +112,9 @@ require_once "header.php";
   </div>
 </div>
 
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
+<input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">
 </body>
 <script src="services/announcement.js"></script>
+<script src="services/pim_tab.js"></script>
 </html>

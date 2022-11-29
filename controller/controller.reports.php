@@ -149,21 +149,21 @@ class crud extends db_conn_mysql
     echo json_encode(array('data'=>$return));
   }
 
-  public function monthsEvaluation(){
-    $date_hired = new DateTime('2020-10-01');
-    $target = new DateTime('2020-12-25');
-    $interval = $date_hired->diff($target);
-    echo $interval->format('%y years, %m month, %d days until Christmas.');
-    // $date1 = '2022-07-28';
-    // // $dateNow = '2010-02-20';
-    // $d1 = strtotime(date1); 
-    // $d2=new DateTime();                                  
-    // $Months = $d2->diff($d1); 
-    // $howeverManyMonths = (($Months->y) * 12) + ($Months->m);
-    // // $days = ($d2 - $d1) / (60*60*24);
+  // public function monthsEvaluation(){
+  //   $date_hired = new DateTime('2020-10-01');
+  //   $target = new DateTime('2020-12-25');
+  //   $interval = $date_hired->diff($target);
+  //   echo $interval->format('%y years, %m month, %d days until Christmas.');
+  //   // $date1 = '2022-07-28';
+  //   // // $dateNow = '2010-02-20';
+  //   // $d1 = strtotime(date1); 
+  //   // $d2=new DateTime();                                  
+  //   // $Months = $d2->diff($d1); 
+  //   // $howeverManyMonths = (($Months->y) * 12) + ($Months->m);
+  //   // // $days = ($d2 - $d1) / (60*60*24);
 
-    // var_dump($howeverManyMonths, $days);
-  }
+  //   // var_dump($howeverManyMonths, $days);
+  // }
 
 
 }
@@ -182,8 +182,8 @@ if(isset($_GET['d_jobcategory'])){
 if(isset($_GET['loademployeereport'])){
   $x->loademployeereport();
 }
-if(isset($_GET['monthsEvaluation'])){
-  $x->monthsEvaluation();
-}
+// if(isset($_GET['monthsEvaluation'])){
+//   $x->monthsEvaluation();
+// }
 
  ?>

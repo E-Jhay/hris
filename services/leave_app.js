@@ -909,17 +909,17 @@ $(document).ready(function(){
   }
 
   
-	function lb(){
+	// function lb(){
 
-		$.ajax({
-			url:"controller/controller.leavebalance.php?leave_credits_load",
-			method:"POST",
-			data:{
-			id:""
-			},success:function(){
+	// 	$.ajax({
+	// 		url:"controller/controller.leavebalance.php?leave_credits_load",
+	// 		method:"POST",
+	// 		data:{
+	// 		id:""
+	// 		},success:function(){
 
-			}
-		});
+	// 		}
+	// 	});
 		
-	}
-	lb();
+	// }
+	// lb();

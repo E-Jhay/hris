@@ -79,8 +79,8 @@ class crud extends db_conn_mysql
           }
 
           $data = array();
-          $data['action'] = '<button onclick="dl_news(\''.$x['file_name'].'\')" class="btn btn-sm btn-success"><i class="fa fa-eye"></i> View</button>
-          <button onclick="delete_news('.$x['id'].',\''.$x['file_name'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>';
+          $data['action'] = '<div class="text-center"><button title="View" onclick="dl_news(\''.$x['file_name'].'\')" class="btn btn-sm btn-success"><i class="fa fa-eye"></i></button>
+          <button title="Delete" onclick="delete_news('.$x['id'].',\''.$x['file_name'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></div>';
           $data['department'] = $x['department'];
           $data['topic'] = $x['topic'];
           $data['publish_date'] = date('F d, Y',strtotime($x['publish_date']));

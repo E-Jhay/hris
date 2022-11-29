@@ -30,7 +30,7 @@ require_once "header.php";
     <form id="form" enctype="multipart/form-data">
 		<table class="table-condensed grid3_master">
 			<tr>
-				<td class="text-center"><img style="border: 1px dashed #a7a7a7; cursor: pointer;" src="usera.png" id="personal_image"></td>
+				<td class="text-center"><img title="Upload Image" style="border: 1px dashed #a7a7a7; cursor: pointer;" src="usera.png" id="personal_image"></td>
 				<input class="d-none" id="profile" type="file" name="profile" accept="image/png, image/gif, image/jpeg">
 			</tr>
 			<tr>

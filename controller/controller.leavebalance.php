@@ -11,7 +11,7 @@ class crud extends db_conn_mysql
       // Select all regular employees
       $query = $conn->prepare("SELECT a.*,b.* FROM tbl_employee a
                               LEFT JOIN contractinfo b
-                              ON a.id=b.emp_id ORDER BY a.id DESC");
+                              ON a.id=b.emp_id ORDER BY a.id_number ASC");
       $query->execute();
       $row = $query->fetchAll();
 

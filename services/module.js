@@ -26,20 +26,32 @@ function deleteCLient_callback(){
 }
 
 
-	// function lb(){
+	function lb(){
 
-	// 		 $.ajax({
-	// 			url:"controller/controller.leavebalance.php?leave_credits_load",
-	// 			method:"POST",
-	// 			data:{
-	// 				id:""
-	// 			},success:function(){
+			 $.ajax({
+				url:"controller/controller.leavebalance.php?leave_credits_load",
+				method:"POST",
+				data:{
+					id:""
+				},success:function(){
 
-	// 			}
-	// 		});
+				}
+			});
 			 
-	// }
-	// lb();
+	}
+	lb();
+	function sendNotificationEvaluation(){
+
+			 $.ajax({
+				url:"controller/controller.employee.php?sendNotificationEvaluation",
+				method:"POST",
+				success:function(data){
+					console.log(data)
+				}
+			});
+			 
+	}
+	sendNotificationEvaluation();
 
 	function open_file_news(){
 		var news_filename = $('#news_filename').val();

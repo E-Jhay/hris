@@ -17,7 +17,7 @@ require_once "header.php";
       
       <ul class="nav nav-tabs bb-none">
         <li class="nav-item">
-          <a class="nav-link active" id="memo" href="#" onclick="btnMemo()">Memo</a>
+          <a class="nav-link active" id="memo" href="#" onclick="btnMemo()">Individual Memo</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="inter_office_memo" href="#" onclick="btnInterOfficeMemo()">Inter Office Memo</a>
@@ -57,7 +57,7 @@ require_once "header.php";
               <th>Employee Name</th>
               <th>Memo Name</th>
               <th>Date</th>
-              <th>Action</th>
+              <th class="text-center">Action</th>
             </thead>
             <tbody>
               
@@ -96,7 +96,7 @@ require_once "header.php";
               <th>Department Name</th>
               <th>Memo Name</th>
               <th>Date</th>
-              <th>Action</th>
+              <th class="text-center">Action</th>
             </thead>
             <tbody>
               
@@ -109,6 +109,9 @@ require_once "header.php";
  
 </div>
 
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
+<input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">
 </body>
 <script src="services/memo.js"></script>
+<script src="services/pim_tab.js"></script>
 </html>
