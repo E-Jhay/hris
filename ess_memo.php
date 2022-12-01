@@ -47,7 +47,7 @@ $count = $leaves->countLeaves($empno);
           <th>Employee no</th>
           <th>Memo Name</th>
           <th>Date</th>
-          <th>Action</th>
+          <th class="text-center">Action</th>
         </thead>
         <tbody>
                 
@@ -60,7 +60,7 @@ $count = $leaves->countLeaves($empno);
           <th>Department Name</th>
           <th>Memo Name</th>
           <th>Date</th>
-          <th>Action</th>
+          <th class="text-center">Action</th>
         </thead>
         <tbody>
           

@@ -90,12 +90,19 @@ class crud extends db_conn_mysql
       
 
       $conn = $this->connect_mysql();
+      $sql = $conn->prepare("SELECT id FROM benefitsinfo WHERE emp_id = '$empid'");
+      $sql->execute();
 
       $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
       $qry1->execute();
 
-      $qry = $conn->prepare("UPDATE benefitsinfo SET dependent1='$dependent1', age1='$age1', sex1='$sex1', dependent2='$dependent2', age2='$age2', sex2='$sex2', dependent3='$dependent3', age3='$age3', sex3='$sex3', dependent4='$dependent4', age4='$age4', sex4='$sex4', dependent5='$dependent5', age5='$age5', sex5='$sex5',relation1='$relation1',relation2='$relation2',relation3='$relation3',relation4='$relation4',relation5='$relation5' WHERE emp_id='$empid'");
-      $qry->execute();
+      if($sql->fetch()) {
+        $qry = $conn->prepare("UPDATE benefitsinfo SET dependent1='$dependent1', age1='$age1', sex1='$sex1', dependent2='$dependent2', age2='$age2', sex2='$sex2', dependent3='$dependent3', age3='$age3', sex3='$sex3', dependent4='$dependent4', age4='$age4', sex4='$sex4', dependent5='$dependent5', age5='$age5', sex5='$sex5',relation1='$relation1',relation2='$relation2',relation3='$relation3',relation4='$relation4',relation5='$relation5' WHERE emp_id='$empid'");
+        $qry->execute();
+      } else {
+        $qry = $conn->prepare("INSERT INTO benefitsinfo SET dependent1='$dependent1', age1='$age1', sex1='$sex1', dependent2='$dependent2', age2='$age2', sex2='$sex2', dependent3='$dependent3', age3='$age3', sex3='$sex3', dependent4='$dependent4', age4='$age4', sex4='$sex4', dependent5='$dependent5', age5='$age5', sex5='$sex5',relation1='$relation1',relation2='$relation2',relation3='$relation3',relation4='$relation4',relation5='$relation5', emp_id='$empid'");
+        $qry->execute();
+      }
 
       session_start();
       $useraction = $_SESSION['fullname'];

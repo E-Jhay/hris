@@ -38,19 +38,21 @@ class crud extends db_conn_mysql
           $q2 = $conn->prepare("SELECT date_hired FROM contractinfo WHERE emp_id='$empid'");
           $q2->execute();
           $qrow = $q2->fetch();
+          if($qrow) {
 
-          $years=  date('Y') - date('Y', strtotime($qrow['date_hired']));
-          $months = date('m') - date('m', strtotime($qrow['date_hired']));
-          $days = date('d') - date('d', strtotime($qrow['date_hired']));
+            $years=  date('Y') - date('Y', strtotime($qrow['date_hired']));
+            $months = date('m') - date('m', strtotime($qrow['date_hired']));
+            $days = date('d') - date('d', strtotime($qrow['date_hired']));
 
-          $diffmonth = $years * 12 + $months;
+            $diffmonth = $years * 12 + $months;
 
-          if($days < 0){
+            if($days < 0){
 
-            $months -= 1;
-            $diffmonth -=1;
+              $months -= 1;
+              $diffmonth -=1;
+            }
+            $_SESSION['employee_month'] = $diffmonth;
           }
-          $_SESSION['employee_month'] = $diffmonth;
 
           echo json_encode(array("emp_status"=>"meron"));
       }else{

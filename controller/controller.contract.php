@@ -123,11 +123,20 @@ class crud extends db_conn_mysql
     $department = $_POST['department'];
 
     $conn = $this->connect_mysql();
+    $sql = $conn->prepare("SELECT id FROM contractinfo WHERE emp_id = '$empid'");
+    $sql->execute();
+
     $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',job_title='$job_title', job_category='$job_category',department='$department' WHERE id='$empid'");
     $qry1->execute();
 
-    $qry = $conn->prepare("UPDATE contractinfo SET date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='$preterm', resigned='$resigned', retired='$retired', terminatedd='$terminated', lastpay='$lastpay', remarks='$remarks' WHERE emp_id='$empid'");
-    $qry->execute();
+    if($sql->fetch()) {
+      $qry = $conn->prepare("UPDATE contractinfo SET date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='$preterm', resigned='$resigned', retired='$retired', terminatedd='$terminated', lastpay='$lastpay', remarks='$remarks' WHERE emp_id='$empid'");
+      $qry->execute();
+    } else {
+      $qry = $conn->prepare("INSERT INTO contractinfo SET date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='$preterm', resigned='$resigned', retired='$retired', terminatedd='$terminated', lastpay='$lastpay', remarks='$remarks', emp_id='$empid'");
+      $qry->execute();
+    }
+
 
     session_start();
     $useraction = $_SESSION['fullname'];

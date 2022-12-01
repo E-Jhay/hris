@@ -662,9 +662,9 @@ if(isset($_GET['generateEmployeeNumber'])){
 if(isset($_GET['updateEmployeeMasterfile'])){
   $x->updateEmployeeMasterfile();
 }
-if(isset($_GET['sendNotificationEvaluation'])){
-  $x->sendNotificationEvaluation();
-}
+// if(isset($_GET['sendNotificationEvaluation'])){
+//   $x->sendNotificationEvaluation();
+// }
 
 
 

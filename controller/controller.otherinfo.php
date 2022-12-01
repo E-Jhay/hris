@@ -125,11 +125,11 @@ class crud extends db_conn_mysql
 
       $empid = $_POST['emp_id'];
       $nickname = $_POST['nickname'];
-      $dateofbirth = $_POST['dateofbirth'];
-      $gender = $_POST['gender'];
+      $dateofbirth = $_POST['dateofbirth'] != '' ? $_POST['dateofbirth'] : '0000-00-00';
+      $gender = $_POST['gender'] != '' ? $_POST['gender'] : '';
       $height = $_POST['height'];
       $weight = $_POST['weight'];
-      $marital_status = $_POST['marital_status'];
+      $marital_status = $_POST['marital_status'] != '' ? $_POST['marital_status'] : '';
       $birth_place = $_POST['birth_place'];
       $blood_type = $_POST['blood_type'];
       $contact_name = $_POST['contact_name'];
@@ -141,12 +141,19 @@ class crud extends db_conn_mysql
       $contact_relation = $_POST['contact_relation'];
 
       $conn = $this->connect_mysql();
+      $sql = $conn->prepare("SELECT id FROM otherpersonalinfo WHERE emp_id = '$empid'");
+      $sql->execute();
 
       $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
       $qry1->execute();
 
-      $qry = $conn->prepare("UPDATE otherpersonalinfo SET nickname='$nickname', dateofbirth='$dateofbirth', gender='$gender', height='$height', weight='$weight', marital_status='$marital_status', birth_place='$birth_place', blood_type='$blood_type', contact_name='$contact_name', contact_address='$contact_address', contact_telno='$contact_telno', contact_celno='$contact_celno',contact_relation='$contact_relation' WHERE emp_id='$empid'");
-      $qry->execute();
+      if($sql->fetch()) {
+        $qry = $conn->prepare("UPDATE otherpersonalinfo SET nickname='$nickname', dateofbirth='$dateofbirth', gender='$gender', height='$height', weight='$weight', marital_status='$marital_status', birth_place='$birth_place', blood_type='$blood_type', contact_name='$contact_name', contact_address='$contact_address', contact_telno='$contact_telno', contact_celno='$contact_celno',contact_relation='$contact_relation' WHERE emp_id='$empid'");
+        $qry->execute();
+      } else {
+        $qry = $conn->prepare("INSERT INTO otherpersonalinfo SET nickname='$nickname', dateofbirth='$dateofbirth', gender='$gender', height='$height', weight='$weight', marital_status='$marital_status', birth_place='$birth_place', blood_type='$blood_type', contact_name='$contact_name', contact_address='$contact_address', contact_telno='$contact_telno', contact_celno='$contact_celno',contact_relation='$contact_relation', emp_id='$empid'");
+        $qry->execute();
+      }
 
       session_start();
       $useraction = $_SESSION['fullname'];

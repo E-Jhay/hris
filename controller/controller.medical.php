@@ -108,12 +108,19 @@ class crud extends db_conn_mysql
       $department = $_POST['department'];
 
       $conn = $this->connect_mysql();
+      $sql = $conn->prepare("SELECT id FROM medicalinfo WHERE emp_id = '$empid'");
+      $sql->execute();
 
       $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
       $qry1->execute();
 
-      $qry = $conn->prepare("UPDATE medicalinfo SET type1='$type1', classification1='$classification1', status1='$status1', dateofexam1='$dateofexam1', remarks1='$remarks1', type2='$type2', classification2='$classification2', status2='$status2', dateofexam2='$dateofexam2', remarks2='$remarks2', type3='$type3', classification3='$classification3', status3='$status3', dateofexam3='$dateofexam3', remarks3='$remarks3' WHERE emp_id='$empid'");
-      $qry->execute();
+      if($sql->fetch()) {
+        $qry = $conn->prepare("UPDATE medicalinfo SET type1='$type1', classification1='$classification1', status1='$status1', dateofexam1='$dateofexam1', remarks1='$remarks1', type2='$type2', classification2='$classification2', status2='$status2', dateofexam2='$dateofexam2', remarks2='$remarks2', type3='$type3', classification3='$classification3', status3='$status3', dateofexam3='$dateofexam3', remarks3='$remarks3' WHERE emp_id='$empid'");
+        $qry->execute();
+      } else {
+        $qry = $conn->prepare("INSERT INTO medicalinfo SET type1='$type1', classification1='$classification1', status1='$status1', dateofexam1='$dateofexam1', remarks1='$remarks1', type2='$type2', classification2='$classification2', status2='$status2', dateofexam2='$dateofexam2', remarks2='$remarks2', type3='$type3', classification3='$classification3', status3='$status3', dateofexam3='$dateofexam3', remarks3='$remarks3', emp_id='$empid'");
+        $qry->execute();
+      }
 
       session_start();
       $useraction = $_SESSION['fullname'];

@@ -66,7 +66,7 @@ $(document).ready(function(){
 				});
 				
 				$('#nickname').val(b.nickname);
-				$('#dateofbirth').val(b.dateofbirth);
+				$('#dateofbirth').val(b.dateofbirth !== '0000-00-00' ? b.dateofbirth : '');
 				$('#gender').val(b.gender);
 				$('#weight').val(b.weight);
 				$('#height').val(b.height);

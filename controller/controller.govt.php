@@ -96,12 +96,24 @@ class crud extends db_conn_mysql
       $department = $_POST['department'];
 
       $conn = $this->connect_mysql();
+      $sql = $conn->prepare("SELECT id FROM govtidinfo WHERE emp_id = '$empid'");
+      $sql->execute();
 
       $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
       $qry1->execute();
 
-      $qry = $conn->prepare("UPDATE govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks' WHERE emp_id='$empid'");
-      $qry->execute();
+      if($sql->fetch()) {
+        $qry = $conn->prepare("UPDATE govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks' WHERE emp_id='$empid'");
+        $qry->execute();
+      } else {
+        $qry = $conn->prepare("INSERT INTO govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks', emp_id='$empid'");
+        $qry->execute();
+      }
+      // $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
+      //   $qry1->execute();
+
+      //   $qry = $conn->prepare("UPDATE govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks' WHERE emp_id='$empid'");
+      //   $qry->execute();
 
       session_start();
       $useraction = $_SESSION['fullname'];

@@ -40,7 +40,7 @@ require_once "header.php";
           <th>File Name</th>
           <th>Payroll Period</th>
           <th>Process Date</th>
-          <th>Action</th>
+          <th class="text-center">Action</th>
         </thead>
         <tbody>
                 

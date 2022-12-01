@@ -102,12 +102,19 @@ class crud extends db_conn_mysql
       $yearend2 = $_POST['yearend2'];
 
       $conn = $this->connect_mysql();
+      $sql = $conn->prepare("SELECT id FROM previous_empinfo WHERE emp_id = '$empid'");
+      $sql->execute();
 
       $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
       $qry1->execute();
 
-      $qry = $conn->prepare("UPDATE previous_empinfo SET company1='$company1', naturebusiness1='$naturebusiness1', year1='$year1', position1='$position1', rate1='$rate1', company2='$company2', naturebusiness2='$naturebusiness2', year2='$year2', position2='$position2', rate2='$rate2',yearend1='$yearend1',yearend2='$yearend2' WHERE emp_id='$empid'");
-      $qry->execute();
+      if($sql->fetch()) {
+        $qry = $conn->prepare("UPDATE previous_empinfo SET company1='$company1', naturebusiness1='$naturebusiness1', year1='$year1', position1='$position1', rate1='$rate1', company2='$company2', naturebusiness2='$naturebusiness2', year2='$year2', position2='$position2', rate2='$rate2',yearend1='$yearend1',yearend2='$yearend2' WHERE emp_id='$empid'");
+        $qry->execute();
+      } else {
+        $qry = $conn->prepare("INSERT INTO previous_empinfo SET company1='$company1', naturebusiness1='$naturebusiness1', year1='$year1', position1='$position1', rate1='$rate1', company2='$company2', naturebusiness2='$naturebusiness2', year2='$year2', position2='$position2', rate2='$rate2',yearend1='$yearend1',yearend2='$yearend2', emp_id='$empid'");
+        $qry->execute();
+      }
 
       session_start();
       $useraction = $_SESSION['fullname'];

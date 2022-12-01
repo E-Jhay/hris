@@ -75,12 +75,19 @@ class crud extends db_conn_mysql
       $civil_service = $_POST['civil_service'];
 
       $conn = $this->connect_mysql();
+      $sql = $conn->prepare("SELECT id FROM otheridinfo WHERE emp_id = '$empid'");
+      $sql->execute();
 
       $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
       $qry1->execute();
 
-      $qry = $conn->prepare("UPDATE otheridinfo SET comp_id_dateissue='$comp_id_dateissue', comp_id_vdate='$comp_id_vdate', fac_ap_dateissue='$fac_ap_dateissue', fac_ap_vdate='$fac_ap_vdate', card_number='$fac_card_number',driver_id='$driver_id',driver_exp='$driver_exp',prc_number='$prc_number',prc_exp='$prc_exp',civil_service='$civil_service' WHERE emp_id='$empid'");
-      $qry->execute();
+      if($sql->fetch()) {
+        $qry = $conn->prepare("UPDATE otheridinfo SET comp_id_dateissue='$comp_id_dateissue', comp_id_vdate='$comp_id_vdate', fac_ap_dateissue='$fac_ap_dateissue', fac_ap_vdate='$fac_ap_vdate', card_number='$fac_card_number',driver_id='$driver_id',driver_exp='$driver_exp',prc_number='$prc_number',prc_exp='$prc_exp',civil_service='$civil_service' WHERE emp_id='$empid'");
+        $qry->execute();
+      } else {
+        $qry = $conn->prepare("INSERT INTO otheridinfo SET comp_id_dateissue='$comp_id_dateissue', comp_id_vdate='$comp_id_vdate', fac_ap_dateissue='$fac_ap_dateissue', fac_ap_vdate='$fac_ap_vdate', card_number='$fac_card_number',driver_id='$driver_id',driver_exp='$driver_exp',prc_number='$prc_number',prc_exp='$prc_exp',civil_service='$civil_service', emp_id='$empid'");
+        $qry->execute();
+      }
 
       session_start();
       $useraction = $_SESSION['fullname'];

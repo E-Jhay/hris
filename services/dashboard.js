@@ -107,9 +107,12 @@ $(document).ready(function(){
 	  	method:"POST",
 	  	data: $('form').serialize(),
 	  	success:function(data){
-	  		var b = $.parseJSON(data);
-	  		var id = b.id;
-	  		window.location.href="dashboard.php?id="+id;
+			$.Toast("Successfully Saved", successToast);
+			setTimeout(() => {
+				var b = $.parseJSON(data);
+				var id = b.id;
+				window.location.href="dashboard.php?id="+id;
+			}, 1000)
 	  	}
 	  });
 	}

@@ -40,18 +40,18 @@ function deleteCLient_callback(){
 			 
 	}
 	lb();
-	function sendNotificationEvaluation(){
+	// function sendNotificationEvaluation(){
 
-			 $.ajax({
-				url:"controller/controller.employee.php?sendNotificationEvaluation",
-				method:"POST",
-				success:function(data){
-					console.log(data)
-				}
-			});
+	// 		 $.ajax({
+	// 			url:"controller/controller.employee.php?sendNotificationEvaluation",
+	// 			method:"POST",
+	// 			success:function(data){
+	// 				console.log(data)
+	// 			}
+	// 		});
 			 
-	}
-	sendNotificationEvaluation();
+	// }
+	// sendNotificationEvaluation();
 
 	function open_file_news(){
 		var news_filename = $('#news_filename').val();

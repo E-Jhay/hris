@@ -127,7 +127,11 @@ class crud extends db_conn_mysql
         echo "Sorry, file already exists.";
        }else{
   
-        mkdir("../memo/".$departmentList);
+        if($employeeddown != '' || $employeeddown != NULL) {
+          mkdir("../memo/".$employeeddown);
+        } else {
+          mkdir("../memo/".$departmentList);
+        }
 
           move_uploaded_file($temp_name,$path_filename_ext);
 

@@ -102,12 +102,19 @@ class crud extends db_conn_mysql
     $dept_head_email = $_POST['dept_head_email'];
 
     $conn = $this->connect_mysql();
+    $sql = $conn->prepare("SELECT id FROM contactinfo WHERE emp_id = '$empid'");
+    $sql->execute();
 
     $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
     $qry1->execute();
 
-    $qry = $conn->prepare("UPDATE contactinfo SET street='$street', municipality='$municipality', province='$province', contactno='$contactno', telephoneno='$telephoneno', corp_email='$corp_email', personal_email='$personal_email',nationality='$nationality',driver_license='$driver_license',driver_expdate='$driver_expdate',dept_head_email='$dept_head_email' WHERE emp_id='$empid'");
-    $qry->execute();
+    if($sql->fetch()) {
+      $qry = $conn->prepare("UPDATE contactinfo SET street='$street', municipality='$municipality', province='$province', contactno='$contactno', telephoneno='$telephoneno', corp_email='$corp_email', personal_email='$personal_email',nationality='$nationality',driver_license='$driver_license',driver_expdate='$driver_expdate',dept_head_email='$dept_head_email' WHERE emp_id='$empid'");
+      $qry->execute();
+    } else {
+      $qry = $conn->prepare("INSERT INTO contactinfo SET street='$street', municipality='$municipality', province='$province', contactno='$contactno', telephoneno='$telephoneno', corp_email='$corp_email', personal_email='$personal_email',nationality='$nationality',driver_license='$driver_license',driver_expdate='$driver_expdate',dept_head_email='$dept_head_email', emp_id='$empid'");
+      $qry->execute();
+    }
 
 
     session_start();
