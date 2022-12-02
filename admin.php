@@ -115,7 +115,7 @@ require_once "header.php";
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">ESS</label>
-            <input type="checkbox" id="3" name="role" value="3">
+            <input type="checkbox" id="3" name="role" value="3" disabled>
           </div>
           <center>
           <button type="button" onclick="updateuser()" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>

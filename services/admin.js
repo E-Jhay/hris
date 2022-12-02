@@ -242,7 +242,7 @@ $(document).ready(function(){
   $.each($("input[name='role']:checked"), function(){
     roles.push($(this).val());
   });
-  var userrole = roles.join(",");
+  var userrole = roles.length > 0 ? roles.join(",") : '3';
 	$.ajax({
 		url:"controller/controller.admin.php?updateuser",
 		method:"POST",
