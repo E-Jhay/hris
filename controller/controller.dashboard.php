@@ -97,7 +97,7 @@ class crud extends db_conn_mysql
     $leave_balance = $_POST['leave_balance'];
     $nationality = $_POST['nationality'];
     $driver_license = $_POST['driver_license'];
-    $driver_expdate = $_POST['driver_expdate'];
+    $driver_expdate = $_POST['driver_expdate'] != '' ? $_POST['driver_expdate'] : '0000-00-00';
     $department = $_POST['department'];
     $dept_head_email = $_POST['dept_head_email'];
 

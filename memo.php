@@ -29,26 +29,46 @@ require_once "header.php";
 <div class="navcontainer">
 
   <div id="div_memo" class="div_content">
-    <form id="form" name="form" method="post" action="controller/controller.memo.php?uploadmemo" enctype="multipart/form-data">
-                        
-        <table class="table table-striped w-100">
-          <tr>
-            <td><label>Employee:</label></td>
-            <td><select class="form-control" id="employeeddown" name="employeeddown" required></select></td>
-            <td><label>Memo name:</label></td>
-            <td>
-              <input type="text" class="form-control" id="memoname" name="memoname" required>
-              <input type="hidden" class="form-control" name="departmentList" value="">
-            </td>
-          </tr>
+    <form id="form" action="controller/controller.memo.php?uploadmemo" enctype="multipart/form-data">
+    <div>
+      <button type="button" id="addMemoBtn" class="btn btn-primary mb-4">Add Individual Memo</button>
+      <button type="button" id="cancelMemoBtn" class="btn btn-warning mb-4" style="display: none; ">Cancel</button>
+    </div>
 
-          <tr>
-            <td><label>Memorandum File:</label></td>
-            <td><input class="form-control" id="empfile" required="" type="file" name="empfile" /></td>
-            <td><button type="submit" class="btn btn-sm btn-success"><i class="fas fa-sm fa-save"></i> Save</button></td>
-            <td></td>
-          </tr>
-        </table>                  
+    <table class="table-condensed grid12_master" id="memo_table">
+			<tr>
+				<td>
+					<b>Employee: </b>
+					<select class="form-control" id="employeeddown" name="employeeddown" required></select>
+          <input type="hidden" class="form-control" name="departmentList" value="">
+				</td>
+			</tr>
+      <tr>
+        
+				<td>
+					<b>Memo title: </b>
+					<input type="text" class="form-control" id="memoname" name="memoname" placeholder="Memo Title" required>
+				</td>
+      </tr>
+			<tr>
+				<td>
+					<b>Memorandum File: </b>
+					<input class="form-control" id="empfile" required="" type="file" name="empfile" />
+				</td>
+			</tr>
+      <tr>
+				<td>
+					<b>Remarks: </b>
+					<textarea name="remarks" id="remarks" cols="20" rows="3" class="form-control" placeholder="Remarks"></textarea>
+				</td>
+      </tr>
+      <tr>
+        <td class="text-center">
+          <button type="submit" class="btn btn-md btn-success"><i class="fas fa-sm fa-save"></i> Save</button>
+        </td>
+      </tr>
+		</table>
+                    
                     
     </form>
     <table class="table table-striped w-100" id="tbl_memo">
@@ -57,6 +77,7 @@ require_once "header.php";
               <th>Employee Name</th>
               <th>Memo Name</th>
               <th>Date</th>
+              <th>Remarks</th>
               <th class="text-center">Action</th>
             </thead>
             <tbody>
@@ -69,9 +90,9 @@ require_once "header.php";
   </div>
 
   <div id="div_inter_office_memo" class="div_content">
-    <form id="form2" name="form2" method="post" action="controller/controller.memo.php?uploadmemo" enctype="multipart/form-data">
+    <form id="form2" name="form2" enctype="multipart/form-data">
                         
-        <table class="table table-striped w-100">
+        <!-- <table class="table table-striped w-100">
           <tr>
             <td><label>Department:</label></td>
             <td><select class="form-control" id="departmentList" name="departmentList" required></select></td>
@@ -88,7 +109,46 @@ require_once "header.php";
             <td><button type="submit" class="btn btn-sm btn-success"><i class="fas fa-sm fa-save"></i> Save</button></td>
             <td></td>
           </tr>
-        </table>                  
+        </table>   -->
+
+        <div>
+          <button type="button" id="addMemoBtnDepartment" class="btn btn-primary mb-4">Add Inter Office Memo</button>
+          <button type="button" id="cancelMemoBtnDepartment" class="btn btn-warning mb-4" style="display: none; ">Cancel</button>
+        </div>
+        
+        <table class="table-condensed grid12_master" id="memo_table_department">
+          <tr>
+            <td>
+              <b>Department: </b>
+              <select class="form-control" id="departmentList" name="departmentList" required></select>
+              <input type="hidden" class="form-control" name="employeeddown" value="">
+            </td>
+          </tr>
+          <tr>
+            
+            <td>
+              <b>Memo title: </b>
+              <input type="text" class="form-control" id="memoname" name="memoname" placeholder="Memo Title" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Memorandum File: </b>
+              <input class="form-control" id="empfile" required="" type="file" name="empfile" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Remarks: </b>
+              <textarea name="remarks" id="remarks" cols="20" rows="3" class="form-control" placeholder="Remarks"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center">
+              <button type="submit" class="btn btn-md btn-success"><i class="fas fa-sm fa-save"></i> Save</button>
+            </td>
+          </tr>
+        </table>
                     
     </form>
     <table class="table table-striped w-100" id="tbl_inter_office_memo">
@@ -96,6 +156,7 @@ require_once "header.php";
               <th>Department Name</th>
               <th>Memo Name</th>
               <th>Date</th>
+              <th>Remarks</th>
               <th class="text-center">Action</th>
             </thead>
             <tbody>

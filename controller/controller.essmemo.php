@@ -23,12 +23,14 @@ class crud extends db_conn_mysql
             }
             $data = array();
             $data['action'] = '<center>
-            <button onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-download"></i> Download</button>
+            <button onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View</button>
+            <button onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
             </center>
             ';
 
             $data['employeeno'] = $x['employee_no'];
             $data['memo'] = $x['memo_name'];
+            $data['remarks'] = $x['remarks'];
             $data['date'] = $x['datee'];
 
           $return[] = $data;
@@ -54,6 +56,7 @@ class crud extends db_conn_mysql
 
             $data['department'] = $x['department'];
             $data['memo'] = $x['memo_name'];
+            $data['remarks'] = $x['remarks'];
             $data['date'] = $x['datee'];
 
           $return[] = $data;
@@ -62,6 +65,34 @@ class crud extends db_conn_mysql
         echo json_encode(array('data'=>$return));
     }
 
+  }
+
+  function uploadExplanation() {
+    $memo_id = $_POST['memo_id'];
+    if(!empty($_FILES["file"]["name"])) {
+      $target_dir = "../memo/Explanation/";
+      $file = $_FILES['file']['name'];
+      $path = pathinfo($file);
+      $ext = $path['extension'];
+      $temp_name = $_FILES['file']['tmp_name'];
+      $today = date("Ymd");
+      $name = explode(".", $file);
+      $fileExplanation = $name[0]."-".$today.".".$ext;
+      $path_filename_ext = $target_dir;
+      if(!is_dir($path_filename_ext)){
+        mkdir($path_filename_ext, 0755);
+      }
+      $path_filename_ext .= $fileExplanation;
+    
+      if (move_uploaded_file($temp_name,$path_filename_ext)) {
+        $conn = $this->connect_mysql();
+        $qry = $conn->prepare("UPDATE tbl_memo SET explanation='$fileExplanation' WHERE id = '$memo_id'");
+        $qry->execute();
+        echo json_encode(array('message' => 'Explanation Uploaded Successfully', 'type' => 'success'));
+        exit;
+      }
+    }
+    echo json_encode(array('message' => 'An Error Occured', 'type' => 'error'));
   }
 
   function readleave(){
@@ -168,6 +199,9 @@ if(isset($_GET['count_payslip'])){
 
 if(isset($_GET['count_reimbursement'])){
   $x->count_reimbursement();
+}
+if(isset($_GET['uploadExplanation'])){
+  $x->uploadExplanation();
 }
 
  ?>

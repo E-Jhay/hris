@@ -67,6 +67,7 @@ class crud extends db_conn_mysql
         $data['employeeno'] = $x['employee_no'];
         $data['name'] = $x['fullname'];
         $data['memo'] = $x['memo_name'];
+        $data['remarks'] = strlen($x['remarks']) > 20 ? substr($x['remarks'], 0, 20)."..." : $x['remarks'];
         $data['date'] = date('F d, Y',strtotime($x['datee']));
 
         $return[] = $data;
@@ -90,6 +91,7 @@ class crud extends db_conn_mysql
 
           $data['department'] = $x['department'];
           $data['memo'] = $x['memo_name'];
+          $data['remarks'] = strlen($x['remarks']) > 20 ? substr($x['remarks'], 0, 20)."..." : $x['remarks'];
           $data['date'] = date('F d, Y',strtotime($x['datee']));
 
           $return[] = $data;
@@ -106,6 +108,7 @@ class crud extends db_conn_mysql
       $employeeddown = $_POST['employeeddown'];
       $departmentList = $_POST['departmentList'];
       $memoname = $_POST['memoname'];
+      $remarks = $_POST['remarks'];
       $datenow = date('Y-m-d');
       // Where the file is going to be stored
       if($employeeddown != '' || $employeeddown != NULL){
@@ -136,7 +139,7 @@ class crud extends db_conn_mysql
           move_uploaded_file($temp_name,$path_filename_ext);
 
           $conn=$this->connect_mysql();
-          $sql = $conn->prepare("INSERT INTO tbl_memo SET employee_no='$employeeddown', file_name='$attachfile', datee='$datenow', status='active', memo_name='$memoname', department='$departmentList'");
+          $sql = $conn->prepare("INSERT INTO tbl_memo SET employee_no='$employeeddown', file_name='$attachfile', datee='$datenow', status='active', memo_name='$memoname', department='$departmentList', remarks='$remarks'");
           $sql->execute();
 
           session_start();

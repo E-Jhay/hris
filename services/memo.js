@@ -10,8 +10,88 @@ $(document).ready(function(){
       $('.navnavnav').slideToggle();
      });
      $('#div_inter_office_memo').hide();
+     $('#memo_table').hide();
+     $('#memo_table_department').hide();
+    //  $('#cancelMemoBtn').hide();
 
-	});
+});
+
+  $('#addMemoBtn').on('click', () => {
+    $("#addMemoBtn").hide()
+    $('#cancelMemoBtn').show();
+    $('#memo_table').show();
+  })
+  $('#cancelMemoBtn').on('click', () => {
+    $("#addMemoBtn").show()
+    $('#cancelMemoBtn').hide();
+    $('#memo_table').hide();
+  })
+  $('#addMemoBtnDepartment').on('click', () => {
+    $("#addMemoBtnDepartment").hide()
+    $('#cancelMemoBtnDepartment').show();
+    $('#memo_table_department').show();
+  })
+  $('#cancelMemoBtnDepartment').on('click', () => {
+    $("#addMemoBtnDepartment").show()
+    $('#cancelMemoBtnDepartment').hide();
+    $('#memo_table_department').hide();
+  })
+
+  $('#form').on('submit', (e) => {
+    e.preventDefault()
+    confirmed("save",save_callback, "Do you really want to save this?", "Yes", "No");
+  })
+  $('#form2').on('submit', (e) => {
+    e.preventDefault()
+    confirmed("save",save_callback_form2, "Do you really want to save this?", "Yes", "No");
+  })
+
+  function save_callback(){
+		var formData = new FormData($("#form")[0]);
+		$.ajax({
+			url:"controller/controller.memo.php?uploadmemo",
+			method:"POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success:function(){
+				$.Toast("Successfully Saved", successToast);
+        $('#form').trigger("reset");
+        $("#addMemoBtn").show()
+        $('#cancelMemoBtn').hide();
+        $('#memo_table').hide();
+        $('#tbl_inter_office_memo').DataTable().destroy();
+        $('#tbl_memo').DataTable().destroy();
+        load_memo();
+				// setTimeout(() => {
+				// 	window.location.href="memo.php";
+				// }, 1000)
+			}
+		});
+	}
+  function save_callback_form2(){
+		var formData = new FormData($("#form2")[0]);
+		$.ajax({
+			url:"controller/controller.memo.php?uploadmemo",
+			method:"POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success:function(){
+				$.Toast("Successfully Saved", successToast);
+        $('#form2').trigger("reset");
+        $("#addMemoBtnDepartment").show()
+        $('#cancelMemoBtnDepartment').hide();
+        $('#memo_table_department').hide();
+        $('#tbl_inter_office_memo').DataTable().destroy();
+        $('#tbl_memo').DataTable().destroy();
+        load_memo();
+				// setTimeout(() => {
+				// 	window.location.href="memo.php";
+				// }, 1000)
+			}
+		});
+	}
 
   // function lb(){
 
@@ -56,6 +136,7 @@ function delete_memo_callback(data){
       },success:function(){
         $.Toast("Successfully Deleted", errorToast);
         $('#tbl_memo').DataTable().destroy();
+        $('#tbl_inter_office_memo').DataTable().destroy();
         load_memo();
       }
     });
@@ -79,6 +160,7 @@ function delete_memo_callback(data){
                     {"data" : "name"},
                     { "data" : "memo"},
                     { "data" : "date"},
+                    { "data" : "remarks"},
                     { "data" : "action"}
 
                 ],
@@ -97,6 +179,7 @@ function delete_memo_callback(data){
                     { "data" : "department"},
                     { "data" : "memo"},
                     { "data" : "date"},
+                    { "data" : "remarks"},
                     { "data" : "action"}
 
                 ],

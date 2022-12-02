@@ -47,6 +47,7 @@ $count = $leaves->countLeaves($empno);
           <th>Employee no</th>
           <th>Memo Name</th>
           <th>Date</th>
+          <th>Remarks</th>
           <th class="text-center">Action</th>
         </thead>
         <tbody>
@@ -68,6 +69,45 @@ $count = $leaves->countLeaves($empno);
       </table>
   </div>
 
+</div>
+
+<div class="modal fade" id="acknowledge_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Overtime Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="acknowledge_form" enctype="multipart/form-data">
+            <div class="form-group">
+              <input type="hidden" id="memo_id" name="">
+              <label for="exampleInputEmail1">Memo Name:</label>
+              <input type="text" disabled class="form-control" id="memo_name"></input>
+            </div>
+            
+            <div class="form-group">
+              <label for="exampleInputEmail1">Date:</label>
+              <input type="text" disabled class="form-control" id="memo_date"></input>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Remarks:</label>
+              <input type="text" disabled class="form-control" id="remarks"></input>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Upload Explanation:</label>
+              <input type="file" name="file" id="file" class="form-control" required>
+            </div>
+            <center>
+              <button type="submit" class="btn btn-primary btn-sm" id="btn_submit">Submit</button>
+            </center>
+          </form>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <input type="hidden" id="employeenum" value="<?php echo $empno ?>" name="">

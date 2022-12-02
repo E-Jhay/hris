@@ -57,6 +57,7 @@ $(document).ready(function(){
                     { "data" : "employeeno"},
                     { "data" : "memo"},
                     { "data" : "date"},
+                    { "data" : "remarks"},
                     { "data" : "action"}
 
                 ],
@@ -75,6 +76,7 @@ $(document).ready(function(){
                     { "data" : "department"},
                     { "data" : "memo"},
                     { "data" : "date"},
+                    { "data" : "remarks"},
                     { "data" : "action"}
 
                 ],
@@ -223,3 +225,82 @@ $(document).ready(function(){
     $("#personal_memo").removeClass("active");
     $("#inter_office_memo").addClass("active");
  }
+
+ function uploadExplain(id, date, memo_name) {
+  $('#acknowledge_modal').modal('show');
+  $('#memo_id').val(id);
+  $('#memo_name').val(memo_name);
+  $('#memo_date').val(date);
+
+  // if(statuss=="Pending"){
+  //   $('#btnapprove').show();
+  //   $('#btndisapprove').show();
+  //   $('#btncancelapprove').hide();
+  // }else{
+  //   $('#btnapprove').hide();
+  //   $('#btndisapprove').hide();
+  //   $('#btncancelapprove').show();
+  // }
+
+}
+
+// function submitFormConfirm(e){
+//   e.preventDefault()
+//   confirmed("save",submitForm, "Do you really want to approve this?", "Yes", "No");
+// }
+
+$('#acknowledge_form').on('submit', (e) => {
+  e.preventDefault()
+  const form_data = new FormData();
+  const file = $("#file").prop("files")[0];
+  const memo_id = $("#memo_id").val();
+  form_data.append("file", file)
+  form_data.append("memo_id", memo_id)
+
+  $.ajax({
+    url:"controller/controller.essmemo.php?uploadExplanation",
+    method:"POST",
+    data: form_data,
+    processData: false,
+    contentType: false,
+    success:function(data){
+      const b = $.parseJSON(data)
+      if(b.type == 'error') {
+        $.Toast(b.message, errorToast);
+      } else {
+        $.Toast(b.message, successToast);
+        setTimeout(() => {	
+          window.location.href="ess_memo.php";
+        }, 1000)
+      }
+    }
+  });
+  // console.log(form_data)
+  // console.log(memo_id)
+})
+
+// function submitForm(e) {
+//   e.preventDefault()
+//   const form_data = new FormData();
+//   const file = $("#file").prop("files")[0];
+//   const memo_id = $("#memo_id").val();
+//   form_data.append("file", file)
+//   form_data.append("memo_id", memo_id)
+
+//   $.ajax({
+//     url:"controller/controller.essmemo.php?uploadExplanation",
+//     method:"POST",
+//     data: form_data,
+//     processData: false,
+//     contentType: false,
+//     success:function(data){
+//       // $.Toast("Successfully Saved", successToast);
+//       // setTimeout(() => {	
+//       //   window.location.href="ess_memo.php";
+//       // }, 1000)
+//       console.log(data)
+//     }
+//   });
+//   // console.log(form_data)
+//   // console.log(memo_id)
+// }
