@@ -212,21 +212,21 @@ require_once "header.php";
 			<tr>
 				<td>
 					<b>TIN#: </b>
-					<input type="text" class="form-control" id="tin" name="tin" placeholder="TIN #">
+					<input type="text" class="form-control" id="tin" name="tin" placeholder="000-000-000-000" maxlength="15" minlength="15">
 				</td>
 				<td>
 					<b>SSS#: </b>
-					<input type="text" class="form-control" id="sss" name="sss" placeholder="SSS Number">
+					<input type="text" class="form-control" id="sss" name="sss" placeholder="00-0000000-0" maxlength="12" minlength="12">
 				</td>
 				<td>
 					<b>PHIC#: </b>
-					<input type="text" class="form-control" id="phic" name="phic" placeholder="PHIC Number">
+					<input type="text" class="form-control" id="phic" name="phic" placeholder="00-000000000-0" maxlength="14" minlength="14">
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<b>HDMF#: </b>
-					<input type="text" class="form-control" id="hdmf" name="hdmf" placeholder="HDMF Number">
+					<input type="text" class="form-control" id="hdmf" name="hdmf" placeholder="0000-0000-0000" maxlength="14">
 				</td>
 				<td>
 					<b>ATM#: </b>

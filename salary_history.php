@@ -86,11 +86,11 @@ require_once "header.php";
 		<div class="grid12_master p-3">
 			<button type="button" class="btn btn-sm btn-success" onclick="salary_adjust()"><i class="fas fa-sm fa-wallet"></i> Salary Adjustment</button>
 			<div class="table-responsive">
-				<table class="table table-condensed" id="tbl_salaryhistory">
+				<table class="table" id="tbl_salaryhistory">
 					<thead>
-						<th>Position</th>
-						<th>Employment Status</th>
-						<th>Date Hired</th>
+						<!-- <th>Position</th>
+						<th>Employment Status</th> -->
+						<!-- <th>Date Hired</th> -->
 						<th>Basic salary</th>
 						<th>Salary Type1</th>
 						<th>Salary Rate1</th>
@@ -120,107 +120,102 @@ require_once "header.php";
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-
-          <div class="form-group">
-          	<input type="hidden" id="idemp" value="<?php echo $_GET['id']; ?>" name="">
-        		<input type="hidden" id="empno" value="<?php echo $empno; ?>" name="">
-        		<input type="hidden" id="idsalary" name="">
-
-            <label for="exampleInputEmail1">Position</label>
-            <input type="text" class="form-control txtbox" id="positionemp" name="positionemp" placeholder="">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleInputEmail1">Employment Status</label>
-            <select class="form-control" id="statusemp" name="statusemp"></select>
-          </div>
-
-          <div class="form-group">
-            <label for="exampleInputEmail1">Date Hired</label>
-            <input type="date" class="form-control txtbox" id="datehiredemp" name="datehiredemp" placeholder="">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleInputEmail1">Basic Salary</label>
-            <input type="number" class="form-control txtbox" id="basic_salary" name="basic_salary" placeholder="">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleInputEmail1">Allowance 1</label>
-	            <select class="form-control" id="salarytype" name="salarytype">
-	        				<option value="" selected=""> --Select allowance-- </option>
-	        				<option value="Subsidy"> Subsidy </option>
-	        				<option value="Revolving Fund"> Revolving Fund </option>
-	        				<option value="Transportation"> Transportation </option>
-	        				<option value="Meal"> Meal </option>
-	        				<option value="Housing"> Housing </option>
-	        				<option value="Professional Fee"> Professional Fee </option>
-	        				<option value="Car Rental"> Car Rental </option>
-	        				<option value="Ecola"> Ecola </option>
-        			</select>
-        			<input class="form-control" type="number" id="salaryemp" name="salaryemp">
-        			<label for="exampleInputEmail1">Allowance 2</label>
-	        		<select class="form-control" id="salarytype2" name="salarytype2">
-	        				<option value="" selected=""> --Select allowance-- </option>
-	        				<option value="Subsidy"> Subsidy </option>
-	        				<option value="Revolving Fund"> Revolving Fund </option>
-	        				<option value="Transportation"> Transportation </option>
-	        				<option value="Meal"> Meal </option>
-	        				<option value="Housing"> Housing </option>
-	        				<option value="Professional Fee"> Professional Fee </option>
-	        				<option value="Car Rental"> Car Rental </option>
-	        				<option value="Ecola"> Ecola </option>
-        			</select>
-        			<input class="form-control" type="number" id="salaryemp2" name="salaryemp2">
-
-        			<label for="exampleInputEmail1">Allowance 3</label>
-	        		<select class="form-control" id="salarytype3" name="salarytype3">
-	        				<option value="" selected=""> --Select allowance-- </option>
-	        				<option value="Subsidy"> Subsidy </option>
-	        				<option value="Revolving Fund"> Revolving Fund </option>
-	        				<option value="Transportation"> Transportation </option>
-	        				<option value="Meal"> Meal </option>
-	        				<option value="Housing"> Housing </option>
-	        				<option value="Professional Fee"> Professional Fee </option>
-	        				<option value="Car Rental"> Car Rental </option>
-	        				<option value="Ecola"> Ecola </option>
-        			</select>
-        			<input class="form-control" type="number" id="salaryemp3" name="salaryemp3">
-
-        			<label for="exampleInputEmail1">Allowance 4</label>
-	        		<select class="form-control" id="salarytype4" name="salarytype4">
-	        				<option value="" selected=""> --Select allowance-- </option>
-	        				<option value="Subsidy"> Subsidy </option>
-	        				<option value="Revolving Fund"> Revolving Fund </option>
-	        				<option value="Transportation"> Transportation </option>
-	        				<option value="Meal"> Meal </option>
-	        				<option value="Housing"> Housing </option>
-	        				<option value="Professional Fee"> Professional Fee </option>
-	        				<option value="Car Rental"> Car Rental </option>
-	        				<option value="Ecola"> Ecola </option>
-        			</select>
-        			<input class="form-control" type="number" id="salaryemp4" name="salaryemp4">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleInputEmail1">Effective Date</label>
-            <input type="date" class="form-control txtbox" id="effectdateemp" name="effectdateemp" placeholder="" required>
-			<span style="color: red" id="error" class="d-none">Effected date is required</span>
-          </div>
-
-          <div class="form-group">
-            <label for="exampleInputEmail1">Remarks</label>
-            <input type="text" class="form-control txtbox" id="remarks" name="remarks" placeholder="">
-          </div>
-
-          
-          <center>
-	          <button type="button" class="btn btn-sm btn-success" id="btnsave_histo" onclick="savesalary()"><i class="fas fa-sm fa-save"></i> Save</button>
-        		<button type="button" class="btn btn-sm btn-success" id="btnupd_histo" onclick="updatesalary()"><i class="fas fa-sm fa-save"></i> Save</button>
-          </center>
-
-      </div>
+      <form id="formModal" enctype="multipart/form-data">
+		<div class="modal-body">
+			<div class="form-group">
+				<input type="hidden" id="idemp" value="<?php echo $_GET['id']; ?>" name="idemp">
+				<input type="hidden" id="employeeno"  name="employeeno">
+				<input type="hidden" id="action"  name="action">
+				<input type="hidden" id="idsalary" name="idsalary">
+			  <label for="exampleInputEmail1">Position</label>
+			  <input type="text" class="form-control txtbox" id="positionemp" name="positionemp" placeholder="">
+			</div>
+			<div class="form-group">
+			  <label for="exampleInputEmail1">Employment Status</label>
+			  <select class="form-control" id="statusemp" name="statusemp"></select>
+			</div>
+			<div class="form-group">
+			  <label for="exampleInputEmail1">Date Hired</label>
+			  <input type="date" class="form-control txtbox" id="datehiredemp" name="datehiredemp" placeholder="">
+			</div>
+			<div class="form-group">
+			  <label for="exampleInputEmail1">Basic Salary</label>
+			  <input type="number" class="form-control txtbox" id="basic_salary" name="basic_salary" placeholder="">
+			</div>
+			<div class="form-group">
+			  <label for="exampleInputEmail1">Allowance 1</label>
+						<select class="form-control" id="salarytype" name="salarytype">
+									<option value="" selected=""> --Select allowance-- </option>
+									<option value="Subsidy"> Subsidy </option>
+									<option value="Revolving Fund"> Revolving Fund </option>
+									<option value="Transportation"> Transportation </option>
+									<option value="Meal"> Meal </option>
+									<option value="Housing"> Housing </option>
+									<option value="Professional Fee"> Professional Fee </option>
+									<option value="Car Rental"> Car Rental </option>
+									<option value="Ecola"> Ecola </option>
+					</select>
+					<input class="form-control" type="number" id="salaryemp" name="salaryemp">
+					<label for="exampleInputEmail1">Allowance 2</label>
+							<select class="form-control" id="salarytype2" name="salarytype2">
+									<option value="" selected=""> --Select allowance-- </option>
+									<option value="Subsidy"> Subsidy </option>
+									<option value="Revolving Fund"> Revolving Fund </option>
+									<option value="Transportation"> Transportation </option>
+									<option value="Meal"> Meal </option>
+									<option value="Housing"> Housing </option>
+									<option value="Professional Fee"> Professional Fee </option>
+									<option value="Car Rental"> Car Rental </option>
+									<option value="Ecola"> Ecola </option>
+					</select>
+					<input class="form-control" type="number" id="salaryemp2" name="salaryemp2">
+					<label for="exampleInputEmail1">Allowance 3</label>
+							<select class="form-control" id="salarytype3" name="salarytype3">
+									<option value="" selected=""> --Select allowance-- </option>
+									<option value="Subsidy"> Subsidy </option>
+									<option value="Revolving Fund"> Revolving Fund </option>
+									<option value="Transportation"> Transportation </option>
+									<option value="Meal"> Meal </option>
+									<option value="Housing"> Housing </option>
+									<option value="Professional Fee"> Professional Fee </option>
+									<option value="Car Rental"> Car Rental </option>
+									<option value="Ecola"> Ecola </option>
+					</select>
+					<input class="form-control" type="number" id="salaryemp3" name="salaryemp3">
+					<label for="exampleInputEmail1">Allowance 4</label>
+							<select class="form-control" id="salarytype4" name="salarytype4">
+									<option value="" selected=""> --Select allowance-- </option>
+									<option value="Subsidy"> Subsidy </option>
+									<option value="Revolving Fund"> Revolving Fund </option>
+									<option value="Transportation"> Transportation </option>
+									<option value="Meal"> Meal </option>
+									<option value="Housing"> Housing </option>
+									<option value="Professional Fee"> Professional Fee </option>
+									<option value="Car Rental"> Car Rental </option>
+									<option value="Ecola"> Ecola </option>
+					</select>
+					<input class="form-control" type="number" id="salaryemp4" name="salaryemp4">
+			</div>
+			<div class="form-group">
+			  <label for="exampleInputEmail1">Effective Date</label>
+			  <input type="date" class="form-control txtbox" id="effectdateemp" name="effectdateemp" placeholder="" required>
+					<span style="color: red" id="error" class="d-none">Effected date is required</span>
+			</div>
+			<div class="form-group">
+			  <label for="exampleInputEmail1">Remarks</label>
+			  <input type="text" class="form-control txtbox" id="remarks" name="remarks" placeholder="">
+			</div>
+			<div class="form-group">
+			  <label for="exampleInputEmail1">Salary Adjustment (Hardcopy)</label>
+			  <input type="file" class="form-control txtbox" id="hardcopy" name="hardcopy">
+			</div>
+		
+			<center>
+					  <button type="submit" class="btn btn-sm btn-success" id="btnsave_histo"><i class="fas fa-sm fa-save"></i> Save</button>
+				<button type="submit" class="btn btn-sm btn-success" id="btnupd_histo"><i class="fas fa-sm fa-save"></i> Update</button>
+			</center>
+		</div>
+	  </form>
 
     </div>
   </div>

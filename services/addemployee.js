@@ -17,6 +17,74 @@ $(document).ready(function(){
 			}
 
 		});
+
+		$('#tin').on('keyup',function(){
+			var tin = $('#tin').val();
+			var len = tin.length;
+			if(len==3){
+				
+				$('#tin').val(tin+"-");
+			}
+
+			if(len==7){
+				
+				$('#tin').val(tin+"-");
+			}
+
+			if(len==11){
+				
+				$('#tin').val(tin+"-");
+			}
+
+		});
+
+		$('#sss').on('keyup',function(){
+			var sss = $('#sss').val();
+			var len = sss.length;
+			if(len==2){
+				
+				$('#sss').val(sss+"-");
+			}
+
+			if(len==10){
+				
+				$('#sss').val(sss+"-");
+			}
+
+		});
+
+		$('#phic').on('keyup',function(){
+			var phic = $('#phic').val();
+			var len = phic.length;
+			if(len==2){
+				
+				$('#phic').val(phic+"-");
+			}
+
+			if(len==12){
+				
+				$('#phic').val(phic+"-");
+			}
+
+			
+
+		});
+
+		$('#hdmf').on('keyup',function(){
+			var hdmf = $('#hdmf').val();
+			var len = hdmf.length;
+			if(len==4){
+				
+				$('#hdmf').val(hdmf+"-");
+			}
+
+			if(len==9){
+				
+				$('#hdmf').val(hdmf+"-");
+			}
+
+
+		});
 		
 		$('#personal_image').css('cursor','pointer');
 		$('#personal_image').on('click', function(){

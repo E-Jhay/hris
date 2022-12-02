@@ -5,7 +5,7 @@ $usertype = $_SESSION['usertype'];
 $empno = $_SESSION['employeeno'];
 $approver = $_SESSION['approver'];
 $employment_status = $_SESSION['employment_status'];
-$employee_month = $_SESSION['employee_month'];
+// $employee_month = $_SESSION['employee_month'];
 $userrole = $_SESSION['userrole'];
 
 

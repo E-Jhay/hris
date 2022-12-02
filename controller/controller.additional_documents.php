@@ -25,10 +25,14 @@ class crud extends db_conn_mysql
 
     $data = array();
     $return = array();
-    $data['marriage_contract'] = $marriage_contract_data ? '<button onclick="viewDocument(\''.$marriage_contract_data['marriage_contract'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
-    $data['dependent'] = $dependent_data ? '<button onclick="viewDocument(\''.$dependent_data['dependent'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
-    $data['additional_id'] = $additional_id_data ? '<button onclick="viewDocument(\''.$additional_id_data['additional_id'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
-    $data['proof_of_billing'] = $proof_of_billing_data ? '<button onclick="viewDocument(\''.$proof_of_billing_data['proof_of_billing'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
+    $data['marriage_contract'] = $marriage_contract_data && $marriage_contract_data['marriage_contract'] ? '<button onclick="viewDocument(\''.$marriage_contract_data['marriage_contract'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : 'N/A';
+
+    $data['dependent'] = $dependent_data && $dependent_data['dependent'] ? '<button onclick="viewDocument(\''.$dependent_data['dependent'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
+
+    $data['additional_id'] = $additional_id_data && $additional_id_data['additional_id'] ? '<button onclick="viewDocument(\''.$additional_id_data['additional_id'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
+
+    $data['proof_of_billing'] = $proof_of_billing_data && $proof_of_billing_data['proof_of_billing'] ? '<button onclick="viewDocument(\''.$proof_of_billing_data['proof_of_billing'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
+
     $return[] = $data;
   
     echo json_encode(array('data'=>$return));
@@ -133,7 +137,6 @@ function update(){
         $query = $conn->prepare("UPDATE marriage_contract SET marriage_contract = '$marriageContract' WHERE employee_number = '$emp_no'");
         $query->execute();
       } else {
-        echo json_encode(array("id"=>$emp_no, 'action' => 'insert'));
         $qry = $conn->prepare("INSERT INTO marriage_contract SET marriage_contract = '$marriageContract', employee_number = '$emp_no'");
         $qry->execute();
       }
@@ -165,7 +168,6 @@ function update(){
         $query2 = $conn->prepare("UPDATE dependents SET dependent = '$dependent' WHERE employee_number = '$emp_no'");
         $query2->execute();
       } else {
-        echo json_encode(array("id"=>$emp_no, 'action' => 'insert'));
         $qry = $conn->prepare("INSERT INTO dependents SET dependent = '$dependent', employee_number = '$emp_no'");
         $qry->execute();
       }
@@ -199,7 +201,6 @@ function update(){
         $query3 = $conn->prepare("UPDATE additional_id SET additional_id = '$additionalId' WHERE employee_number = '$emp_no'");
         $query3->execute();
       } else {
-        echo json_encode(array("id"=>$emp_no, 'action' => 'insert'));
         $qry = $conn->prepare("INSERT INTO additional_id SET additional_id = '$additionalId', employee_number = '$emp_no'");
         $qry->execute();
       }
@@ -234,7 +235,6 @@ function update(){
         $query4 = $conn->prepare("UPDATE proof_of_billing SET proof_of_billing = '$proofOFBilling' WHERE employee_number = '$emp_no'");
         $query4->execute();
       } else {
-        echo json_encode(array("id"=>$emp_no, 'action' => 'insert'));
         $qry = $conn->prepare("INSERT INTO proof_of_billing SET proof_of_billing = '$proofOFBilling', employee_number = '$emp_no'");
         $qry->execute();
       }

@@ -87,95 +87,245 @@ class crud extends db_conn_mysql
   }
 
   function savesalary(){
-      
-      $idemp = $_POST['idemp'];
-      $positionemp = $_POST['positionemp'];
-      $statusemp = $_POST['statusemp'];
-      $datehiredemp = $_POST['datehiredemp'];
-      $salarytype = $_POST['salarytype'];
-      $salaryemp = $_POST['salaryemp'] != '' ? $_POST['salaryemp'] : '0';
-      $salarytype2 = $_POST['salarytype2'];
-      $salaryemp2 = $_POST['salaryemp2']  != '' ? $_POST['salaryemp2'] : '0';
-      $salarytype3 = $_POST['salarytype3'];
-      $salaryemp3 = $_POST['salaryemp3']  != '' ? $_POST['salaryemp3'] : '0';
-      $salarytype4 = $_POST['salarytype4'];
-      $salaryemp4 = $_POST['salaryemp4']  != '' ? $_POST['salaryemp4'] : '0';
-      $effectdateemp = $_POST['effectdateemp'];
-      $basic_salary = $_POST['basic_salary'];
-      $remarks = $_POST['remarks'];
+    $action = $_POST['action'];
 
-      $conn = $this->connect_mysql();
+    $id = $_POST['idsalary'];
+    $idemp = $_POST['idemp'];
+    $employeeno = $_POST['employeeno'];
+    $positionemp = $_POST['positionemp'];
+    $statusemp = $_POST['statusemp'];
+    $datehiredemp = $_POST['datehiredemp'];
+    $salarytype = $_POST['salarytype'];
+    $salaryemp = $_POST['salaryemp'] != '' ? $_POST['salaryemp'] : '0';
+    $salarytype2 = $_POST['salarytype2'];
+    $salaryemp2 = $_POST['salaryemp2']  != '' ? $_POST['salaryemp2'] : '0';
+    $salarytype3 = $_POST['salarytype3'];
+    $salaryemp3 = $_POST['salaryemp3']  != '' ? $_POST['salaryemp3'] : '0';
+    $salarytype4 = $_POST['salarytype4'];
+    $salaryemp4 = $_POST['salaryemp4']  != '' ? $_POST['salaryemp4'] : '0';
+    $effectdateemp = $_POST['effectdateemp'];
+    $basic_salary = $_POST['basic_salary'];
+    $remarks = $_POST['remarks'];
+    if($action == 'insert') {
+      if (($_FILES['hardcopy']['name']!="")){
 
-      $squery = $conn->prepare("INSERT INTO salary_history SET emp_id='$idemp', date_hired='$datehiredemp',salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', added_by='Administrator', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks'");
-      $squery->execute();
+        // Where the file is going to be stored
+        $target_dir = "../salary_adjustment/".$employeeno."/";
+        $file = $_FILES['hardcopy']['name'];
+        $path = pathinfo($file);
+        $filename = $path['filename'];
+        $ext = $path['extension'];
+        $attachfile = $filename.date('Y-m-d-His').".".$ext;
+        $temp_name = $_FILES['hardcopy']['tmp_name'];
+        $path_filename_ext = $target_dir.$attachfile;
 
-      $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE id='$idemp'");
-      $qry->execute();
 
-      $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
-      $query->execute();
-      $row = $query->fetch();
-      $employeeno = $row['employeeno'];
+        // Check if file already exists
+        if (file_exists($path_filename_ext)) {
+          echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error", "employeeno" => $employeeno));
+          exit;
+        }else{
+          if(!is_dir("../salary_adjustment/".$employeeno."/")){
+            mkdir("../salary_adjustment/".$employeeno."/");
+          }
 
-      session_start();
-      $useraction = $_SESSION['fullname'];
-      $dateaction = date('Y-m-d');
-      $auditaction = "Added new salary for Employee no ".$employeeno;
-      $audittype = "Add";
-      $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
-      $q->execute();
+            if(move_uploaded_file($temp_name,$path_filename_ext)){
 
-      echo json_encode(array("employeeno"=>$employeeno));
+              $conn = $this->connect_mysql();
 
+              $squery = $conn->prepare("INSERT INTO salary_history SET emp_id='$idemp', date_hired='$datehiredemp',salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', added_by='Administrator', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks', hardcopy='$attachfile'");
+              $squery->execute();
+
+              $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE id='$idemp'");
+              $qry->execute();
+
+              $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
+              $query->execute();
+              $row = $query->fetch();
+              $employeeno = $row['employeeno'];
+
+              session_start();
+              $useraction = $_SESSION['fullname'];
+              $dateaction = date('Y-m-d');
+              $auditaction = "Added new salary for Employee no ".$employeeno;
+              $audittype = "Add";
+              $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
+              $q->execute();
+
+              echo json_encode(array("message"=>"Salary Adjustment Added Successfully", "type" => "success", "employeeno" => $employeeno));
+              exit;
+            }
+        }
+      }
+      else {
+        echo json_encode(array("message"=>"Hard Copy is required", "type" => "error", "employeeno" => $employeeno));
+        exit;
+      }
     }
-
-  function updatesalaryhisto(){
-
-      $id = $_POST['id'];
-      $idemp = $_POST['idemp'];
-      $job_title = $_POST['job_title'];
-      $employment_status = $_POST['employment_status'];
-      $date_hired = $_POST['date_hired'];
-      $salarytype = $_POST['salarytype'];
-      $salaryemp = $_POST['salaryemp'];
-      $salarytype2 = $_POST['salarytype2'];
-      $salaryemp2 = $_POST['salaryemp2'];
-      $salarytype3 = $_POST['salarytype3'];
-      $salaryemp3 = $_POST['salaryemp3'];
-      $salarytype4 = $_POST['salarytype4'];
-      $salaryemp4 = $_POST['salaryemp4'];
-      $effective_date = $_POST['effective_date'];
-      $basic_salary = $_POST['basic_salary'];
-      $remarks = $_POST['remarks'];
-
+    else {
       $conn = $this->connect_mysql();
+      if($_FILES['hardcopy']['size'] > 0) {
 
-      $query = $conn->prepare("UPDATE salary_history SET date_hired='$date_hired', salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effective_date', job_title='$job_title', employment_status='$employment_status',basic_salary='$basic_salary',remarks='$remarks' WHERE id='$id'");
-      $query->execute();
+        // Where the file is going to be stored
+        $target_dir = "../salary_adjustment/".$employeeno."/";
+        $file = $_FILES['hardcopy']['name'];
+        $path = pathinfo($file);
+        $filename = $path['filename'];
+        $ext = $path['extension'];
+        $attachfile = $filename.date('Y-m-d-His').".".$ext;
+        $temp_name = $_FILES['hardcopy']['tmp_name'];
+        $path_filename_ext = $target_dir.$attachfile;
 
-      $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
-      $query->execute();
-      $row = $query->fetch();
-      $employeeno = $row['employeeno'];
 
-      session_start();
-      $useraction = $_SESSION['fullname'];
-      $dateaction = date('Y-m-d');
-      $auditaction = "Update  the salary of Employee no ".$employeeno;
-      $audittype = "EDIT";
-      $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
-      $q->execute();
+        // Check if file already exists
+        if (file_exists($path_filename_ext)) {
+          echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error", "employeeno" => $employeeno));
+          exit;
+        }
+        else{
+          if(!is_dir("../salary_adjustment/".$employeeno."/")){
+            mkdir("../salary_adjustment/".$employeeno."/");
+          }
 
-      echo json_encode(array("employeeno"=>$employeeno));
+          if(move_uploaded_file($temp_name,$path_filename_ext)){
+
+            $squery = $conn->prepare("UPDATE salary_history SET date_hired='$datehiredemp', salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks', hardcopy='$attachfile' WHERE id='$id'");
+            $squery->execute();
+
+            $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE id='$idemp'");
+            $qry->execute();
+
+            $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
+            $query->execute();
+            $row = $query->fetch();
+            $employeeno = $row['employeeno'];
+
+            session_start();
+            $useraction = $_SESSION['fullname'];
+            $dateaction = date('Y-m-d');
+            $auditaction = "Update  the salary of Employee no ".$employeeno;
+            $audittype = "EDIT";
+            $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
+            $q->execute();
+
+            echo json_encode(array("message"=>"Salary Adjustment Updated Successfully", "type" => "success", "employeeno" => $employeeno));
+            exit;
+          }
+          else {
+            echo json_encode(array("message"=>"Hard Copy is required", "type" => "error", "employeeno" => $employeeno));
+            exit;
+          }
+        }
+      }
+      else {
+        $query = $conn->prepare("UPDATE salary_history SET date_hired='$datehiredemp', salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks' WHERE id='$id'");
+        $query->execute();
+
+        $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
+        $query->execute();
+        $row = $query->fetch();
+        $employeeno = $row['employeeno'];
+
+        session_start();
+        $useraction = $_SESSION['fullname'];
+        $dateaction = date('Y-m-d');
+        $auditaction = "Update  the salary of Employee no ".$employeeno;
+        $audittype = "EDIT";
+        $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
+        $q->execute();
+        echo json_encode(array("message"=>"Salary Adjustment Updated Successfully", "type" => "success", "employeeno" => $employeeno));
+        exit;
+      }
+    }
+      
+      // $idemp = $_POST['idemp'];
+      // $positionemp = $_POST['positionemp'];
+      // $statusemp = $_POST['statusemp'];
+      // $datehiredemp = $_POST['datehiredemp'];
+      // $salarytype = $_POST['salarytype'];
+      // $salaryemp = $_POST['salaryemp'] != '' ? $_POST['salaryemp'] : '0';
+      // $salarytype2 = $_POST['salarytype2'];
+      // $salaryemp2 = $_POST['salaryemp2']  != '' ? $_POST['salaryemp2'] : '0';
+      // $salarytype3 = $_POST['salarytype3'];
+      // $salaryemp3 = $_POST['salaryemp3']  != '' ? $_POST['salaryemp3'] : '0';
+      // $salarytype4 = $_POST['salarytype4'];
+      // $salaryemp4 = $_POST['salaryemp4']  != '' ? $_POST['salaryemp4'] : '0';
+      // $effectdateemp = $_POST['effectdateemp'];
+      // $basic_salary = $_POST['basic_salary'];
+      // $remarks = $_POST['remarks'];
+
+      // $conn = $this->connect_mysql();
+
+      // $squery = $conn->prepare("INSERT INTO salary_history SET emp_id='$idemp', date_hired='$datehiredemp',salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', added_by='Administrator', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks'");
+      // $squery->execute();
+
+      // $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE id='$idemp'");
+      // $qry->execute();
+
+      // $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
+      // $query->execute();
+      // $row = $query->fetch();
+      // $employeeno = $row['employeeno'];
+
+      // session_start();
+      // $useraction = $_SESSION['fullname'];
+      // $dateaction = date('Y-m-d');
+      // $auditaction = "Added new salary for Employee no ".$employeeno;
+      // $audittype = "Add";
+      // $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
+      // $q->execute();
+
+      // echo json_encode(array("employeeno"=>$employeeno));
 
   }
+
+  // function updatesalaryhisto(){
+
+  //     $id = $_POST['id'];
+  //     $idemp = $_POST['idemp'];
+  //     $job_title = $_POST['job_title'];
+  //     $employment_status = $_POST['employment_status'];
+  //     $date_hired = $_POST['date_hired'];
+  //     $salarytype = $_POST['salarytype'];
+  //     $salaryemp = $_POST['salaryemp'];
+  //     $salarytype2 = $_POST['salarytype2'];
+  //     $salaryemp2 = $_POST['salaryemp2'];
+  //     $salarytype3 = $_POST['salarytype3'];
+  //     $salaryemp3 = $_POST['salaryemp3'];
+  //     $salarytype4 = $_POST['salarytype4'];
+  //     $salaryemp4 = $_POST['salaryemp4'];
+  //     $effective_date = $_POST['effective_date'];
+  //     $basic_salary = $_POST['basic_salary'];
+  //     $remarks = $_POST['remarks'];
+
+  //     $conn = $this->connect_mysql();
+
+  //     $query = $conn->prepare("UPDATE salary_history SET date_hired='$date_hired', salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effective_date', job_title='$job_title', employment_status='$employment_status',basic_salary='$basic_salary',remarks='$remarks' WHERE id='$id'");
+  //     $query->execute();
+
+  //     $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
+  //     $query->execute();
+  //     $row = $query->fetch();
+  //     $employeeno = $row['employeeno'];
+
+  //     session_start();
+  //     $useraction = $_SESSION['fullname'];
+  //     $dateaction = date('Y-m-d');
+  //     $auditaction = "Update  the salary of Employee no ".$employeeno;
+  //     $audittype = "EDIT";
+  //     $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
+  //     $q->execute();
+
+  //     echo json_encode(array("employeeno"=>$employeeno));
+
+  // }
 
   function loadsalary_history(){
 
     $employeeno = $_GET['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.id,a.employeeno,b.id as idd,b.*
-                             FROM tbl_employee a LEFT JOIN salary_history b ON a.id=b.emp_id WHERE a.employeeno='$employeeno' ORDER BY b.id DESC");
+                             FROM tbl_employee a RIGHT JOIN salary_history b ON a.id=b.emp_id WHERE a.employeeno='$employeeno' ORDER BY b.id DESC");
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
@@ -188,18 +338,19 @@ class crud extends db_conn_mysql
 
           $data = array();
           $data['action'] = '<center>
-          <button onclick="edit_salaryhistory('.$x['idd'].',\''.$x['job_title'].'\',\''.$x['employment_status'].'\',\''.$x['date_hired'].'\',\''.$x['salary_type'].'\',\''.$x['salary_rate'].'\',\''.$x['salary_type2'].'\',\''.$x['salary_rate2'].'\',\''.$x['salary_type3'].'\',\''.$x['salary_rate3'].'\',\''.$x['salary_type4'].'\',\''.$x['salary_rate4'].'\',\''.$x['effective_date'].'\',\''.$x['remarks'].'\',\''.$x['basic_salary'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Edit</button>
-          <button onclick="delete_salaryhistory('.$x['idd'].',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
+          <button title="Edit" onclick="edit_salaryhistory('.$x['idd'].',\''.$x['job_title'].'\',\''.$x['employment_status'].'\',\''.$x['date_hired'].'\',\''.$x['salary_type'].'\',\''.$x['salary_rate'].'\',\''.$x['salary_type2'].'\',\''.$x['salary_rate2'].'\',\''.$x['salary_type3'].'\',\''.$x['salary_rate3'].'\',\''.$x['salary_type4'].'\',\''.$x['salary_rate4'].'\',\''.$x['effective_date'].'\',\''.$x['remarks'].'\',\''.$x['basic_salary'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i></button>
+          <button title="View Hardcopy" onclick="viewHardcopy(\''.$x['hardcopy'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-primary"><i class="fas fa-sm fa-eye"></i></button>
+          <button title="Delete" onclick="delete_salaryhistory('.$x['idd'].',\''.$x['employeeno'].'\',\''.$x['hardcopy'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
           
           </center>
           ';
           
         
 
-          $data['job_title'] = $x['job_title'];
-          $data['employment_status'] = $x['employment_status'];
+          // $data['job_title'] = $x['job_title'];
+          // $data['employment_status'] = $x['employment_status'];
           $data['basic_salary'] = $x['basic_salary'];
-          $data['date_hired'] = $x['date_hired'];
+          // $data['date_hired'] = $x['date_hired'];
           $data['salary_type'] = $x['salary_type'];
           $data['salary_rate'] = $x['salary_rate'];
           $data['salary_type2'] = $x['salary_type2'];
@@ -219,9 +370,15 @@ class crud extends db_conn_mysql
   function delete_salaryhistory(){
 
     $id = $_POST['id'];
+    $hardcopy = $_POST['hardcopy'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("DELETE FROM salary_history WHERE id='$id'");
     $query->execute();
+    if($hardcopy != '' || $hardcopy != NULL) {
+      $link_file = "../salary_adjustment/".$employeeno."/".$hardcopy;
+      unlink($link_file);
+    }
 
   }
 

@@ -150,8 +150,6 @@ class crud extends db_conn_mysql
           $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
           $q->execute();
 
-          header("location:../memo.php");
-
           
        }
 

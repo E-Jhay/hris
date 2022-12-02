@@ -7,6 +7,7 @@ $(document).ready(function(){
 		$('.drawer').on('click',function(){
 		   $('.navnavnav').slideToggle();
 		});
+		$('#btnupd_histo').hide()
 		var emp_id = $('#emp_id').val();
 		$.ajax({
 			url:"controller/controller.salary.php?selectotherid",
@@ -63,7 +64,7 @@ $(document).ready(function(){
 			}
 		});
 
-	});
+});
 // function lb(){
 
 //        $.ajax({
@@ -78,121 +79,102 @@ $(document).ready(function(){
        
 //   }
 //   lb();
-	function savesalary(){
+	$('#formModal').on('submit', (e) => {
+		e.preventDefault()
 		var effectdateemp = $('#effectdateemp').val();
 		if(!effectdateemp) {
 			$('#error').removeClass('d-none')
 		} else {
 			confirmed("save",savesalary_callback, "Do you really want to save this?", "Yes", "No");
 		}
-	}
-
+	})
 	function savesalary_callback(){
-		var idemp = $('#idemp').val();
-		var empno = $('#empno').val();
-		var positionemp = $('#positionemp').val();
-		var statusemp = $('#statusemp').val();
-		var datehiredemp = $('#datehiredemp').val();
-		var salarytype = $('#salarytype').val();
-		var salaryemp = $('#salaryemp').val();
-		var salarytype2 = $('#salarytype2').val();
-		var salaryemp2 = $('#salaryemp2').val();
-		var salarytype3 = $('#salarytype3').val();
-		var salaryemp3 = $('#salaryemp3').val();
-		var salarytype4 = $('#salarytype4').val();
-		var salaryemp4 = $('#salaryemp4').val();
-		var effectdateemp = $('#effectdateemp').val();
-		var basic_salary = $('#basic_salary').val();
-		var remarks = $('#remarks').val();
-
+		var formData = new FormData($("#formModal")[0]);
 		$.ajax({
 			url:"controller/controller.salary.php?savesalary",
 			method:"POST",
-			data:{
-				idemp: idemp,
-				positionemp: positionemp,
-				statusemp: statusemp,
-				datehiredemp: datehiredemp,
-				salarytype: salarytype,
-				salaryemp: salaryemp,
-				salarytype2: salarytype2,
-				salaryemp2: salaryemp2,
-				salarytype3: salarytype3,
-				salaryemp3: salaryemp3,
-				salarytype4: salarytype4,
-				salaryemp4: salaryemp4,
-				effectdateemp: effectdateemp,
-				basic_salary:basic_salary,
-				remarks: remarks
-			},success:function(data){
-				$.Toast("Successfully Saved", successToast);
+			data: formData,
+			processData: false,
+			contentType: false,
+			success:function(data){
 				var b = $.parseJSON(data);
-				var employeeno = b.employeeno;
+				if(b.type === "error")
+					$.Toast(b.message, errorToast)
+				else
+					$.Toast(b.message, successToast)
+				const employeeno = b.employeeno;
 				clearFields()
 				$('#salarymodal').modal('hide');
 				$('#error').addClass('d-none')
 				$('#tbl_salaryhistory').DataTable().destroy();
 				loadsalary(employeeno);
+				$('#btnupd_histo').hide()
 			}
 		});
 	}
 
-	function updatesalary(){
-		confirmed("save",updatesalary_callback, "Do you really want to save this?", "Yes", "No");
+	function viewHardcopy(filename, employeeno) {
+		var link = "salary_adjustment/"+employeeno+"/"+filename;
+		window.open(link);
 	}
 
-	function updatesalary_callback(){
-		var empno = $('#empno').val();
-		var idemp = $('#idemp').val();
-		var id = $('#idsalary').val();
-		var job_title = $('#positionemp').val();
-		var employment_status = $('#statusemp').val();
-		var date_hired = $('#datehiredemp').val();
-		var salarytype = $('#salarytype').val();
-		var salaryemp = $('#salaryemp').val();
-		var salarytype2 = $('#salarytype2').val();
-		var salaryemp2 = $('#salaryemp2').val();
-		var salarytype3 = $('#salarytype3').val();
-		var salaryemp3 = $('#salaryemp3').val();
-		var salarytype4 = $('#salarytype4').val();
-		var salaryemp4 = $('#salaryemp4').val();
-		var effective_date = $('#effectdateemp').val();
-		var basic_salary = $('#basic_salary').val();
-		var remarks = $('#remarks').val();
+	// function updatesalary(){
+	// 	confirmed("save",updatesalary_callback, "Do you really want to save this?", "Yes", "No");
+	// }
 
-		$.ajax({
-			url:"controller/controller.salary.php?updatesalaryhisto",
-			method:"POST",
-			data:{
-				id : id,
-				job_title : job_title,
-				employment_status : employment_status,
-				date_hired : date_hired,
-				salarytype: salarytype,
-				salaryemp: salaryemp,
-				salarytype2: salarytype2,
-				salaryemp2: salaryemp2,
-				salarytype3: salarytype3,
-				salaryemp3: salaryemp3,
-				salarytype4: salarytype4,
-				salaryemp4: salaryemp4,
-				effective_date : effective_date,
-				idemp: idemp,
-				basic_salary: basic_salary,
-				remarks: remarks
-			},success:function(data){
-				$.Toast("Successfully Saved", successToast);
-				var b = $.parseJSON(data);
-				var employeeno = b.employeeno;
-				clearFields()
-				$('#salarymodal').modal('hide');
-				$('#tbl_salaryhistory').DataTable().destroy();
-				loadsalary(employeeno);
-			}
-		});
-	}
+	// function updatesalary_callback(){
+	// 	var empno = $('#empno').val();
+	// 	var idemp = $('#idemp').val();
+	// 	var id = $('#idsalary').val();
+	// 	var job_title = $('#positionemp').val();
+	// 	var employment_status = $('#statusemp').val();
+	// 	var date_hired = $('#datehiredemp').val();
+	// 	var salarytype = $('#salarytype').val();
+	// 	var salaryemp = $('#salaryemp').val();
+	// 	var salarytype2 = $('#salarytype2').val();
+	// 	var salaryemp2 = $('#salaryemp2').val();
+	// 	var salarytype3 = $('#salarytype3').val();
+	// 	var salaryemp3 = $('#salaryemp3').val();
+	// 	var salarytype4 = $('#salarytype4').val();
+	// 	var salaryemp4 = $('#salaryemp4').val();
+	// 	var effective_date = $('#effectdateemp').val();
+	// 	var basic_salary = $('#basic_salary').val();
+	// 	var remarks = $('#remarks').val();
+
+	// 	$.ajax({
+	// 		url:"controller/controller.salary.php?updatesalaryhisto",
+	// 		method:"POST",
+	// 		data:{
+	// 			id : id,
+	// 			job_title : job_title,
+	// 			employment_status : employment_status,
+	// 			date_hired : date_hired,
+	// 			salarytype: salarytype,
+	// 			salaryemp: salaryemp,
+	// 			salarytype2: salarytype2,
+	// 			salaryemp2: salaryemp2,
+	// 			salarytype3: salarytype3,
+	// 			salaryemp3: salaryemp3,
+	// 			salarytype4: salarytype4,
+	// 			salaryemp4: salaryemp4,
+	// 			effective_date : effective_date,
+	// 			idemp: idemp,
+	// 			basic_salary: basic_salary,
+	// 			remarks: remarks
+	// 		},success:function(data){
+	// 			$.Toast("Successfully Saved", successToast);
+	// 			var b = $.parseJSON(data);
+	// 			var employeeno = b.employeeno;
+	// 			clearFields()
+	// 			$('#salarymodal').modal('hide');
+	// 			$('#tbl_salaryhistory').DataTable().destroy();
+	// 			loadsalary(employeeno);
+	// 		}
+	// 	});
+	// }
 
 	function salary_adjust(){
+		$('#action').val('insert')
 		$('#salarymodal').modal('show');
 
 		clearFields()
@@ -212,6 +194,7 @@ $(document).ready(function(){
 		$('#salaryemp4').val("");
 		$('#effectdateemp').val("");
 		$('#remarks').val("");
+		$('#hardcopy').val("");
 
 		$('#btnsave_histo').show();
 		$('#btnupd_histo').hide();
@@ -258,9 +241,9 @@ $(document).ready(function(){
               "ajax" : "controller/controller.salary.php?loadsalary_history&employeeno="+employeeno,
               "columns" : [
                     
-                    { "data" : "job_title"},
-                    { "data" : "employment_status"},
-                    { "data" : "date_hired"},
+                    // { "data" : "job_title"},
+                    // { "data" : "employment_status"},
+                    // { "data" : "date_hired"},
                     { "data" : "basic_salary"},
                     { "data" : "salary_type"},
                     { "data" : "salary_rate"},
@@ -298,22 +281,26 @@ $(document).ready(function(){
 	$('#btnsave_histo').hide();
 	$('#btnupd_histo').show();
 	$('#basic_salary').val(basic_salary);
+	$('#action').val('update')
 
   }
 
-  function delete_salaryhistory(id,employeeno){
-  	var data = [id,employeeno];
+  function delete_salaryhistory(id,employeeno, hardcopy){
+  	var data = [id,employeeno, hardcopy];
   	confirmed("delete",delete_salaryhistory_callback, "Do you really want to delete this?", "Yes", "No",data);
   }
 
   function delete_salaryhistory_callback(data){
 	  	var id = data[0];
 	  	var employeeno = data[1];
+	  	var hardcopy = data[2];
   		$.ajax({
 	  		url:"controller/controller.salary.php?delete_salaryhistory",
 	  		method:"POST",
 	  		data:{
-	  			id:id
+	  			id:id,
+	  			employeeno:employeeno,
+	  			hardcopy:hardcopy,
 	  		},success:function(){
 				$.Toast("Deleted Successfully", successToast);
 				$('#tbl_salaryhistory').DataTable().destroy();
