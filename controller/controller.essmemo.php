@@ -23,13 +23,14 @@ class crud extends db_conn_mysql
             }
             $data = array();
             $data['action'] = '<center>
-            <button onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View</button>
-            <button onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
+            <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View Memo</button>
+            <button title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
             </center>
             ';
 
             $data['employeeno'] = $x['employee_no'];
             $data['memo'] = $x['memo_name'];
+            $data['status'] = ucfirst($x['status']);
             $data['remarks'] = $x['remarks'];
             $data['date'] = $x['datee'];
 
@@ -38,39 +39,54 @@ class crud extends db_conn_mysql
       
       echo json_encode(array('data'=>$return));
     } else if($memo == 'department') {
-        $query = $conn->prepare("SELECT * FROM tbl_memo WHERE department='$department' ORDER BY datee DESC");
-        $query->execute();
-        $row = $query->fetchAll();
-        $return = array();
-        foreach ($row as $x){
+      $query = $conn->prepare("SELECT * FROM tbl_memo WHERE department='$department' ORDER BY datee DESC");
+      $query->execute();
+      $row = $query->fetchAll();
+      $return = array();
+      foreach ($row as $x){
 
-            foreach ($x as $key => $input_arr) {
-            $x[$key] = addslashes($input_arr);
-            $x[$key] = utf8_encode($input_arr);
-            }
-            $data = array();
-            $data['action'] = '<center>
-            <button onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['department'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-download"></i> Download</button>
-            </center>
-            ';
-
-            $data['department'] = $x['department'];
-            $data['memo'] = $x['memo_name'];
-            $data['remarks'] = $x['remarks'];
-            $data['date'] = $x['datee'];
-
-          $return[] = $data;
+        foreach ($x as $key => $input_arr) {
+        $x[$key] = addslashes($input_arr);
+        $x[$key] = utf8_encode($input_arr);
         }
-        
-        echo json_encode(array('data'=>$return));
+        if($x['explanation'] != NULL || $x['explanation'] != '') {
+          $explanationBtn = '';
+          $explanationText = 'Explanation';
+        } else {
+          $explanationBtn = 'disabled';
+          $explanationText = 'Unavailable';
+        }
+        $data = array();
+        $data['action'] = '<div class="text-center">
+          <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['department'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View Memo</button>
+          <button title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
+        </div>';
+
+        $data['department'] = $x['department'];
+        $data['memo'] = $x['memo_name'];
+        $data['status'] = ucfirst($x['status']);
+        $data['remarks'] = strlen($x['remarks']) > 20 ? substr($x['remarks'], 0, 20)."..." : $x['remarks'];
+        $data['date'] = date('F d, Y',strtotime($x['datee']));
+
+        $return[] = $data;
+      }
+      echo json_encode(array('data'=>$return));
     }
 
   }
 
   function uploadExplanation() {
     $memo_id = $_POST['memo_id'];
+    $action = $_POST['action'];
+    $employeeno = $_POST['employeeno'];
+    $department = $_POST['department'];
+    $explanation = $_POST['explanation'];
     if(!empty($_FILES["file"]["name"])) {
-      $target_dir = "../memo/Explanation/";
+      if($action == 'employee'){
+        $target_dir = "../memo/Explanation/".$employeeno."/";
+      } else {
+        $target_dir = "../memo/Explanation/".$department."/";
+      }
       $file = $_FILES['file']['name'];
       $path = pathinfo($file);
       $ext = $path['extension'];
@@ -85,8 +101,13 @@ class crud extends db_conn_mysql
       $path_filename_ext .= $fileExplanation;
     
       if (move_uploaded_file($temp_name,$path_filename_ext)) {
+        if($explanation != '' || $explanation != NULL){
+          $link_file = $target_dir.$explanation;
+          if(file_exists($link_file))
+          unlink($link_file);
+        }
         $conn = $this->connect_mysql();
-        $qry = $conn->prepare("UPDATE tbl_memo SET explanation='$fileExplanation' WHERE id = '$memo_id'");
+        $qry = $conn->prepare("UPDATE tbl_memo SET explanation='$fileExplanation', status='acknowledge' WHERE id = '$memo_id'");
         $qry->execute();
         echo json_encode(array('message' => 'Explanation Uploaded Successfully', 'type' => 'success'));
         exit;

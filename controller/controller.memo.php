@@ -60,13 +60,23 @@ class crud extends db_conn_mysql
         $x[$key] = addslashes($input_arr);
         $x[$key] = utf8_encode($input_arr);
         }
+        if($x['explanation'] != NULL || $x['explanation'] != '') {
+          $explanationBtn = '';
+          $explanationText = 'Explanation';
+        } else {
+          $explanationBtn = 'disabled';
+          $explanationText = 'Unavailable';
+        }
         $data = array();
-        $data['action'] = '<div class="text-center"><button onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i>  View</button>
-        <button onclick="delete_memo('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button></div>';
+        $data['action'] = '<div class="text-center">
+        <button title="View Explanation" style="background-color: green; color: white" onclick="viewExplanation(\''.$x['explanation'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm" '.$explanationBtn.'><i class="fas fa-sm fa-eye"></i>  '.$explanationText.'</button>
+        <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
+        <button title="Delete" onclick="delete_memo('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></div>';
 
         $data['employeeno'] = $x['employee_no'];
         $data['name'] = $x['fullname'];
         $data['memo'] = $x['memo_name'];
+        $data['status'] = ucfirst($x['status']);
         $data['remarks'] = strlen($x['remarks']) > 20 ? substr($x['remarks'], 0, 20)."..." : $x['remarks'];
         $data['date'] = date('F d, Y',strtotime($x['datee']));
 
@@ -85,12 +95,22 @@ class crud extends db_conn_mysql
           $x[$key] = addslashes($input_arr);
           $x[$key] = utf8_encode($input_arr);
           }
+          if($x['explanation'] != NULL || $x['explanation'] != '') {
+            $explanationBtn = '';
+            $explanationText = 'Explanation';
+          } else {
+            $explanationBtn = 'disabled';
+            $explanationText = 'Unavailable';
+          }
           $data = array();
-          $data['action'] = '<div class="text-center"><button onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['department'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
-          <button onclick="delete_memo('.$x['id'].',\''.$x['file_name'].'\',\''.$x['department'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button></div>';
+          $data['action'] = '<div class="text-center">
+          <button title="View Explanation" style="background-color: green; color: white" onclick="viewExplanation(\''.$x['explanation'].'\',\''.$x['department'].'\')" class="btn btn-sm" '.$explanationBtn.'><i class="fas fa-sm fa-eye"></i>  '.$explanationText.'</button>
+          <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['department'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i</button>
+          <button title="Delete" onclick="delete_memo('.$x['id'].',\''.$x['file_name'].'\',\''.$x['department'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></div>';
 
           $data['department'] = $x['department'];
           $data['memo'] = $x['memo_name'];
+          $data['status'] = ucfirst($x['status']);
           $data['remarks'] = strlen($x['remarks']) > 20 ? substr($x['remarks'], 0, 20)."..." : $x['remarks'];
           $data['date'] = date('F d, Y',strtotime($x['datee']));
 

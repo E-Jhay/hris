@@ -16,6 +16,8 @@ $(document).ready(function(){
     }
     $('#div_inter_office_memo').hide();
 
+    $('#action').val('employee')
+
 	});
 
 
@@ -58,6 +60,7 @@ $(document).ready(function(){
                     { "data" : "memo"},
                     { "data" : "date"},
                     { "data" : "remarks"},
+                    { "data" : "status"},
                     { "data" : "action"}
 
                 ],
@@ -73,11 +76,12 @@ $(document).ready(function(){
               "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno + "&department=" + department + "&memo=department",
               "columns" : [
                     
-                    { "data" : "department"},
-                    { "data" : "memo"},
-                    { "data" : "date"},
-                    { "data" : "remarks"},
-                    { "data" : "action"}
+                { "data" : "department"},
+                { "data" : "memo"},
+                { "data" : "date"},
+                { "data" : "remarks"},
+                { "data" : "status"},
+                { "data" : "action"}
 
                 ],
          });
@@ -217,6 +221,7 @@ $(document).ready(function(){
     $('#div_inter_office_memo').hide();
     $("#personal_memo").addClass("active");
     $("#inter_office_memo").removeClass("active");
+    $('#action').val('employee')
   }
 
  function btnInterOfficeMemo(){
@@ -224,13 +229,16 @@ $(document).ready(function(){
     $('#div_inter_office_memo').show();
     $("#personal_memo").removeClass("active");
     $("#inter_office_memo").addClass("active");
+    $('#action').val('department')
  }
 
- function uploadExplain(id, date, memo_name) {
+ function uploadExplain(id, date, memo_name, remarks, explanation) {
   $('#acknowledge_modal').modal('show');
   $('#memo_id').val(id);
   $('#memo_name').val(memo_name);
   $('#memo_date').val(date);
+  $('#remarks').val(remarks);
+  $('#explanation').val(explanation);
 
   // if(statuss=="Pending"){
   //   $('#btnapprove').show();
@@ -254,8 +262,16 @@ $('#acknowledge_form').on('submit', (e) => {
   const form_data = new FormData();
   const file = $("#file").prop("files")[0];
   const memo_id = $("#memo_id").val();
+  const employeeno = $("#employeeno").val();
+  const department = $("#department").val();
+  const explanation = $("#explanation").val();
+  const action = $("#action").val();
   form_data.append("file", file)
   form_data.append("memo_id", memo_id)
+  form_data.append("employeeno", employeeno)
+  form_data.append("department", department)
+  form_data.append("action", action)
+  form_data.append("explanation", explanation)
 
   $.ajax({
     url:"controller/controller.essmemo.php?uploadExplanation",

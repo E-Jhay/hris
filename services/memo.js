@@ -161,6 +161,7 @@ function delete_memo_callback(data){
                     { "data" : "memo"},
                     { "data" : "date"},
                     { "data" : "remarks"},
+                    { "data" : "status"},
                     { "data" : "action"}
 
                 ],
@@ -180,6 +181,7 @@ function delete_memo_callback(data){
                     { "data" : "memo"},
                     { "data" : "date"},
                     { "data" : "remarks"},
+                    { "data" : "status"},
                     { "data" : "action"}
 
                 ],
@@ -199,4 +201,9 @@ function delete_memo_callback(data){
     $('#div_inter_office_memo').show();
     $("#memo").removeClass("active");
     $("#inter_office_memo").addClass("active");
+ }
+
+ function viewExplanation(explanation, type) {
+    const link = "memo/Explanation/"+type+"/"+explanation;
+    window.open(link);
  }

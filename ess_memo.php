@@ -48,6 +48,7 @@ $count = $leaves->countLeaves($empno);
           <th>Memo Name</th>
           <th>Date</th>
           <th>Remarks</th>
+              <th>Status</th>
           <th class="text-center">Action</th>
         </thead>
         <tbody>
@@ -56,17 +57,19 @@ $count = $leaves->countLeaves($empno);
       </table>
   </div>
   <div id="div_inter_office_memo" class="div_content">
-      <table class="table table-striped w-100" id="tbl_inter_office_memo">
-        <thead>
-          <th>Department Name</th>
-          <th>Memo Name</th>
-          <th>Date</th>
-          <th class="text-center">Action</th>
-        </thead>
-        <tbody>
-          
-        </tbody>
-      </table>
+  <table class="table table-striped w-100" id="tbl_inter_office_memo">
+            <thead>
+              <th>Department Name</th>
+              <th>Memo Name</th>
+              <th>Date</th>
+              <th>Remarks</th>
+              <th>Status</th>
+              <th class="text-center">Action</th>
+            </thead>
+            <tbody>
+              
+            </tbody>
+    </table>
   </div>
 
 </div>
@@ -75,7 +78,7 @@ $count = $leaves->countLeaves($empno);
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Overtime Details</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Memo Details</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -112,7 +115,9 @@ $count = $leaves->countLeaves($empno);
 
 <input type="hidden" id="employeenum" value="<?php echo $empno ?>" name="">
 <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="">
-<input type="text" id="department" value="<?php echo $_SESSION['department'] ?>" name="">
+<input type="hidden" id="department" value="<?php echo $_SESSION['department'] ?>" name="">
+<input type="text" id="action" name="">
+<input type="hidden" id="explanation" name="">
 
 </body>
 <script src="services/essmemo.js"></script> 

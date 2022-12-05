@@ -29,7 +29,7 @@ require_once "header.php";
 <div class="navcontainer">
 
   <div id="div_memo" class="div_content">
-    <form id="form" action="controller/controller.memo.php?uploadmemo" enctype="multipart/form-data">
+    <form id="form" enctype="multipart/form-data">
     <div>
       <button type="button" id="addMemoBtn" class="btn btn-primary mb-4">Add Individual Memo</button>
       <button type="button" id="cancelMemoBtn" class="btn btn-warning mb-4" style="display: none; ">Cancel</button>
@@ -78,15 +78,13 @@ require_once "header.php";
               <th>Memo Name</th>
               <th>Date</th>
               <th>Remarks</th>
+              <th>Status</th>
               <th class="text-center">Action</th>
             </thead>
             <tbody>
               
             </tbody>
     </table>
-    <center>
-        <button type="button" id="btncancel" onclick="canceledit()" style="display: none;" class="btn btn-sm btn-success"><i class="fa fa-ban"></i> Cancel</button>
-    </center>
   </div>
 
   <div id="div_inter_office_memo" class="div_content">
@@ -157,15 +155,13 @@ require_once "header.php";
               <th>Memo Name</th>
               <th>Date</th>
               <th>Remarks</th>
+              <th>Status</th>
               <th class="text-center">Action</th>
             </thead>
             <tbody>
               
             </tbody>
     </table>
-    <center>
-        <button type="button" id="btncancel" onclick="canceledit()" style="display: none;" class="btn btn-sm btn-success"><i class="fa fa-ban"></i> Cancel</button>
-    </center>
   </div>
  
 </div>
