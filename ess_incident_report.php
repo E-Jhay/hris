@@ -33,6 +33,39 @@ $count = $leaves->countLeaves($empno);
 <div class="navcontainer">
 
   <div id="div_incident" class="div_content">
+    <form id="form" enctype="multipart/form-data">
+        <div>
+        <button type="button" id="addIncidentBtn" class="btn btn-primary mb-4">Add Incident Report</button>
+        <button type="button" id="cancelIncidentBtn" class="btn btn-warning mb-4" style="display: none; ">Cancel</button>
+        </div>
+
+        <table class="table-condensed grid12_master" id="incident_table">
+            <tr>
+                <td>
+                    <b>Incident title: </b>
+                    <input type="text" class="form-control" id="incidentTitle" name="incidentTitle" placeholder="Incident Title" required>
+                    <input type="hidden" value="<?php echo $_SESSION['employeeno'] ?>" name="employee_number">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Description: </b>
+                    <input type="text" class="form-control" id="incidentDescription" name="incidentDescription" placeholder="Incident Description" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Incident File: </b>
+                    <input class="form-control" id="incidentFile" required="" type="file" name="incidentFile" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                <button type="submit" class="btn btn-md btn-success"><i class="fas fa-sm fa-save"></i> Save</button>
+                </td>
+            </tr>
+        </table>
+    </form>
     <table class="table table-striped w-100" id="tbl_incident">
         <thead>
             <th>Title</th>
@@ -62,20 +95,21 @@ $count = $leaves->countLeaves($empno);
               <div class="form-group">
                 <input type="hidden" id="incident_id" name="incident_id">
                 <label for="exampleInputEmail1">Title:</label>
-                <input type="text" class="form-control" id="incident_title" name="incident_title" disabled></input>
+                <input type="text" class="form-control" id="incident_title" name="incident_title"></input>
+                    <input type="hidden" value="<?php echo $_SESSION['employeeno'] ?>" name="incident_employee_number">
               </div>
               
               <div class="form-group">
                 <label for="exampleInputEmail1">Description:</label>
-                <input type="text" class="form-control" id="incident_description" name="incident_description" disabled></input>
+                <input type="text" class="form-control" id="incident_description" name="incident_description"></input>
               </div>
               <div class="form-group">
-                <label for="exampleInputEmail1">Remarks:</label>
-                <!-- <input type="text" class="form-control" id="incident_remarks" name="incident_remarks"></input> -->
-                <textarea class="form-control" name="incident_remarks" id="incident_remarks" cols="30" rows="2"></textarea>
+                <label for="exampleInputEmail1">Upload File:</label>
+                <input type="file" name="incident_file" id="incident_file" class="form-control">
+                <input type="hidden" name="file_name" id="file_name" class="form-control">
               </div>
               <center>
-                <button type="submit" class="btn btn-primary btn-sm" id="btn_submit">Acknowledge</button>
+                <button type="submit" class="btn btn-primary btn-sm" id="btn_submit">Submit</button>
               </center>
             </form>
         </div>
@@ -88,6 +122,6 @@ $count = $leaves->countLeaves($empno);
 <input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 <input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">
 </body>
-<script src="services/incident.js"></script>
+<script src="services/ess_incident.js"></script>
 <!-- <script src="services/ess_tab.js"></script> -->
 </html>

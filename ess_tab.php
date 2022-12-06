@@ -12,7 +12,7 @@
   
   <h6 class="admin_tab" id="ess_memo" onclick="goto('ess_memo.php')"><i class="fas fa-md fa-file-word"></i><span class="admin_tab_name">My Memorandum</span></h6>
 
-  <h6 class="admin_tab" id="incident" onclick="goto('incident_report.php')"><i class="fas fa-md fa-file-word"></i><span class="admin_tab_name">Incident Report</span></h6>
+  <h6 class="admin_tab" id="incident" onclick="goto('ess_incident_report.php')"><i class="fas fa-md fa-file-word"></i><span class="admin_tab_name">Incident Report</span></h6>
 
   <br><br>
   <h6 class="admin_tab" id="admin_dashboard" onclick="goto('module.php')"><i class="fas fa-md fa-clipboard"></i><span class="admin_tab_name">Back to Dashboard</span></h6>

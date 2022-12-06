@@ -81,7 +81,7 @@ require_once "header.php";
 						
 		</table>
 
-		  <div class="grid12_master p-3">
+		<div class="grid12_master p-3">
 			<table class="table-condensed w-100 mb-4">
     			<tr>
     				<td><p>Note: Maximum of 10 files can be uploaded on the same time.</p></td>
@@ -103,7 +103,7 @@ require_once "header.php";
 								
 							</tbody>
 			</table>
-			</div>
+		</div>
 		</form>
 
 		

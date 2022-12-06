@@ -3,30 +3,6 @@ include 'controller.db.php';
 
 class crud extends db_conn_mysql
 {
-  function deletememo(){
-
-
-    $id = $_POST['id'];
-    $filename = $_POST['filename'];
-    $employeeno = $_POST['employeeno'];
-
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("DELETE FROM tbl_memo WHERE id='$id'");
-    $query->execute();
-
-    $link_file = "../memo/".$employeeno."/".$filename;
-    unlink($link_file);
-
-    session_start();
-    $useraction = $_SESSION['fullname'];
-    $dateaction = date('Y-m-d');
-    $auditaction = "Deleted a memo";
-    $audittype = "Delete";
-    $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
-    $q->execute();
-
-  }
-
   function load_employee_incident(){
     
     $employee_number = $_GET['employee'];
@@ -42,10 +18,49 @@ class crud extends db_conn_mysql
     $x[$key] = addslashes($input_arr);
     $x[$key] = utf8_encode($input_arr);
     }
+    $editBtn = $x['status'] == 'active' ? '' : 'disabled';
+    $editText = $x['status'] == 'active' ? 'Edit' : 'Acknowledge';
+    $editTitle = $x['status'] == 'active' ? 'Edit Incident Report' : '';
     $data = array();
     $data['action'] = '<div class="text-center">
-    <button title="Edit Incident Report" style="background-color: green; color: white" onclick="editIncident('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\')" class="btn btn-sm"><i class="fas fa-sm fa-eye"></i>  Edit</button>
-    <button title="Delete" onclick="delete_incident('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></div>';
+    <button title="'.$editTitle.'" style="background-color: green; color: white" onclick="editIncident('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\')" class="btn btn-sm" '.$editBtn.'><i class="fas fa-sm fa-eye"></i>  '.$editText.'</button>'
+    ;
+    if($x['status'] == 'active') {
+      $data['action'] .= ' <button title="Delete" onclick="delete_incident('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></div>';
+    }
+
+    $data['title'] = ucfirst($x['title']);
+    $data['description'] = strlen($x['description']) > 20 ? ucfirst(substr($x['description'], 0, 20))."..." : ucfirst($x['description']);
+    $data['date'] = date('F d, Y',strtotime($x['date']));
+    $data['status'] = ucfirst($x['status']);
+    $data['file'] = '<div class="text-center">
+        <button title="View File" onclick="viewFile(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-primary btn-sm"><i class="fas fa-sm fa-eye"></i> View File</button>
+        </div>';
+    $return[] = $data;
+    }
+    
+    echo json_encode(array('data'=>$return));
+  }
+  function load_employee_incident_all(){
+    
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("SELECT * FROM incident ORDER BY date DESC");
+    $query->execute();
+    $row = $query->fetchAll();
+    $return = array();
+    foreach ($row as $x){
+
+    foreach ($x as $key => $input_arr) {
+    $x[$key] = addslashes($input_arr);
+    $x[$key] = utf8_encode($input_arr);
+    }
+    
+    $editBtn = $x['status'] == 'active' ? '' : 'disabled';
+    $editTitle = $x['status'] == 'active' ? 'Acknowledge Incident Report' : '';
+    $data = array();
+    $data['action'] = '<div class="text-center">
+    <button title="'.$editTitle.'" style="background-color: green; color: white" onclick="editIncident('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\')" class="btn btn-sm" '.$editBtn.'><i class="fas fa-sm fa-eye"></i>  Acknowledge</button>
+    </div>';
 
     $data['title'] = ucfirst($x['title']);
     $data['description'] = strlen($x['description']) > 20 ? ucfirst(substr($x['description'], 0, 20))."..." : ucfirst($x['description']);
@@ -176,12 +191,32 @@ class crud extends db_conn_mysql
       exit;
     }
   }
+  function acknowledgeIncidentReport() {
+    $incident_id = $_POST['incident_id'];
+    $remarks = $_POST['remarks'];
+
+    $conn = $this->connect_mysql();
+
+    if($remarks && $incident_id) {
+      $squery = $conn->prepare("UPDATE incident SET remarks='$remarks', status='Acknowledge' WHERE id = '$incident_id'");
+      $squery->execute();
+
+      echo json_encode(array("message"=>"Incident Report Acknowledge", "type" => "success"));
+      exit;
+    }else {
+      echo json_encode(array("message"=>"Sorry, remarks is required.", "type" => "error"));
+      exit;
+    }
+  }
 }
 
 $x = new crud();
 
 if(isset($_GET['load_employee_incident'])){
   $x->load_employee_incident();
+}
+if(isset($_GET['load_employee_incident_all'])){
+  $x->load_employee_incident_all();
 }
 if(isset($_GET['addIncidentReport'])){
   $x->addIncidentReport();
@@ -191,6 +226,9 @@ if(isset($_GET['deleteIncidentReport'])){
 }
 if(isset($_GET['updateIncidentReport'])){
   $x->updateIncidentReport();
+}
+if(isset($_GET['acknowledgeIncidentReport'])){
+  $x->acknowledgeIncidentReport();
 }
 
  ?>
