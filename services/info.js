@@ -96,8 +96,13 @@ $(document).ready(function(){
 			},success:function(data){
 				var b = $.parseJSON(data);
 				// document.getElementById("personal_pic").src = "personal_picture/3.jpg";
-				document.getElementById("personal_pic").src = "personal_picture/"+b.imagepic;
-				document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
+				document.getElementById("personal_pic").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
+				document.getElementById("personal_image").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
+				$('#file_name').val(b.imagepic);
+				$('#prevMarriageContract').val(b.marriage_contract);
+				$('#prevDependent').val(b.dependent);
+				$('#prevAdditionalId').val(b.additional_id);
+				$('#prevProofOfBilling').val(b.proof_of_billing);
 				$('#fname').html(b.firstname);
 				$('#mname').html(b.middlename);
 				$('#lname').html(b.lastname);
@@ -135,7 +140,7 @@ function removeFile(button, image) {
 		$(image).attr('src', "static/card-thumbnail.jpg");
 	}
 	// $(image).attr('src', $(defaultImage).attr('src'));
-	console.log(button, image)
+	// console.log(button, image)
 }
 
 // function lb(){
@@ -176,6 +181,31 @@ function removeFile(button, image) {
 	});
  }
 
+ $('#form').on('submit', (e) => {
+	e.preventDefault()
+	const formData = new FormData($("#form")[0]);
+	$.ajax({
+		url:"controller/controller.info.php?addDocuments",
+		method:"POST",
+		data: formData,
+		processData: false,
+		contentType: false,
+		success:function(data){
+			const b = $.parseJSON(data)
+			if(b.type === 'error')
+				$.Toast(b.message, errorToast);
+			else
+				$.Toast(b.message, successToast);
+				$('#documentsModal').modal('hide');
+				setTimeout(() => {
+					var b = $.parseJSON(data);
+					var id = b.id;
+					window.location.href="myinfo.php";
+				}, 1000)
+		}
+	});
+
+ })
 //  function save_form_callback(){
 // 	var formData = new FormData($("#form")[0]);
 	
@@ -189,7 +219,7 @@ function removeFile(button, image) {
 // 			console.log(data)
 // 		}
 // 	});
-// }
+// 	}
 
  function change(){
  	$('#password_modal').modal('show');

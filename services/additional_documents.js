@@ -85,7 +85,7 @@ $(document).ready(function(){
 	$('form').on('submit', function (e) {
 
             e.preventDefault();
-            confirmed("save",save_callback, "Do you really aawant to save this?", "Yes", "No");
+            confirmed("save",save_callback, "Do you really want to save this?", "Yes", "No");
             
             
 
@@ -169,7 +169,7 @@ $(document).ready(function(){
 	}
 	loadDocuments($('#emp_id').val())
 
-	function viewDocument(filename,employeeno){
-		var link = "documents/"+employeeno+"/"+filename;
+	function viewDocument(filename,employeeno, type){
+		var link = "documents/"+employeeno+"/"+type+"/"+filename;
 		window.open(link);
 	}

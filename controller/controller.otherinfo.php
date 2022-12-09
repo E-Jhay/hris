@@ -89,15 +89,15 @@ class crud extends db_conn_mysql
        $emp_no = $_POST['emp_no'];
        $file_name = $_POST['file_name'];
 
-       $target_dir = "../personal_picture/";
-       $file = $_FILES['profile']['name'];
-       $path = pathinfo($file);
-       $filename = str_replace(' ', '', $path['filename']);
-       $ext = $path['extension'];
-       $today = date("Ymd");
-       $attachfile = $filename."-".$today.".".$ext;
-       $temp_name = $_FILES['profile']['tmp_name'];
-       $path_filename_ext = $target_dir.$attachfile;
+      //  $target_dir = "../personal_picture/";
+      //  $file = $_FILES['profile']['name'];
+      //  $path = pathinfo($file);
+      //  $filename = str_replace(' ', '', $path['filename']);
+      //  $ext = $path['extension'];
+      //  $today = date("Ymd");
+      //  $attachfile = $filename."-".$today.".".$ext;
+      //  $temp_name = $_FILES['profile']['tmp_name'];
+      //  $path_filename_ext = $target_dir.$attachfile;
 
         // Where the file is going to be stored
         $target_dir = "../personal_picture/".$emp_no."/";

@@ -25,13 +25,13 @@ class crud extends db_conn_mysql
 
     $data = array();
     $return = array();
-    $data['marriage_contract'] = $marriage_contract_data && $marriage_contract_data['marriage_contract'] ? '<button onclick="viewDocument(\''.$marriage_contract_data['marriage_contract'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : 'N/A';
+    $data['marriage_contract'] = $marriage_contract_data && $marriage_contract_data['marriage_contract'] ? '<button onclick="viewDocument(\''.$marriage_contract_data['marriage_contract'].'\',\''.$employeeno.'\', \'marriage_contract\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : 'N/A';
 
-    $data['dependent'] = $dependent_data && $dependent_data['dependent'] ? '<button onclick="viewDocument(\''.$dependent_data['dependent'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
+    $data['dependent'] = $dependent_data && $dependent_data['dependent'] ? '<button onclick="viewDocument(\''.$dependent_data['dependent'].'\',\''.$employeeno.'\', \'dependent\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
 
-    $data['additional_id'] = $additional_id_data && $additional_id_data['additional_id'] ? '<button onclick="viewDocument(\''.$additional_id_data['additional_id'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
+    $data['additional_id'] = $additional_id_data && $additional_id_data['additional_id'] ? '<button onclick="viewDocument(\''.$additional_id_data['additional_id'].'\',\''.$employeeno.'\', \'additional_id\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
 
-    $data['proof_of_billing'] = $proof_of_billing_data && $proof_of_billing_data['proof_of_billing'] ? '<button onclick="viewDocument(\''.$proof_of_billing_data['proof_of_billing'].'\',\''.$employeeno.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
+    $data['proof_of_billing'] = $proof_of_billing_data && $proof_of_billing_data['proof_of_billing'] ? '<button onclick="viewDocument(\''.$proof_of_billing_data['proof_of_billing'].'\',\''.$employeeno.'\', \'proof_of_billing\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>' : '<p>N/A</p>';
 
     $return[] = $data;
   
@@ -115,7 +115,7 @@ function update(){
   $qry1->execute();
 
   if(!empty($_FILES["marriageContract"]["name"])) {
-    $target_dir = "../documents/".$emp_no."/";
+    $target_dir = "../documents/".$emp_no."/marriage_contract/";
     $file = $_FILES['marriageContract']['name'];
     $path = pathinfo($file);
     $ext = $path['extension'];
@@ -125,7 +125,7 @@ function update(){
     $marriageContract = $name[0]."-".$today.".".$ext;
     $path_filename_ext = $target_dir;
     if(!is_dir($path_filename_ext)){
-      mkdir($path_filename_ext, 0755);
+      mkdir($path_filename_ext, 0777, true);
     }
     $path_filename_ext .= $marriageContract;
 
@@ -146,7 +146,7 @@ function update(){
   }
 
   if(!empty($_FILES["dependent"]["name"])) {
-    $target_dir = "../documents/".$emp_no."/";
+    $target_dir = "../documents/".$emp_no."/dependent/";
     $file = $_FILES['dependent']['name'];
     $path = pathinfo($file);
     $ext = $path['extension'];
@@ -156,7 +156,7 @@ function update(){
     $dependent = $name[0]."-".$today.".".$ext;
     $path_filename_ext = $target_dir;
     if(!is_dir($path_filename_ext)){
-      mkdir($path_filename_ext, 0755);
+      mkdir($path_filename_ext, 0777, true);
     }
     $path_filename_ext .= $dependent;
 
@@ -178,7 +178,7 @@ function update(){
   }
 
   if(!empty($_FILES["additionalId"]["name"])) {
-    $target_dir = "../documents/".$emp_no."/";
+    $target_dir = "../documents/".$emp_no."/additional_id/";
     $file = $_FILES['additionalId']['name'];
     $path = pathinfo($file);
     $ext = $path['extension'];
@@ -188,7 +188,7 @@ function update(){
     $additionalId = $name[0]."-".$today.".".$ext;
     $path_filename_ext = $target_dir;
     if(!is_dir($path_filename_ext)){
-      mkdir($path_filename_ext, 0755);
+      mkdir($path_filename_ext, 0777, true);
     }
     $path_filename_ext .= $additionalId;
 
@@ -211,7 +211,7 @@ function update(){
   }
 
   if(!empty($_FILES["proofOFBilling"]["name"])) {
-    $target_dir = "../documents/".$emp_no."/";
+    $target_dir = "../documents/".$emp_no."/proof_of_billing/";
     $file = $_FILES['proofOFBilling']['name'];
     $path = pathinfo($file);
     // $proofOFBilling = $path['filename'];
@@ -223,7 +223,7 @@ function update(){
     $proofOFBilling = $name[0]."-".$today.".".$ext;
     $path_filename_ext = $target_dir;
     if(!is_dir($path_filename_ext)){
-      mkdir($path_filename_ext, 0755);
+      mkdir($path_filename_ext, 0777, true);
     }
     $path_filename_ext .= $proofOFBilling;
 

@@ -117,12 +117,13 @@ $count = $leaves->countLeaves($empno);
       </div>
       <div class="modal-body">
 
-      <form id="form" action="controller/controller.info.php?addDocuments" method="post" enctype="multipart/form-data">
+      <form id="form" enctype="multipart/form-data">
         <div class="container">
           <div class="row mb-4">
             <div class="col d-flex justify-content-center">
                 <div class="text-center" style="height: 180px; width: 180px; border: 1px dashed #a7a7a7; cursor: pointer; margin-bottom: 4em">
                   <img class="mb-4" title="Profile Picture" src="" id="personal_image" width="100%" height="100%">
+                  <input type="hidden" class="form-control" id="file_name" name="file_name">
                   <span style="font-size: 18px;">Profile Picture</span>
                   <button type="button" id="removeImage" class="btn btn-danger btn-sm">Remove</button>
                 </div>
@@ -164,6 +165,10 @@ $count = $leaves->countLeaves($empno);
                   <button type="button" id="removeProofOfBilling" onclick="removeFile('#removeProofOfBilling', '#proofOFBilling_image')" onclick="removeFile('#removeImage')" class="btn btn-danger btn-sm">Remove</button>
                 </div>
               <input class="d-none" id="proofOFBilling" type="file" name="proofOFBilling" accept="image/png, image/gif, image/jpeg, application/pdf">
+              <input type="hidden" id="prevMarriageContract" name="prevMarriageContract">
+              <input type="hidden" id="prevDependent" name="prevDependent">
+              <input type="hidden" id="prevAdditionalId" name="prevAdditionalId">
+              <input type="hidden" id="prevProofOfBilling" name="prevProofOfBilling">
             </div>
           </div>
         </div>

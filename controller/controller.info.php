@@ -66,6 +66,23 @@ class crud extends db_conn_mysql
 
     $query->execute();
     $row = $query->fetch();
+
+    $query1 = $conn->prepare("SELECT marriage_contract FROM marriage_contract WHERE employee_number='$employeeno'");
+    $query1->execute();
+    $marriage_contract = $query1->fetch();
+
+    $query2 = $conn->prepare("SELECT dependent FROM dependents WHERE employee_number='$employeeno'");
+    $query2->execute();
+    $dependent = $query2->fetch();
+
+    $query3 = $conn->prepare("SELECT additional_id FROM additional_id WHERE employee_number='$employeeno'");
+    $query3->execute();
+    $additional_id = $query3->fetch();
+
+    $query4 = $conn->prepare("SELECT proof_of_billing FROM proof_of_billing WHERE employee_number='$employeeno'");
+    $query4->execute();
+    $proof_of_billing = $query4->fetch();
+    
     $firstname = $row['firstname'];
     $lastname = utf8_decode($row['lastname']);
     $middlename = $row['middlename'];
@@ -82,7 +99,7 @@ class crud extends db_conn_mysql
     session_start();
     $username = $_SESSION['username'];
     $password = $_SESSION['password'];
-    echo json_encode(array("firstname"=>$firstname,"lastname"=>$lastname,"middlename"=>$middlename,"imagepic"=>$imagepic,"employeeno"=>$employeeno,"dateofbirth"=>$dateofbirth,"marital_status"=>$marital_status,"gender"=>$gender,"date_hired"=>$date_hired,"nationality"=>$nationality,"username"=>$username,"password"=>$password));
+    echo json_encode(array("firstname"=>$firstname,"lastname"=>$lastname,"middlename"=>$middlename,"imagepic"=>$imagepic,"employeeno"=>$employeeno,"dateofbirth"=>$dateofbirth,"marital_status"=>$marital_status,"gender"=>$gender,"date_hired"=>$date_hired,"nationality"=>$nationality,"username"=>$username,"password"=>$password, "marriage_contract" => $marriage_contract['marriage_contract'], "dependent" => $dependent['dependent'], "additional_id" => $additional_id['additional_id'], "proof_of_billing" => $proof_of_billing['proof_of_billing']));
   }
 
   function changepassword(){
@@ -103,169 +120,195 @@ class crud extends db_conn_mysql
       $audittype = "EDIT";
       $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
       $q->execute();
-    }
+  }
 
-    function readleave(){
+  function readleave(){
 
+    $employeeno = $_POST['employeeno'];
+
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
+    $query->execute();
+
+  }
+
+  function readpayslip(){
+
+    $employeeno = $_POST['employeeno'];
+
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
+    $query->execute();
+
+  }
+
+  function addDocuments() {
+    try {
       $employeeno = $_POST['employeeno'];
+      $file_name = $_POST['file_name'];
+      $prevMarriageContract = $_POST['prevMarriageContract'];
+      $prevDependent = $_POST['prevDependent'];
+      $prevAdditionalId = $_POST['prevAdditionalId'];
+      $prevProofOfBilling = $_POST['prevProofOfBilling'];
+      $conn=$this->connect_mysql();
+      if (($_FILES['profile']['name']!="")){
 
-      $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
-      $query->execute();
+        $target_dir = "../personal_picture/".$employeeno."/";
+        $file = $_FILES['profile']['name'];
+        $path = pathinfo($file);
+        $filename = $path['filename'];
+        $ext = $path['extension'];
+        $profile = $filename.date('Y-m-d-His').".".$ext;
+        $temp_name = $_FILES['profile']['tmp_name'];
+        $path_filename_ext = $target_dir.$profile;
 
-    }
-
-    function readpayslip(){
-
-      $employeeno = $_POST['employeeno'];
-
-      $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
-      $query->execute();
-
-    }
-
-    function addDocuments() {
-      try {
-        $employeeno = $_POST['employeeno'];
-        if (($_FILES['profile']['name']!="")){
-
-          // Where the file is going to be stored
-
-          $target_dir = "../personal_picture/";
-          $file = $_FILES['profile']['name'];
-          $path = pathinfo($file);
-          $filename = $path['filename'];
-          $ext = $path['extension'];
-          $attachfile = $filename.".".$ext;
-          $temp_name = $_FILES['profile']['tmp_name'];
-          $path_filename_ext = $target_dir.$filename.".".$ext;
-
-          $lto_upload = $target_dir.$attachfile;
-          unlink($lto_upload);
-
-          //  Check if file already exists
-          if (file_exists($path_filename_ext)) {
-          echo "Sorry, file already exists.";
-          }else{
-
-            move_uploaded_file($temp_name,$path_filename_ext);
-
-            $conn=$this->connect_mysql();
-            $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$attachfile' WHERE employeeno='$employeeno'");
+        if (file_exists($path_filename_ext)) {
+          echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error", "employeeno" => $employeeno));
+          exit;
+        }else{
+          if(!is_dir("../personal_picture/".$employeeno."/")){
+            mkdir("../personal_picture/".$employeeno."/");
+          }
+          if(move_uploaded_file($temp_name,$path_filename_ext)){
+            if($file_name != '' || $file_name != NULL){
+              $link_file = $target_dir.$file_name;
+              if(file_exists($link_file))
+              unlink($link_file);
+            }
+            $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$profile' WHERE employeeno='$employeeno'");
             $sql->execute();
-
           }
         }
 
-        
-        $conn = $this->connect_mysql();
-
-        if(!empty($_FILES["marriageContract"]["name"])) {
-          $target_dir = "../documents/".$employeeno."/";
-          $file = $_FILES['marriageContract']['name'];
-          $path = pathinfo($file);
-          $ext = $path['extension'];
-          $temp_name = $_FILES['marriageContract']['tmp_name'];
-          $today = date("Ymd");
-          $name = explode(".", $file);
-          $marriageContract = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir;
-          if(!is_dir($path_filename_ext)){
-            mkdir($path_filename_ext, 0755);
-          }
-          $path_filename_ext .= $marriageContract;
-
-          if(move_uploaded_file($temp_name,$path_filename_ext)) {
-            $query = $conn->prepare("UPDATE marriage_contract SET marriage_contract = '$marriageContract' WHERE employee_number = '$employeeno'");
-            $query->execute();
-          }
-        } else {
-          $marriageContract = '';
-        }
-
-        if(!empty($_FILES["dependent"]["name"])) {
-          $target_dir = "../documents/".$employeeno."/";
-          $file = $_FILES['dependent']['name'];
-          $path = pathinfo($file);
-          $ext = $path['extension'];
-          $temp_name = $_FILES['dependent']['tmp_name'];
-          $today = date("Ymd");
-          $name = explode(".", $file);
-          $dependent = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir;
-          if(!is_dir($path_filename_ext)){
-            mkdir($path_filename_ext, 0755);
-          }
-          $path_filename_ext .= $dependent;
-
-          if(move_uploaded_file($temp_name,$path_filename_ext)) {
-            $query2 = $conn->prepare("UPDATE dependents SET dependent = '$dependent' WHERE employee_number = '$employeeno'");
-            $query2->execute();
-          }
-
-        } else {
-          $dependent = '';
-        }
-
-        if(!empty($_FILES["additionalId"]["name"])) {
-          $target_dir = "../documents/".$employeeno."/";
-          $file = $_FILES['additionalId']['name'];
-          $path = pathinfo($file);
-          $ext = $path['extension'];
-          $temp_name = $_FILES['additionalId']['tmp_name'];
-          $today = date("Ymd");
-          $name = explode(".", $file);
-          $additionalId = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir;
-          if(!is_dir($path_filename_ext)){
-            mkdir($path_filename_ext, 0755);
-          }
-          $path_filename_ext .= $additionalId;
-
-          if(move_uploaded_file($temp_name,$path_filename_ext)) {
-            $query3 = $conn->prepare("UPDATE additional_id SET additional_id = '$additionalId' WHERE employee_number = '$employeeno'");
-            $query3->execute();
-          }
-
-        } else {
-          $additionalId = '';
-        }
-
-        if(!empty($_FILES["proofOFBilling"]["name"])) {
-          $target_dir = "../documents/".$employeeno."/";
-          $file = $_FILES['proofOFBilling']['name'];
-          $path = pathinfo($file);
-          // $proofOFBilling = $path['filename'];
-          $ext = $path['extension'];
-          // $attachfile = $filename.".".$ext;
-          $temp_name = $_FILES['proofOFBilling']['tmp_name'];
-          $today = date("Ymd");
-          $name = explode(".", $file);
-          $proofOFBilling = $name[0]."-".$today.".".$ext;
-          $path_filename_ext = $target_dir;
-          if(!is_dir($path_filename_ext)){
-            mkdir($path_filename_ext, 0755);
-          }
-          $path_filename_ext .= $proofOFBilling;
-
-          if(move_uploaded_file($temp_name,$path_filename_ext)) {
-            $query4 = $conn->prepare("UPDATE proof_of_billing SET proof_of_billing = '$proofOFBilling' WHERE employee_number = '$employeeno'");
-            $query4->execute();
-          }
-
-        } else {
-          $proofOFBilling = '';
-        }
-
-      } catch (Exception $e) {
-        echo 'Message: ' .$e->getMessage();
       }
-      // print_r($_POST['employeeno']);
-      // print_r($_FILES);
-      // header("Location: https://google.com");
-      header("location:../myinfo.php");
+
+      if(!empty($_FILES["marriageContract"]["name"])) {
+        $target_dir = "../documents/".$employeeno."/marriage_contract/";
+        $file = $_FILES['marriageContract']['name'];
+        $path = pathinfo($file);
+        $ext = $path['extension'];
+        $temp_name = $_FILES['marriageContract']['tmp_name'];
+        $today = date("Ymd");
+        $name = explode(".", $file);
+        $marriageContract = $name[0]."-".$today.".".$ext;
+        $path_filename_ext = $target_dir;
+        if(!is_dir($path_filename_ext)){
+          mkdir("../documents/".$employeeno."/marriage_contract/", 0777, true);
+        }
+        $path_filename_ext .= $marriageContract;
+
+        if(move_uploaded_file($temp_name,$path_filename_ext)) {
+          if($prevMarriageContract != '' || $prevMarriageContract != NULL){
+            $link_file = $target_dir.$prevMarriageContract;
+            if(file_exists($link_file))
+            unlink($link_file);
+          }
+          $query = $conn->prepare("UPDATE marriage_contract SET marriage_contract = '$marriageContract' WHERE employee_number = '$employeeno'");
+          $query->execute();
+        }
+      } else {
+        $marriageContract = '';
+      }
+
+      if(!empty($_FILES["dependent"]["name"])) {
+        $target_dir = "../documents/".$employeeno."/dependent/";
+        $file = $_FILES['dependent']['name'];
+        $path = pathinfo($file);
+        $ext = $path['extension'];
+        $temp_name = $_FILES['dependent']['tmp_name'];
+        $today = date("Ymd");
+        $name = explode(".", $file);
+        $dependent = $name[0]."-".$today.".".$ext;
+        $path_filename_ext = $target_dir;
+        if(!is_dir($path_filename_ext)){
+          mkdir("../documents/".$employeeno."/dependent/", 0777, true);
+        }
+        $path_filename_ext .= $dependent;
+
+        if(move_uploaded_file($temp_name,$path_filename_ext)) {
+          if($prevDependent != '' || $prevDependent != NULL){
+            $link_file = $target_dir.$prevDependent;
+            if(file_exists($link_file))
+            unlink($link_file);
+          }
+          $query2 = $conn->prepare("UPDATE dependents SET dependent = '$dependent' WHERE employee_number = '$employeeno'");
+          $query2->execute();
+        }
+
+      } else {
+        $dependent = '';
+      }
+
+      if(!empty($_FILES["additionalId"]["name"])) {
+        $target_dir = "../documents/".$employeeno."/additional_id/";
+        $file = $_FILES['additionalId']['name'];
+        $path = pathinfo($file);
+        $ext = $path['extension'];
+        $temp_name = $_FILES['additionalId']['tmp_name'];
+        $today = date("Ymd");
+        $name = explode(".", $file);
+        $additionalId = $name[0]."-".$today.".".$ext;
+        $path_filename_ext = $target_dir;
+        if(!is_dir($path_filename_ext)){
+          mkdir("../documents/".$employeeno."/additional_id/", 0777, true);
+        }
+        $path_filename_ext .= $additionalId;
+
+        if(move_uploaded_file($temp_name,$path_filename_ext)) {
+          if($prevAdditionalId != '' || $prevAdditionalId != NULL){
+            $link_file = $target_dir.$prevAdditionalId;
+            if(file_exists($link_file))
+            unlink($link_file);
+          }
+          $query3 = $conn->prepare("UPDATE additional_id SET additional_id = '$additionalId' WHERE employee_number = '$employeeno'");
+          $query3->execute();
+        }
+
+      } else {
+        $additionalId = '';
+      }
+
+      if(!empty($_FILES["proofOFBilling"]["name"])) {
+        $target_dir = "../documents/".$employeeno."/proof_of_billing/";
+        $file = $_FILES['proofOFBilling']['name'];
+        $path = pathinfo($file);
+        // $proofOFBilling = $path['filename'];
+        $ext = $path['extension'];
+        // $attachfile = $filename.".".$ext;
+        $temp_name = $_FILES['proofOFBilling']['tmp_name'];
+        $today = date("Ymd");
+        $name = explode(".", $file);
+        $proofOFBilling = $name[0]."-".$today.".".$ext;
+        $path_filename_ext = $target_dir;
+        if(!is_dir($path_filename_ext)){
+          mkdir("../documents/".$employeeno."/proof_of_billing/", 0777, true);
+        }
+        $path_filename_ext .= $proofOFBilling;
+
+        if(move_uploaded_file($temp_name,$path_filename_ext)) {
+          if($prevProofOfBilling != '' || $prevProofOfBilling != NULL){
+            $link_file = $target_dir.$prevProofOfBilling;
+            if(file_exists($link_file))
+            unlink($link_file);
+          }
+          $query4 = $conn->prepare("UPDATE proof_of_billing SET proof_of_billing = '$proofOFBilling' WHERE employee_number = '$employeeno'");
+          $query4->execute();
+        }
+
+      } else {
+        $proofOFBilling = '';
+      }
+
+      echo json_encode(array('message' => 'Successfully Saved', 'type' => 'success'));
+
+    } catch (Exception $e) {
+      echo 'Message: ' .$e->getMessage();
     }
+    // print_r($_POST['employeeno']);
+    // print_r($_FILES);
+    // header("Location: https://google.com");
+    // header("location:../myinfo.php");
+  }
 }
 
 $x = new crud();

@@ -273,7 +273,7 @@ class crud extends db_conn_mysql
     }
 
     if(!empty($_FILES["marriageContract"]["name"])) {
-      $target_dir = "../documents/".$employeeno."/";
+      $target_dir = "../documents/".$employeeno."/marriage_contract/";
       $file = $_FILES['marriageContract']['name'];
       $path = pathinfo($file);
       $ext = $path['extension'];
@@ -283,7 +283,7 @@ class crud extends db_conn_mysql
       $marriageContract = $name[0]."-".$today.".".$ext;
       $path_filename_ext = $target_dir;
       if(!is_dir($path_filename_ext)){
-        mkdir($path_filename_ext, 0755);
+        mkdir("../documents/".$employeeno."/marriage_contract/", 0777, true);
       }
       $path_filename_ext .= $marriageContract;
 
@@ -294,7 +294,7 @@ class crud extends db_conn_mysql
     }
 
     if(!empty($_FILES["dependent"]["name"])) {
-      $target_dir = "../documents/".$employeeno."/";
+      $target_dir = "../documents/".$employeeno."/dependent/";
       $file = $_FILES['dependent']['name'];
       $path = pathinfo($file);
       $ext = $path['extension'];
@@ -304,7 +304,7 @@ class crud extends db_conn_mysql
       $dependent = $name[0]."-".$today.".".$ext;
       $path_filename_ext = $target_dir;
       if(!is_dir($path_filename_ext)){
-        mkdir($path_filename_ext, 0755);
+        mkdir("../documents/".$employeeno."/dependent/", 0777, true);
       }
       $path_filename_ext .= $dependent;
 
@@ -315,7 +315,7 @@ class crud extends db_conn_mysql
     }
 
     if(!empty($_FILES["additionalId"]["name"])) {
-      $target_dir = "../documents/".$employeeno."/";
+      $target_dir = "../documents/".$employeeno."/additional_id/";
       $file = $_FILES['additionalId']['name'];
       $path = pathinfo($file);
       $ext = $path['extension'];
@@ -325,7 +325,7 @@ class crud extends db_conn_mysql
       $additionalId = $name[0]."-".$today.".".$ext;
       $path_filename_ext = $target_dir;
       if(!is_dir($path_filename_ext)){
-        mkdir($path_filename_ext, 0755);
+        mkdir("../documents/".$employeeno."/additional_id/", 0777, true);
       }
       $path_filename_ext .= $additionalId;
 
@@ -336,7 +336,7 @@ class crud extends db_conn_mysql
     }
 
     if(!empty($_FILES["proofOFBilling"]["name"])) {
-      $target_dir = "../documents/".$employeeno."/";
+      $target_dir = "../documents/".$employeeno."/proof_of_billing/";
       $file = $_FILES['proofOFBilling']['name'];
       $path = pathinfo($file);
       // $proofOFBilling = $path['filename'];
@@ -348,7 +348,7 @@ class crud extends db_conn_mysql
       $proofOFBilling = $name[0]."-".$today.".".$ext;
       $path_filename_ext = $target_dir;
       if(!is_dir($path_filename_ext)){
-        mkdir($path_filename_ext, 0755);
+        mkdir("../documents/".$employeeno."/proof_of_billing/", 0777, true);
       }
       $path_filename_ext .= $proofOFBilling;
 
