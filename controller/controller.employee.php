@@ -243,21 +243,31 @@ class crud extends db_conn_mysql
     $personal_email = $_POST['personal_email'];
     $dept_head_email = $_POST['dept_head_email'];
     $date_hired = $_POST['date_hired'] != '' ? $_POST['date_hired'] : '0000-00-00';
-    $eoc = $_POST['eoc'] != '' ? $_POST['eoc'] : '0000-00-00';
+    $end_of_contract = $_POST['end_of_contract'] != '' ? $_POST['end_of_contract'] : '0000-00-00';
     $regularized = $_POST['regularized'] != '' ? $_POST['regularized'] : '0000-00-00';
     if(!empty($_FILES["profile"]["name"])) {
-      $target_dir = "../personal_picture/";
+      // Where the file is going to be stored
+      $target_dir = "../personal_picture/".$employeeno."/";
       $file = $_FILES['profile']['name'];
       $path = pathinfo($file);
+      $filename = $path['filename'];
       $ext = $path['extension'];
+      $profile = $filename.date('Y-m-d-His').".".$ext;
       $temp_name = $_FILES['profile']['tmp_name'];
-      $today = date("Ymd");
-      $name = explode(".", $file);
-      $profile = str_replace(' ', '', $name[0])."-".$today.".".$ext;
       $path_filename_ext = $target_dir.$profile;
 
-      move_uploaded_file($temp_name,$path_filename_ext);
-
+      if (file_exists($path_filename_ext)) {
+        echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error", "employeeno" => $employeeno));
+        exit;
+      }else{
+        if(!is_dir("../personal_picture/".$employeeno."/")){
+          mkdir("../personal_picture/".$employeeno."/");
+        }
+        if(!move_uploaded_file($temp_name,$path_filename_ext)){
+          echo json_encode(array("message"=>"An error has occured, file not uploaded.", "type" => "error", "employeeno" => $employeeno));
+          exit;
+        }
+      }
     } else {
       $profile = 'usera.png';
     }
@@ -362,7 +372,7 @@ class crud extends db_conn_mysql
     $qry1 = $conn->prepare("INSERT INTO contactinfo SET emp_id='$id', street='$street', municipality='$municipality', province='$province', contactno='$contact_no', telephoneno='', corp_email='$corp_email', personal_email='$personal_email', nationality='$nationality', driver_license='', driver_expdate='0000-00-00', dept_head_email='$dept_head_email'");
     $qry1->execute();
 
-    $qry2 = $conn->prepare("INSERT INTO contractinfo SET emp_id='$id', date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
+    $qry2 = $conn->prepare("INSERT INTO contractinfo SET emp_id='$id', date_hired='$date_hired', eoc='$end_of_contract', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
     $qry2->execute();
 
     $qry3 = $conn->prepare("INSERT INTO govtidinfo SET emp_id='$id', tin_no='$tin', sss_no='$sss', phic_no='$phic', hdmf_no='$hdmf', atm_no='$atm', bank_name='$bank_name', sss_remarks='', phic_remarks='', hdmf_remarks=''");

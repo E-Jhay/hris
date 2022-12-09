@@ -36,6 +36,7 @@ require_once "header.php";
 			<table class="table-condensed grid12_master master_input">
 					<tr class="d-none">
 						<td><input id="profile" type="file" name="profile"></td>
+						<td><input type="text" class="form-control" id="file_name" name="file_name"></td>
 					</tr>
     			<tr>
     				<td><b>Nick Name: </b><input type="text" class="form-control" id="nickname" name="nickname"></td>

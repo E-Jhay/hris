@@ -86,6 +86,8 @@ class crud extends db_conn_mysql
 
        // Where the file is going to be stored
        $employ_id = $_POST['emp_id'];
+       $emp_no = $_POST['emp_no'];
+       $file_name = $_POST['file_name'];
 
        $target_dir = "../personal_picture/";
        $file = $_FILES['profile']['name'];
@@ -97,22 +99,51 @@ class crud extends db_conn_mysql
        $temp_name = $_FILES['profile']['tmp_name'];
        $path_filename_ext = $target_dir.$attachfile;
 
-       $lto_upload = $target_dir.$attachfile;
-      //  unlink($lto_upload);
+        // Where the file is going to be stored
+        $target_dir = "../personal_picture/".$emp_no."/";
+        $file = $_FILES['profile']['name'];
+        $path = pathinfo($file);
+        $filename = $path['filename'];
+        $ext = $path['extension'];
+        $profile = $filename.date('Y-m-d-His').".".$ext;
+        $temp_name = $_FILES['profile']['tmp_name'];
+        $path_filename_ext = $target_dir.$profile;
 
-      // Check if file already exists
-       if (file_exists($path_filename_ext)) {
-        echo "Sorry, file already exists.";
-       }else{
+        if (file_exists($path_filename_ext)) {
+          echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error", "employeeno" => $employeeno));
+          exit;
+        }else{
+          if(!is_dir("../personal_picture/".$emp_no."/")){
+            mkdir("../personal_picture/".$emp_no."/");
+          }
+          if(move_uploaded_file($temp_name,$path_filename_ext)){
+            if($file_name != '' || $file_name != NULL){
+              $link_file = $target_dir.$file_name;
+              if(file_exists($link_file))
+              unlink($link_file);
+            }
+            $conn=$this->connect_mysql();
+            $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$profile' WHERE id='$employ_id'");
+            $sql->execute();
+          }
+        }
 
-          move_uploaded_file($temp_name,$path_filename_ext);
+        //  $lto_upload = $target_dir.$attachfile;
+        // //  unlink($lto_upload);
 
-          $conn=$this->connect_mysql();
-          $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$attachfile' WHERE id='$employ_id'");
-          $sql->execute();
+        // // Check if file already exists
+        //  if (file_exists($path_filename_ext)) {
+        //   echo "Sorry, file already exists.";
+        //  }else{
 
-       }
-    }
+        //     move_uploaded_file($temp_name,$path_filename_ext);
+
+        //     $conn=$this->connect_mysql();
+        //     $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$attachfile' WHERE id='$employ_id'");
+        //     $sql->execute();
+
+        //  }
+      }
 
       $emp_no = $_POST['emp_no'];
       $f_name = $_POST['f_name'];

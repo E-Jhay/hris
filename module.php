@@ -86,7 +86,7 @@ foreach ($birthday as $x) {
 				<?php if ($count_announce <=0): ?>
 					<div class="announce_null">
 						<br>
-						<h1 class="announce_null_msg">NO ANNOUNCEMENT THIS MONTH.</h1>
+						<h1 class="announce_null_msg">NO ACTIVE ANNOUNCEMENT.</h1>
 					</div>
 				<?php endif ?>
 

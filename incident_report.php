@@ -14,11 +14,7 @@ $count = $leaves->countLeaves($empno);
  ?>
 <div class="sidenavigation">
 <?php 
-  if($userrole == '1'){
-    require_once "pim_tab.php";
-  }else{
-    require_once "ess_tab.php";
-  }
+  require_once "pim_tab.php";
    ?>
 </div>
 

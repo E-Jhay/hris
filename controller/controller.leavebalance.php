@@ -83,7 +83,7 @@ class crud extends db_conn_mysql
             break;
           case 1:
             if($row2['balance'] == 0 && $row3['balance'] == 0){
-              if(date('n') == 1){
+              if(date('n') == 12){
                 $earnedPoints = 5;
               }
               else $earnedPoints = 0;
@@ -121,7 +121,7 @@ class crud extends db_conn_mysql
           $newvl = round($row3['balance'] + $earnedPoints,3);
 
         $lastMonthUpdate =$row2['what_month'];
-        $monthNow = date('m');
+        $monthNow = date('n');
       //   $date_hired = $x['date_hired'];
       //   $date_today = date('Y-m-d');
       //   $date_today = "2020-07-27";
@@ -206,10 +206,14 @@ class crud extends db_conn_mysql
               $slQuery = $conn->prepare("UPDATE leave_balance SET balance='$newsl',earned='yes',what_month='$monthNow' WHERE employee_no='$employee_no' AND leave_type='SL' AND what_month !='$monthNow'");
 
               $vlQuery = $conn->prepare("UPDATE leave_balance SET balance='$newvl',earned='yes',what_month='$monthNow' WHERE employee_no='$employee_no' AND leave_type='VL' AND what_month !='$monthNow'");
-            } else {
+            } else if($years == 1) {
               $slQuery = $conn->prepare("UPDATE leave_balance SET balance='$newsl',earned='no',what_month='$monthNow' WHERE employee_no='$employee_no' AND leave_type='SL' AND what_month !='$monthNow'");
 
               $vlQuery = $conn->prepare("UPDATE leave_balance SET balance='$newvl',earned='no',what_month='$monthNow' WHERE employee_no='$employee_no' AND leave_type='VL' AND what_month !='$monthNow'");
+            } else if($years <= 0){
+              $slQuery = $conn->prepare("UPDATE leave_balance SET what_month='$monthNow' WHERE employee_no='$employee_no' AND leave_type='SL' AND what_month !='$monthNow'");
+
+              $vlQuery = $conn->prepare("UPDATE leave_balance SET what_month='$monthNow' WHERE employee_no='$employee_no' AND leave_type='VL' AND what_month !='$monthNow'");
             }
 
             $slQuery->execute();

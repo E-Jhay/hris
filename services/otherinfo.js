@@ -35,6 +35,7 @@ $(document).ready(function(){
 				$('#m_name').val(b.m_name);
 				$('#rank').val(b.rank);
 				$('#statuss').val(b.statuss);
+				$('#file_name').val(b.imagepic);
 
 				  var dob = b.dateofbirth;
 		          var dobb = new Date(dob);
@@ -58,7 +59,8 @@ $(document).ready(function(){
 				if(b.imagepic=="" || b.imagepic==null){
 					document.getElementById("personal_image").src = "usera.png";
 				}else{
-					document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
+					document.getElementById("personal_image").src = "personal_picture/"+b.emp_no+"/"+b.imagepic;
+					// document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
 				}
 
 				$('#department').load('controller/controller.otherinfo.php?ddepartment',function(){

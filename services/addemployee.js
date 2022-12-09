@@ -148,11 +148,12 @@ $(document).ready(function(){
 			data: formData,
 			processData: false,
 			contentType: false,
-			success:function(){
-				$.Toast("Successfully Saved", successToast);
-				setTimeout(() => {
-					window.location.href="employee.php";
-				}, 1000)
+			success:function(data){
+				// $.Toast("Successfully Saved", successToast);
+				// setTimeout(() => {
+				// 	window.location.href="employee.php";
+				// }, 1000)
+				console.log(data)
 			}
 		});
 	}

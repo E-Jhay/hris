@@ -69,29 +69,29 @@ function ddepartment(){
 }
 
 function selectcontact(){
-$emp_id = $_POST['emp_id'];
-$conn = $this->connect_mysql();
-$query = $conn->prepare("SELECT * FROM tbl_employee WHERE id='$emp_id'");
-$query->execute();
-$row = $query->fetch();
+  $emp_id = $_POST['emp_id'];
+  $conn = $this->connect_mysql();
+  $query = $conn->prepare("SELECT * FROM tbl_employee WHERE id='$emp_id'");
+  $query->execute();
+  $row = $query->fetch();
 
-foreach ($row as $key => $input_arr) {
-  $row[$key] = addslashes($input_arr);
-  $row[$key] = utf8_encode($input_arr);
-}
+  foreach ($row as $key => $input_arr) {
+    $row[$key] = addslashes($input_arr);
+    $row[$key] = utf8_encode($input_arr);
+  }
 
-echo json_encode(array(
-  'emp_no'=>$row['employeeno'],
-  'f_name'=>$row['firstname'],
-  'l_name'=>utf8_decode($row['lastname']),
-  'm_name'=>$row['middlename'],
-  'rank'=>$row['rank'],
-  'statuss'=>$row['statuss'],
-  'emp_statuss'=>$row['employment_status'],
-  'company'=>$row['company'],
-  'leave_balance'=>$row['leave_balance'],
-  'imagepic'=>utf8_decode($row['imagepic']),
-));
+  echo json_encode(array(
+    'emp_no'=>$row['employeeno'],
+    'f_name'=>$row['firstname'],
+    'l_name'=>utf8_decode($row['lastname']),
+    'm_name'=>$row['middlename'],
+    'rank'=>$row['rank'],
+    'statuss'=>$row['statuss'],
+    'emp_statuss'=>$row['employment_status'],
+    'company'=>$row['company'],
+    'leave_balance'=>$row['leave_balance'],
+    'imagepic'=>utf8_decode($row['imagepic']),
+  ));
 }
 
 function update(){

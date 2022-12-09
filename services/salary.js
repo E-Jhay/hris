@@ -54,7 +54,8 @@ $(document).ready(function(){
 				if(b.imagepic=="" || b.imagepic==null){
 					document.getElementById("personal_image").src = "usera.png";
 				}else{
-					document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
+					document.getElementById("personal_image").src = "personal_picture/"+b.emp_no+"/"+b.imagepic;
+					// document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
 				}
 
 				                                                                                                                                                  
