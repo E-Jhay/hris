@@ -73,44 +73,35 @@ $balance = $leaves->getleavebalance($empno);
               <input type="hidden" id="points_todeduct" name="">
               <input type="number" disabled="" class="form-control" id="leave_bal" name="">
               <select class="form-control" id="pay_leave">
-                <option value="With Pay" selected=""> WITH PAY </option>
+                <option value="With Pay" selected="" id="withPay"> WITH PAY </option>
                 <option value="Without Pay"> WITHOUT PAY</option>
               </select>
             </td>
           </tr>
-          <tr style="display: none;" id="date_column">
+          <tr id="date_column">
             <td>
               <label> Date:</label>
               <input type="date" class="form-control" id="halfdate" name="">
             </td>
           </tr>
-          <tr style="display: none;" id="ampm_column">
+          <tr id="ampm_column">
             <td>
-              <input type="radio" value="AM" onclick="ampm()" checked="" name="leaveampm"> AM <input type="radio" value="PM" onclick="ampm()" name="leaveampm"> PM
-              <select class="form-control" id="amchoice">
-                <option selected="" disabled="" value="">-- Select Time --</option>
-                <option value="0.5">8:00 AM - 12:00 PM</option>
-                <option value="0.63">8:00 AM - 2:00 PM</option>
-              </select>
-              <select class="form-control" id="pmchoice" style="display: none;">
-                <option selected="" disabled="" value="">-- Select Time --</option>
-                <option value="sixpm">12:00 PM - 6:00 PM</option>
-                <option value="twopm">2:00 PM - 6:00 PM</option>
-                <option value="fivepm">12:00 PM - 5:00 PM</option>
-              </select>
+              <label> Timeframe:</label>
+              <input type="radio" value="AM" checked="" name="leaveampm" class="leaveampm"> AM 
+              <input type="radio" value="PM" name="leaveampm" class="leaveampm"> PM
             </td>
           </tr>
-          <tr style="display: none;" id="timefrom_column">
+          <tr id="timefrom_column">
             <td>
               <label>From Time:</label>
               <input type="time" value="15:00" class="form-control" id="timefrom" name="">
             </td>
           </tr>
-          <tr style="display: none;" id="timeto_column">
+          <tr id="timeto_column">
             <td>
               <label>To Time:</label>
               <select class="form-control" id="timeto">
-                <option value="17:00">05:00 PM</option>
+                <option value="17:00" selected>05:00 PM</option>
                 <option value="18:00">06:00 PM</option>
               </select>
             </td>
@@ -127,7 +118,7 @@ $balance = $leaves->getleavebalance($empno);
               <input type="date" class="form-control" id="dateto" name="">
             </td>
           </tr>
-          <tr style="display: none;">
+          <tr>
             <td>
               <label>No. of Days(credits to deduct):</label>
               <input disabled="" type="number" class="form-control" id="no_days" name="">
@@ -143,6 +134,8 @@ $balance = $leaves->getleavebalance($empno);
             <td>
               <label>Upload Leave Form:</label>
               <input type="file" class="form-control" id="leaveForm" name"leaveForm">
+              <input type="hidden" class="form-control" id="date1">
+              <input type="hidden" class="form-control" id="date2">
             </td>
           </tr>
         </table>
@@ -154,7 +147,7 @@ $balance = $leaves->getleavebalance($empno);
 			</center>
   </div>
 
-  <div id="div_myleave" class="div_content" style="display: none;">
+  <div id="div_myleave" class="div_content">
 
     <table class="table table-striped w-100" id="tbl_myleave">
             <thead>
@@ -211,16 +204,12 @@ $balance = $leaves->getleavebalance($empno);
           <div class="form-group">
             <label for="exampleInputEmail1">Leave Type</label>
             <span class="form-control" id="emp_leavetype"></span>
+            <span class="form-control" id="pay_leave_span"></span>
           </div>
 
           <div class="form-group">
             <label for="exampleInputEmail1">Date Applied</label>
             <span class="form-control" id="emp_dateapplied"></span>
-          </div>
-
-          <div class="form-group" style="display: none;">
-            <label for="exampleInputEmail1">Total Leave Balance(all type)</label>
-            <span class="form-control" id="emp_leavetype"></span>
           </div>
 
           <div class="form-group" id="dfrom_column">
@@ -233,7 +222,7 @@ $balance = $leaves->getleavebalance($empno);
             <span class="form-control" id="emp_dateto"></span>
           </div>
 
-          <div class="form-group" id="ap_column">
+          <!-- <div class="form-group" id="ap_column">
             <label for="exampleInputEmail1">AM/PM</label>
             <span class="form-control" id="emp_ampm"></span>
           </div>
@@ -241,34 +230,34 @@ $balance = $leaves->getleavebalance($empno);
           <div class="form-group" id="time_column">
             <label for="exampleInputEmail1">Time</label>
             <span class="form-control" id="emp_time"></span>
-          </div>
+          </div> -->
 
           <div class="form-group" id="no_days_column">
             <label for="exampleInputEmail1">No. of days:</label>
             <input type="number" class="form-control" id="emp_days" name="">
           </div>
 
-          <div class="form-group" id="fivepm_column" style="display: none;">
+          <!-- <div class="form-group" id="fivepm_column">
             <label for="exampleInputEmail1">No. of 8AM-5PM</label>
             <input type="number" class="form-control" id="fivepm" name="">
           </div>
 
-          <div class="form-group" id="sixpm_column" style="display: none;">
+          <div class="form-group" id="sixpm_column">
             <label for="exampleInputEmail1">No. of 8AM-6PM</label>
             <input type="number" class="form-control" id="sixpm" name="">
             <button type="button" class="btn btn-sm btn-success" onclick="compute_rate()">Set</button>
-          </div>
+          </div> -->
 
-          <div class="form-group" id="rate_column">
+          <!-- <div class="form-group" id="rate_column">
             <label for="exampleInputEmail1">Rate</label>
             <select id="emp_rate" class="form-control">
       					<option value="1.13">1.13</option>
       					<option value="1">1</option>
       			</select> 
             <button type="button" class="btn btn-sm btn-success" onclick="upt()">update</button>
-          </div>
+          </div> -->
 
-          <div class="form-group" style="display: none;">
+          <div class="form-group">
             <label for="exampleInputEmail1">No. of credits to deduct</label>
             <span class="form-control" id="emp_nodays"></span>
           </div>

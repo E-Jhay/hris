@@ -67,14 +67,14 @@ $count = $leaves->countLeaves($empno);
 							</select>
 						</td>
 					</tr>
-					<tr style="display: none;">
+					<!-- <tr style="display: none;">
 						<td>
 							<label>Balance Per L Type:</label>
 							<div id="bal_pertype_parent">
 									<span id="bal_pertype_child"></span>
 							</div>
 						</td>
-					</tr>
+					</tr> -->
 					<tr>
 						<td>
 							<label>Leave Type:</label>
@@ -87,40 +87,30 @@ $count = $leaves->countLeaves($empno);
 							<input type="hidden" id="assign_points_todeduct" name="">
 							<input type="number" disabled="" class="form-control" id="assignleavebal" name="">
 							<select class="form-control" id="pay_leave">
-								<option value="With Pay" selected=""> WITH PAY </option>
+								<option value="With Pay" selected="" id="withPay"> WITH PAY </option>
 								<option value="Without Pay"> WITHOUT PAY</option>
 							</select>
 						</td>
 					</tr>
-					<tr style="display: none;" id="assign_date_column">
+					<tr id="assign_date_column">
 						<td>
 							<label> Date:</label>
 							<input type="date" class="form-control" id="assign_halfdate" name="">
 						</td>
 					</tr>
-					<tr style="display: none;" id="assign_ampm_column">
+					<tr id="assign_ampm_column">
 						<td>
-							<input type="radio" value="AM" onclick="assign_ampm()" checked="" name="assign_leaveampm"> AM <input type="radio" value="PM" onclick="assign_ampm()" name="assign_leaveampm"> PM
-							<select class="form-control" id="assign_amchoice">
-								<option selected="" disabled="" value="">-- Select Time --</option>
-								<option value="0.5">8:00 AM - 12:00 PM</option>
-								<option value="0.63">8:00 AM - 2:00 PM</option>
-							</select>
-							<select class="form-control" id="assign_pmchoice" style="display: none;">
-								<option selected="" disabled="" value="">-- Select Time --</option>
-								<option value="sixpm">12:00 PM - 6:00 PM</option>
-								<option value="twopm">2:00 PM - 6:00 PM</option>
-								<option value="fivepm">12:00 PM - 5:00 PM</option>
-							</select>
+							<label> Timeframe:</label><br />
+							<input class="assign_leaveampm" type="radio" value="AM" name="assign_leaveampm" checked> AM <input class="assign_leaveampm" type="radio" value="PM" name="assign_leaveampm"> PM
 						</td>
 					</tr>
-					<tr style="display: none;" id="assign_timefrom_column">
+					<tr id="assign_timefrom_column">
 						<td>
 							<label>From Time:</label>
 							<input type="time" value="15:00" class="form-control" id="assign_timefrom" name="">
 						</td>
 					</tr>
-					<tr style="display: none;" id="assign_timeto_column">
+					<tr id="assign_timeto_column">
 						<td>
 							<label>To Time:</label>
 							<select class="form-control" id="assign_timeto">
@@ -132,18 +122,18 @@ $count = $leaves->countLeaves($empno);
 					<tr id="assign_datefrom_column">
 						<td>
 							<label>From Date:</label>
-							<input type="date" class="form-control" id="asssignfromdate" name="">
+							<input type="date" class="form-control" id="assignfromdate" name="">
 						</td>
 					</tr>
 					<tr id="assign_dateto_column">
 						<td>
 							<label>To Date:</label>
-							<input type="date" class="form-control" id="asssigntodate" name="">
+							<input type="date" class="form-control" id="assigntodate" name="">
 						</td>
 					</tr>
-					<tr style="display: none;">
+					<tr>
 						<td>
-							<label>No Days:</label>
+							<label>No. of Days(credits to deduct):</label>
 							<input disabled="" type="number" id="assigno_days" class="form-control" name="">
 						</td>
 					</tr>
@@ -157,6 +147,8 @@ $count = $leaves->countLeaves($empno);
 						<td>
 						<label>Upload Leave Form:</label>
 						<input type="file" class="form-control" id="leaveForm" name"leaveForm">
+						<input type="hidden" class="form-control" id="date1">
+              			<input type="hidden" class="form-control" id="date2">
 						</td>
 					</tr>
 		
@@ -268,10 +260,10 @@ $count = $leaves->countLeaves($empno);
             <span class="form-control" id="emp_dateapplied"></span>
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="exampleInputEmail1">Total Leave Balance(all type)</label>
             <span class="form-control" id="emp_leavebalance"></span>
-          </div>
+          </div> -->
 
           <div class="form-group" id="dfrom_column">
             <label for="exampleInputEmail1">Date/Time From</label>
@@ -283,7 +275,7 @@ $count = $leaves->countLeaves($empno);
             <span class="form-control" id="emp_dateto"></span>
           </div>
 
-          <div class="form-group" id="ap_column">
+          <!-- <div class="form-group" id="ap_column">
             <label for="exampleInputEmail1">AM/PM</label>
             <span class="form-control" id="emp_ampm"></span>
           </div>
@@ -291,7 +283,7 @@ $count = $leaves->countLeaves($empno);
           <div class="form-group" id="time_column">
             <label for="exampleInputEmail1">Time</label>
             <span class="form-control" id="emp_time"></span>
-          </div>
+          </div> -->
 
           <div class="form-group" id="no_days_column">
             <label for="exampleInputEmail1">No. of days</label>

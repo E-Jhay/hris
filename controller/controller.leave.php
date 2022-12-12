@@ -332,27 +332,29 @@ class crud extends db_conn_mysql
       $employeeno = $_POST['employeeno'];
       $date_applied = $_POST['date_applied'];
       $no_days = $_POST['no_days'];
-      $updatedbalance = $_POST['updatedbalance'];
+      // $updatedbalance = $_POST['updatedbalance'];
       $application_type = $_POST['application_type'];
       $points_todeduct = $_POST['points_todeduct'];
-      $dayss = $_POST['dayss'];
+      // $dayss = $_POST['dayss'];
       $date_from = $_POST['date_from'];
       $leave_bal = $_POST['leave_bal'];
       $pay_leave = $_POST['pay_leave'];
+      $datenow = date('Y-m-d');
+      $timenow = date('H:i:s');
 
-      if($application_type=="Whole Day"){
-        $date_from = $datefrom;
-      }
+      // if($application_type=="Whole Day"){
+      //   $date_from = $datefrom;
+      // }
       
-      if($application_type=="Half Day" || $application_type=="Under Time"){
-        $dayss = 1;
-      }
+      // if($application_type=="Half Day" || $application_type=="Under Time"){
+      //   $dayss = 1;
+      // }
 
-      if($application_type=="Under Time") {
-        $from_time = date('h:i A', strtotime($datefrom)); 
-        $to_time = date('h:i A', strtotime($dateto));
-        $dateto = $from_time ." - ". $to_time;
-      }
+      // if($application_type=="Under Time") {
+      //   $from_time = date('h:i A', strtotime($datefrom)); 
+      //   $to_time = date('h:i A', strtotime($dateto));
+      //   $dateto = $from_time ." - ". $to_time;
+      // }
 
       if(!empty($_FILES["leaveForm"]["name"])) {
         $target_dir = "../static/leave_form/";
@@ -377,7 +379,7 @@ class crud extends db_conn_mysql
 
 
       $conn = $this->connect_mysql();
-      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$datefrom', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', date_applied='$date_applied',previous_bal='$leave_bal', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='$dayss',date_from='$date_from',pay_leave='$pay_leave', remarks='', approved_by='', readd='', last_update='0000-00-00', last_update_time='2017-08-15 19:30:10', leave_form='$leaveForm'");
+      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$datefrom', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', date_applied='$date_applied',previous_bal='$leave_bal', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='0',date_from='',pay_leave='$pay_leave', remarks='', approved_by='', readd='', last_update='$datenow', last_update_time='$timenow', leave_form='$leaveForm'");
       $qry->execute();
 
       $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
@@ -440,8 +442,8 @@ class crud extends db_conn_mysql
       //         echo "success";
       //       }
 
-      $qry1 = $conn->prepare("UPDATE tbl_employee SET leave_balance='$updatedbalance' WHERE employeeno='$employeeno'");
-      $qry1->execute();
+      // $qry1 = $conn->prepare("UPDATE tbl_employee SET leave_balance='$updatedbalance' WHERE employeeno='$employeeno'");
+      // $qry1->execute();
 
   }
 
@@ -493,7 +495,7 @@ class crud extends db_conn_mysql
           if($stados=="Pending"){
             $data['numberofdays'] = "";
             $data['action'] = '<center>
-            <button onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
+            <button onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
             <button onclick="delete_leave('.$x['idd'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
             </center>
             ';
@@ -507,7 +509,7 @@ class crud extends db_conn_mysql
               $data['numberofdays'] = $x['no_days'];
             }
             $data['action'] = '<center>
-            <button onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\')" style="font-size:10px;color: white;background: #4c91cd;border-color: #4c91cd;"><i class="fa fa-eye"></i> View</button>
+            <button onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" style="font-size:10px;color: white;background: #4c91cd;border-color: #4c91cd;"><i class="fa fa-eye"></i> View</button>
             <button disabled="" onclick="delete_leave('.$x['idd'].')" style="font-size:10px;color: white;background: #ff8080;border-color: #ff8080;"><i class="fa fa-trash"></i> Delete</button>
             </center>
             ';

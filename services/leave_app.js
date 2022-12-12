@@ -1,5 +1,5 @@
-var errorToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-danger"}
-var successToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-success"}
+var errorToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-danger"}
+var successToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-success"}
 $(document).ready(function(){
 		$("#ess_leavereports").addClass("active_tab");
 		$('.drawer').hide();
@@ -17,37 +17,19 @@ $(document).ready(function(){
 		$('#employeeddown').load('controller/controller.leave_app.php?employeelistadmin&employeenoo='+employeenoo);
 		$('#assignlt').load('controller/controller.leave_app.php?leave_typelist');
 
-		$('#assign_timeto').on('change',function(){
-			var halfdate = $('#assign_halfdate').val();
-			var timefrom = $('#assign_timefrom').val();
-			var timeto = $('#assign_timeto').val();
-			var date1 = new Date(halfdate+' '+timefrom);
-			var date2 = new Date(halfdate+' '+timeto);
-			
-			var diff = Math.abs(date1-date2);
-
-			var seconds = Math.floor(diff / 1000);
-			var minute = Math.floor(seconds / 60);
-			var seconds = seconds % 60;
-			var hour = Math.floor(minute / 60);
-			var minute = minute % 60;
-			var day = Math.floor(hour / 24);
-			var hour = hour % 24;
-			
-			if(hour >= 5){
-				hour = hour - 1;
-			}
-		   	var points_todeduct = 0.125;
-
-			$('#assigno_days').val(hour * points_todeduct);
-		});
+		$('#assign_date_column').hide()
+		$('#assign_ampm_column').hide()
+		$('#assign_timefrom_column').hide()
+		$('#assign_timeto_column').hide()
+		$('#assign_datefrom_column').hide()
+		$('#assign_dateto_column').hide()
 
 		$('#assignlt').on('change',function(){
 			var leave_type = $('#assignlt').val();
 			var employeeno = $('#employeeddown').val();
-			var assign_application_type = $('#assign_application_type').val();
+			// var application_type = $('#application_type').val();
 			$.ajax({
-				url:"controller/controller.leave_app.php?get_leavebal",
+				url:"controller/controller.leave.php?get_leavebal",
 				method:"POST",
 				data:{
 					leave_type: leave_type,
@@ -55,156 +37,373 @@ $(document).ready(function(){
 				},success:function(data){
 					var b = $.parseJSON(data);
 					if(b.bal=="wala"){
-						$.Toast("Insufficient leave credits", errorToast);
+						$.Toast("This leave is not available", errorToast);
 						$('#assignlt').val("");
 						$('#assignleavebal').val("");
 						$('#assign_points_todeduct').val("");
 						$('#assigno_days').val("");
 					}else{
-
 						if(b.bal <= 0){
 							$('#pay_leave').val("Without Pay");
+							$('#withPay').prop('disabled', true);
 						}else{
 							$('#pay_leave').val("With Pay");
 						}
-						
 						$('#assignleavebal').val(b.bal);
-
-						$('#assign_points_todeduct').val(b.points);
-						if(assign_application_type=="Half Day"){
-						}
+						// if(application_type=="Half Day"){
+						// }
 					}
 					
 				}
 			});
+		});	
+
+		///////////////////////////////
+
+		// $('#assign_timeto').on('change',function(){
+		// 	var halfdate = $('#assign_halfdate').val();
+		// 	var timefrom = $('#assign_timefrom').val();
+		// 	var timeto = $('#assign_timeto').val();
+		// 	var date1 = new Date(halfdate+' '+timefrom);
+		// 	var date2 = new Date(halfdate+' '+timeto);
+			
+		// 	var diff = Math.abs(date1-date2);
+
+		// 	var seconds = Math.floor(diff / 1000);
+		// 	var minute = Math.floor(seconds / 60);
+		// 	var seconds = seconds % 60;
+		// 	var hour = Math.floor(minute / 60);
+		// 	var minute = minute % 60;
+		// 	var day = Math.floor(hour / 24);
+		// 	var hour = hour % 24;
+			
+		// 	if(hour >= 5){
+		// 		hour = hour - 1;
+		// 	}
+		//    	var points_todeduct = 0.125;
+
+		// 	$('#assigno_days').val(hour * points_todeduct);
+		// });
+
+		// $('#assignlt').on('change',function(){
+		// 	var leave_type = $('#assignlt').val();
+		// 	var employeeno = $('#employeeddown').val();
+		// 	var assign_application_type = $('#assign_application_type').val();
+		// 	$.ajax({
+		// 		url:"controller/controller.leave_app.php?get_leavebal",
+		// 		method:"POST",
+		// 		data:{
+		// 			leave_type: leave_type,
+		// 			employeeno: employeeno
+		// 		},success:function(data){
+		// 			var b = $.parseJSON(data);
+		// 			if(b.bal=="wala"){
+		// 				$.Toast("Insufficient leave credits", errorToast);
+		// 				$('#assignlt').val("");
+		// 				$('#assignleavebal').val("");
+		// 				$('#assign_points_todeduct').val("");
+		// 				$('#assigno_days').val("");
+		// 			}else{
+
+		// 				if(b.bal <= 0){
+		// 					$('#pay_leave').val("Without Pay");
+		// 				}else{
+		// 					$('#pay_leave').val("With Pay");
+		// 				}
+						
+		// 				$('#assignleavebal').val(b.bal);
+
+		// 				$('#assign_points_todeduct').val(b.points);
+		// 				if(assign_application_type=="Half Day"){
+		// 				}
+		// 			}
+					
+		// 		}
+		// 	});
 
 
-		});
+		// });
 		
-		$('#assign_amchoice').on('change',function(){
-			var amchoice = $('#assign_amchoice').val();
-			$('#assigno_days').val(amchoice);
-		});
+		// $('#assign_amchoice').on('change',function(){
+		// 	var amchoice = $('#assign_amchoice').val();
+		// 	$('#assigno_days').val(amchoice);
+		// });
 
-		$('#assign_pmchoice').on('change',function(){
-			var pmchoice = $('#assign_pmchoice').val();
-			var pmchoice = $('#assign_pmchoice').val();
-			if(pmchoice=="sixpm"){
-				$('#assigno_days').val("0.63");
-			}else if(pmchoice=="twopm"){
-				$('#assigno_days').val("0.5");
-			}else if(pmchoice=="fivepm"){
-				$('#assigno_days').val("0.5");
-			}
+		// $('#assign_pmchoice').on('change',function(){
+		// 	var pmchoice = $('#assign_pmchoice').val();
+		// 	var pmchoice = $('#assign_pmchoice').val();
+		// 	if(pmchoice=="sixpm"){
+		// 		$('#assigno_days').val("0.63");
+		// 	}else if(pmchoice=="twopm"){
+		// 		$('#assigno_days').val("0.5");
+		// 	}else if(pmchoice=="fivepm"){
+		// 		$('#assigno_days').val("0.5");
+		// 	}
 
-		});
+		// });
 
-		$('#employeeddown').on('change',function(){
-			var employeeno = $('#employeeddown').val();
-			$.ajax({
-				url:"controller/controller.leave_app.php?searchleavebalance",
-				method:"POST",
-				data:{
-					employeeno:employeeno
-				},success:function(data){
-					var b = $.parseJSON(data);
-					$('#assignremaininglb').val(b.leave_balance);
+		// $('#employeeddown').on('change',function(){
+		// 	var employeeno = $('#employeeddown').val();
+		// 	$.ajax({
+		// 		url:"controller/controller.leave_app.php?searchleavebalance",
+		// 		method:"POST",
+		// 		data:{
+		// 			employeeno:employeeno
+		// 		},success:function(data){
+		// 			var b = $.parseJSON(data);
+		// 			$('#assignremaininglb').val(b.leave_balance);
 
-					$("#bal_pertype_parent").empty();
+		// 			$("#bal_pertype_parent").empty();
 
-					$.ajax({
-						url:"controller/controller.leave_app.php?fetch_leave",
-						method:"POST",
-						data:{
-							employeeno: employeeno
-						},success:function(datass){
+		// 			$.ajax({
+		// 				url:"controller/controller.leave_app.php?fetch_leave",
+		// 				method:"POST",
+		// 				data:{
+		// 					employeeno: employeeno
+		// 				},success:function(datass){
 
-						}
-					});
+		// 				}
+		// 			});
 
-				}
-			});
+		// 		}
+		// 	});
 
-		});
+		// });
 
-		var employeeno = $('#employeeno').val();
-		$.ajax({
-			url:"controller/controller.leave_app.php?searchleavebalance",
-			method:"POST",
-			data:{
-				employeeno:employeeno
-			},success:function(data){
-				var b = $.parseJSON(data);
-				$('#leave_value').html(b.leave_balance);
-			}
-		});
+		// var employeeno = $('#employeeno').val();
+		// $.ajax({
+		// 	url:"controller/controller.leave_app.php?searchleavebalance",
+		// 	method:"POST",
+		// 	data:{
+		// 		employeeno:employeeno
+		// 	},success:function(data){
+		// 		var b = $.parseJSON(data);
+		// 		$('#leave_value').html(b.leave_balance);
+		// 	}
+		// });
 
-		$('#asssigntodate').on('change',function(){
-			var asssigntodate = $('#asssigntodate').val();
-			var asssignfromdate = $('#asssignfromdate').val();
-			const date1 = new Date(asssigntodate);
-			const date2 = new Date(asssignfromdate);
-			const diffTime = Math.abs(date2 - date1);
-			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-			var assign_points_todeduct = $('#assign_points_todeduct').val();
-			if(asssignfromdate > asssigntodate){
-				alert("Invalid date range");
-				$('#asssigntodate').val("0000-00-00");
-				$('#assigno_days').val("");
-			}else{
+		// $('#asssigntodate').on('change',function(){
+		// 	var asssigntodate = $('#asssigntodate').val();
+		// 	var asssignfromdate = $('#asssignfromdate').val();
+		// 	const date1 = new Date(asssigntodate);
+		// 	const date2 = new Date(asssignfromdate);
+		// 	const diffTime = Math.abs(date2 - date1);
+		// 	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+		// 	var assign_points_todeduct = $('#assign_points_todeduct').val();
+		// 	if(asssignfromdate > asssigntodate){
+		// 		alert("Invalid date range");
+		// 		$('#asssigntodate').val("0000-00-00");
+		// 		$('#assigno_days').val("");
+		// 	}else{
 
-				var dayss = diffDays+1;
-				var deduct = dayss * assign_points_todeduct;
-				$('#assigno_days').val(deduct);
-			}
-		});
+		// 		var dayss = diffDays+1;
+		// 		var deduct = dayss * assign_points_todeduct;
+		// 		$('#assigno_days').val(deduct);
+		// 	}
+		// });
 
 		$('#assign_application_type').on('change',function(){
-			var assign_application_type = $('#assign_application_type').val();
+			var application_type = $('#assign_application_type').val();
 
 			$('#assignlt').val("");
 			$('#assignleavebal').val("");
 			$('#assign_halfdate').val("");
-			$('#assign_timefrom').val("15:00");
-			$('#assign_timeto').val("15:00");
 			$('#asssignfromdate').val("");
 			$('#asssigntodate').val("");
 			$('#assigno_days').val("");
 			$('#assigncomment').val("");
-			$('#assign_amchoice').val("");
-			$('#assign_pmchoice').val("");
-
-			if(assign_application_type=="Whole Day"){
-				$('#assign_date_column').hide();
-				$('#assign_timefrom_column').hide();
-				$('#assign_timeto_column').hide();
-				$('#assign_datefrom_column').show();
-				$('#assign_dateto_column').show();
-				$('#assign_ampm_column').hide();
-			}else if(assign_application_type=="Half Day"){
-				$('#assign_date_column').show();
-				$('#assign_timefrom_column').hide();
-				$('#assign_timeto_column').hide();
-				$('#assign_datefrom_column').hide();
-				$('#assign_dateto_column').hide();
-				$('#assign_ampm_column').show();
-			}else if(assign_application_type=="Under Time"){
-				$('#assign_date_column').show();
-				$('#assign_timefrom_column').show();
-				$('#assign_timeto_column').show();
-				$('#assign_datefrom_column').hide();
-				$('#assign_dateto_column').hide();
-				$('#assign_ampm_column').hide();
+			if(application_type=="Whole Day"){
+				
+				$('#assign_date_column').hide()
+				$('#assign_ampm_column').hide()
+				$('#assign_timefrom_column').hide()
+				$('#assign_timeto_column').hide()
+				$('#assign_datefrom_column').show()
+				$('#assign_dateto_column').show()
+				$('#assign_points_todeduct').val(1);
+				$('#assignfromdate').on('change',function(){
+					const dateto = $('#assigntodate').val();
+					const datefrom = $('#assignfromdate').val();
+					const date1 = new Date(datefrom);
+					const date2 = new Date(dateto);
+					if(dateto) {
+						$('#date1').val(date1.toISOString().substring(0, 10))
+						$('#date2').val(date2.toISOString().substring(0, 10))
+						const diffTime = Math.abs(date2 - date1);
+						const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+						const points_todeduct = $('#assign_points_todeduct').val();
+						if(datefrom > dateto){
+							$.Toast("Invalid date range", errorToast);
+							$('#assigntodate').val("0000-00-00");
+							$('#assigno_days').val("");
+						}else{
+							// var dayss = diffDays+1;
+							const deduct = (diffDays + 1) * points_todeduct;
+							$('#assigno_days').val(deduct);
+						}
+					}
+					
+				});
+				$('#assigntodate').on('change',function(){
+					const dateto = $('#assigntodate').val();
+					const datefrom = $('#assignfromdate').val();
+					const date1 = new Date(datefrom);
+					const date2 = new Date(dateto);
+					if(dateto) {
+						$('#date1').val(date1.toISOString().substring(0, 10))
+						$('#date2').val(date2.toISOString().substring(0, 10))
+						const diffTime = Math.abs(date2 - date1);
+						const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+						const points_todeduct = $('#assign_points_todeduct').val();
+						if(datefrom > dateto){
+							$.Toast("Invalid date range", errorToast);
+							$('#assigntodate').val("0000-00-00");
+							$('#assigno_days').val("");
+						}else{
+							// var dayss = diffDays+1;
+							const deduct = (diffDays + 1) * points_todeduct;
+							$('#assigno_days').val(deduct);
+						}
+					}
+					
+				});
+			}else if(application_type=="Half Day"){
+				
+				$('#assign_date_column').show()
+				$('#assign_ampm_column').show()
+				$('#assign_timefrom_column').hide()
+				$('#assign_timeto_column').hide()
+				$('#assign_datefrom_column').hide()
+				$('#assign_dateto_column').hide()
+				$('#assign_points_todeduct').val(.5);
+				$('#assign_halfdate').on('change',function(){
+					let date = $('#assign_halfdate').val() ? $('#assign_halfdate').val() : new Date().toJSON().slice(0, 10)
+					if($('.assign_leaveampm:checked').val() === 'AM') {
+						$('#date1').val(`${date} 08:00 AM`)
+						$('#date2').val(`${date} 12:00 PM`)
+					} else {
+						$('#date1').val(`${date} 01:00 PM`)
+						$('#date2').val(`${date} 05:PM PM`)
+					}
+					console.log($('#date1').val())
+					console.log($('#date2').val())
+				})
+				$('.assign_leaveampm').on('change',function(){
+					let date = $('#assign_halfdate').val() ? $('#assign_halfdate').val() : new Date().toJSON().slice(0, 10)
+					if($('.assign_leaveampm:checked').val() === 'AM') {
+						$('#date1').val(`${date} 08:00 AM`)
+						$('#date2').val(`${date} 12:00 PM`)
+					} else {
+						$('#date1').val(`${date} 01:00 PM`)
+						$('#date2').val(`${date} 05:PM PM`)
+					}
+				})
+				
+					const deduct = 0.5;
+					$('#assigno_days').val(deduct);
+			}else if(application_type=="Under Time"){
+				
+				$('#assign_date_column').show()
+				$('#assign_ampm_column').hide()
+				$('#assign_timefrom_column').show()
+				$('#assign_timeto_column').show()
+				$('#assign_datefrom_column').hide()
+				$('#assign_dateto_column').hide()
+				$('#assign_points_todeduct').val(.125);
+				$('#assign_timefrom').on('change',function(){
+					const timeFrom = $('#assign_timefrom').val();
+					const timeTo = $('#assign_timeto').val();
+					let date = $('#assign_halfdate').val() ? $('#assign_halfdate').val() : new Date().toJSON().slice(0, 10)
+					const date1 = date + " " + timeFrom;
+					const date2 = date + " " + timeTo;
+					$('#date1').val(date1)
+					$('#date2').val(date2)
+					const points_todeduct = $('#assign_points_todeduct').val();
+					let difference = new Date(date2) - new Date(date1);             
+		
+					difference = difference / 60 / 60 / 1000;
+					const deduct = difference * points_todeduct;
+					$('#assigno_days').val(deduct);
+				});
+				$('#assign_timeto').on('change',function(){
+					const timeFrom = $('#assign_timefrom').val();
+					const timeTo = $('#assign_timeto').val();
+					let date = $('#assign_halfdate').val() ? $('#assign_halfdate').val() : new Date().toJSON().slice(0, 10)
+					const date1 = date + " " + timeFrom;
+					const date2 = date + " " + timeTo;
+					$('#date1').val(date1)
+					$('#date2').val(date2)
+					const points_todeduct = $('#assign_points_todeduct').val();
+					let difference = new Date(date2) - new Date(date1);             
+		
+					difference = difference / 60 / 60 / 1000;
+					const deduct = difference * points_todeduct;
+					$('#assigno_days').val(deduct);
+				});
+				$('#assign_halfdate').on('change',function(){
+					const timeFrom = $('#assign_timefrom').val();
+					const timeTo = $('#assign_timeto').val();
+					let date = $('#halfdate').val() ? $('#assign_halfdate').val() : new Date().toJSON().slice(0, 10)
+					const date1 = date + " " + timeFrom;
+					const date2 = date + " " + timeTo;
+					$('#date1').val(date1)
+					$('#date2').val(date2)
+					const points_todeduct = $('#assign_points_todeduct').val();
+					let difference = new Date(date2) - new Date(date1);             
+		
+					difference = difference / 60 / 60 / 1000;
+					const deduct = difference * points_todeduct;
+					$('#assigno_days').val(deduct);
+				});
 			}
 		});
 
+		// $('#assign_application_type').on('change',function(){
+		// 	var assign_application_type = $('#assign_application_type').val();
 
-		var status_module =  window.localStorage.getItem("status");
+		// 	$('#assignlt').val("");
+		// 	$('#assignleavebal').val("");
+		// 	$('#assign_halfdate').val("");
+		// 	$('#assign_timefrom').val("15:00");
+		// 	$('#assign_timeto').val("15:00");
+		// 	$('#asssignfromdate').val("");
+		// 	$('#asssigntodate').val("");
+		// 	$('#assigno_days').val("");
+		// 	$('#assigncomment').val("");
+		// 	$('#assign_amchoice').val("");
+		// 	$('#assign_pmchoice').val("");
+
+		// 	if(assign_application_type=="Whole Day"){
+		// 		$('#assign_date_column').hide();
+		// 		$('#assign_timefrom_column').hide();
+		// 		$('#assign_timeto_column').hide();
+		// 		$('#assign_datefrom_column').show();
+		// 		$('#assign_dateto_column').show();
+		// 		$('#assign_ampm_column').hide();
+		// 	}else if(assign_application_type=="Half Day"){
+		// 		$('#assign_date_column').show();
+		// 		$('#assign_timefrom_column').hide();
+		// 		$('#assign_timeto_column').hide();
+		// 		$('#assign_datefrom_column').hide();
+		// 		$('#assign_dateto_column').hide();
+		// 		$('#assign_ampm_column').show();
+		// 	}else if(assign_application_type=="Under Time"){
+		// 		$('#assign_date_column').show();
+		// 		$('#assign_timefrom_column').show();
+		// 		$('#assign_timeto_column').show();
+		// 		$('#assign_datefrom_column').hide();
+		// 		$('#assign_dateto_column').hide();
+		// 		$('#assign_ampm_column').hide();
+		// 	}
+		// });
+
+
+		// var status_module =  window.localStorage.getItem("status");
 		
-		if(status_module == "success"){
-			$.Toast("Successfully Sent", successToast);
-			localStorage.clear();
-		}
+		// if(status_module == "success"){
+		// 	$.Toast("Successfully Sent", successToast);
+		// 	localStorage.clear();
+		// }
 
 	});
 
@@ -295,49 +494,49 @@ $(document).ready(function(){
 
 	/////////////////////////////////////////////////////////////////////
 	
-	function upt(){
-		var emp_days = $('#emp_days').val();
-		var emp_rate = $('#emp_rate').val();
-		var emp_id = $('#emp_id').val();
-		var new_deduct = emp_days * emp_rate;
-		$.ajax({
-			url:"controller/controller.leave_app.php?update_deductleave",
-			method:"POST",
-			data:{
-				emp_id: emp_id,
-				new_deduct: new_deduct,
-				emp_rate: emp_rate
-			},success:function(){
-				$('#emp_nodays').html(new_deduct);
+	// function upt(){
+	// 	var emp_days = $('#emp_days').val();
+	// 	var emp_rate = $('#emp_rate').val();
+	// 	var emp_id = $('#emp_id').val();
+	// 	var new_deduct = emp_days * emp_rate;
+	// 	$.ajax({
+	// 		url:"controller/controller.leave_app.php?update_deductleave",
+	// 		method:"POST",
+	// 		data:{
+	// 			emp_id: emp_id,
+	// 			new_deduct: new_deduct,
+	// 			emp_rate: emp_rate
+	// 		},success:function(){
+	// 			$('#emp_nodays').html(new_deduct);
 
 
-				$('#tbl_myleave').DataTable().destroy();
-				var employeeno = $('#employeeno').val();
-  				loadmyleave(employeeno);
-				$('#tbl_leavelist').DataTable().destroy();
-				var stat = "Pending";
-				loadleavelist(stat);
+	// 			$('#tbl_myleave').DataTable().destroy();
+	// 			var employeeno = $('#employeeno').val();
+  	// 			loadmyleave(employeeno);
+	// 			$('#tbl_leavelist').DataTable().destroy();
+	// 			var stat = "Pending";
+	// 			loadleavelist(stat);
 
-			}
-		});
-	}
+	// 		}
+	// 	});
+	// }
 
-	function assign_ampm(){
-		var leaveampm = $("input[name='assign_leaveampm']:checked").val();
-		if(leaveampm=="AM"){
-			$('#assign_amchoice').val("");
-			$('#assign_amchoice').show();
-			$('#assign_pmchoice').hide();
-			$('#assigno_days').val("");
-		}else if(leaveampm=="PM"){
-			$('#assign_amchoice').hide();
-			$('#assign_pmchoice').show();
-			$('#assign_pmchoice').val("");
-			$('#assigno_days').val("");
-		}else{
-			alert("E");
-		}
-	}
+	// function assign_ampm(){
+	// 	var leaveampm = $("input[name='assign_leaveampm']:checked").val();
+	// 	if(leaveampm=="AM"){
+	// 		$('#assign_amchoice').val("");
+	// 		$('#assign_amchoice').show();
+	// 		$('#assign_pmchoice').hide();
+	// 		$('#assigno_days').val("");
+	// 	}else if(leaveampm=="PM"){
+	// 		$('#assign_amchoice').hide();
+	// 		$('#assign_pmchoice').show();
+	// 		$('#assign_pmchoice').val("");
+	// 		$('#assigno_days').val("");
+	// 	}else{
+	// 		alert("E");
+	// 	}
+	// }
 
 
 	function cancelapprove(){
@@ -364,8 +563,11 @@ $(document).ready(function(){
 				emp_nodays:emp_nodays,
 				emp_status:emp_status
 			},success:function(){
-				$.Toast("Successfully Cancelled", errorToast);
-				window.location.href="leave_application.php";
+				$.Toast("Successfully Cancelled", successToast);
+				$('#tbl_leavelist').DataTable().destroy();
+				var stat = "Pending";
+				loadleavelist(stat);
+				$('#leavemodal').modal('hide')
 			}
 		});
 	}
@@ -393,9 +595,17 @@ $(document).ready(function(){
 				emp_leavetype:emp_leavetype,
 				emp_nodays:emp_nodays,
 				emp_status:emp_status
-			},success:function(){
-				$.Toast("Successfully Approved", successToast);
-				window.location.href="leave_application.php";
+			},success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast)
+					$('#tbl_leavelist').DataTable().destroy();
+					var stat = "Pending";
+					loadleavelist(stat);
+					$('#leavemodal').modal('hide')
+				}
 			}
 		});
 	}
@@ -424,8 +634,11 @@ $(document).ready(function(){
 				emp_nodays:emp_nodays,
 				emp_status:emp_status
 			},success:function(){
-				$.Toast("Successfully Disapproved", errorToast);
-				window.location.href="leave_application.php";
+				$.Toast("Successfully Disapproved", successToast);
+				$('#tbl_leavelist').DataTable().destroy();
+				var stat = "Pending";
+				loadleavelist(stat);
+				$('#leavemodal').modal('hide')
 			}
 		});
   	}
@@ -437,73 +650,43 @@ $(document).ready(function(){
 	function submitassignleave_callback(){
 
 		var application_type = $('#assign_application_type').val();
-		var leave_value = $('#assignremaininglb').val();
+		// var leave_value = $('#assignremaininglb').val();
 		var leave_bal = $('#assignleavebal').val();
 		var leave_type = $('#assignlt').val();
-		var datefrom = $('#asssignfromdate').val();
-		var dateto = $('#asssigntodate').val();
+		var datefrom = $('#date1').val();
+		var dateto = $('#date2').val();
 		var comment = $('#assigncomment').val();
 		var stat = "Pending";
 		var employeeno = $('#employeeddown').val();
 		var date_applied = $('#datenow').val();
 		var no_days = $('#assigno_days').val();
-		var timefrom = $('#assign_timefrom').val();
-		var timeto = $('#assign_timeto').val();
+		// var timefrom = $('#assign_timefrom').val();
+		// var timeto = $('#assign_timeto').val();
 		var points_todeduct = $('#assign_points_todeduct').val();
 		var halfdate = $('#assign_halfdate').val();
 		var pay_leave = $('#pay_leave').val();
+		var leaveForm = $("#leaveForm").prop("files")[0];
 		// var leaveForm = $('#leaveForm').prop('files');
 
-		const date1 = new Date(dateto);
-		const date2 = new Date(datefrom);
-		const diffTime = Math.abs(date2 - date1);
-		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-		var dayss = diffDays+1;
+		// const date1 = new Date(dateto);
+		// const date2 = new Date(datefrom);
+		// const diffTime = Math.abs(date2 - date1);
+		// const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+		// var dayss = diffDays+1;
 		if(leave_bal=="" || leave_bal==null){
-			alert("Invalid transaction");
+			$.Toast("No available leave credits", errorToast);
 		}
 		else if(no_days=="" || no_days==null){
-			alert("Invalid transaction");
+			$.Toast("Invalid transaction", errorToast);
 		}else if(comment=="" || comment==null){
-			alert("Please input the reason of your leave");
+			$.Toast("Please input the reason of your leave.", errorToast);
+		}else if(leaveForm=="" || leaveForm==null){
+			$.Toast("Please input the hardcopy of your leave form.", errorToast);
+		}else if(parseInt(leave_bal) < parseInt(no_days)){
+			$.Toast("Invalid transaction, insufficient leave balance", errorToast);
 		}else{
-
-			if(application_type=="Under Time"){
-				datefrom = timefrom;
-				dateto = timeto;
-				dayss = 0
-			}
-
-			if(application_type=="Half Day"){
-
-				var leaveampm = $("input[name='assign_leaveampm']:checked").val();
-				dayss = 0
-				if(leaveampm=="AM"){
-					datefrom = "AM";
-					var amchoice = $('#assign_amchoice').val();
-					if(amchoice=="0.5"){
-						dateto = "8:00 AM - 12:00 PM";
-					}else{
-						dateto = "8:00 AM - 2:00 PM";
-					}
-					
-				}else{
-					datefrom = "PM";
-					var pmchoice = $('#assign_pmchoice').val();
-					if(pmchoice=="sixpm"){
-						dateto = "12:00 PM - 6:00 PM";
-					}else if(pmchoice=="twopm"){
-						dateto = "2:00 PM - 6:00 PM";
-					}else if(pmchoice=="fivepm"){
-						dateto = "12:00 PM - 5:00 PM";
-					}
-					
-				}
-					
-			}
-			var updatedbalance = leave_value - no_days;
+			// var updatedbalance = leave_value - no_days;
 			var form_data = new FormData();
-			var leaveForm = $("#leaveForm").prop("files")[0];
 			form_data.append("leaveForm", leaveForm)
 			form_data.append("leave_type", leave_type)
 			form_data.append("datefrom", datefrom)
@@ -513,10 +696,10 @@ $(document).ready(function(){
 			form_data.append("employeeno", employeeno)
 			form_data.append("date_applied", date_applied)
 			form_data.append("no_days", no_days)
-			form_data.append("updatedbalance", updatedbalance)
+			// form_data.append("updatedbalance", updatedbalance)
 			form_data.append("application_type", application_type)
 			form_data.append("points_todeduct", points_todeduct)
-			form_data.append("dayss", dayss)
+			// form_data.append("dayss", dayss)
 			form_data.append("date_from", halfdate)
 			form_data.append("leave_bal", leave_bal)
 			form_data.append("pay_leave", pay_leave)
@@ -623,13 +806,15 @@ $(document).ready(function(){
 		const date2 = new Date(datefrom);
 		const diffTime = Math.abs(date2 - date1);
 		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-		var dayss = diffDays+1;
-		$('#emp_days').val(dayss);
+		let dayss = 1
+		if(application_type === 'Whole Day'){
+			dayss = diffDays+1;
+		}
+		
+		$('#emp_days').html(dayss);
 
 		$('#fivepm').val(fivepm);
 		$('#sixpm').val(sixpm);
-
-
 
 		$('#emp_leavebalancetype').html(balanse);
 		$('#emp_id').val(id);
@@ -637,20 +822,21 @@ $(document).ready(function(){
 		$('#emp_fname').html(fname);
 		$('#emp_leavetype').html(leave_type);
 		$('#emp_dateapplied').html(date_applied);
-		$('#emp_leavebalance').html(leave_balance);
+		// $('#emp_leavebalance').html(leave_balance);
 		$('#emp_datefrom').html(datefrom);
 		$('#emp_dateto').html(dateto);
 
-		$('#emp_ampm').html(datefrom);
-		$('#emp_time').html(dateto);
+		// $('#emp_ampm').html(datefrom);
+		// $('#emp_time').html(dateto);
 
 		$('#emp_nodays').html(no_days);
+		console.log(no_days)
 		$('#emp_status').html(status);
 		$('#emp_comment').html(comment);
 		$('#remarks').val(remarks);
 		$('#emp_application_type').html(application_type);
-		$('#emp_rate').val(deduct_rate);
-		$('#pay_leave_span').html(pay_leave);
+		// $('#emp_rate').val(deduct_rate);
+		// $('#pay_leave_span').html(pay_leave);
 		$('#pay_leave_span').html(pay_leave);
 		// $('#leaveFormButton').on(leaveForm);
 		// $('#leaveFormButton').on('click', () => {

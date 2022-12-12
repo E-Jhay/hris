@@ -120,20 +120,74 @@ class crud extends db_conn_mysql
     $emp_leavetype = $_POST['emp_leavetype'];
     $datenow = date('Y-m-d');
     $timenow = date('h:i:s');
-    $stat = $_POST['status'];
-    $statt = $_POST['status'];
+    $statusProxy = $_POST['status'];
+    // $statt = $_POST['status'];
     $emp_status = $_POST['emp_status'];
 
-    if($stat=="Cancelled"){
-      $stat = "Pending";
+    if($status=="Cancelled"){
+      $statusProxy = "Pending";
     }
 
-    if($statt=="Cancelled"){
-      $statt = "Undo";
-    }
+    // if($statt=="Cancelled"){
+    //   $statt = "Undo";
+    // }
 
       $conn=$this->connect_mysql();
-      $sql = $conn->prepare("UPDATE leave_application SET status='$stat', remarks='$remarks', approved_by='Administrator', readd='notread',last_update='$datenow',last_update_time='$timenow' WHERE id='$emp_id'");
+
+      if($status=="Approved"){
+        $sqll = $conn->prepare("SELECT balance FROM leave_balance WHERE employee_no='$emp_number' AND leave_type='$emp_leavetype'");
+        $sqll->execute();
+        $roww = $sqll->fetch();
+        $balance = $roww['balance'];
+        $points_deduct = $_POST['emp_nodays'];
+
+        if($balance < $points_deduct){
+          echo json_encode(array('type' => 'error', 'message' => 'An error has occured, Insufficient balance'));
+          exit;
+        }else{
+          $n_balance = $balance - $points_deduct;
+
+          $sql4 = $conn->prepare("UPDATE leave_balance SET balance='$n_balance' WHERE employee_no='$emp_number' AND leave_type='$emp_leavetype'");
+          $sql4->execute();
+
+          $sql2 = $conn->prepare("SELECT * FROM tbl_employee WHERE employeeno='$emp_number'");
+          $sql2->execute();
+          $row = $sql2->fetch();
+          $leave_balance = $row['leave_balance'];
+          $new_balance = $leave_balance - $points_deduct;
+
+          $sql3 = $conn->prepare("UPDATE tbl_employee SET leave_balance='$new_balance' WHERE employeeno='$emp_number'");
+          $sql3->execute();
+          echo json_encode(array('type' => 'success', 'message' => 'Leave Approved'));
+        }
+
+    }else if($status=="Cancelled" && $emp_status=="Approved"){
+
+        $qry = $conn->prepare("SELECT balance FROM leave_balance WHERE employee_no='$emp_number' AND leave_type='$emp_leavetype'");
+        $qry->execute();
+        $rw = $qry->fetch();
+        $balance = $rw['balance'];
+
+        $points_deduct = $_POST['emp_nodays'];
+
+        $n_balance = $balance + $points_deduct;
+
+        $qry2 = $conn->prepare("UPDATE leave_balance SET balance='$n_balance' WHERE employee_no='$emp_number' AND leave_type='$emp_leavetype'");
+        $qry2->execute();
+
+        $qry3 = $conn->prepare("SELECT * FROM tbl_employee WHERE employeeno='$emp_number'");
+        $qry3->execute();
+        $rw2 = $qry3->fetch();
+        $leave_balance = $rw2['leave_balance'];
+        $new_balance = $leave_balance + $points_deduct;
+
+        $sql3 = $conn->prepare("UPDATE tbl_employee SET leave_balance='$new_balance' WHERE employeeno='$emp_number'");
+        $sql3->execute();
+
+    }
+
+
+      $sql = $conn->prepare("UPDATE leave_application SET status='$statusProxy', remarks='$remarks', approved_by='Administrator', readd='notread',last_update='$datenow',last_update_time='$timenow' WHERE id='$emp_id'");
       $sql->execute();
 
       $sqry = $conn->prepare("SELECT id,firstname,lastname,department FROM tbl_employee WHERE employeeno='$emp_number'");
@@ -183,52 +237,7 @@ class crud extends db_conn_mysql
             /////////////////////////////////////////////////////////////////////
 
             
-      if($status=="Approved"){
-          
-          $sqll = $conn->prepare("SELECT balance FROM leave_balance WHERE employee_no='$emp_number' AND leave_type='$emp_leavetype'");
-          $sqll->execute();
-          $roww = $sqll->fetch();
-          $balance = $roww['balance'];
-          $points_deduct = $_POST['emp_nodays'];
-          
-          $n_balance = $balance - $points_deduct;
-
-          $sql4 = $conn->prepare("UPDATE leave_balance SET balance='$n_balance' WHERE employee_no='$emp_number' AND leave_type='$emp_leavetype'");
-          $sql4->execute();
-
-          $sql2 = $conn->prepare("SELECT * FROM tbl_employee WHERE employeeno='$emp_number'");
-          $sql2->execute();
-          $row = $sql2->fetch();
-          $leave_balance = $row['leave_balance'];
-          $new_balance = $leave_balance - $points_deduct;
-
-          $sql3 = $conn->prepare("UPDATE tbl_employee SET leave_balance='$new_balance' WHERE employeeno='$emp_number'");
-          $sql3->execute();
-      }else if($status=="Cancelled" && $emp_status=="Approved"){
-
-          $qry = $conn->prepare("SELECT balance FROM leave_balance WHERE employee_no='$emp_number' AND leave_type='$emp_leavetype'");
-          $qry->execute();
-          $rw = $qry->fetch();
-          $balance = $rw['balance'];
-
-          $points_deduct = $_POST['emp_nodays'];
-
-          $n_balance = $balance + $points_deduct;
-
-          $qry2 = $conn->prepare("UPDATE leave_balance SET balance='$n_balance' WHERE employee_no='$emp_number' AND leave_type='$emp_leavetype'");
-          $qry2->execute();
-
-          $qry3 = $conn->prepare("SELECT * FROM tbl_employee WHERE employeeno='$emp_number'");
-          $qry3->execute();
-          $rw2 = $qry3->fetch();
-          $leave_balance = $rw2['leave_balance'];
-          $new_balance = $leave_balance + $points_deduct;
-
-          $sql3 = $conn->prepare("UPDATE tbl_employee SET leave_balance='$new_balance' WHERE employeeno='$emp_number'");
-          $sql3->execute();
-
-      }
-
+      
   }
 
   function addleave(){
@@ -244,13 +253,12 @@ class crud extends db_conn_mysql
       // $updatedbalance = $_POST['updatedbalance'];
       $application_type = $_POST['application_type'];
       $points_todeduct = $_POST['points_todeduct'];
-      $dayss = $_POST['dayss'];
+      // $dayss = $_POST['dayss'];
       $date_from = $_POST['date_from'];
       $leave_bal = $_POST['leave_bal'];
       $pay_leave = $_POST['pay_leave'];
-      if($application_type=="Whole Day"){
-        $date_from = $datefrom;
-      }
+      $datenow = date('Y-m-d');
+      $timenow = date('H:i:s');
       $conn = $this->connect_mysql();
 
       if(!empty($_FILES["leaveForm"]["name"])) {
@@ -272,7 +280,7 @@ class crud extends db_conn_mysql
       } else {
         $leaveForm = '';
       }
-      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$datefrom', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', date_applied='$date_applied',previous_bal='$leave_bal', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='$dayss',date_from='$date_from',pay_leave='$pay_leave', remarks='', approved_by='', readd='', last_update='0000-00-00', last_update_time='2017-08-15 19:30:10', leave_form='$leaveForm'");
+      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$datefrom', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', date_applied='$date_applied',previous_bal='$leave_bal', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='0',date_from='',pay_leave='$pay_leave', remarks='', approved_by='', readd='', last_update='$datenow', last_update_time='$timenow', leave_form='$leaveForm'");
       $qry->execute();
 
       // $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
