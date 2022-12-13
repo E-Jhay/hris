@@ -182,10 +182,10 @@ class crud extends db_conn_mysql
   function uploadreimbursement(){
     $reimbursement_bal = $_POST['reimbursement_bal'];
     if($reimbursement_bal <=0){
-      header("location:../reimbursement.php?balance=0");
+      echo json_encode(array('type' => 'error', 'message' => 'Insufficient balance'));
+      exit;
     }else{
-
-        if (($_FILES['empfile']['name']!="")){
+      if (($_FILES['empfile']['name']!="")){
         $description = $_POST['description'];
         $nature = $_POST['nature'];
         $amount = $_POST['amount'];
@@ -193,36 +193,36 @@ class crud extends db_conn_mysql
         $emp_no = $_POST['emp_no'];
         $datenow = date('Y-m-d');
         // Where the file is going to be stored
-         $target_dir = "../reimbursement/".$emp_no."/";
-         $file = $_FILES['empfile']['name'];
-         $path = pathinfo($file);
-         $filename = $path['filename'];
-         $ext = $path['extension'];
-         $attachfile = $filename.".".$ext;
-         $temp_name = $_FILES['empfile']['tmp_name'];
-         $path_filename_ext = $target_dir.$filename.".".$ext;
-        // Check if file already exists
-         if (file_exists($path_filename_ext)) {
-          echo "Sorry, file already exists.";
-         }else{
-          if(!file_exists("../reimbursement/".$emp_no)){
-            mkdir("../reimbursement/".$emp_no);
-          }
-          // $lto_upload = $target_dir.$attachfile;
-          // unlink($lto_upload);
-            move_uploaded_file($temp_name,$path_filename_ext);
+        $target_dir = "../reimbursement/".$emp_no."/";
+        $file = $_FILES['empfile']['name'];
+        $path = pathinfo($file);
+        $filename = $path['filename'];
+        $ext = $path['extension'];
+        $today = date("Y-m-d-His");
+        $attachfile = $filename."-".$today.".".$ext;
+        $temp_name = $_FILES['empfile']['tmp_name'];
+        $path_filename_ext = $target_dir.$attachfile;
 
+        if (file_exists($path_filename_ext)) {
+          echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error"));
+          exit;
+        }else{
+          if(!is_dir("../reimbursement/".$emp_no."/")){
+            mkdir("../reimbursement/".$emp_no."/", 0777, true);
+          }
+          if(move_uploaded_file($temp_name,$path_filename_ext)) {
             $conn=$this->connect_mysql();
             $sql = $conn->prepare("INSERT INTO tbl_reimbursement SET employeeno='$emp_no', description='$description', nature='$nature', datee='$datenow', amount='$amount', file_name='$attachfile', statuss='Pending', remarks='',orig_amount='$amount'");
             $sql->execute();
-
-            // header("location:../reimbursement.php?balance=yes");
-            echo "Successfully requested reimbursement";
-         }    
+            echo json_encode(array('type' => 'success', 'message' => 'Reimbursement requested successfully'));
+            exit;
+          } else {
+            echo json_encode(array('type' => 'error', 'message' => 'There\'s an error uploading your file'));
+            exit;
+          }
+        }
       }
     }
-
-
   }
 
   public function getallreimburse()

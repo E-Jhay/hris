@@ -52,6 +52,7 @@ class crud extends db_conn_mysql
           if($x['imagepic']==""){
             $picture = "usera.png";
           }
+          if(!file_exists('../'.$picture)) $picture = "usera.png";
           $data['pic'] = '<img src='.$picture.' style="width:40px;height:40px;border-radius:10%">';
           $data['employeeno'] = $x['employeeno'];
           $data['lastname'] = utf8_decode($x['lastname']);

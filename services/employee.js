@@ -1,5 +1,5 @@
-var errorToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-danger"}
-var successToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-success"}
+var errorToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-danger"}
+var successToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-success"}
 $(document).ready(function(){
 
 	  $("#pim_list").addClass("active_tab");
@@ -100,10 +100,11 @@ $(document).ready(function(){
 	  		data:{
 	  			id:id
 	  		},success:function(){
-	  			$.Toast("Successfully Deleted", errorToast);
+	  			$.Toast("Successfully Deleted", successToast);
 	  			$('#myModal').modal('hide');
 		      $('#tbl_employee').DataTable().destroy();
 		      loademployee("Active");
+			  $('#statusdd').val('Active')
 	  		}
 	  	});
   }

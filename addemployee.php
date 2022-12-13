@@ -59,19 +59,19 @@ require_once "header.php";
 			<tr>
 				<td>
 					<b>Job Title: </b>
-					<select class="form-control" id="job_title" name="job_title"></select>
+					<select class="form-control" id="job_title" name="job_title" required></select>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<b>Job Category: </b>
-					<select class="form-control" id="job_category" name="job_category"></select>
+					<select class="form-control" id="job_category" name="job_category" required></select>
 				</td>
 			</tr>		
 			<tr>
 				<td>
 					<b>Department: </b>
-					<select class="form-control" id="department" name="department"></select>
+					<select class="form-control" id="department" name="department" required></select>
 				</td>
 			</tr>
 		</table>
@@ -88,13 +88,13 @@ require_once "header.php";
 			<tr>
 				<td>
 					<b>Employment Status: </b>
-					<select class="form-control" id="employment_status" name="employment_status"></select>
+					<select class="form-control" id="employment_status" name="employment_status" required></select>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<b>Company: </b>
-					<select class="form-control" id="company" name="company"></select>
+					<select class="form-control" id="company" name="company" required></select>
 				</td>
 			</tr>		
 		</table>
@@ -108,15 +108,15 @@ require_once "header.php";
 			<tr>
 				<td>
 					<b>First name: </b>
-					<input type="text" class="form-control" placeholder="Firstname" name="firstname" required="">
+					<input type="text" class="form-control" placeholder="Firstname" name="firstname" required>
 				</td>
 				<td>
 					<b>Middle name: </b>
-					<input type="text" class="form-control" placeholder="Middlename" name="middlename" required="">
+					<input type="text" class="form-control" placeholder="Middlename" name="middlename" required>
 				</td>
 				<td>
 					<b>Last name: </b>
-					<input type="text" class="form-control" placeholder="Lastname" name="lastname">
+					<input type="text" class="form-control" placeholder="Lastname" name="lastname" required>
 				</td>
 			</tr>
 			<tr>
@@ -130,7 +130,7 @@ require_once "header.php";
 				</td>
 				<td>
 					<b>Gender: </b>
-					<select class="form-control" id="gender" name="gender">
+					<select class="form-control" id="gender" name="gender" required>
 						<option selected="" value="" disabled="">-- Select gender --</option>
 						<option value="Male"> Male </option>
 						<option value="Female"> Female </option>
@@ -195,7 +195,7 @@ require_once "header.php";
 			<tr>
 				<td>
 					<b>Date hired: </b>
-					<input type="date" class="form-control" id="date_hired" name="date_hired">
+					<input type="date" class="form-control" id="date_hired" name="date_hired" required>
 				</td>
 				<td>
 					<b>End of contract: </b>

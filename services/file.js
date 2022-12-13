@@ -1,5 +1,5 @@
-var errorToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-danger"}
-var successToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-success"}
+var errorToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-danger"}
+var successToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-success"}
 $(document).ready(function(){
 
 		$("#master_file").addClass("active_tab");

@@ -1,5 +1,5 @@
-var errorToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-danger"}
-var successToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-success"}
+var errorToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-danger"}
+var successToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-success"}
 $(document).ready(function(){
 
 		$("#pim_add").addClass("active_tab");
@@ -141,6 +141,24 @@ $(document).ready(function(){
 	});
 	
 	function save_callback(){
+		const job_title = $('#job_title').val()
+		const job_category = $('#job_category').val()
+		const department = $('#department').val()
+		const employment_status = $('#employment_status').val()
+		const company = $('#company').val()
+		const date_hired = $('#date_hired').val()
+
+		let errors = []
+
+		if(!job_title) errors.push('Job title')
+		if(!job_category) errors.push('Job category')
+		if(!department) errors.push('Department')
+		if(!employment_status) errors.push('Employment Status')
+		if(!company) errors.push('Company')
+		if(!date_hired) errors.push('Date hired')
+		if(!errors.length <= 0) {
+			return $.Toast(errors.join(', ') + ' are required', errorToast)
+		}
 		var formData = new FormData($("#form")[0]);
 		$.ajax({
 			url:"controller/controller.employee.php?addnewemployee",
@@ -149,11 +167,10 @@ $(document).ready(function(){
 			processData: false,
 			contentType: false,
 			success:function(data){
-				// $.Toast("Successfully Saved", successToast);
-				// setTimeout(() => {
-				// 	window.location.href="employee.php";
-				// }, 1000)
-				console.log(data)
+				$.Toast("Successfully Saved", successToast);
+				setTimeout(() => {
+					window.location.href="employee.php";
+				}, 1000)
 			}
 		});
 	}

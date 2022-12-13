@@ -1,5 +1,5 @@
-var errorToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-danger"}
-var successToast = {'position':'bottom','align':'left', 'duration': 4000, 'class': "bg-success"}
+var errorToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-danger"}
+var successToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-success"}
 $(document).ready(function(){
 		$("#ess_omnibus").addClass("active_tab");
 		$('.drawer').hide();
@@ -21,7 +21,21 @@ $(document).ready(function(){
 
 		$('#form').on('submit', (e) => {
 			e.preventDefault()
-			var formData = new FormData($("#form")[0]);
+			const emp_no = $('#emp_no').val()
+			const reimbursement_bal = $('#reimbursement_bal').val()
+			const description = $('#description').val()
+			const nature = $('#nature').val()
+			const amount = $('#amount').val()
+			const empfile = $("#empfile").prop("files")[0]
+			if (parseInt(reimbursement_bal) <= 0) return $.Toast('No available balance', errorToast)
+			if (parseInt(reimbursement_bal) < parseInt(amount)) return $.Toast('Insufficient balance', errorToast)
+			const formData = new FormData()
+			formData.append('emp_no', emp_no)
+			formData.append('reimbursement_bal', reimbursement_bal)
+			formData.append('description', description)
+			formData.append('nature', nature)
+			formData.append('amount', amount)
+			formData.append('empfile', empfile)
 			$.ajax({
 				url:"controller/controller.reimburse.php?uploadreimbursement",
 				method:"POST",
@@ -29,10 +43,15 @@ $(document).ready(function(){
 				processData: false,
 				contentType: false,
 				success:function(data){
-					$.Toast(data, successToast);
-					$('#form')[0].reset()
-					$('#tbl_reimburse').DataTable().destroy();
-					load_myreimburse('');
+					const b = $.parseJSON(data)
+					if(b.type === 'error')
+						$.Toast(b.message, errorToast);
+					else{
+						$.Toast(b.message, successToast)
+						$('#form')[0].reset()
+						$('#tbl_reimburse').DataTable().destroy();
+						load_myreimburse('');
+					}
 				}
 			});
 		 })

@@ -12,9 +12,10 @@
 .sl-notification {
     position: fixed;
     padding: 1em 2em;
+    max-width: 20em;
     margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 500;
     color: #fff;
     background-color: rgba(0,0,0,0.9);
     text-align: left;
