@@ -601,17 +601,20 @@ $(document).ready(function(){
 
 	}
 
-	function delete_leave(id){
-		confirmed("delete",delete_leave_callback, "Do you really want to delete this?", "Yes", "No", id);	
+	function delete_leave(id, leave_form, employeeno){
+		const data = [id,leave_form,employeeno];
+		confirmed("delete",delete_leave_callback, "Do you really want to delete this?", "Yes", "No", data);	
 	}
 
-	function delete_leave_callback(id){
+	function delete_leave_callback(data){
 		$.ajax({
 			url:"controller/controller.leave.php?delete_myleave",
 			method:"POST",
 			data:{
-				id:id
-			},success:function(){
+				id:data[0],
+				leave_form:data[1],
+				employeeno:data[2],
+			},success:function(data){
 				$.Toast("Successfully Deleted", successToast);
 				$('#tbl_myleave').DataTable().destroy();
 				var employeeno = $('#employeeno').val();

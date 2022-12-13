@@ -262,7 +262,7 @@ class crud extends db_conn_mysql
       $conn = $this->connect_mysql();
 
       if(!empty($_FILES["leaveForm"]["name"])) {
-        $target_dir = "../static/leave_form/";
+        $target_dir = "../static/leave_form/".$employeeno.'/';
         $file = $_FILES['leaveForm']['name'];
         $path = pathinfo($file);
         $ext = $path['extension'];
@@ -494,7 +494,7 @@ class crud extends db_conn_mysql
           
           $data['active_status'] = $x['status'];
           $data['leave_form'] = '<center>
-                                <button class="btn btn-sm btn-success" onclick="viewLeaveForm('.'\''.$x['leave_form'].'\')"><i class="fas fa-sm fa-eye"></i> Leave Form</button> 
+                                <button class="btn btn-sm btn-success" onclick="viewLeaveForm('.'\''.$x['leave_form'].'\',\''.$x['employeeno'].'\')"><i class="fas fa-sm fa-eye"></i> Leave Form</button> 
                                 </center>';
         $return[] = $data;
       }

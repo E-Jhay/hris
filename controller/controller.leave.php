@@ -357,7 +357,7 @@ class crud extends db_conn_mysql
       // }
 
       if(!empty($_FILES["leaveForm"]["name"])) {
-        $target_dir = "../static/leave_form/";
+        $target_dir = "../static/leave_form/".$employeeno.'/';
         $file = $_FILES['leaveForm']['name'];
         $path = pathinfo($file);
         $ext = $path['extension'];
@@ -450,10 +450,14 @@ class crud extends db_conn_mysql
   function delete_myleave(){
 
       $id = $_POST['id'];
+      $leave_form = $_POST['leave_form'];
+      $employeeno = $_POST['employeeno'];
       $conn=$this->connect_mysql();
       $sql = $conn->prepare("DELETE FROM leave_application WHERE id='$id' AND status='Pending'");
       $sql->execute();
-
+      
+      $link_file = "../static/leave_form/".$employeeno.'/'.$leave_form;
+      unlink($link_file);
     
   }
 
@@ -496,7 +500,7 @@ class crud extends db_conn_mysql
             $data['numberofdays'] = "";
             $data['action'] = '<center>
             <button onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
-            <button onclick="delete_leave('.$x['idd'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
+            <button onclick="delete_leave('.$x['idd'].',\''.$x['leave_form'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
             </center>
             ';
 

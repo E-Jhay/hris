@@ -234,7 +234,7 @@ $balance = $leaves->getleavebalance($empno);
 
           <div class="form-group" id="no_days_column">
             <label for="exampleInputEmail1">No. of days:</label>
-            <input type="number" class="form-control" id="emp_days" name="">
+            <input type="number" class="form-control" id="emp_days" name="" disabled>
           </div>
 
           <!-- <div class="form-group" id="fivepm_column">

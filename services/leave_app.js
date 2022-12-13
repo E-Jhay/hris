@@ -849,8 +849,8 @@ $(document).ready(function(){
 			$('#btncancelapprove').show();
 			$('#compute_btn').hide();
 			$( "#remarks" ).prop( "disabled", true);
-			$( "#fivepm" ).prop( "disabled", true);
-			$( "#sixpm" ).prop( "disabled", true);
+			// $( "#fivepm" ).prop( "disabled", true);
+			// $( "#sixpm" ).prop( "disabled", true);
 			
 
 		}else if(status=="Approved"){
@@ -859,16 +859,16 @@ $(document).ready(function(){
 			$('#btncancelapprove').show();
 			$('#compute_btn').hide();
 			$( "#remarks" ).prop( "disabled", true);
-			$( "#fivepm" ).prop( "disabled", true);
-			$( "#sixpm" ).prop( "disabled", true);
+			// $( "#fivepm" ).prop( "disabled", true);
+			// $( "#sixpm" ).prop( "disabled", true);
 		}else{
 			$('#btnapprove').show();
 			$('#btndisapprove').show();
 			$('#btncancelapprove').hide();
 			$('#compute_btn').show();
 			$( "#remarks" ).prop( "disabled", false);
-			$( "#fivepm" ).prop( "disabled", false);
-			$( "#sixpm" ).prop( "disabled", false);
+			// $( "#fivepm" ).prop( "disabled", false);
+			// $( "#sixpm" ).prop( "disabled", false);
 		}
 
 		if(application_type=="Half Day"){
@@ -878,8 +878,8 @@ $(document).ready(function(){
 			$('#dto_column').hide();
 			$('#ap_column').show();
 			$('#time_column').show();
-			$('#fivepm_column').hide();
-			$('#sixpm_column').hide();
+			// $('#fivepm_column').hide();
+			// $('#sixpm_column').hide();
 		}else if(application_type=="Whole Day"){
 			$('#no_days_column').show();
 			$('#rate_column').hide();
@@ -887,8 +887,8 @@ $(document).ready(function(){
 			$('#dto_column').show();
 			$('#ap_column').hide();
 			$('#time_column').hide();
-			$('#fivepm_column').show();
-			$('#sixpm_column').show();
+			// $('#fivepm_column').show();
+			// $('#sixpm_column').show();
 		}else{
 			$('#no_days_column').hide();
 			$('#rate_column').hide();
@@ -896,50 +896,50 @@ $(document).ready(function(){
 			$('#dto_column').show();
 			$('#ap_column').hide();
 			$('#time_column').hide();
-			$('#fivepm_column').hide();
-			$('#sixpm_column').hide();
+			// $('#fivepm_column').hide();
+			// $('#sixpm_column').hide();
 		}
 
 		if(pay_leave=="Without Pay"){
 			$('#emp_nodays').html(0);
 			$('#no_days_column').hide();
-			$('#fivepm_column').hide();
-			$('#sixpm_column').hide();
+			// $('#fivepm_column').hide();
+			// $('#sixpm_column').hide();
 		}else{
 			$('#no_days_column').show();
-			$('#fivepm_column').show();
-			$('#sixpm_column').show();
+			// $('#fivepm_column').show();
+			// $('#sixpm_column').show();
 		}
 
 		$('#leavemodal').modal('show');
 	}
 
-	function loadmyleave(employeeno){
+	// function loadmyleave(employeeno){
 							
-		$('#tbl_myleave').DataTable({  
-				"aaSorting": [],
-				"bSearching": true,
-				"bFilter": true,
-				"bInfo": true,
-				"bPaginate": true,
-				"bLengthChange": true,
-				"pagination": true,
-				"ajax" : "controller/controller.leave_app.php?loadmyleave&employeeno="+employeeno,
-				"columns" : [
+	// 	$('#tbl_myleave').DataTable({  
+	// 			"aaSorting": [],
+	// 			"bSearching": true,
+	// 			"bFilter": true,
+	// 			"bInfo": true,
+	// 			"bPaginate": true,
+	// 			"bLengthChange": true,
+	// 			"pagination": true,
+	// 			"ajax" : "controller/controller.leave_app.php?loadmyleave&employeeno="+employeeno,
+	// 			"columns" : [
 					
-					{ "data" : "employeeno"},
-					{ "data" : "date"},
-					{ "data" : "leavetype"},
-					{ "data" : "leavebalance"},
-					{ "data" : "numberofdays"},
-					{ "data" : "active_status"},
-					{ "data" : "action"}
+	// 				{ "data" : "employeeno"},
+	// 				{ "data" : "date"},
+	// 				{ "data" : "leavetype"},
+	// 				{ "data" : "leavebalance"},
+	// 				{ "data" : "numberofdays"},
+	// 				{ "data" : "active_status"},
+	// 				{ "data" : "action"}
 
-				],
-			});
-	}
-	var employeeno = $('#employeeno').val();
-	loadmyleave(employeeno);
+	// 			],
+	// 		});
+	// }
+	// var employeeno = $('#employeeno').val();
+	// loadmyleave(employeeno);
 
 
 	function loadleavelist(stat){
@@ -1089,8 +1089,8 @@ $(document).ready(function(){
 	var filter_to = $('#filter_to').val();
   loadleavelistreport(filter_type,filter_from,filter_to);
 
-  function viewLeaveForm(filename){
-    var link = "static/leave_form/" + filename;
+  function viewLeaveForm(filename, employeeno){
+    var link = "static/leave_form/" + employeeno + '/' + filename;
     window.open(link);
   }
 
