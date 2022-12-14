@@ -12,7 +12,7 @@ class crud extends db_conn_mysql
       $datefrom = $_POST['datefrom'];
       $dateto = $_POST['dateto'];
       $processdate = $_POST['processdate'];
-      $datenow = date('Y-m-d');
+      $datenow = date('Y-m-d-His');
       // Where the file is going to be stored
        $target_dir = "../payslips/".$employeeddown."/";
        $file = $_FILES['empfile']['name'];
@@ -26,30 +26,32 @@ class crud extends db_conn_mysql
 
       // Check if file already exists
        if (file_exists($path_filename_ext)) {
-        echo "Sorry, file already exists.";
+        echo json_encode(array('type' => 'error', 'message' => 'Sorry, file already exists.'));
+        exit;
        }else{
-  
-        mkdir("../payslips/".$employeeddown);
+        if(!is_dir("../payslips/".$employeeddown)){
+          mkdir("../payslips/".$employeeddown, 0777, true);
+        }
 
         // $lto_upload = $target_dir.$attachfile;
         // unlink($lto_upload);
 
-          move_uploaded_file($temp_name,$path_filename_ext);
+          if(move_uploaded_file($temp_name,$path_filename_ext)){
 
-          $conn=$this->connect_mysql();
-          $sql = $conn->prepare("INSERT INTO payslips SET employeeno='$employeeddown', filename='$attachfile', pay_periodfrom='$datefrom', pay_periodto='$dateto', process_date='$processdate', stat='posted'");
-          $sql->execute();
+            $conn=$this->connect_mysql();
+            $sql = $conn->prepare("INSERT INTO payslips SET employeeno='$employeeddown', filename='$attachfile', pay_periodfrom='$datefrom', pay_periodto='$dateto', process_date='$processdate', stat='posted'");
+            $sql->execute();
 
 
-          $sqry = $conn->prepare("SELECT id FROM tbl_employee WHERE employeeno='$employeeddown'");
-          $sqry->execute();
-          $srow = $sqry->fetch();
-          $employee_id = $srow['id'];
+            // $sqry = $conn->prepare("SELECT id FROM tbl_employee WHERE employeeno='$employeeddown'");
+            // $sqry->execute();
+            // $srow = $sqry->fetch();
+            // $employee_id = $srow['id'];
 
-          $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
-          $sqry2->execute();
-          $srow2 = $sqry2->fetch();
-          $corp_email = $srow2['corp_email'];
+            // $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
+            // $sqry2->execute();
+            // $srow2 = $sqry2->fetch();
+            // $corp_email = $srow2['corp_email'];
 
 
             // require 'PHPMailer\src\Exception.php';
@@ -79,11 +81,11 @@ class crud extends db_conn_mysql
             //     echo "Mailer Error: " . $mail->ErrorInfo;
             // } else {
             // }
-
-
-          header("location:../uplo.php");
-
-          
+            echo json_encode(array('type' => 'success', 'message' => 'Payslip uploaded successfully'));
+          }else {
+            echo json_encode(array('type' => 'error', 'message' => 'There\'s an error uploading your file, tyr again.'));
+            exit;
+          }
        }
 
        
@@ -124,8 +126,8 @@ class crud extends db_conn_mysql
 
           $data = array();
           $data['action'] = '<center>
-          <button onclick="dl_payslip(\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
-          <button onclick="delete_payslip('.$x['id'].',\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
+          <button title="View file" onclick="dl_payslip(\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View file</button>
+          <button title="Delete" onclick="delete_payslip('.$x['id'].',\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
           
           </center>
           ';

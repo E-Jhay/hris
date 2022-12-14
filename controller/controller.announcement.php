@@ -79,7 +79,7 @@ class crud extends db_conn_mysql
           }
 
           $data = array();
-          $data['action'] = '<div class="text-center"><button title="View" onclick="dl_news(\''.$x['file_name'].'\')" class="btn btn-sm btn-success"><i class="fa fa-eye"></i></button>
+          $data['action'] = '<div class="text-center"><button title="View file" onclick="dl_news(\''.$x['file_name'].'\')" class="btn btn-sm btn-success"><i class="fa fa-eye"></i></button>
           <button title="Delete" onclick="delete_news('.$x['id'].',\''.$x['file_name'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></div>';
           $data['department'] = $x['department'];
           $data['topic'] = $x['topic'];
@@ -117,42 +117,52 @@ class crud extends db_conn_mysql
         $department = "";
       }
 
-      // Where the file is going to be stored
-       $target_dir = "../news/";
-       $file = $_FILES['news_file']['name'];
-       $path = pathinfo($file);
-       $filename = $path['filename'];
-       $ext = $path['extension'];
-       $attachfile = $filename.".".$ext;
-       $temp_name = $_FILES['news_file']['tmp_name'];
-       $path_filename_ext = $target_dir.$filename.".".$ext;
-      // Check if file already exists
-       if (file_exists($path_filename_ext)) {
-        // echo "Sorry, file already exists.";
-        echo ('Sorry, file already exists.');
-       }else{
-        
-        $file_upload = $target_dir.$attachfile;
-        // unlink($file_upload);
-
-          move_uploaded_file($temp_name,$path_filename_ext);
-
-          $conn=$this->connect_mysql();
-          $sql = $conn->prepare("INSERT INTO announce_news SET topic='$modal_topic', publish_date='$modal_date', end_date='$modal_end_date', file_name='$attachfile', ack_status='active', department='$department'");
-          $sql->execute();
-
-          session_start();
-          $useraction = $_SESSION['fullname'];
-          $dateaction = date('Y-m-d');
-          $auditaction = "Added new announcement ".$modal_topic;
-          $audittype = "ADD";
-          $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
-          $q->execute();
-
-          // header("location:../announcement.php");
-          echo ('Announcement Added Successfully');
+        // Where the file is going to be stored
+        $target_dir = "../news/";
+        $file = $_FILES['news_file']['name'];
+        $path = pathinfo($file);
+        $filename = $path['filename'];
+        $ext = $path['extension'];
+        $dateNow = date('Y-m-d-His');
+        $attachfile = $filename.$dateNow.".".$ext;
+        $temp_name = $_FILES['news_file']['tmp_name'];
+        $path_filename_ext = $target_dir.$attachfile;
+        // Check if file already exists
+        if (file_exists($path_filename_ext)) {
+          // echo "Sorry, file already exists.";
+          echo json_encode(array('type' => 'error', 'message' => 'Sorry, file already exists.'));
+          exit;
+        }else{
           
-       }
+          // $file_upload = $target_dir.$attachfile;
+          // unlink($file_upload);
+
+            if(move_uploaded_file($temp_name,$path_filename_ext)){
+
+              $conn=$this->connect_mysql();
+              $sql = $conn->prepare("INSERT INTO announce_news SET topic='$modal_topic', publish_date='$modal_date', end_date='$modal_end_date', file_name='$attachfile', ack_status='active', department='$department'");
+              $sql->execute();
+
+              session_start();
+              $useraction = $_SESSION['fullname'];
+              $dateaction = date('Y-m-d');
+              $auditaction = "Added new announcement ".$modal_topic;
+              $audittype = "ADD";
+              $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
+              $q->execute();
+
+              // header("location:../announcement.php");
+              echo json_encode(array('type' => 'success', 'message' => 'Announcement Added Successfully'));
+              exit;
+            } else {
+              echo json_encode(array('type' => 'error', 'message' => 'There\'s an error uploading your file.'));
+              exit;
+            }
+            
+        }
+    }else{
+      echo json_encode(array('type' => 'error', 'message' => 'File is required'));
+      exit;
     }
 
 

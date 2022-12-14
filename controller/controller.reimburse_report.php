@@ -170,8 +170,8 @@ class crud extends db_conn_mysql
           if($type=="all"){
 
             $data['action'] = '<center>
-            <button onclick="view_file('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
-            <button onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-download"></i> Download File</button>
+            <button title="View details" onclick="view_file('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
+            <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> View File</button>
             </center>';
 
           }else{
@@ -179,23 +179,20 @@ class crud extends db_conn_mysql
             if($x['statuss']=="Pending"){
               
             $data['action'] = '<center>
-            <button onclick="view_file_personal('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
-            <button onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-download"></i> Download File</button>
-            <button onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
+            <button title="View details" onclick="view_file_personal('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
+            <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> View File</button>
+            <button title="Delete" onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
             </center>';
 
             }else{
 
               $data['action'] = '<center>
-              <button onclick="view_file_personal('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
-              <button onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-download"></i> Download File</button>
-              <button disabled="" onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
+              <button title="View details" onclick="view_file_personal('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
+              <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> View File</button>
+              <button title="Delete" disabled="" onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
               </center>';
 
             }
-
-            
-
           }
 
         $return[] = $data;

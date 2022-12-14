@@ -22,7 +22,6 @@ $(document).ready(function(){
 		$('#ot_to').on('change',function(){
 			var ot_from = $('#ot_from').val();
 			var ot_to = $('#ot_to').val();
-			console.log(ot_from, ot_to)
 			
 			var hours = ( new Date("1970-1-1 " + ot_to) - new Date("1970-1-1 " + ot_from) ) / 1000 / 60 / 60;
 			
@@ -55,44 +54,55 @@ $(document).ready(function(){
 
 	function submitot_callback(){
 
-			var employeeno = $('#employeeno').val();
-			var reasons = $('#reasons').val();
-			var date_filed = $('#date_filed').val();
-			var ot_from = $('#ot_from').val();
-			var ot_to = $('#ot_to').val();
-			var no_of_hrs = $('#no_of_hrs').val();
-			var ot_date = $('#ot_date').val();
-			var ot_date_to = $('#ot_date_to').val();
+		var employeeno = $('#employeeno').val();
+		var reasons = $('#reasons').val();
+		var date_filed = $('#date_filed').val();
+		var ot_from = $('#ot_from').val();
+		var ot_to = $('#ot_to').val();
+		var no_of_hrs = $('#no_of_hrs').val();
+		var ot_date = $('#ot_date').val();
+		var ot_date_to = $('#ot_date_to').val();
 
-			if(reasons=="" || reasons==null){
-				$.Toast("Please input the reason of your Overtime.", errorToast);
-			}else if(no_of_hrs=="" || no_of_hrs==null){
-				$.Toast("Invalid Transaction", errorToast);
-			} else if(ot_date=="" || ot_date==null){
-				$.Toast("Overtime date should not be empty", errorToast);
-			} else if(ot_date_to=="" || ot_date_to==null){
-				$.Toast("Overtime date To should not be empty", errorToast);
-			}else{
-				$.ajax({
-					url:"controller/controller.overtime.php?apply_overtime",
-					method:"POST",
-					data:{
-						employeeno: employeeno,
-						reasons: reasons,
-						date_filed: date_filed,
-						ot_from: ot_from,
-						ot_to: ot_to,
-						no_of_hrs: no_of_hrs,
-						ot_date: ot_date,
-						ot_date_to: ot_date_to
-					},success:function(){
-						$.Toast("Successfully applied for overtime", successToast);
-						setTimeout(() => {
-							window.location.href="overtime.php";
-						}, 1000)
-					}
-				});
+		if(reasons=="" || reasons==null) return $.Toast("Please input the reason of your Overtime.", errorToast)
+		if(no_of_hrs=="" || no_of_hrs==null) return $.Toast("Invalid Transaction", errorToast);
+		if(ot_date=="" || ot_date==null) return $.Toast("Overtime date should not be empty", errorToast);
+		if(ot_date_to=="" || ot_date_to==null) return $.Toast("Overtime date To should not be empty", errorToast);
+		if(ot_date > ot_date_to) return $.Toast("Invalid dates, please check the dates", errorToast);
+		$.ajax({
+			url:"controller/controller.overtime.php?apply_overtime",
+			method:"POST",
+			data:{
+				employeeno: employeeno,
+				reasons: reasons,
+				date_filed: date_filed,
+				ot_from: ot_from,
+				ot_to: ot_to,
+				no_of_hrs: no_of_hrs,
+				ot_date: ot_date,
+				ot_date_to: ot_date_to
+			},success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast)
+					clearFields()
+					$('#tbl_myot').DataTable().destroy();
+					var employeeno = $('#employeeno').val();
+					loadmyot(employeeno);
+				}
 			}
+		});
+	}
+
+	function clearFields() {
+		$('#reasons').val('');
+		$('#date_filed').val('');
+		$('#ot_from').val('');
+		$('#ot_to').val('');
+		$('#no_of_hrs').val('');
+		$('#ot_date').val('');
+		$('#ot_date_to').val('');
 	}
 
 	// function lb(){

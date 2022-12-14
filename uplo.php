@@ -63,7 +63,7 @@ $count = $leaves->countLeaves($empno);
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" action="controller/controller.upload.php?uploadpayslip" enctype="multipart/form-data">
+        <form id="formModal" enctype="multipart/form-data">
           <div class="form-group">
             <label>Employee:</label>
             <select class="form-control" id="employeeddown" required="" name="employeeddown"></select>

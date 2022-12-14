@@ -20,7 +20,7 @@ class crud extends db_conn_mysql
           }
           $data = array();
           $data['action'] = '<center>
-          <button onclick="dl_payslip(\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> Download</button>
+          <button onclick="dl_payslip(\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-download"></i> View</button>
           </center>
           ';
 

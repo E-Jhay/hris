@@ -20,18 +20,18 @@ class crud extends db_conn_mysql
     $query->execute();
 
 
-      $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
-      $qry2->execute();
-      $row = $qry2->fetch();
+    $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
+    $qry2->execute();
+    $row = $qry2->fetch();
 
-      $department = $row['department'];
-      $firstname = $row['firstname'];
-      $lastname = utf8_decode($row['lastname']);
-      $id = $row['id'];
+    $department = $row['department'];
+    $firstname = $row['firstname'];
+    $lastname = utf8_decode($row['lastname']);
+    $id = $row['id'];
 
-      $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
-      $qry3->execute();
-      $row2 = $qry3->fetch();
+    $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
+    $qry3->execute();
+    $row2 = $qry3->fetch();
 
 
       // require 'Exception.php';
@@ -80,6 +80,8 @@ class crud extends db_conn_mysql
       // } else {
       //   echo "success";
       // }
+
+      echo json_encode(array('type' => 'success', 'message' => 'Overtime applied successfully'));
 
   }
 

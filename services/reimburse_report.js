@@ -162,7 +162,7 @@ function btnreports(){
 				employeeno: employeeno,
 				credits_modal: credits_modal
 			},success:function(){
-				$.Toast("Successfully Disapproved", errorToast);
+				$.Toast("Successfully Disapproved", successToast);
 				$('#reimbursement_modal').modal('hide');
 				$('#tbl_reimburse_all').DataTable().destroy();
 				load_reimburse_all("Pending");
@@ -194,7 +194,7 @@ function btnreports(){
 				employeeno: employeeno,
 				credits_modal: credits_modal
 			},success:function(){
-				$.Toast("Successfully Cancelled", errorToast);
+				$.Toast("Successfully Cancelled", successToast);
 				$('#reimbursement_modal').modal('hide');
 				$('#tbl_reimburse_all').DataTable().destroy();
 				load_reimburse_all("Pending");

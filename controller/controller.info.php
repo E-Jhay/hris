@@ -69,30 +69,34 @@ class crud extends db_conn_mysql
 
     $query1 = $conn->prepare("SELECT marriage_contract FROM marriage_contract WHERE employee_number='$employeeno'");
     $query1->execute();
-    $marriage_contract = $query1->fetch();
+    $marriage_temp = $query1->fetch();
+    $marriage_contract = $marriage_temp ? $marriage_temp : array('marriage_contract' => '');
 
     $query2 = $conn->prepare("SELECT dependent FROM dependents WHERE employee_number='$employeeno'");
     $query2->execute();
-    $dependent = $query2->fetch();
+    $dependent_temp = $query2->fetch();
+    $dependent = $dependent_temp ? $dependent_temp : array('dependent' => '');
 
     $query3 = $conn->prepare("SELECT additional_id FROM additional_id WHERE employee_number='$employeeno'");
     $query3->execute();
-    $additional_id = $query3->fetch();
+    $additional_id_temp = $query3->fetch();
+    $additional_id = $additional_id_temp ? $additional_id_temp : array('additional_id' => '');
 
     $query4 = $conn->prepare("SELECT proof_of_billing FROM proof_of_billing WHERE employee_number='$employeeno'");
     $query4->execute();
-    $proof_of_billing = $query4->fetch();
+    $proof_of_billing_temp = $query4->fetch();
+    $proof_of_billing = $proof_of_billing_temp ? $proof_of_billing_temp : array('proof_of_billing' => '');
     
-    $firstname = $row['firstname'];
-    $lastname = utf8_decode($row['lastname']);
-    $middlename = $row['middlename'];
-    $imagepic = utf8_decode($row['imagepic']);
-    $employeeno = $row['employeeno'];
-    $dateofbirth = $row['dateofbirth'];
-    $marital_status = $row['marital_status'];
-    $date_hired = $row['date_hired'];
-    $nationality = $row['nationality'];
-    $gender = $row['gender'];
+    $firstname = $row['firstname'] ?  $row['firstname'] : '';
+    $lastname = $row['lastname'] ? utf8_decode($row['lastname']) : '';
+    $middlename = $row['middlename'] ? $row['middlename'] : '';
+    $imagepic = $row['imagepic'] ? utf8_decode($row['imagepic']) : '';
+    $employeeno = $row['employeeno'] ? $row['employeeno'] : '';
+    $dateofbirth = $row['dateofbirth'] ? $row['dateofbirth'] : '';
+    $marital_status = $row['marital_status'] ? $row['marital_status'] : '';
+    $date_hired = $row['date_hired'] ? $row['date_hired'] : '';
+    $nationality = $row['nationality'] ? $row['nationality'] : '';
+    $gender = $row['gender'] ? $row['gender'] : '';
     if($imagepic==""){
       $imagepic = "usera.png";
     }

@@ -499,8 +499,8 @@ class crud extends db_conn_mysql
           if($stados=="Pending"){
             $data['numberofdays'] = "";
             $data['action'] = '<center>
-            <button onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
-            <button onclick="delete_leave('.$x['idd'].',\''.$x['leave_form'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
+            <button title="View" onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
+            <button title="Delete" onclick="delete_leave('.$x['idd'].',\''.$x['leave_form'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
             </center>
             ';
 
@@ -513,8 +513,8 @@ class crud extends db_conn_mysql
               $data['numberofdays'] = $x['no_days'];
             }
             $data['action'] = '<center>
-            <button onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" style="font-size:10px;color: white;background: #4c91cd;border-color: #4c91cd;"><i class="fa fa-eye"></i> View</button>
-            <button disabled="" onclick="delete_leave('.$x['idd'].')" style="font-size:10px;color: white;background: #ff8080;border-color: #ff8080;"><i class="fa fa-trash"></i> Delete</button>
+            <button title="View" onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" style="font-size:10px;color: white;background: #4c91cd;border-color: #4c91cd;"><i class="fa fa-eye"></i></button>
+            <button title="Delete" disabled="" onclick="delete_leave('.$x['idd'].')" style="font-size:10px;color: white;background: #ff8080;border-color: #ff8080;"><i class="fa fa-trash"></i></button>
             </center>
             ';
           }

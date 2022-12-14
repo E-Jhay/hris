@@ -21,18 +21,22 @@ $(document).ready(function(){
 			processData: false,
 			contentType: false,
 			success:function(data){
-				$.Toast(data, successToast);
-				console.log(data)
-				$('#tbl_news').DataTable().destroy();
-				$('#tbl_inter_office_news').DataTable().destroy();
-				load_news();
-				$('#news_modal').modal('hide');
-				$('#modal_newsid').val("");
-				$('#modal_topic').val("");
-				$('#departmentList').val("");
-				$('#modal_date').val("");
-				$('#modal_end_date').val("");
-				$('#news_file').val("");
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast)
+					$('#tbl_news').DataTable().destroy();
+					$('#tbl_inter_office_news').DataTable().destroy();
+					load_news();
+					$('#news_modal').modal('hide');
+					$('#modal_newsid').val("");
+					$('#modal_topic').val("");
+					$('#departmentList').val("");
+					$('#modal_date').val("");
+					$('#modal_end_date').val("");
+					$('#news_file').val("");
+				}
 			}
 		});
 	 })

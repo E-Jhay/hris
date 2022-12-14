@@ -477,7 +477,7 @@ class crud extends db_conn_mysql
           $fname = utf8_decode($x['firstname'].' '.$x['lastname']);
           $data = array();
           $data['action'] = '<center>
-          <button onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button> 
+          <button title="View details" onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button> 
           </center>';
           $data['employeeno'] = utf8_decode($x['firstname'].' '.$x['lastname']);
           $data['date'] = $x['date_applied'];
@@ -494,7 +494,7 @@ class crud extends db_conn_mysql
           
           $data['active_status'] = $x['status'];
           $data['leave_form'] = '<center>
-                                <button class="btn btn-sm btn-success" onclick="viewLeaveForm('.'\''.$x['leave_form'].'\',\''.$x['employeeno'].'\')"><i class="fas fa-sm fa-eye"></i> Leave Form</button> 
+                                <button title="View leave form" class="btn btn-sm btn-success" onclick="viewLeaveForm('.'\''.$x['leave_form'].'\',\''.$x['employeeno'].'\')"><i class="fas fa-sm fa-eye"></i> Leave Form</button> 
                                 </center>';
         $return[] = $data;
       }

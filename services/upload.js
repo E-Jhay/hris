@@ -22,6 +22,40 @@ $(document).ready(function(){
 function upload_pslip(){
   $('#userrole_modal').modal('show');
 }
+
+$('#formModal').on('submit', (e) => {
+  e.preventDefault()
+  confirmed("save",save_callback, "Do you really want to save this?", "Yes", "No")
+})
+
+function save_callback() {
+  const dateTo = $('#dateto').val()
+  const dateFrom = $('#datefrom').val()
+  if(dateFrom > dateTo) return $.Toast('Error: Invalid dates', errorToast)
+
+  const formData = new FormData($("#formModal")[0])
+
+  $.ajax({
+    url:"controller/controller.upload.php?uploadpayslip",
+			method:"POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success:function(data){
+        const b = $.parseJSON(data)
+        if(b.type === 'error')
+          $.Toast(b.message, errorToast)
+        else{
+          $.Toast(b.message, successToast)
+          $('#userrole_modal').modal('hide');
+          $('#formModal').trigger("reset");
+          $('#tbl_payslip').DataTable().destroy();
+          loadpayslip();
+        }
+      }
+  })
+
+}
 // function lb(){
 
 //        $.ajax({
@@ -61,7 +95,7 @@ function delete_payslip_callback(data){
           filename: filename,
           employeeno: employeeno
         },success:function(){
-          $.Toast("Successfully Deleted", errorToast);
+          $.Toast("Successfully Deleted", successToast);
           $('#tbl_payslip').DataTable().destroy();
           loadpayslip();
         }
