@@ -210,4 +210,5 @@ $count = $leaves->countLeaves($empno);
  
 </body>
 <script src="services/reimburse_report.js"></script>
+<script src="services/pim_tab.js"></script>
 </html>

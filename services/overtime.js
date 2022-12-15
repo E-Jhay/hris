@@ -80,7 +80,16 @@ $(document).ready(function(){
 				no_of_hrs: no_of_hrs,
 				ot_date: ot_date,
 				ot_date_to: ot_date_to
-			},success:function(data){
+			},
+			beforeSend: function(){
+				$("#btn_submit").text('Loading....')
+				$("#btn_submit").attr('disabled', true)
+			},
+			complete: function(){
+				$("#btn_submit").text('Submit')
+				$("#btn_submit").attr('disabled', false)
+			},
+			success:function(data){
 				const b = $.parseJSON(data)
 				if(b.type === 'error')
 					$.Toast(b.message, errorToast)

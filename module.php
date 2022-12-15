@@ -76,7 +76,7 @@ foreach ($birthday as $x) {
 				<div class = "container-fluid">
 					<div class = "row">
 						<?php foreach ($announcements as $x) { ?>
-							<div class="col-sm-3 col-md-6 col-lg-4">
+							<div class="col-md-6 col-lg-4">
 									<p class="announcement_name" onclick="view(<?= $x['id'] ?>)" ><?= '<strong style="letter-spacing: 1px; font-size: 1.5rem;">'.substr($x['topic'], 0, 20).'</strong>'; if(strlen($x['topic']) > 20) echo "..."; if($x['department'] != '' || $x['department'] != NULL) echo '<br /><span>For '.$x['department'].'</span>'; else {echo '<br /><span>For Everyone</span>';} ?><span class="announce_btn"><i class="fa fa-chevron-circle-right "></i> View</span></p>
 							</div>
 						<?php } ?>

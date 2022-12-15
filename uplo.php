@@ -100,7 +100,7 @@ $count = $leaves->countLeaves($empno);
           </div>
           
           <center>
-            <button type="submit" class="btn btn-sm btn-success">Upload</button>
+            <button type="submit" class="btn btn-sm btn-success" id="btn_submit">Upload</button>
           </center>
         </form>
 

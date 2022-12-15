@@ -19,7 +19,7 @@
   <?php endif ?>
 
   <h6 class="admin_tab" id="ess_overtimereports" onclick="goto('ot_application.php')"><i class="fas fa-md fa-print"></i><span class="admin_tab_name">Overtime Reports</span> <span id="ot_app_number" class="notif_val"></span></h6>
-  <h6 class="admin_tab" id="incident" onclick="goto('incident_report.php')"><i class="fas fa-md fa-print"></i><span class="admin_tab_name">Incident Reports</span></h6>
+  <h6 class="admin_tab" id="incident" onclick="goto('incident_report.php')"><i class="fas fa-md fa-print"></i><span class="admin_tab_name">Incident Reports</span> <span id="incident_reports_number" class="notif_val"></span></h6>
 
   <?php if($userrole == '1'): ?>
   <h6 class="admin_tab" id="ess_omnibus" onclick="goto('reimbursement.php?balance=yes')"><i class="fas fa-md fa-file-contract"></i><span class="admin_tab_name">Omnibus Reimbursement</span></h6>

@@ -61,7 +61,7 @@ $count = $leaves->countLeaves($empno);
             </tr>
             <tr>
                 <td class="text-center">
-                <button type="submit" class="btn btn-md btn-success"><i class="fas fa-sm fa-save"></i> Save</button>
+                <button type="submit" class="btn btn-md btn-success" id="btn_submit"><i class="fas fa-sm fa-save"></i> Save</button>
                 </td>
             </tr>
         </table>

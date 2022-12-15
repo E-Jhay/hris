@@ -5,6 +5,16 @@ class crud extends db_conn_mysql
 {
 
 
+  function count_incident_reports(){
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM incident a
+                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='active' ORDER BY a.id DESC");
+    $query->execute();
+
+    $count = $query->rowCount();
+
+    echo json_encode(array("count"=>$count));
+  }
   function count_leaveapp(){
 
     $employeenoo = $_POST['employeenoo'];
@@ -317,6 +327,9 @@ class crud extends db_conn_mysql
 
 $x = new crud();
 
+if(isset($_GET['count_incident_reports'])){
+  $x->count_incident_reports();
+}
 if(isset($_GET['count_leaveapp'])){
   $x->count_leaveapp();
 }

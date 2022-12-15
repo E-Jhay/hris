@@ -30,44 +30,44 @@ require_once "header.php";
 
   <div id="div_memo" class="div_content">
     <form id="form" enctype="multipart/form-data">
-    <div>
-      <button type="button" id="addMemoBtn" class="btn btn-primary mb-4">Add Individual Memo</button>
-      <button type="button" id="cancelMemoBtn" class="btn btn-warning mb-4" style="display: none; ">Cancel</button>
-    </div>
+      <div>
+        <button type="button" id="addMemoBtn" class="btn btn-primary mb-4">Add Individual Memo</button>
+        <button type="button" id="cancelMemoBtn" class="btn btn-warning mb-4" style="display: none; ">Cancel</button>
+      </div>
 
-    <table class="table-condensed grid12_master" id="memo_table">
-			<tr>
-				<td>
-					<b>Employee: </b>
-					<select class="form-control" id="employeeddown" name="employeeddown" required></select>
-          <input type="hidden" class="form-control" name="departmentList" value="">
-				</td>
-			</tr>
-      <tr>
-        
-				<td>
-					<b>Memo title: </b>
-					<input type="text" class="form-control" id="memoname" name="memoname" placeholder="Memo Title" required>
-				</td>
-      </tr>
-			<tr>
-				<td>
-					<b>Memorandum File: </b>
-					<input class="form-control" id="empfile" required="" type="file" name="empfile" />
-				</td>
-			</tr>
-      <tr>
-				<td>
-					<b>Remarks: </b>
-					<textarea name="remarks" id="remarks" cols="20" rows="3" class="form-control" placeholder="Remarks"></textarea>
-				</td>
-      </tr>
-      <tr>
-        <td class="text-center">
-          <button type="submit" class="btn btn-md btn-success"><i class="fas fa-sm fa-save"></i> Save</button>
-        </td>
-      </tr>
-		</table>
+      <table class="table-condensed grid12_master" id="memo_table">
+        <tr>
+          <td>
+            <b>Employee: </b>
+            <select class="form-control" id="employeeddown" name="employeeddown" required></select>
+            <input type="hidden" class="form-control" name="departmentList" value="">
+          </td>
+        </tr>
+        <tr>
+          
+          <td>
+            <b>Memo title: </b>
+            <input type="text" class="form-control" id="memoname" name="memoname" placeholder="Memo Title" required>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Memorandum File: </b>
+            <input class="form-control" id="empfile" required="" type="file" name="empfile" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Remarks: </b>
+            <textarea name="remarks" id="remarks" cols="20" rows="3" class="form-control" placeholder="Remarks"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center">
+            <button type="submit" class="btn btn-md btn-success btn_submit"><i class="fas fa-sm fa-save" id="btn_submit"></i> Submit</button>
+          </td>
+        </tr>
+      </table>
                     
                     
     </form>
@@ -143,7 +143,7 @@ require_once "header.php";
           </tr>
           <tr>
             <td class="text-center">
-              <button type="submit" class="btn btn-md btn-success"><i class="fas fa-sm fa-save"></i> Save</button>
+              <button type="submit" class="btn btn-md btn-success btn_submit"><i class="fas fa-sm fa-save"></i> Submit</button>
             </td>
           </tr>
         </table>

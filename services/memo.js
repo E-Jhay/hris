@@ -54,7 +54,15 @@ $(document).ready(function(){
 			data: formData,
 			processData: false,
 			contentType: false,
-			success:function(){
+			beforeSend: function(){
+				$(".btn_submit").text('Loading....')
+				$(".btn_submit").attr('disabled', true)
+			},
+			complete: function(){
+				$(".btn_submit").text('Submit')
+				$(".btn_submit").attr('disabled', false)
+			},
+			success:function(data){
 				$.Toast("Successfully Saved", successToast);
         $('#form').trigger("reset");
         $("#addMemoBtn").show()
@@ -77,7 +85,15 @@ $(document).ready(function(){
 			data: formData,
 			processData: false,
 			contentType: false,
-			success:function(){
+			beforeSend: function(){
+				$(".btn_submit").text('Loading....')
+				$(".btn_submit").attr('disabled', true)
+			},
+			complete: function(){
+				$(".btn_submit").text('Submit')
+				$(".btn_submit").attr('disabled', false)
+			},
+			success:function(data){
 				$.Toast("Successfully Saved", successToast);
         $('#form2').trigger("reset");
         $("#addMemoBtnDepartment").show()
@@ -134,7 +150,7 @@ function delete_memo_callback(data){
         filename: filename,
         employeeno: employeeno
       },success:function(){
-        $.Toast("Successfully Deleted", errorToast);
+        $.Toast("Successfully Deleted", successToast);
         $('#tbl_memo').DataTable().destroy();
         $('#tbl_inter_office_memo').DataTable().destroy();
         load_memo();

@@ -19,45 +19,58 @@ $(document).ready(function(){
 			$.Toast("Insufficient balance", errorToast);
 		}
 
-		$('#form').on('submit', (e) => {
-			e.preventDefault()
-			const emp_no = $('#emp_no').val()
-			const reimbursement_bal = $('#reimbursement_bal').val()
-			const description = $('#description').val()
-			const nature = $('#nature').val()
-			const amount = $('#amount').val()
-			const empfile = $("#empfile").prop("files")[0]
-			if (parseInt(reimbursement_bal) <= 0) return $.Toast('No available balance', errorToast)
-			if (parseInt(reimbursement_bal) < parseInt(amount)) return $.Toast('Insufficient balance', errorToast)
-			const formData = new FormData()
-			formData.append('emp_no', emp_no)
-			formData.append('reimbursement_bal', reimbursement_bal)
-			formData.append('description', description)
-			formData.append('nature', nature)
-			formData.append('amount', amount)
-			formData.append('empfile', empfile)
-			$.ajax({
-				url:"controller/controller.reimburse.php?uploadreimbursement",
-				method:"POST",
-				data: formData,
-				processData: false,
-				contentType: false,
-				success:function(data){
-					const b = $.parseJSON(data)
-					if(b.type === 'error')
-						$.Toast(b.message, errorToast);
-					else{
-						$.Toast(b.message, successToast)
-						$('#form')[0].reset()
-						$('#tbl_reimburse').DataTable().destroy();
-						load_myreimburse('');
-					}
-				}
-			});
-		 })
-
+		
 });
 
+$('#form').on('submit', (e) => {
+	e.preventDefault()
+	confirmed("save",save_callback, "Do you really want to submit this?", "Yes", "No");
+})
+
+function save_callback() {
+	const emp_no = $('#emp_no').val()
+	const reimbursement_bal = $('#reimbursement_bal').val()
+	const description = $('#description').val()
+	const nature = $('#nature').val()
+	const amount = $('#amount').val()
+	const empfile = $("#empfile").prop("files")[0]
+	if (parseInt(reimbursement_bal) <= 0) return $.Toast('No available balance', errorToast)
+	if (parseInt(reimbursement_bal) < parseInt(amount)) return $.Toast('Insufficient balance', errorToast)
+	const formData = new FormData()
+	formData.append('emp_no', emp_no)
+	formData.append('reimbursement_bal', reimbursement_bal)
+	formData.append('description', description)
+	formData.append('nature', nature)
+	formData.append('amount', amount)
+	formData.append('empfile', empfile)
+	$.ajax({
+		url:"controller/controller.reimburse.php?uploadreimbursement",
+		method:"POST",
+		data: formData,
+		processData: false,
+		contentType: false,
+		beforeSend: function(){
+			$("#btn_submit").text('Loading....')
+			$("#btn_submit").attr('disabled', true)
+		},
+		complete: function(){
+			$("#btn_submit").text('Submit')
+			$("#btn_submit").attr('disabled', false)
+		},
+		success:function(data){
+			const b = $.parseJSON(data)
+			if(b.type === 'error')
+				$.Toast(b.message, errorToast);
+			else{
+				$.Toast(b.message, successToast)
+				$('#form')[0].reset()
+				$('#tbl_reimburse').DataTable().destroy();
+				load_myreimburse('');
+			}
+		}
+	});
+}
+	
 function get_reimbal(){
 	var employeeno = $('#employeeno').val();
 	$.ajax({
@@ -114,7 +127,7 @@ function delete_file_callback(data){
 					file_name: file_name,
 					employeeno: employeeno
 				},success:function(){
-					$.Toast("Successfully Deleted", errorToast);
+					$.Toast("Successfully Deleted", successToast);
 					$('#tbl_reimburse').DataTable().destroy();
 					load_myreimburse();
 				}

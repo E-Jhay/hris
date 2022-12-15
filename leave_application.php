@@ -364,4 +364,5 @@ $count = $leaves->countLeaves($empno);
  
 </body>
 <script src="services/leave_app.js"></script>
+<script src="services/pim_tab.js"></script>
 </html>

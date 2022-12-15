@@ -142,7 +142,7 @@ $balance = $leaves->getleavebalance($empno);
       </form>
 
 			<center>
-				<button type="button" class="btn btn-sm btn-success" onclick="submitleave()"><i class="fas fa-sm fa-save"></i> Submit</button>
+				<button type="button" class="btn btn-sm btn-success" onclick="submitleave()" id="btn_submit"><i class="fas fa-sm fa-save"></i> Submit</button>
         <!-- <button type="button" class="btn btn-sm btn-success" onclick="leaveUploadBtn()"><i class="fas fa-sm fa-upload"></i> Upload</button> -->
 			</center>
   </div>

@@ -34,10 +34,10 @@ class crud extends db_conn_mysql
     $row2 = $qry3->fetch();
 
 
-      // require 'Exception.php';
-      // require 'PHPMailer.php';
-      // require 'SMTP.php';
-      // require 'PHPMailerAutoload.php';
+      require 'Exception.php';
+      require 'PHPMailer.php';
+      require 'SMTP.php';
+      require 'PHPMailerAutoload.php';
 
       // $mail = new PHPMailer();
       // $mail->IsSMTP();
@@ -59,28 +59,26 @@ class crud extends db_conn_mysql
       //     echo "success";
       // }
 
-      // $mail = new PHPMailer();
-      // $mail->IsSMTP();
-      // $mail->SMTPDebug = 0;
-      // $mail->SMTPAuth = true;
-      // $mail->SMTPSecure = 'ssl';
-      // $mail->Host = "smtp.gmail.com";
-      // $mail->Port = 465;
-      // $mail->IsHTML(true);
-      // $mail->Username = "pmcmailchimp@gmail.com";
-      // $mail->Password = "qyegdvkzvbjihbou";
-      // $mail->SetFrom("no-reply@panamed.com.ph", "");
-      // $mail->Subject = "Overtime Application";
-      // $msg = $firstname." ".$lastname." applied Overtime From: ".$ot_date." (".$ot_from.") To: ".$ot_date_to." (".$ot_to.")\n\nReason: ".$reasons;
-      // $mail->Body = $msg;
-      // $dept_head_email = "bumacodejhay@gmail.com";
-      // $mail->AddAddress($dept_head_email);
-      // if(!$mail->Send()) {
-      //   echo "Mailer Error: " . $mail->ErrorInfo;
-      // } else {
-      //   echo "success";
-      // }
-
+      $mail = new PHPMailer();
+      $mail->IsSMTP();
+      $mail->SMTPDebug = 0;
+      $mail->SMTPAuth = true;
+      $mail->SMTPSecure = 'ssl';
+      $mail->Host = "smtp.gmail.com";
+      $mail->Port = 465;
+      $mail->IsHTML(true);
+      $mail->Username = "pmcmailchimp@gmail.com";
+      $mail->Password = "qyegdvkzvbjihbou";
+      $mail->SetFrom("no-reply@panamed.com.ph", "");
+      
+      $message = $firstname." ".$lastname." applied Overtime From: ".$ot_date." (".$ot_from.") To: ".$ot_date_to." (".$ot_to.")\n\nReason: ".$reasons;
+      $mail->Subject = "Overtime Application";
+      $mail->Body = $message;
+      $mail->isHTML(true);
+      // $dept_head_email = $row2['dept_head_email'];
+      $mail->AddAddress('bumacodejhay@gmail.com');
+      $mail->AddCC('ejhaybumacod26@gmail.com');
+      $mail->Send();
       echo json_encode(array('type' => 'success', 'message' => 'Overtime applied successfully'));
 
   }

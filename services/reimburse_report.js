@@ -130,7 +130,20 @@ function btnreports(){
 				statuss: statuss,
 				employeeno: employeeno,
 				credits_modal: credits_modal
-			},success:function(){
+			},
+			beforeSend: function(){
+				$("#disapproved_btn").text('Loading....')
+				$("#disapproved_btn").attr('disabled', true)
+				$("#approved_btn").text('Loading....')
+				$("#approved_btn").attr('disabled', true)
+			},
+			complete: function(){
+				$("#disapproved_btn").text('Disapprove')
+				$("#disapproved_btn").attr('disabled', false)
+				$("#approved_btn").text('Approve')
+				$("#approved_btn").attr('disabled', false)
+			},
+			success:function(){
 				$.Toast("Successfully Approved", successToast);
 				$('#reimbursement_modal').modal('hide');
 				$('#tbl_reimburse_all').DataTable().destroy();
@@ -161,7 +174,20 @@ function btnreports(){
 				statuss: statuss,
 				employeeno: employeeno,
 				credits_modal: credits_modal
-			},success:function(){
+			},
+			beforeSend: function(){
+				$("#disapproved_btn").text('Loading....')
+				$("#disapproved_btn").attr('disabled', true)
+				$("#approved_btn").text('Loading....')
+				$("#approved_btn").attr('disabled', true)
+			},
+			complete: function(){
+				$("#disapproved_btn").text('Disapprove')
+				$("#disapproved_btn").attr('disabled', false)
+				$("#approved_btn").text('Approve')
+				$("#approved_btn").attr('disabled', false)
+			},
+			success:function(){
 				$.Toast("Successfully Disapproved", successToast);
 				$('#reimbursement_modal').modal('hide');
 				$('#tbl_reimburse_all').DataTable().destroy();
@@ -180,7 +206,7 @@ function btnreports(){
 		var rem_id = $('#rem_id').val();
 		var amount_modal = $('#orig_amount_modal').val();
 		var remarks = "";
-		var statuss = "Pending";
+		var statuss = "Cancelled";
 		var employeeno = $('#employeeno_modal').val();
 		var credits_modal = $('#credits_modal').val();
 		$.ajax({
@@ -193,7 +219,16 @@ function btnreports(){
 				statuss: statuss,
 				employeeno: employeeno,
 				credits_modal: credits_modal
-			},success:function(){
+			},
+			beforeSend: function(){
+				$("#undo_btn").text('Loading....')
+				$("#undo_btn").attr('disabled', true)
+			},
+			complete: function(){
+				$("#undo_btn").text('Undo')
+				$("#undo_btn").attr('disabled', false)
+			},
+			success:function(){
 				$.Toast("Successfully Cancelled", successToast);
 				$('#reimbursement_modal').modal('hide');
 				$('#tbl_reimburse_all').DataTable().destroy();

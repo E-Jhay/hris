@@ -56,6 +56,8 @@ $count = $leaves->countLeaves($empno);
         <div class="modal-body">
             <form id="incident_form" enctype="multipart/form-data">
               <div class="form-group">
+                <input type="hidden" id="incident_employeeno" name="incident_employeeno">
+                <input type="hidden" id="incident_date" name="incident_date">
                 <input type="hidden" id="incident_id" name="incident_id">
                 <label for="exampleInputEmail1">Title:</label>
                 <input type="text" class="form-control" id="incident_title" name="incident_title" disabled></input>

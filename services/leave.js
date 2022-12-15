@@ -527,16 +527,28 @@ $(document).ready(function(){
 				data: form_data,
 				processData: false,
 				contentType: false,
+				beforeSend: function(){
+					$("#btn_submit").text('Loading....')
+					$("#btn_submit").attr('disabled', true)
+				},
+				complete: function(){
+					$("#btn_submit").text('Submit')
+					$("#btn_submit").attr('disabled', false)
+				},
 				success:function(data){
-					$.Toast("Successfully Saved", successToast);
-					setTimeout(() => {	
-						window.location.href="leave.php";
-					}, 1000)
-					// window.location.href="leave.php";
+					const b = $.parseJSON(data)
+					if(b.type === 'error')
+						$.Toast(b.message, errorToast);
+					else {
+						$.Toast(b.message, successToast);
+						$('#tbl_myleave').DataTable().destroy();
+						var employeeno = $('#employeeno').val();
+						loadmyleave(employeeno);
+						$('#form').trigger("reset");
+					}
 				}
 			});
 		}
-
 	}
 
 	function btnapply(){

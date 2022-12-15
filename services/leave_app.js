@@ -562,10 +562,20 @@ $(document).ready(function(){
 				emp_leavetype:emp_leavetype,
 				emp_nodays:emp_nodays,
 				emp_status:emp_status
-			},success:function(){
+			},
+			beforeSend: function(){
+				$("#btncancelapprove").text('Loading....')
+				$("#btncancelapprove").attr('disabled', true)
+			},
+			complete: function(){
+				$("#btncancelapprove").text('Undo')
+				$("#btncancelapprove").attr('disabled', false)
+			},
+			success:function(){
 				$.Toast("Successfully Cancelled", successToast);
 				$('#tbl_leavelist').DataTable().destroy();
 				var stat = "Pending";
+				$('#filter_status').val(stat)
 				loadleavelist(stat);
 				$('#leavemodal').modal('hide')
 			}
@@ -595,7 +605,20 @@ $(document).ready(function(){
 				emp_leavetype:emp_leavetype,
 				emp_nodays:emp_nodays,
 				emp_status:emp_status
-			},success:function(data){
+			},
+			beforeSend: function(){
+				$("#btndisapprove").text('Loading....')
+				$("#btndisapprove").attr('disabled', true)
+				$("#btnapprove").text('Loading....')
+				$("#btnapprove").attr('disabled', true)
+			},
+			complete: function(){
+				$("#btndisapprove").text('Disapprove')
+				$("#btndisapprove").attr('disabled', false)
+				$("#btnapprove").text('Approve')
+				$("#btnapprove").attr('disabled', false)
+			},
+			success:function(data){
 				const b = $.parseJSON(data)
 				if(b.type === 'error')
 					$.Toast(b.message, errorToast)
@@ -603,6 +626,7 @@ $(document).ready(function(){
 					$.Toast(b.message, successToast)
 					$('#tbl_leavelist').DataTable().destroy();
 					var stat = "Pending";
+					$('#filter_status').val(stat)
 					loadleavelist(stat);
 					$('#leavemodal').modal('hide')
 				}
@@ -633,10 +657,24 @@ $(document).ready(function(){
 				emp_leavetype:emp_leavetype,
 				emp_nodays:emp_nodays,
 				emp_status:emp_status
-			},success:function(){
+			},
+			beforeSend: function(){
+				$("#btndisapprove").text('Loading....')
+				$("#btndisapprove").attr('disabled', true)
+				$("#btnapprove").text('Loading....')
+				$("#btnapprove").attr('disabled', true)
+			},
+			complete: function(){
+				$("#btndisapprove").text('Disapprove')
+				$("#btndisapprove").attr('disabled', false)
+				$("#btnapprove").text('Approve')
+				$("#btnapprove").attr('disabled', false)
+			},
+			success:function(){
 				$.Toast("Successfully Disapproved", successToast);
 				$('#tbl_leavelist').DataTable().destroy();
 				var stat = "Pending";
+				$('#filter_status').val(stat)
 				loadleavelist(stat);
 				$('#leavemodal').modal('hide')
 			}
@@ -830,7 +868,6 @@ $(document).ready(function(){
 		// $('#emp_time').html(dateto);
 
 		$('#emp_nodays').html(no_days);
-		console.log(no_days)
 		$('#emp_status').html(status);
 		$('#emp_comment').html(comment);
 		$('#remarks').val(remarks);

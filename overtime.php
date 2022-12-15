@@ -193,7 +193,7 @@ $count = $leaves->countLeaves($empno);
 
     </table>
     <center>
-				<button type="button" class="btn btn-sm btn-success" onclick="submitot()"><i class="fas fa-sm fa-save"></i> Save</button>
+				<button type="button" class="btn btn-sm btn-success" onclick="submitot()" id="btn_submit"><i class="fas fa-sm fa-save"></i> Submit</button>
 		</center>
 
   </div>

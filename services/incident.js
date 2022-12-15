@@ -46,6 +46,25 @@ function load_employee_incident_all(){
 }
 load_employee_incident_all();
 
+function count_incident_reports(){
+
+    $.ajax({
+        url:"controller/controller.info.php?count_incident_reports",
+        method:"POST",
+        success:function(data){
+            var b = $.parseJSON(data);
+            
+          if(b.count > 0){
+              $('#incident_reports_number').show();
+              $('#incident_reports_number').html(b.count);
+          }else{
+              $('#incident_reports_number').hide();
+          }
+
+        }
+    });
+}
+count_incident_reports();
 function count_leaveapp(){
 
     var employeenoo = $('#currentUser').val();
@@ -199,11 +218,13 @@ function viewFile(file_name, employee_number) {
 //     });
 // }
 
-function editIncident(id, title, description, file_name) {
+function editIncident(id, title, description, file_name, employeeno, date) {
     $('#edit_modal').modal('show')
     $('#incident_id').val(id)
     $('#incident_title').val(title)
     $('#incident_description').val(description)
+    $('#incident_employeeno').val(employeeno)
+    $('#incident_date').val(date)
 }
 
 $('#incident_form').on('submit', (e) => {
@@ -214,12 +235,24 @@ $('#incident_form').on('submit', (e) => {
 function update_callback() {
     const remarks = $('#incident_remarks').val();
     const incident_id = $('#incident_id').val();
+    const incident_employeeno = $('#incident_employeeno').val();
+    const incident_date = $('#incident_date').val();
     $.ajax({
         url:"controller/controller.incident.php?acknowledgeIncidentReport",
         method:"POST",
         data: {
             remarks : remarks,
-            incident_id : incident_id
+            incident_id : incident_id,
+            incident_employeeno : incident_employeeno,
+            incident_date : incident_date,
+        },
+        beforeSend: function(){
+            $("#btn_submit").text('Loading....')
+            $("#btn_submit").attr('disabled', true)
+        },
+        complete: function(){
+            $("#btn_submit").text('Acknowledge')
+            $("#btn_submit").attr('disabled', false)
         },
         success:function(data){
             const b = $.parseJSON(data)
@@ -231,6 +264,7 @@ function update_callback() {
             $('#incident_form').trigger("reset");
             $('#tbl_incident').DataTable().destroy();
             load_employee_incident_all();
+            count_incident_reports();
         }
     });
 }

@@ -86,3 +86,23 @@ function count_reimbursement(){
     });
 }
 count_reimbursement();
+
+function count_incident_reports(){
+
+    $.ajax({
+        url:"controller/controller.info.php?count_incident_reports",
+        method:"POST",
+        success:function(data){
+            var b = $.parseJSON(data);
+            
+          if(b.count > 0){
+              $('#incident_reports_number').show();
+              $('#incident_reports_number').html(b.count);
+          }else{
+              $('#incident_reports_number').hide();
+          }
+
+        }
+    });
+}
+count_incident_reports();

@@ -201,14 +201,14 @@ class crud extends db_conn_mysql
       $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
       $sqry2->execute();
       $srow2 = $sqry2->fetch();
-      $corp_email = $srow2['corp_email'];
+      $corp_email = $srow2 ? $srow2['corp_email'] : '';
 
             /////////////////////////////////////////////////////////////////////
 
-            // require 'Exception.php';
-            // require 'PHPMailer.php';
-            // require 'SMTP.php';
-            // require 'PHPMailerAutoload.php';
+            require 'Exception.php';
+            require 'PHPMailer.php';
+            require 'SMTP.php';
+            require 'PHPMailerAutoload.php';
 
             // $mail = new PHPMailer();
             // $mail->IsSMTP();
@@ -233,6 +233,30 @@ class crud extends db_conn_mysql
             // } else {
 
             // }
+
+        $mail = new PHPMailer();
+        $mail->IsSMTP();
+        $mail->SMTPDebug = 0;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'ssl';
+        $mail->Host = "smtp.gmail.com";
+        $mail->Port = 465;
+        $mail->IsHTML(true);
+        $mail->Username = "pmcmailchimp@gmail.com";
+        $mail->Password = "qyegdvkzvbjihbou";
+        $mail->SetFrom("no-reply@panamed.com.ph", "");
+        
+        if($status == 'Cancelled')
+          $message = 'Your request '.$emp_leavetype.' was '.$status.' by HR Assistant-Payroll';
+        else
+          $message = 'Your request '.$emp_leavetype.' was '.$status.' by HR Assistant-Payroll<br />No. of Credits to be deducted: '.$emp_nodays;
+        $mail->Subject = "Leave Application";
+        $mail->Body = $message;
+        $mail->isHTML(true);
+        // $dept_head_email = $row2['dept_head_email'];
+        $mail->AddAddress('bumacodejhay@gmail.com');
+        $mail->AddCC('ejhaybumacod26@gmail.com');
+        $mail->Send();
 
             /////////////////////////////////////////////////////////////////////
 
@@ -267,7 +291,7 @@ class crud extends db_conn_mysql
         $path = pathinfo($file);
         $ext = $path['extension'];
         $temp_name = $_FILES['leaveForm']['tmp_name'];
-        $today = date("Ymd");
+        $today = date("Y-m-d-His");
         $name = explode(".", $file);
         $leaveForm = $name[0]."-".$today.".".$ext;
         $path_filename_ext = $target_dir;
@@ -299,10 +323,10 @@ class crud extends db_conn_mysql
 
           /////////////////////////////////////////////////////////////////////
 
-          // require 'Exception.php';
-          // require 'PHPMailer.php';
-          // require 'SMTP.php';
-          // require 'PHPMailerAutoload.php';
+          require 'Exception.php';
+          require 'PHPMailer.php';
+          require 'SMTP.php';
+          require 'PHPMailerAutoload.php';
 
           // $mail = new PHPMailer();
           // $mail->IsSMTP();
@@ -345,6 +369,27 @@ class crud extends db_conn_mysql
           // } else {
           //   echo "success";
           // }
+
+        $mail = new PHPMailer();
+        $mail->IsSMTP();
+        $mail->SMTPDebug = 0;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'ssl';
+        $mail->Host = "smtp.gmail.com";
+        $mail->Port = 465;
+        $mail->IsHTML(true);
+        $mail->Username = "pmcmailchimp@gmail.com";
+        $mail->Password = "qyegdvkzvbjihbou";
+        $mail->SetFrom("no-reply@panamed.com.ph", "");
+        
+        $message = $firstname.' '.$lastname.' applied '.$leave_type.' <strong>'. $application_type.'</strong> From: '.$datefrom.' To: '.$dateto;
+        $mail->Subject = "Leave Application";
+        $mail->Body = $message;
+        $mail->isHTML(true);
+        // $dept_head_email = $row2['dept_head_email'];
+        $mail->AddAddress('bumacodejhay@gmail.com');
+        $mail->AddCC('ejhaybumacod26@gmail.com');
+        $mail->Send();
 
           /////////////////////////////////////////////////////////////////////
 

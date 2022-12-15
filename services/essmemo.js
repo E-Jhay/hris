@@ -279,6 +279,14 @@ $('#acknowledge_form').on('submit', (e) => {
     data: form_data,
     processData: false,
     contentType: false,
+    beforeSend: function(){
+      $("#btn_submit").text('Loading....')
+      $("#btn_submit").attr('disabled', true)
+    },
+    complete: function(){
+      $("#btn_submit").text('Submit')
+      $("#btn_submit").attr('disabled', false)
+    },
     success:function(data){
       const b = $.parseJSON(data)
       if(b.type == 'error') {

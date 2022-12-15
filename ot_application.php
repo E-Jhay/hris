@@ -180,4 +180,5 @@ $count = $leaves->countLeaves($empno);
  
 </body>
 <script src="services/otapp.js"></script>
+<script src="services/pim_tab.js"></script>
 </html>

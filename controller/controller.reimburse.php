@@ -214,6 +214,46 @@ class crud extends db_conn_mysql
             $conn=$this->connect_mysql();
             $sql = $conn->prepare("INSERT INTO tbl_reimbursement SET employeeno='$emp_no', description='$description', nature='$nature', datee='$datenow', amount='$amount', file_name='$attachfile', statuss='Pending', remarks='',orig_amount='$amount'");
             $sql->execute();
+
+            $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$emp_no'");
+            $qry2->execute();
+            $row = $qry2->fetch();
+
+            $department = $row['department'];
+            $firstname = $row['firstname'];
+            $lastname = utf8_decode($row['lastname']);
+            $id = $row['id'];
+
+            $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
+            $qry3->execute();
+            $row2 = $qry3->fetch();
+
+            require 'Exception.php';
+            require 'PHPMailer.php';
+            require 'SMTP.php';
+            require 'PHPMailerAutoload.php';
+
+            $mail = new PHPMailer();
+            $mail->IsSMTP();
+            $mail->SMTPDebug = 0;
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl';
+            $mail->Host = "smtp.gmail.com";
+            $mail->Port = 465;
+            $mail->IsHTML(true);
+            $mail->Username = "pmcmailchimp@gmail.com";
+            $mail->Password = "qyegdvkzvbjihbou";
+            $mail->SetFrom("no-reply@panamed.com.ph", "");
+            
+            $message = $firstname.' '.$lastname.' uploaded a reimbursement report <br/> Date: '.date('Y-m-d H:i:s');
+            $mail->Subject = "Reimbursement Application";
+            $mail->Body = $message;
+            $mail->isHTML(true);
+            // $dept_head_email = $row2['dept_head_email'];
+            $mail->AddAddress('bumacodejhay@gmail.com');
+            $mail->AddCC('ejhaybumacod26@gmail.com');
+            $mail->Send();
+
             echo json_encode(array('type' => 'success', 'message' => 'Reimbursement requested successfully'));
             exit;
           } else {

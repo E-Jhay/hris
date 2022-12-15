@@ -160,6 +160,14 @@ function save_callback(){
         data: formData,
         processData: false,
         contentType: false,
+        beforeSend: function(){
+            $("#btn_submit").text('Loading....')
+            $("#btn_submit").attr('disabled', true)
+        },
+        complete: function(){
+            $("#btn_submit").text('Acknowledge')
+            $("#btn_submit").attr('disabled', false)
+        },
         success:function(data){
             const b = $.parseJSON(data)
             $.Toast(b.message, successToast);

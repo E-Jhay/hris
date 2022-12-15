@@ -53,7 +53,7 @@ $count = $leaves->countLeaves($empno);
 	<?php if ($employment_status != "Probationary"): ?>
 
 	<div id="div_apply" class="div_content">
-		<form name="form" id="form" method="post" enctype="multipart/form-data">
+		<form name="form" id="form" enctype="multipart/form-data">
 			<label>Available Credits: <span id="rem_bal"></span></label>
 			<table class="table table-condensed w-100">
 				<input type="hidden" id="emp_no" value="<?php echo $_SESSION['employeeno'] ?>" name="emp_no">
@@ -94,7 +94,7 @@ $count = $leaves->countLeaves($empno);
 
 			</table>
 			<center>
-				<button type="submit" class="btn btn-sm btn-success"><i class="fas fa-sm fa-save"></i> Submit</button>
+				<button type="submit" class="btn btn-sm btn-success" id="btn_submit"><i class="fas fa-sm fa-save"></i> Submit</button>
 			</center>
 
 		</form>				

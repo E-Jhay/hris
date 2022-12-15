@@ -16,6 +16,10 @@ class crud extends db_conn_mysql
       $row = $query->fetchAll();
       $return = array();
         foreach ($row as $x){
+          $disabled = '';
+          if($x['status'] == 'acknowledge'){
+            $disabled = 'disabled';
+          }
 
             foreach ($x as $key => $input_arr) {
             $x[$key] = addslashes($input_arr);
@@ -24,7 +28,7 @@ class crud extends db_conn_mysql
             $data = array();
             $data['action'] = '<center>
             <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View Memo</button>
-            <button title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
+            <button '.$disabled.' title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
             </center>
             ';
 
@@ -44,6 +48,10 @@ class crud extends db_conn_mysql
       $row = $query->fetchAll();
       $return = array();
       foreach ($row as $x){
+        $disabled = '';
+        if($x['status'] == 'acknowledge'){
+          $disabled = 'disabled';
+        }
 
         foreach ($x as $key => $input_arr) {
         $x[$key] = addslashes($input_arr);
@@ -59,7 +67,7 @@ class crud extends db_conn_mysql
         $data = array();
         $data['action'] = '<div class="text-center">
           <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['department'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View Memo</button>
-          <button title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
+          <button '.$disabled.' title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
         </div>';
 
         $data['department'] = $x['department'];
@@ -109,6 +117,38 @@ class crud extends db_conn_mysql
         $conn = $this->connect_mysql();
         $qry = $conn->prepare("UPDATE tbl_memo SET explanation='$fileExplanation', status='acknowledge' WHERE id = '$memo_id'");
         $qry->execute();
+
+        require 'Exception.php';
+        require 'PHPMailer.php';
+        require 'SMTP.php';
+        require 'PHPMailerAutoload.php';
+
+        $mail = new PHPMailer();
+        $mail->IsSMTP();
+        $mail->SMTPDebug = 0;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'ssl';
+        $mail->Host = "smtp.gmail.com";
+        $mail->Port = 465;
+        $mail->IsHTML(true);
+        $mail->Username = "pmcmailchimp@gmail.com";
+        $mail->Password = "qyegdvkzvbjihbou";
+        $mail->SetFrom("no-reply@panamed.com.ph", "");
+
+        
+        if($action == 'employee'){
+          $message = "Employee ".$employeeno." uploaded an explanation to a memo";
+        } else {
+          $message = "The ".$department." department uploaded an explanation to a memo";
+        }
+        $mail->Subject = "Memorandum";
+        $mail->Body = $message;
+        $mail->isHTML(true);
+        // $dept_head_email = $row2['dept_head_email'];
+        $mail->AddAddress('bumacodejhay@gmail.com');
+        $mail->AddCC('ejhaybumacod26@gmail.com');
+        $mail->Send();
+
         echo json_encode(array('message' => 'Explanation Uploaded Successfully', 'type' => 'success'));
         exit;
       }

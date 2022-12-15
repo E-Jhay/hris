@@ -43,21 +43,21 @@ class crud extends db_conn_mysql
             $sql->execute();
 
 
-            // $sqry = $conn->prepare("SELECT id FROM tbl_employee WHERE employeeno='$employeeddown'");
-            // $sqry->execute();
-            // $srow = $sqry->fetch();
-            // $employee_id = $srow['id'];
+            $sqry = $conn->prepare("SELECT id FROM tbl_employee WHERE employeeno='$employeeddown'");
+            $sqry->execute();
+            $srow = $sqry->fetch();
+            $employee_id = $srow['id'];
 
-            // $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
-            // $sqry2->execute();
-            // $srow2 = $sqry2->fetch();
-            // $corp_email = $srow2['corp_email'];
+            $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
+            $sqry2->execute();
+            $srow2 = $sqry2->fetch();
+            $corp_email = $srow2 ? $srow2['corp_email'] : '';
 
 
-            // require 'PHPMailer\src\Exception.php';
-            // require 'PHPMailer\src\PHPMailer.php';
-            // require 'PHPMailer\src\SMTP.php';
-            // require 'PHPMailer\src\PHPMailerAutoload.php';
+            require 'Exception.php';
+            require 'PHPMailer.php';
+            require 'SMTP.php';
+            require 'PHPMailerAutoload.php';
 
             // $mail = new PHPMailer();
             // $mail->IsSMTP();
@@ -81,6 +81,27 @@ class crud extends db_conn_mysql
             //     echo "Mailer Error: " . $mail->ErrorInfo;
             // } else {
             // }
+
+            $mail = new PHPMailer();
+            $mail->IsSMTP();
+            $mail->SMTPDebug = 0;
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl';
+            $mail->Host = "smtp.gmail.com";
+            $mail->Port = 465;
+            $mail->IsHTML(true);
+            $mail->Username = "pmcmailchimp@gmail.com";
+            $mail->Password = "qyegdvkzvbjihbou";
+            $mail->SetFrom("no-reply@panamed.com.ph", "");
+            
+            $message = 'Your payslip was already uploaded to your HRIS account.';
+            $mail->Subject = "Payslip";
+            $mail->Body = $message;
+            $mail->isHTML(true);
+            // $dept_head_email = $row2['dept_head_email'];
+            $mail->AddAddress('bumacodejhay@gmail.com');
+            $mail->AddCC('ejhaybumacod26@gmail.com');
+            $mail->Send();
             echo json_encode(array('type' => 'success', 'message' => 'Payslip uploaded successfully'));
           }else {
             echo json_encode(array('type' => 'error', 'message' => 'There\'s an error uploading your file, tyr again.'));

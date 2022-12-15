@@ -59,7 +59,7 @@ class crud extends db_conn_mysql
     $editTitle = $x['status'] == 'active' ? 'Acknowledge Incident Report' : '';
     $data = array();
     $data['action'] = '<div class="text-center">
-    <button title="'.$editTitle.'" style="background-color: green; color: white" onclick="editIncident('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\')" class="btn btn-sm" '.$editBtn.'><i class="fas fa-sm fa-eye"></i>  Acknowledge</button>
+    <button title="'.$editTitle.'" style="background-color: green; color: white" onclick="editIncident('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\',\''.$x['employeeno'].'\',\''.$x['date'].'\')" class="btn btn-sm" '.$editBtn.'><i class="fas fa-sm fa-eye"></i>  Acknowledge</button>
     </div>';
 
     $data['title'] = ucfirst($x['title']);
@@ -108,6 +108,45 @@ class crud extends db_conn_mysql
                 $conn = $this->connect_mysql();
                 $qry = $conn->prepare("INSERT INTO incident (employeeno, title, description, date, status, file_name) VALUES ('$employee_number', '$incidentTitle', '$incidentDescription', '$dateNow', 'active', '$fileIncident')");
                 $qry->execute();
+
+                $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
+                $qry2->execute();
+                $row = $qry2->fetch();
+
+                $department = $row['department'];
+                $firstname = $row['firstname'];
+                $lastname = utf8_decode($row['lastname']);
+                $id = $row['id'];
+
+                $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
+                $qry3->execute();
+                $row2 = $qry3->fetch();
+
+                require 'Exception.php';
+                require 'PHPMailer.php';
+                require 'SMTP.php';
+                require 'PHPMailerAutoload.php';
+                $mail = new PHPMailer();
+                $mail->IsSMTP();
+                $mail->SMTPDebug = 0;
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = 'ssl';
+                $mail->Host = "smtp.gmail.com";
+                $mail->Port = 465;
+                $mail->IsHTML(true);
+                $mail->Username = "pmcmailchimp@gmail.com";
+                $mail->Password = "qyegdvkzvbjihbou";
+                $mail->SetFrom("no-reply@panamed.com.ph", "");
+                
+                $message = $firstname.' '.$lastname.' uploaded an incident report <br />Date: '.$dateNow;
+                $mail->Subject = "Incident Report";
+                $mail->Body = $message;
+                $mail->isHTML(true);
+                // $dept_head_email = $row2['dept_head_email'];
+                $mail->AddAddress('bumacodejhay@gmail.com');
+                $mail->AddCC('ejhaybumacod26@gmail.com');
+                $mail->Send();
+
                 echo json_encode(array('message' => 'Incident Report Submitted Successfully', 'type' => 'success'));
                 exit;
             }            
@@ -193,6 +232,8 @@ class crud extends db_conn_mysql
   }
   function acknowledgeIncidentReport() {
     $incident_id = $_POST['incident_id'];
+    $employeeno = $_POST['incident_employeeno'];
+    $date = $_POST['incident_date'];
     $remarks = $_POST['remarks'];
 
     $conn = $this->connect_mysql();
@@ -200,6 +241,45 @@ class crud extends db_conn_mysql
     if($remarks && $incident_id) {
       $squery = $conn->prepare("UPDATE incident SET remarks='$remarks', status='Acknowledge' WHERE id = '$incident_id'");
       $squery->execute();
+
+      $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
+      $qry2->execute();
+      $row = $qry2->fetch();
+
+      $department = $row['department'];
+      $firstname = $row['firstname'];
+      $lastname = utf8_decode($row['lastname']);
+      $id = $row['id'];
+
+      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$id'");
+      $sqry2->execute();
+      $srow2 = $sqry2->fetch();
+      $corp_email = $srow2['corp_email'];
+
+      require 'Exception.php';
+      require 'PHPMailer.php';
+      require 'SMTP.php';
+      require 'PHPMailerAutoload.php';
+      $mail = new PHPMailer();
+      $mail->IsSMTP();
+      $mail->SMTPDebug = 0;
+      $mail->SMTPAuth = true;
+      $mail->SMTPSecure = 'ssl';
+      $mail->Host = "smtp.gmail.com";
+      $mail->Port = 465;
+      $mail->IsHTML(true);
+      $mail->Username = "pmcmailchimp@gmail.com";
+      $mail->Password = "qyegdvkzvbjihbou";
+      $mail->SetFrom("no-reply@panamed.com.ph", "");
+      
+      $message = 'Your incident report posted last '.$date.' has been acknowledge by HR<br />Remarks: '.$remarks;
+      $mail->Subject = "Incident Report";
+      $mail->Body = $message;
+      $mail->isHTML(true);
+      // $dept_head_email = $row2['dept_head_email'];
+      $mail->AddAddress('bumacodejhay@gmail.com');
+      $mail->AddCC('ejhaybumacod26@gmail.com');
+      $mail->Send();
 
       echo json_encode(array("message"=>"Incident Report Acknowledge", "type" => "success"));
       exit;
