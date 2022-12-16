@@ -95,9 +95,17 @@ $(document).ready(function(){
 				employeeno:employeeno
 			},success:function(data){
 				var b = $.parseJSON(data);
+				if(b.imagepic=="" || b.imagepic==null){
+					document.getElementById("personal_pic").src = "usera.png";
+					document.getElementById("personal_image").src = "usera.png";
+				}else{
+					document.getElementById("personal_pic").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
+					document.getElementById("personal_image").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
+					// document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
+				}
 				// document.getElementById("personal_pic").src = "personal_picture/3.jpg";
-				document.getElementById("personal_pic").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
-				document.getElementById("personal_image").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
+				// document.getElementById("personal_pic").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
+				// document.getElementById("personal_image").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
 				$('#file_name').val(b.imagepic);
 				$('#prevMarriageContract').val(b.marriage_contract);
 				$('#prevDependent').val(b.dependent);

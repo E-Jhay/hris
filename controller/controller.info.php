@@ -107,9 +107,6 @@ class crud extends db_conn_mysql
     $date_hired = $row['date_hired'] ? $row['date_hired'] : '';
     $nationality = $row['nationality'] ? $row['nationality'] : '';
     $gender = $row['gender'] ? $row['gender'] : '';
-    if($imagepic==""){
-      $imagepic = "usera.png";
-    }
     session_start();
     $username = $_SESSION['username'];
     $password = $_SESSION['password'];

@@ -32,10 +32,11 @@ $(document).ready(function(){
 			contentType: false,
 			success:function(data){
 				// const b = $.parseJSON(data)
-				$.Toast("Successfully Saved", successToast);
-				setTimeout(() => {
-					window.location.href="employee.php";
-				}, 1000)
+				// $.Toast("Successfully Saved", successToast);
+				// setTimeout(() => {
+				// 	window.location.href="employee.php";
+				// }, 1000)
+				console.log(data)
 			}
 		});
 	}

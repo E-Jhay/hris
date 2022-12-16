@@ -167,10 +167,20 @@ $(document).ready(function(){
 			processData: false,
 			contentType: false,
 			success:function(data){
-				$.Toast("Successfully Saved", successToast);
-				setTimeout(() => {
-					window.location.href="employee.php";
-				}, 1000)
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast);
+					setTimeout(() => {
+						window.location.href="employee.php";
+					}, 2000)
+				}
+				// $.Toast("Successfully Saved", successToast);
+				// setTimeout(() => {
+				// 	window.location.href="employee.php";
+				// }, 1000)
+				// console.log(data)
 			}
 		});
 	}
