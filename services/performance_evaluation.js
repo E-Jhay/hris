@@ -11,12 +11,12 @@ $(document).ready(function(){
     
     $('#performance_evaluation_table').hide()
 
-    var emp_id = $('#emp_id').val();
+    var employeeno = $('#employeeno').val();
     $.ajax({
         url:"controller/controller.file.php?selectotherid",
         method:"POST",
         data:{
-            emp_id:emp_id
+            employeeno:employeeno
         },success:function(data){
             var b = $.parseJSON(data);
             $('#emp_no').val(b.emp_no);
@@ -70,7 +70,7 @@ $('#cancelBtn').on('click', () => {
 })
 
 function load_performance_evaluation(){
-    const emp_id = $('#emp_id').val()
+    const employeeno = $('#employeeno').val()
     $('#tbl_performance_evaluation').DataTable({  
         "aaSorting": [],
         "bSearching": true,
@@ -79,7 +79,7 @@ function load_performance_evaluation(){
         "bPaginate": true,
         "bLengthChange": true,
         "pagination": true,
-        "ajax" : "controller/controller.performance_evaluation.php?load_performance_evaluation&id=" + emp_id,
+        "ajax" : "controller/controller.performance_evaluation.php?load_performance_evaluation&employeeno=" + employeeno,
         "columns" : [
             { "data" : "employee_no"},
             { "data" : "title"},
@@ -95,8 +95,8 @@ function load_performance_evaluation(){
 load_performance_evaluation()
 
 function goto(linkk){
-    var id = $('#emp_id').val();
-    var link = linkk+"?id="+id;
+    var employeeno = $('#employeeno').val();
+    var link = linkk+"?employeeno="+employeeno;
     window.location.href=link;
 }
 

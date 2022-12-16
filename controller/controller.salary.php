@@ -5,14 +5,14 @@ class crud extends db_conn_mysql
 {
 
   function selectotherid(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.*,c.date_hired FROM tbl_employee a 
                              LEFT JOIN otheridinfo b 
-                             ON a.id = b.emp_id
+                             ON a.employeeno = b.employeeno
                              LEFT JOIN contractinfo c
-                             ON a.id = c.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = c.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
 
@@ -89,9 +89,9 @@ class crud extends db_conn_mysql
   function savesalary(){
     $action = $_POST['action'];
 
-    $id = $_POST['idsalary'];
-    $idemp = $_POST['idemp'];
-    $employeeno = $_POST['employeeno'];
+    $idsalary = $_POST['idsalary'];
+    // $idemp = $_POST['idemp'];
+    $employeeno = $_POST['employeenoModal'];
     $positionemp = $_POST['positionemp'];
     $statusemp = $_POST['statusemp'];
     $datehiredemp = $_POST['datehiredemp'];
@@ -106,6 +106,7 @@ class crud extends db_conn_mysql
     $effectdateemp = $_POST['effectdateemp'];
     $basic_salary = $_POST['basic_salary'];
     $remarks = $_POST['remarks'];
+    $prev_file_name = $_POST['file_name'];
     if($action == 'insert') {
       if (($_FILES['hardcopy']['name']!="")){
 
@@ -133,16 +134,15 @@ class crud extends db_conn_mysql
 
               $conn = $this->connect_mysql();
 
-              $squery = $conn->prepare("INSERT INTO salary_history SET emp_id='$idemp', date_hired='$datehiredemp',salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', added_by='Administrator', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks', hardcopy='$attachfile'");
+              $squery = $conn->prepare("INSERT INTO salary_history SET emp_id='1', date_hired='$datehiredemp',salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', added_by='Administrator', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks', hardcopy='$attachfile', employeeno='$employeeno'");
               $squery->execute();
 
-              $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE id='$idemp'");
+              $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE employeeno = '$employeeno'");
               $qry->execute();
 
-              $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
-              $query->execute();
-              $row = $query->fetch();
-              $employeeno = $row['employeeno'];
+              // $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE employeeno => '$employeeno'");
+              // $query->execute();
+              // $row = $query->fetch();
 
               session_start();
               $useraction = $_SESSION['fullname'];
@@ -188,17 +188,14 @@ class crud extends db_conn_mysql
           }
 
           if(move_uploaded_file($temp_name,$path_filename_ext)){
+            $link_file = "../salary_adjustment/".$employeeno.'/'.$prev_file_name;
+            unlink($link_file);
 
-            $squery = $conn->prepare("UPDATE salary_history SET date_hired='$datehiredemp', salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks', hardcopy='$attachfile' WHERE id='$id'");
+            $squery = $conn->prepare("UPDATE salary_history SET date_hired='$datehiredemp', salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks', hardcopy='$attachfile' WHERE id = '$idsalary'");
             $squery->execute();
 
-            $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE id='$idemp'");
+            $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE employeeno='$employeeno'");
             $qry->execute();
-
-            $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
-            $query->execute();
-            $row = $query->fetch();
-            $employeeno = $row['employeeno'];
 
             session_start();
             $useraction = $_SESSION['fullname'];
@@ -218,13 +215,10 @@ class crud extends db_conn_mysql
         }
       }
       else {
-        $query = $conn->prepare("UPDATE salary_history SET date_hired='$datehiredemp', salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks' WHERE id='$id'");
+        $query = $conn->prepare("UPDATE salary_history SET date_hired='$datehiredemp', salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks' WHERE id = '$idsalary'");
         $query->execute();
-
-        $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$idemp'");
-        $query->execute();
-        $row = $query->fetch();
-        $employeeno = $row['employeeno'];
+        
+        $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE employeeno='$employeeno'");
 
         session_start();
         $useraction = $_SESSION['fullname'];
@@ -325,7 +319,7 @@ class crud extends db_conn_mysql
     $employeeno = $_GET['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.id,a.employeeno,b.id as idd,b.*
-                             FROM tbl_employee a RIGHT JOIN salary_history b ON a.id=b.emp_id WHERE a.employeeno='$employeeno' ORDER BY b.id DESC");
+                             FROM tbl_employee a RIGHT JOIN salary_history b ON a.employeeno=b.employeeno WHERE a.employeeno='$employeeno' ORDER BY b.id DESC");
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
@@ -338,7 +332,7 @@ class crud extends db_conn_mysql
 
           $data = array();
           $data['action'] = '<center>
-          <button title="Edit" onclick="edit_salaryhistory('.$x['idd'].',\''.$x['job_title'].'\',\''.$x['employment_status'].'\',\''.$x['date_hired'].'\',\''.$x['salary_type'].'\',\''.$x['salary_rate'].'\',\''.$x['salary_type2'].'\',\''.$x['salary_rate2'].'\',\''.$x['salary_type3'].'\',\''.$x['salary_rate3'].'\',\''.$x['salary_type4'].'\',\''.$x['salary_rate4'].'\',\''.$x['effective_date'].'\',\''.$x['remarks'].'\',\''.$x['basic_salary'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i></button>
+          <button title="Edit" onclick="edit_salaryhistory('.$x['idd'].',\''.$x['job_title'].'\',\''.$x['employment_status'].'\',\''.$x['date_hired'].'\',\''.$x['salary_type'].'\',\''.$x['salary_rate'].'\',\''.$x['salary_type2'].'\',\''.$x['salary_rate2'].'\',\''.$x['salary_type3'].'\',\''.$x['salary_rate3'].'\',\''.$x['salary_type4'].'\',\''.$x['salary_rate4'].'\',\''.$x['effective_date'].'\',\''.$x['remarks'].'\',\''.$x['basic_salary'].'\',\''.$x['hardcopy'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i></button>
           <button title="View Hardcopy" onclick="viewHardcopy(\''.$x['hardcopy'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-primary"><i class="fas fa-sm fa-eye"></i></button>
           <button title="Delete" onclick="delete_salaryhistory('.$x['idd'].',\''.$x['employeeno'].'\',\''.$x['hardcopy'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
           

@@ -29,12 +29,12 @@ $(document).ready(function(){
 		});
 
 
-		var emp_id = $('#emp_id').val();
+		var employeeno = $('#employeeno').val();
 		$.ajax({
-			url:"controller/controller.dashboard.php?selectcontact",
+			url:"controller/controller.additional_documents.php?selectcontact",
 			method:"POST",
 			data:{
-				emp_id:emp_id
+				employeeno:employeeno
 			},success:function(data){
 				var b = $.parseJSON(data);
 				$('#emp_no').val(b.emp_no);
@@ -103,8 +103,8 @@ $(document).ready(function(){
 			$.Toast("Successfully Saved", successToast);
 			setTimeout(() => {
 				var b = $.parseJSON(data);
-				var id = b.id;
-				window.location.href="additional_documents.php?id="+id;
+				var employeeno = b.employeeno;
+				window.location.href="additional_documents.php?employeeno="+employeeno;
 				console.log(data)
 			}, 1000)
 	  	}
@@ -135,17 +135,17 @@ $(document).ready(function(){
 	}
 
 	function canceledit(){
-		var id = $('#emp_id').val();
-		window.location.href="additional_documents.php?id="+id;
+		var employeeno = $('#employeeno').val();
+		window.location.href="additional_documents.php?employeeno="+employeeno;
 	}
 
 	function goto(linkk){
-		var id = $('#emp_id').val();
-		var link = linkk+"?id="+id;
+		var employeeno = $('#employeeno').val();
+		var link = linkk+"?employeeno="+employeeno;
 		window.location.href=link;
 	}
 
-	function loadDocuments(emp_id){
+	function loadDocuments(employeeno){
 
 		$('#tbl_documents').DataTable({  
 				"aaSorting": [],
@@ -156,7 +156,7 @@ $(document).ready(function(){
 				"bLengthChange": false,
 				"pagination": false,
 				"pageLength": 20,
-				"ajax" : "controller/controller.additional_documents.php?selectAdditionalDocuments&emp_id=" + emp_id,
+				"ajax" : "controller/controller.additional_documents.php?selectAdditionalDocuments&employeeno=" + employeeno,
 				"columns" : [
 					
 					{ "data" : "marriage_contract"},
@@ -167,7 +167,7 @@ $(document).ready(function(){
 				],
 		});
 	}
-	loadDocuments($('#emp_id').val())
+	loadDocuments($('#employeeno').val())
 
 	function viewDocument(filename,employeeno, type){
 		var link = "documents/"+employeeno+"/"+type+"/"+filename;

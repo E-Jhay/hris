@@ -5,14 +5,14 @@ class crud extends db_conn_mysql
 {
 
   function selectotherid(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.*,c.date_hired FROM tbl_employee a 
                              LEFT JOIN otheridinfo b 
-                             ON a.id = b.emp_id
+                             ON a.employeeno = b.employeeno
                              LEFT JOIN contractinfo c
-                             ON a.id = c.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = c.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
 
@@ -161,7 +161,7 @@ class crud extends db_conn_mysql
 
       for($i=0;$i<$countfiles;$i++){
        
-           $employeeid = $_POST['emp_id'];
+          //  $employeeid = $_POST['emp_id'];
            $employeeno = $_POST['emp_no'];
 
           // Where the file is going to be stored
@@ -176,7 +176,7 @@ class crud extends db_conn_mysql
 
           // Check if file already exists
            if (file_exists($path_filename_ext)) {
-            echo json_encode(array("id"=>$employeeid, "error" => true, "message" => "Sorry, file already exists."));
+            echo json_encode(array("employeeno"=>$employeeno, "error" => true, "message" => "Sorry, file already exists."));
             exit;
            }else{
             
@@ -203,7 +203,7 @@ class crud extends db_conn_mysql
 
            }
       }
-      echo json_encode(array("id"=>$employeeid, "error" => false, "message" => "Successfully Saved"));
+      echo json_encode(array("employeeno"=>$employeeno, "error" => false, "message" => "Successfully Saved"));
 
 
     }

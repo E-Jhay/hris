@@ -33,12 +33,12 @@ class crud extends db_conn_mysql
   }
 
   function selectmedical(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.* FROM tbl_employee a 
                              LEFT JOIN medicalinfo b 
-                             ON a.id = b.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = b.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
 
@@ -88,7 +88,7 @@ class crud extends db_conn_mysql
       $emp_statuss = $_POST['emp_statuss'];
       $company = $_POST['company'];
 
-      $empid = $_POST['emp_id'];
+      // $empid = $_POST['emp_id'];
       $type1 = $_POST['type1'];
       $classification1 = $_POST['classification1'];
       $status1 = $_POST['status1'];
@@ -108,17 +108,17 @@ class crud extends db_conn_mysql
       $department = $_POST['department'];
 
       $conn = $this->connect_mysql();
-      $sql = $conn->prepare("SELECT id FROM medicalinfo WHERE emp_id = '$empid'");
+      $sql = $conn->prepare("SELECT employeeno FROM medicalinfo WHERE employeeno = '$emp_no'");
       $sql->execute();
 
-      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
+      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE employeeno = '$emp_no'");
       $qry1->execute();
 
       if($sql->fetch()) {
-        $qry = $conn->prepare("UPDATE medicalinfo SET type1='$type1', classification1='$classification1', status1='$status1', dateofexam1='$dateofexam1', remarks1='$remarks1', type2='$type2', classification2='$classification2', status2='$status2', dateofexam2='$dateofexam2', remarks2='$remarks2', type3='$type3', classification3='$classification3', status3='$status3', dateofexam3='$dateofexam3', remarks3='$remarks3' WHERE emp_id='$empid'");
+        $qry = $conn->prepare("UPDATE medicalinfo SET type1='$type1', classification1='$classification1', status1='$status1', dateofexam1='$dateofexam1', remarks1='$remarks1', type2='$type2', classification2='$classification2', status2='$status2', dateofexam2='$dateofexam2', remarks2='$remarks2', type3='$type3', classification3='$classification3', status3='$status3', dateofexam3='$dateofexam3', remarks3='$remarks3' WHERE employeeno = '$emp_no'");
         $qry->execute();
       } else {
-        $qry = $conn->prepare("INSERT INTO medicalinfo SET type1='$type1', classification1='$classification1', status1='$status1', dateofexam1='$dateofexam1', remarks1='$remarks1', type2='$type2', classification2='$classification2', status2='$status2', dateofexam2='$dateofexam2', remarks2='$remarks2', type3='$type3', classification3='$classification3', status3='$status3', dateofexam3='$dateofexam3', remarks3='$remarks3', emp_id='$empid'");
+        $qry = $conn->prepare("INSERT INTO medicalinfo SET type1='$type1', classification1='$classification1', status1='$status1', dateofexam1='$dateofexam1', remarks1='$remarks1', type2='$type2', classification2='$classification2', status2='$status2', dateofexam2='$dateofexam2', remarks2='$remarks2', type3='$type3', classification3='$classification3', status3='$status3', dateofexam3='$dateofexam3', remarks3='$remarks3', employeeno = '$emp_no'");
         $qry->execute();
       }
 
@@ -130,7 +130,7 @@ class crud extends db_conn_mysql
       $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
       $q->execute();
 
-      echo json_encode(array("id"=>$empid));
+      echo json_encode(array("employeeno"=>$emp_no));
 
   }
 

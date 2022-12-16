@@ -236,98 +236,98 @@ function myFunction(item, index){
   var statuss = "";
   load_myreimburse(statuss);
 
-  function count_leaveapp(){
+//   function count_leaveapp(){
 
-  	var employeenoo = $('#employeeno').val();
-  	$.ajax({
-  		url:"controller/controller.reimburse.php?count_leaveapp",
-  		method:"POST",
-  		data:{
-  			employeenoo:employeenoo
-  		},success:function(data){
-  			var b = $.parseJSON(data);
+//   	var employeenoo = $('#employeeno').val();
+//   	$.ajax({
+//   		url:"controller/controller.reimburse.php?count_leaveapp",
+//   		method:"POST",
+//   		data:{
+//   			employeenoo:employeenoo
+//   		},success:function(data){
+//   			var b = $.parseJSON(data);
   			
-			if(b.count > 0){
-				$('#leave_app_number').show();
-				$('#leave_app_number').html(b.count);
-			}else{
-				$('#leave_app_number').hide();
-			}
+// 			if(b.count > 0){
+// 				$('#leave_app_number').show();
+// 				$('#leave_app_number').html(b.count);
+// 			}else{
+// 				$('#leave_app_number').hide();
+// 			}
 
-  		}
-  	});
-  }
-  count_leaveapp();
+//   		}
+//   	});
+//   }
+//   count_leaveapp();
 
-  function count_otapp(){
+//   function count_otapp(){
 
-  	var employeenoo = $('#employeeno').val();
-  	$.ajax({
-  		url:"controller/controller.reimburse.php?count_otapp",
-  		method:"POST",
-  		data:{
-  			employeenoo:employeenoo
-  		},success:function(data){
-  			var b = $.parseJSON(data);
+//   	var employeenoo = $('#employeeno').val();
+//   	$.ajax({
+//   		url:"controller/controller.reimburse.php?count_otapp",
+//   		method:"POST",
+//   		data:{
+//   			employeenoo:employeenoo
+//   		},success:function(data){
+//   			var b = $.parseJSON(data);
   			
-			if(b.count > 0){
-				$('#ot_app_number').show();
-				$('#ot_app_number').html(b.count);
-			}else{
-				$('#ot_app_number').hide();
-			}
+// 			if(b.count > 0){
+// 				$('#ot_app_number').show();
+// 				$('#ot_app_number').html(b.count);
+// 			}else{
+// 				$('#ot_app_number').hide();
+// 			}
 
-  		}
-  	});
-  }
-  count_otapp();
-
-
-  function count_reimbursement(){
-
-  	var employeenoo = $('#employeeno').val();
-  	$.ajax({
-  		url:"controller/controller.reimburse.php?count_reimbursement",
-  		method:"POST",
-  		data:{
-  			employeenoo:employeenoo
-  		},success:function(data){
-  			var b = $.parseJSON(data);
-			if(b.count > 0){
-				$('#reim_app_number').show();
-				$('#reim_app_number').html(b.count);
-			}else{
-				$('#reim_app_number').hide();
-			}
-
-  		}
-  	});
-  }
-  count_reimbursement();
+//   		}
+//   	});
+//   }
+//   count_otapp();
 
 
-  function count_payslip(){
+//   function count_reimbursement(){
 
-  	var employeenoo = $('#employeeno').val();
-  	$.ajax({
-  		url:"controller/controller.reimburse.php?count_payslip",
-  		method:"POST",
-  		data:{
-  			employeenoo:employeenoo
-  		},success:function(data){
-  			var b = $.parseJSON(data);
+//   	var employeenoo = $('#employeeno').val();
+//   	$.ajax({
+//   		url:"controller/controller.reimburse.php?count_reimbursement",
+//   		method:"POST",
+//   		data:{
+//   			employeenoo:employeenoo
+//   		},success:function(data){
+//   			var b = $.parseJSON(data);
+// 			if(b.count > 0){
+// 				$('#reim_app_number').show();
+// 				$('#reim_app_number').html(b.count);
+// 			}else{
+// 				$('#reim_app_number').hide();
+// 			}
+
+//   		}
+//   	});
+//   }
+//   count_reimbursement();
+
+
+//   function count_payslip(){
+
+//   	var employeenoo = $('#employeeno').val();
+//   	$.ajax({
+//   		url:"controller/controller.reimburse.php?count_payslip",
+//   		method:"POST",
+//   		data:{
+//   			employeenoo:employeenoo
+//   		},success:function(data){
+//   			var b = $.parseJSON(data);
   			
-			if(b.count > 0){
-				$('#payslip_number').show();
-				$('#payslip_number').html(b.count);
-			}else{
-				$('#payslip_number').hide();
-			}
+// 			if(b.count > 0){
+// 				$('#payslip_number').show();
+// 				$('#payslip_number').html(b.count);
+// 			}else{
+// 				$('#payslip_number').hide();
+// 			}
 
-  		}
-  	});
-  }
-  count_payslip();
+//   		}
+//   	});
+//   }
+//   count_payslip();
 
 	// function submitReimbursement(e){
 	// 	e.preventDefault()

@@ -8,12 +8,12 @@ $(document).ready(function(){
 		   $('.navnavnav').slideToggle();
 		});
 		$('#btnupd_histo').hide()
-		var emp_id = $('#emp_id').val();
+		var employeeno = $('#employeeno').val();
 		$.ajax({
 			url:"controller/controller.salary.php?selectotherid",
 			method:"POST",
 			data:{
-				emp_id:emp_id
+				employeeno:employeeno
 			},success:function(data){
 				var b = $.parseJSON(data);
 				$('#emp_no').val(b.emp_no);
@@ -98,18 +98,19 @@ $(document).ready(function(){
 			processData: false,
 			contentType: false,
 			success:function(data){
-				var b = $.parseJSON(data);
-				if(b.type === "error")
-					$.Toast(b.message, errorToast)
-				else
-					$.Toast(b.message, successToast)
-				const employeeno = b.employeeno;
-				clearFields()
-				$('#salarymodal').modal('hide');
-				$('#error').addClass('d-none')
-				$('#tbl_salaryhistory').DataTable().destroy();
-				loadsalary(employeeno);
-				$('#btnupd_histo').hide()
+				// var b = $.parseJSON(data);
+				// if(b.type === "error")
+				// 	$.Toast(b.message, errorToast)
+				// else
+				// 	$.Toast(b.message, successToast)
+				// const employeeno = b.employeeno;
+				// clearFields()
+				// $('#salarymodal').modal('hide');
+				// $('#error').addClass('d-none')
+				// $('#tbl_salaryhistory').DataTable().destroy();
+				// loadsalary(employeeno);
+				// $('#btnupd_histo').hide()
+				console.log(data)
 			}
 		});
 	}
@@ -211,19 +212,13 @@ $(document).ready(function(){
 	}
 
 	function canceledit(){
-		var id = $('#emp_id').val();
-		window.location.href="salary_history.php?id="+id;
+		var employeeno = $('#employeeno').val();
+		window.location.href="salary_history.php?employeeno="+employeeno;
 	}
 
 	function goto(linkk){
-		var id = $('#emp_id').val();
-		var link = linkk+"?id="+id;
-		window.location.href=link;
-	}
-
-	function goto(linkk){
-		var id = $('#emp_id').val();
-		var link = linkk+"?id="+id;
+		var employeeno = $('#employeeno').val();
+		var link = linkk+"?employeeno="+employeeno;
 		window.location.href=link;
 	}
 
@@ -262,7 +257,7 @@ $(document).ready(function(){
          });
   }
 
-  function edit_salaryhistory(id,job_title,employment_status,date_hired,salary_type,salary_rate,salary_type2,salary_rate2,salary_type3,salary_rate3,salary_type4,salary_rate4,effective_date,remarks,basic_salary){
+  function edit_salaryhistory(id,job_title,employment_status,date_hired,salary_type,salary_rate,salary_type2,salary_rate2,salary_type3,salary_rate3,salary_type4,salary_rate4,effective_date,remarks,basic_salary,hardcopy){
   	$('#salarymodal').modal('show');
 
   	$('#idsalary').val(id);
@@ -282,6 +277,7 @@ $(document).ready(function(){
 	$('#btnsave_histo').hide();
 	$('#btnupd_histo').show();
 	$('#basic_salary').val(basic_salary);
+	$('#file_name').val(hardcopy);
 	$('#action').val('update')
 
   }

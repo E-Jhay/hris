@@ -56,12 +56,12 @@ class crud extends db_conn_mysql
 
 
   function selectcontract(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.* FROM tbl_employee a 
                              LEFT JOIN contractinfo b 
-                             ON a.id = b.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = b.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
 
@@ -107,7 +107,7 @@ class crud extends db_conn_mysql
     $emp_statuss = $_POST['emp_statuss'];
     $company = $_POST['company'];
 
-    $empid = $_POST['emp_id'];
+    // $empid = $_POST['emp_id'];
     $date_hired = $_POST['date_hired'] != '' ? $_POST['date_hired'] : '0000-00-00';
     $eoc = $_POST['eoc'] != '' ? $_POST['eoc'] : '0000-00-00';
     $regularized = $_POST['regularized'] != '' ? $_POST['regularized'] : '0000-00-00';
@@ -123,17 +123,17 @@ class crud extends db_conn_mysql
     $department = $_POST['department'];
 
     $conn = $this->connect_mysql();
-    $sql = $conn->prepare("SELECT id FROM contractinfo WHERE emp_id = '$empid'");
+    $sql = $conn->prepare("SELECT id FROM contractinfo WHERE employeeno='$emp_no'");
     $sql->execute();
 
-    $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',job_title='$job_title', job_category='$job_category',department='$department' WHERE id='$empid'");
+    $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',job_title='$job_title', job_category='$job_category',department='$department' WHERE employeeno='$emp_no'");
     $qry1->execute();
 
     if($sql->fetch()) {
-      $qry = $conn->prepare("UPDATE contractinfo SET date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='$preterm', resigned='$resigned', retired='$retired', terminatedd='$terminated', lastpay='$lastpay', remarks='$remarks' WHERE emp_id='$empid'");
+      $qry = $conn->prepare("UPDATE contractinfo SET date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='$preterm', resigned='$resigned', retired='$retired', terminatedd='$terminated', lastpay='$lastpay', remarks='$remarks' WHERE employeeno='$emp_no'");
       $qry->execute();
     } else {
-      $qry = $conn->prepare("INSERT INTO contractinfo SET date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='$preterm', resigned='$resigned', retired='$retired', terminatedd='$terminated', lastpay='$lastpay', remarks='$remarks', emp_id='$empid'");
+      $qry = $conn->prepare("INSERT INTO contractinfo SET date_hired='$date_hired', eoc='$eoc', regularized='$regularized', preterm='$preterm', resigned='$resigned', retired='$retired', terminatedd='$terminated', lastpay='$lastpay', remarks='$remarks', employeeno='$emp_no'");
       $qry->execute();
     }
 
@@ -146,7 +146,7 @@ class crud extends db_conn_mysql
     $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
     $q->execute();
 
-    echo json_encode(array("id"=>$empid));
+    echo json_encode(array('employeeno' => $emp_no));
 
   }
 

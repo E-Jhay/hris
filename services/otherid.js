@@ -6,12 +6,12 @@ $(document).ready(function(){
 		$('.drawer').on('click',function(){
 		   $('.navnavnav').slideToggle();
 		});
-		var emp_id = $('#emp_id').val();
+		var employeeno = $('#employeeno').val();
 		$.ajax({
 			url:"controller/controller.otherid.php?selectotherid",
 			method:"POST",
 			data:{
-				emp_id:emp_id
+				employeeno:employeeno
 			},success:function(data){
 				var b = $.parseJSON(data);
 				$('#emp_no').val(b.emp_no);
@@ -84,8 +84,8 @@ function save_callback(){
 					$.Toast("Successfully Saved", successToast);
 					setTimeout(() => {
 						var b = $.parseJSON(data);
-						var id = b.id;
-						window.location.href="otherid.php?id="+id;
+						var employeeno = b.employeeno;
+						window.location.href="otherid.php?employeeno="+employeeno;
 					}, 1000)
 	        		
 	        	}
@@ -114,12 +114,12 @@ function save_callback(){
 	}
 
 	function canceledit(){
-		var id = $('#emp_id').val();
-		window.location.href="otherid.php?id="+id;
+		var employeeno = $('#employeeno').val();
+		window.location.href="otherid.php?employeeno="+employeeno;
 	}
 
 	function goto(linkk){
-		var id = $('#emp_id').val();
-		var link = linkk+"?id="+id;
+		var employeeno = $('#employeeno').val();
+		var link = linkk+"?employeeno="+employeeno;
 		window.location.href=link;
 	}

@@ -5,12 +5,7 @@ class crud extends db_conn_mysql
 {
   function load_performance_evaluation(){
     
-    $emp_id = $_GET['id'];
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$emp_id'");
-    $query->execute();
-    $row = $query->fetch();
-    $employee_number = $row['employeeno'];
+    $employee_number = $_GET['employeeno'];
     
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT * FROM performance_evaluation WHERE employee_no = '$employee_number' ORDER BY created_at DESC");

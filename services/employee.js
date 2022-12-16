@@ -31,12 +31,11 @@ $(document).ready(function(){
 			processData: false,
 			contentType: false,
 			success:function(data){
-				// var b = $.parseJSON(data);
-				// $.Toast("Successfully Saved", successToast);
-				// setTimeout(() => {
-				// 	window.location.href="employee.php";
-				// }, 1000)
-				console.log(data)
+				// const b = $.parseJSON(data)
+				$.Toast("Successfully Saved", successToast);
+				setTimeout(() => {
+					window.location.href="employee.php";
+				}, 1000)
 			}
 		});
 	}
@@ -86,8 +85,8 @@ $(document).ready(function(){
   var statusdd = "Active";
   loademployee(statusdd);
 
-  function editemp(id){
-  	window.location.href="dashboard.php?id="+id;
+  function editemp(employeeno){
+  	window.location.href="dashboard.php?employeeno="+employeeno;
   }
   function deleteemp(id){
   	confirmed("delete",deleteemp_callback, "Do you really want to delete this?", "Yes", "No",id);

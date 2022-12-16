@@ -2,7 +2,7 @@
 <button type="submit" id="btnsave" class="btn btn-sm btn-info d-none"><i class="fas fa-sm fa-save"></i> Save</button>
 <button type="button" id="btncancel" onclick="canceledit()" class="btn btn-sm btn-danger d-none"><i class="fa fa-ban"></i> Cancel</button>
 <br><br>
-<input type="hidden" id="emp_id" value="<?php echo $_GET['id']; ?>" name="emp_id">
+<input type="hidden" id="employeeno" value="<?php echo $_GET['employeeno']; ?>" name="employeeno">
 <table class="table-condensed grid3_master master_input">
    	<tr>
    		<td class="text-center"><img  style="border: 1px dashed #a7a7a7; cursor: pointer;" src="" id="personal_image"></td>

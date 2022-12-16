@@ -37,42 +37,37 @@ $count = $leaves->countLeaves($empno);
 </div>
 
 <div class="navcontainer">
-
   <div id="div_myinfo" class="div_content">
   	<img src="" id="personal_pic">
 		<br><br>
     <table class="table table-striped w-100">
+      <tr>
+        <td>First Name: <b><span id="fname"></span></b></td>
+        <td>Middle Name: <b><span id="mname"></span></b></td>
+        <td>Last Name: <b><span id="lname"></span></b></td>
+      </tr>
 
-						<tr>
-							<td>First Name: <b><span id="fname"></span></b></td>
-							<td>Middle Name: <b><span id="mname"></span></b></td>
-							<td>Last Name: <b><span id="lname"></span></b></td>
-						</tr>
+      <tr>
+        <td>Employee Number: <b><span id="empno"></b></td>
+        <td>Date Hired: <b><span id="datehired"></span></b></td>
+        <td>Date of Birth: <b><span id="dob"></span></b></td>
+      </tr>
 
-						<tr>
-							<td>Employee Number: <b><span id="empno"></b></td>
-							<td>Date Hired: <b><span id="datehired"></span></b></td>
-							<td>Date of Birth: <b><span id="dob"></span></b></td>
-						</tr>
-
-						<tr>
-							<td>Nationality: <b><span id="nationality"></span></b></td>
-							<td>Marital Status: <b><span id="marital_status"></span></b></td>
-							<td>Gender: <b><span id="genderr"></span></b></td>
-						</tr>
-
-						<tr>
-							<td>
-                <button type="button" onclick="documentsModal()" class="btn btn-sm btn-success"><i class="fas fa-sm fa-pen"></i> Upload Additional Documents</button>
-                <button type="button" onclick="change()" class="btn btn-sm btn-success"><i class="fas fa-sm fa-lock"></i> Change Password</button>
-              </td>
-							<td><br></td>
-							<td><br></td>
-						</tr>
-
-					</table>
+      <tr>
+        <td>Nationality: <b><span id="nationality"></span></b></td>
+        <td>Marital Status: <b><span id="marital_status"></span></b></td>
+        <td>Gender: <b><span id="genderr"></span></b></td>
+      </tr>
+		</table>
   </div>
- 
+    <div class="row">
+      <div class="col-md-6 col-lg-3">
+        <button type="button" onclick="documentsModal()" class="btn btn-success btn-sm"><i class="fas fa-sm fa-pen"></i> Upload Additional Documents</button>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <button type="button" onclick="change()" class="btn btn-success btn-sm"><i class="fas fa-sm fa-lock"></i> Change Password</button>
+      </div>
+    </div>
 </div>
 
 <div class="modal fade" id="password_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

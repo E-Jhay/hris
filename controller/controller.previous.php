@@ -33,12 +33,12 @@ class crud extends db_conn_mysql
   }
 
   function selectprevious(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.* FROM tbl_employee a 
                              LEFT JOIN previous_empinfo b 
-                             ON a.id = b.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = b.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
 
@@ -85,7 +85,7 @@ class crud extends db_conn_mysql
       $emp_statuss = $_POST['emp_statuss'];
       $company = $_POST['company'];
 
-      $empid = $_POST['emp_id'];
+      // $empid = $_POST['emp_id'];
       $company1 = $_POST['company1'];
       $naturebusiness1 = $_POST['naturebusiness1'];
       $year1 = $_POST['year1'];
@@ -102,17 +102,17 @@ class crud extends db_conn_mysql
       $yearend2 = $_POST['yearend2'];
 
       $conn = $this->connect_mysql();
-      $sql = $conn->prepare("SELECT id FROM previous_empinfo WHERE emp_id = '$empid'");
+      $sql = $conn->prepare("SELECT employeeno FROM previous_empinfo WHERE employeeno = '$emp_no'");
       $sql->execute();
 
-      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
+      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE employeeno = '$emp_no'");
       $qry1->execute();
 
       if($sql->fetch()) {
-        $qry = $conn->prepare("UPDATE previous_empinfo SET company1='$company1', naturebusiness1='$naturebusiness1', year1='$year1', position1='$position1', rate1='$rate1', company2='$company2', naturebusiness2='$naturebusiness2', year2='$year2', position2='$position2', rate2='$rate2',yearend1='$yearend1',yearend2='$yearend2' WHERE emp_id='$empid'");
+        $qry = $conn->prepare("UPDATE previous_empinfo SET company1='$company1', naturebusiness1='$naturebusiness1', year1='$year1', position1='$position1', rate1='$rate1', company2='$company2', naturebusiness2='$naturebusiness2', year2='$year2', position2='$position2', rate2='$rate2',yearend1='$yearend1',yearend2='$yearend2' WHERE employeeno = '$emp_no'");
         $qry->execute();
       } else {
-        $qry = $conn->prepare("INSERT INTO previous_empinfo SET company1='$company1', naturebusiness1='$naturebusiness1', year1='$year1', position1='$position1', rate1='$rate1', company2='$company2', naturebusiness2='$naturebusiness2', year2='$year2', position2='$position2', rate2='$rate2',yearend1='$yearend1',yearend2='$yearend2', emp_id='$empid'");
+        $qry = $conn->prepare("INSERT INTO previous_empinfo SET company1='$company1', naturebusiness1='$naturebusiness1', year1='$year1', position1='$position1', rate1='$rate1', company2='$company2', naturebusiness2='$naturebusiness2', year2='$year2', position2='$position2', rate2='$rate2',yearend1='$yearend1',yearend2='$yearend2', employeeno = '$emp_no'");
         $qry->execute();
       }
 
@@ -124,7 +124,7 @@ class crud extends db_conn_mysql
       $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
       $q->execute();
 
-      echo json_encode(array("id"=>$empid));
+      echo json_encode(array("employeeno"=>$emp_no));
 
   }
 

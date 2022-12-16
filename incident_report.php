@@ -87,5 +87,5 @@ $count = $leaves->countLeaves($empno);
 <input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">
 </body>
 <script src="services/incident.js"></script>
-<!-- <script src="services/ess_tab.js"></script> -->
+<script src="services/pim_tab.js"></script>
 </html>

@@ -7,12 +7,12 @@ $(document).ready(function(){
 		$('.drawer').on('click',function(){
 		   $('.navnavnav').slideToggle();
 		});
-		var emp_id = $('#emp_id').val();
+		var employeeno = $('#employeeno').val();
 		$.ajax({
 			url:"controller/controller.file.php?selectotherid",
 			method:"POST",
 			data:{
-				emp_id:emp_id
+				employeeno:employeeno
 			},success:function(data){
 				var b = $.parseJSON(data);
 				$('#emp_no').val(b.emp_no);
@@ -75,7 +75,7 @@ function save_callback(){
 			}else {
 				$.Toast(response.message, successToast);
 				setTimeout(() => {
-					window.location.href="file_attach.php?id="+response.id;
+					window.location.href="file_attach.php?employeeno="+response.employeeno;
 				}, 1000)
 			}
 			
@@ -154,7 +154,7 @@ function save_callback(){
 		var id = data[0];
 		var filename = data[1];
 		var employeeno = $('#emp_no').val();
-		var employeeid = $('#emp_id').val();
+		// var employeeid = $('#emp_id').val();
 		$.ajax({
 			url:"controller/controller.file.php?deletefile",
 			method:"POST",
@@ -163,7 +163,10 @@ function save_callback(){
 				filename: filename,
 				employeeno: employeeno
 			},success:function(){
-				window.location.href="file_attach.php?id="+employeeid;
+				$.Toast('File deleted Successfully', successToast);
+				setTimeout(() => {
+					window.location.href="file_attach.php?employeeno="+employeeno;
+				}, 1000)
 			}
 		});
 	}
@@ -178,13 +181,13 @@ function save_callback(){
 	}
 
 	function canceledit(){
-		var id = $('#emp_id').val();
-		window.location.href="file_attach.php?id="+id;
+		var employeeno = $('#employeeno').val();
+		window.location.href="file_attach.php?employeeno="+employeeno;
 	}
 
 	function goto(linkk){
-		var id = $('#emp_id').val();
-		var link = linkk+"?id="+id;
+		var employeeno = $('#employeeno').val();
+		var link = linkk+"?employeeno="+employeeno;
 		window.location.href=link;
 	}
 

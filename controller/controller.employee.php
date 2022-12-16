@@ -10,14 +10,14 @@ class crud extends db_conn_mysql
     $query = "";
     if($statusdd=="All"){
 
-      $query = $conn->prepare("SELECT a.*,a.id as idd,b.*,c.*,
+      $query = $conn->prepare("SELECT a.*,a.id as idd,a.employeeno as employee_no,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
                              LEFT JOIN contractinfo b ON a.id=b.emp_id
                              LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id ORDER BY a.lastname ASC");
     
     }else if($statusdd=="Active"){
 
-      $query = $conn->prepare("SELECT a.*,a.id as idd,b.*,c.*,
+      $query = $conn->prepare("SELECT a.*,a.id as idd,a.employeeno as employee_no,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
                              LEFT JOIN contractinfo b ON a.id=b.emp_id
                              LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
@@ -25,7 +25,7 @@ class crud extends db_conn_mysql
 
     }else if($statusdd=="Inactive"){
 
-      $query = $conn->prepare("SELECT a.*,a.id as idd,b.*,c.*,
+      $query = $conn->prepare("SELECT a.*,a.id as idd,a.employeeno as employee_no,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
                              LEFT JOIN contractinfo b ON a.id=b.emp_id
                              LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
@@ -45,7 +45,7 @@ class crud extends db_conn_mysql
 
           }
           $data = array();
-          $data['action'] = '<center><button title="View more" onclick="editemp('.$x['idd'].')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
+          $data['action'] = '<center><button title="View more" onclick="editemp(\''.$x['employee_no'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
           <button title="Delete" onclick="deleteemp('.$x['idd'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></center>';
           $imge = utf8_decode($x['imagepic']);
           $picture = "personal_picture/".$imge;
@@ -54,7 +54,7 @@ class crud extends db_conn_mysql
           }
           if(!file_exists('../'.$picture)) $picture = "usera.png";
           $data['pic'] = '<img src='.$picture.' style="width:40px;height:40px;border-radius:10%">';
-          $data['employeeno'] = $x['employeeno'];
+          $data['employeeno'] = $x['employee_no'];
           $data['lastname'] = utf8_decode($x['lastname']);
           $data['firstname'] = $x['firstname'];
           $data['middlename'] = $x['middlename'];
@@ -270,7 +270,7 @@ class crud extends db_conn_mysql
         }
       }
     } else {
-      $profile = 'usera.png';
+      $profile = '';
     }
 
     if(!empty($_FILES["marriageContract"]["name"])) {
@@ -370,31 +370,31 @@ class crud extends db_conn_mysql
 
     $squery = $conn->prepare("INSERT INTO user_account SET employeeno='$employeeno', fullname='$fullname', username='$username', password='$password', empstatus='active', usertype='employee', userrole='3',approver='no'");
     $squery->execute();
-    $qry1 = $conn->prepare("INSERT INTO contactinfo SET emp_id='$id', street='$street', municipality='$municipality', province='$province', contactno='$contact_no', telephoneno='', corp_email='$corp_email', personal_email='$personal_email', nationality='$nationality', driver_license='', driver_expdate='0000-00-00', dept_head_email='$dept_head_email'");
+    $qry1 = $conn->prepare("INSERT INTO contactinfo SET emp_id='$id', employeeno='$employeeno', street='$street', municipality='$municipality', province='$province', contactno='$contact_no', telephoneno='', corp_email='$corp_email', personal_email='$personal_email', nationality='$nationality', driver_license='', driver_expdate='0000-00-00', dept_head_email='$dept_head_email'");
     $qry1->execute();
 
-    $qry2 = $conn->prepare("INSERT INTO contractinfo SET emp_id='$id', date_hired='$date_hired', eoc='$end_of_contract', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
+    $qry2 = $conn->prepare("INSERT INTO contractinfo SET emp_id='$id', employeeno='$employeeno', date_hired='$date_hired', eoc='$end_of_contract', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
     $qry2->execute();
 
-    $qry3 = $conn->prepare("INSERT INTO govtidinfo SET emp_id='$id', tin_no='$tin', sss_no='$sss', phic_no='$phic', hdmf_no='$hdmf', atm_no='$atm', bank_name='$bank_name', sss_remarks='', phic_remarks='', hdmf_remarks=''");
+    $qry3 = $conn->prepare("INSERT INTO govtidinfo SET emp_id='$id', employeeno='$employeeno', tin_no='$tin', sss_no='$sss', phic_no='$phic', hdmf_no='$hdmf', atm_no='$atm', bank_name='$bank_name', sss_remarks='', phic_remarks='', hdmf_remarks=''");
     $qry3->execute();
 
-    $qry4 = $conn->prepare("INSERT INTO otherpersonalinfo SET emp_id='$id', nickname='', dateofbirth='$dateofbirth', gender='$gender', height='', weight='', marital_status='$marital_status', birth_place='$birth_place', blood_type='', contact_name='', contact_address='', contact_telno='', contact_celno='', contact_relation=''");
+    $qry4 = $conn->prepare("INSERT INTO otherpersonalinfo SET emp_id='$id', employeeno='$employeeno', nickname='', dateofbirth='$dateofbirth', gender='$gender', height='', weight='', marital_status='$marital_status', birth_place='$birth_place', blood_type='', contact_name='', contact_address='', contact_telno='', contact_celno='', contact_relation=''");
     $qry4->execute();
 
-    $qry5 = $conn->prepare("INSERT INTO benefitsinfo SET emp_id='$id', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5='', relation1='', relation2='', relation3='', relation4='', relation5=''");
+    $qry5 = $conn->prepare("INSERT INTO benefitsinfo SET emp_id='$id', employeeno='$employeeno', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5='', relation1='', relation2='', relation3='', relation4='', relation5=''");
     $qry5->execute();
 
-    $qry6 = $conn->prepare("INSERT INTO disciplinarytracking SET emp_id='$id', violation='', specifc_offense='', of_offense='', dateissued='0000-00-00', datecommitted='0000-00-00', action=''");
+    $qry6 = $conn->prepare("INSERT INTO disciplinarytracking SET emp_id='$id', employeeno='$employeeno', violation='', specifc_offense='', of_offense='', dateissued='0000-00-00', datecommitted='0000-00-00', action=''");
     $qry6->execute();
 
-    $qry7 = $conn->prepare("INSERT INTO otheridinfo SET emp_id='$id', comp_id_dateissue='0000-00-00', comp_id_vdate='0000-00-00', fac_ap_dateissue='0000-00-00', fac_ap_vdate='0000-00-00', card_number='', driver_id='', driver_exp='0000-00-00', prc_number='', prc_exp='0000-00-00', civil_service=''");
+    $qry7 = $conn->prepare("INSERT INTO otheridinfo SET emp_id='$id', employeeno='$employeeno', comp_id_dateissue='0000-00-00', comp_id_vdate='0000-00-00', fac_ap_dateissue='0000-00-00', fac_ap_vdate='0000-00-00', card_number='', driver_id='', driver_exp='0000-00-00', prc_number='', prc_exp='0000-00-00', civil_service=''");
     $qry7->execute();
 
-    $qry8 = $conn->prepare("INSERT INTO previous_empinfo SET emp_id='$id', company1='', naturebusiness1='', year1='', position1='', rate1='', company2='', naturebusiness2='', year2='', position2='', rate2='', yearend1='', yearend2=''");
+    $qry8 = $conn->prepare("INSERT INTO previous_empinfo SET emp_id='$id', employeeno='$employeeno', company1='', naturebusiness1='', year1='', position1='', rate1='', company2='', naturebusiness2='', year2='', position2='', rate2='', yearend1='', yearend2=''");
     $qry8->execute();
 
-    $qry9 = $conn->prepare("INSERT INTO medicalinfo SET emp_id='$id', type1='', classification1='', status1='', dateofexam1='0000-00-00', remarks1='', type2='', classification2='', status2='', dateofexam2='0000-00-00', remarks2='', type3='', classification3='', status3='', dateofexam3='0000-00-00', remarks3=''");
+    $qry9 = $conn->prepare("INSERT INTO medicalinfo SET emp_id='$id', employeeno='$employeeno', type1='', classification1='', status1='', dateofexam1='0000-00-00', remarks1='', type2='', classification2='', status2='', dateofexam2='0000-00-00', remarks2='', type3='', classification3='', status3='', dateofexam3='0000-00-00', remarks3=''");
     $qry9->execute();
 
     // // $qry10 = $conn->prepare("INSERT INTO employee_documents (employee_number, marriage_contract, dependent, additional_id, proof_of_billing) VALUES ('$employeeno', '$marriageContract', '$dependent', '$additionalId', '$proofOFBilling')");
@@ -538,7 +538,7 @@ class crud extends db_conn_mysql
 
         for ($row = 2; $row <= $getHighestRow; $row++) {
             $employeeno = $sheet->getCellByColumnAndRow(0, $row)->getValue();
-            $id_number = (int)$sheet->getCellByColumnAndRow(1, $row)->getValue();
+            $id_number = $sheet->getCellByColumnAndRow(1, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(1, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(1, $row)->getValue();
             $lastname = $sheet->getCellByColumnAndRow(2, $row)->getValue();
             $firstname = $sheet->getCellByColumnAndRow(3, $row)->getValue();
             $middlename = $sheet->getCellByColumnAndRow(4, $row)->getValue();
@@ -555,9 +555,9 @@ class crud extends db_conn_mysql
         // print_r(implode(',', $values));
         $sql .= implode(',', $values);
         
-        $query = $conn->prepare($sql);
-        $query->execute();
-        echo 'success';
+        // $query = $conn->prepare($sql);
+        // $query->execute();
+        echo json_encode($values);
     }
   }
 

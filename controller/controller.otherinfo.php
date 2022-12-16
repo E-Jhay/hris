@@ -37,12 +37,12 @@ class crud extends db_conn_mysql
 
 
   function selectotherinfo(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.*,YEAR(CURRENT_TIMESTAMP) - YEAR(b.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(b.dateofbirth, 5)) as age FROM tbl_employee a 
                              LEFT JOIN otherpersonalinfo b 
-                             ON a.id = b.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = b.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
 
@@ -82,11 +82,11 @@ class crud extends db_conn_mysql
 
   function editotherinfo(){
 
+    $emp_no = $_POST['emp_no'];
       if (($_FILES['profile']['name']!="")){
 
        // Where the file is going to be stored
-       $employ_id = $_POST['emp_id'];
-       $emp_no = $_POST['emp_no'];
+      //  $employ_id = $_POST['emp_id'];
        $file_name = $_POST['file_name'];
 
       //  $target_dir = "../personal_picture/";
@@ -123,7 +123,7 @@ class crud extends db_conn_mysql
               unlink($link_file);
             }
             $conn=$this->connect_mysql();
-            $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$profile' WHERE id='$employ_id'");
+            $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$profile' WHERE employeeno = '$emp_no'");
             $sql->execute();
           }
         }
@@ -145,7 +145,6 @@ class crud extends db_conn_mysql
         //  }
       }
 
-      $emp_no = $_POST['emp_no'];
       $f_name = $_POST['f_name'];
       $l_name = $_POST['l_name'];
       $m_name = $_POST['m_name'];
@@ -154,7 +153,7 @@ class crud extends db_conn_mysql
       $emp_statuss = $_POST['emp_statuss'];
       $company = $_POST['company'];
 
-      $empid = $_POST['emp_id'];
+      // $empid = $_POST['emp_id'];
       $nickname = $_POST['nickname'];
       $dateofbirth = $_POST['dateofbirth'] != '' ? $_POST['dateofbirth'] : '0000-00-00';
       $gender = $_POST['gender'] != '' ? $_POST['gender'] : '';
@@ -172,17 +171,17 @@ class crud extends db_conn_mysql
       $contact_relation = $_POST['contact_relation'];
 
       $conn = $this->connect_mysql();
-      $sql = $conn->prepare("SELECT id FROM otherpersonalinfo WHERE emp_id = '$empid'");
+      $sql = $conn->prepare("SELECT employeeno FROM otherpersonalinfo WHERE employeeno = '$emp_no'");
       $sql->execute();
 
-      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
+      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE employeeno = '$emp_no'");
       $qry1->execute();
 
       if($sql->fetch()) {
-        $qry = $conn->prepare("UPDATE otherpersonalinfo SET nickname='$nickname', dateofbirth='$dateofbirth', gender='$gender', height='$height', weight='$weight', marital_status='$marital_status', birth_place='$birth_place', blood_type='$blood_type', contact_name='$contact_name', contact_address='$contact_address', contact_telno='$contact_telno', contact_celno='$contact_celno',contact_relation='$contact_relation' WHERE emp_id='$empid'");
+        $qry = $conn->prepare("UPDATE otherpersonalinfo SET nickname='$nickname', dateofbirth='$dateofbirth', gender='$gender', height='$height', weight='$weight', marital_status='$marital_status', birth_place='$birth_place', blood_type='$blood_type', contact_name='$contact_name', contact_address='$contact_address', contact_telno='$contact_telno', contact_celno='$contact_celno',contact_relation='$contact_relation' WHERE employeeno = '$emp_no'");
         $qry->execute();
       } else {
-        $qry = $conn->prepare("INSERT INTO otherpersonalinfo SET nickname='$nickname', dateofbirth='$dateofbirth', gender='$gender', height='$height', weight='$weight', marital_status='$marital_status', birth_place='$birth_place', blood_type='$blood_type', contact_name='$contact_name', contact_address='$contact_address', contact_telno='$contact_telno', contact_celno='$contact_celno',contact_relation='$contact_relation', emp_id='$empid'");
+        $qry = $conn->prepare("INSERT INTO otherpersonalinfo SET nickname='$nickname', dateofbirth='$dateofbirth', gender='$gender', height='$height', weight='$weight', marital_status='$marital_status', birth_place='$birth_place', blood_type='$blood_type', contact_name='$contact_name', contact_address='$contact_address', contact_telno='$contact_telno', contact_celno='$contact_celno',contact_relation='$contact_relation', employeeno = '$emp_no'");
         $qry->execute();
       }
 
@@ -194,7 +193,7 @@ class crud extends db_conn_mysql
       $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
       $q->execute();
 
-      echo json_encode(array("id"=>$empid));
+      echo json_encode(array("employeeno"=>$emp_no));
 
       // header("location:../otherinfo.php?id=".$empid);
   }

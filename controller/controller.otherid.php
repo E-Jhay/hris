@@ -6,14 +6,14 @@ class crud extends db_conn_mysql
 
 // jerico
   function selectotherid(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.*,c.date_hired FROM tbl_employee a 
                              LEFT JOIN otheridinfo b 
-                             ON a.id = b.emp_id
+                             ON a.employeeno = b.employeeno
                              LEFT JOIN contractinfo c
-                             ON a.id = c.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = c.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
 
@@ -60,7 +60,7 @@ class crud extends db_conn_mysql
       $emp_statuss = $_POST['emp_statuss'];
       $company = $_POST['company'];
 
-      $empid = $_POST['emp_id'];
+      // $empid = $_POST['emp_id'];
       $comp_id_dateissue = $_POST['comp_id_dateissue'] != '' ? $_POST['comp_id_dateissue'] : '0000-00-00';
       $comp_id_vdate = $_POST['comp_id_vdate'] != '' ? $_POST['comp_id_vdate'] : '0000-00-00';
       $fac_ap_dateissue = $_POST['fac_ap_dateissue']  != '' ? $_POST['fac_ap_dateissue'] : '0000-00-00';
@@ -75,17 +75,17 @@ class crud extends db_conn_mysql
       $civil_service = $_POST['civil_service'];
 
       $conn = $this->connect_mysql();
-      $sql = $conn->prepare("SELECT id FROM otheridinfo WHERE emp_id = '$empid'");
+      $sql = $conn->prepare("SELECT employeeno FROM otheridinfo WHERE employeeno = '$emp_no'");
       $sql->execute();
 
-      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
+      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE employeeno = '$emp_no'");
       $qry1->execute();
 
       if($sql->fetch()) {
-        $qry = $conn->prepare("UPDATE otheridinfo SET comp_id_dateissue='$comp_id_dateissue', comp_id_vdate='$comp_id_vdate', fac_ap_dateissue='$fac_ap_dateissue', fac_ap_vdate='$fac_ap_vdate', card_number='$fac_card_number',driver_id='$driver_id',driver_exp='$driver_exp',prc_number='$prc_number',prc_exp='$prc_exp',civil_service='$civil_service' WHERE emp_id='$empid'");
+        $qry = $conn->prepare("UPDATE otheridinfo SET comp_id_dateissue='$comp_id_dateissue', comp_id_vdate='$comp_id_vdate', fac_ap_dateissue='$fac_ap_dateissue', fac_ap_vdate='$fac_ap_vdate', card_number='$fac_card_number',driver_id='$driver_id',driver_exp='$driver_exp',prc_number='$prc_number',prc_exp='$prc_exp',civil_service='$civil_service' WHERE employeeno = '$emp_no'");
         $qry->execute();
       } else {
-        $qry = $conn->prepare("INSERT INTO otheridinfo SET comp_id_dateissue='$comp_id_dateissue', comp_id_vdate='$comp_id_vdate', fac_ap_dateissue='$fac_ap_dateissue', fac_ap_vdate='$fac_ap_vdate', card_number='$fac_card_number',driver_id='$driver_id',driver_exp='$driver_exp',prc_number='$prc_number',prc_exp='$prc_exp',civil_service='$civil_service', emp_id='$empid'");
+        $qry = $conn->prepare("INSERT INTO otheridinfo SET comp_id_dateissue='$comp_id_dateissue', comp_id_vdate='$comp_id_vdate', fac_ap_dateissue='$fac_ap_dateissue', fac_ap_vdate='$fac_ap_vdate', card_number='$fac_card_number',driver_id='$driver_id',driver_exp='$driver_exp',prc_number='$prc_number',prc_exp='$prc_exp',civil_service='$civil_service', employeeno = '$emp_no'");
         $qry->execute();
       }
 
@@ -97,7 +97,7 @@ class crud extends db_conn_mysql
       $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
       $q->execute();
 
-      echo json_encode(array("id"=>$empid));
+      echo json_encode(array("employeeno"=>$emp_no));
 
   }
 

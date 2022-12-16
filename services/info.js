@@ -320,7 +320,6 @@ function removeFile(button, image) {
   			employeenoo:employeenoo
   		},success:function(data){
   			var b = $.parseJSON(data);
-			  console.log(data)
   			
 			if(b.count > 0){
 				$('#payslip_number').show();

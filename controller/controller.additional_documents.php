@@ -4,12 +4,8 @@ include 'controller.db.php';
 class crud extends db_conn_mysql
 {
   function selectAdditionalDocuments(){
-    $emp_id = $_GET['emp_id'];
+    $employeeno = $_GET['employeeno'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$emp_id'");
-    $query->execute();
-    $row = $query->fetch();
-    $employeeno = $row['employeeno'];
     $marriage_contract = $conn->prepare("SELECT * FROM marriage_contract WHERE employee_number = '$employeeno' ORDER BY id DESC LIMIT 1");
     $marriage_contract->execute();
     $marriage_contract_data = $marriage_contract->fetch();
@@ -69,9 +65,9 @@ function ddepartment(){
 }
 
 function selectcontact(){
-  $emp_id = $_POST['emp_id'];
+  $employeeno = $_POST['employeeno'];
   $conn = $this->connect_mysql();
-  $query = $conn->prepare("SELECT * FROM tbl_employee WHERE id='$emp_id'");
+  $query = $conn->prepare("SELECT * FROM tbl_employee WHERE employeeno='$employeeno'");
   $query->execute();
   $row = $query->fetch();
 
@@ -88,6 +84,7 @@ function selectcontact(){
     'rank'=>$row['rank'],
     'statuss'=>$row['statuss'],
     'emp_statuss'=>$row['employment_status'],
+    'department'=>$row['department'],
     'company'=>$row['company'],
     'leave_balance'=>$row['leave_balance'],
     'imagepic'=>utf8_decode($row['imagepic']),
@@ -105,13 +102,13 @@ function update(){
   $emp_statuss = $_POST['emp_statuss'];
   $company = $_POST['company'];
 
-  $empid = $_POST['emp_id'];
+  // $empid = $_POST['emp_id'];
   $leave_balance = $_POST['leave_balance'];
   $department = $_POST['department'];
 
   $conn = $this->connect_mysql();
 
-  $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
+  $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE employeeno = '$emp_no'");
   $qry1->execute();
 
   if(!empty($_FILES["marriageContract"]["name"])) {
@@ -251,7 +248,7 @@ function update(){
   $audittype = "EDIT";
   $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
   $q->execute();
-  echo json_encode(array("id"=>$empid));
+  echo json_encode(array("employeeno"=>$emp_no));
 
 }
 

@@ -5,12 +5,12 @@ class crud extends db_conn_mysql
 {
 
   function selectbenefit(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.* FROM tbl_employee a 
                              LEFT JOIN benefitsinfo b 
-                             ON a.id = b.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = b.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
 
@@ -64,7 +64,7 @@ class crud extends db_conn_mysql
       $emp_statuss = $_POST['emp_statuss'];
       $company = $_POST['company'];
 
-      $empid = $_POST['emp_id'];
+      // $empid = $_POST['emp_id'];
       $dependent1 = $_POST['dependent1'];
       $age1 = $_POST['age1'];
       $sex1 = $_POST['sex1'];
@@ -90,17 +90,17 @@ class crud extends db_conn_mysql
       
 
       $conn = $this->connect_mysql();
-      $sql = $conn->prepare("SELECT id FROM benefitsinfo WHERE emp_id = '$empid'");
+      $sql = $conn->prepare("SELECT employeeno FROM benefitsinfo WHERE employeeno = '$emp_no'");
       $sql->execute();
 
-      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
+      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE employeeno = '$emp_no'");
       $qry1->execute();
 
       if($sql->fetch()) {
-        $qry = $conn->prepare("UPDATE benefitsinfo SET dependent1='$dependent1', age1='$age1', sex1='$sex1', dependent2='$dependent2', age2='$age2', sex2='$sex2', dependent3='$dependent3', age3='$age3', sex3='$sex3', dependent4='$dependent4', age4='$age4', sex4='$sex4', dependent5='$dependent5', age5='$age5', sex5='$sex5',relation1='$relation1',relation2='$relation2',relation3='$relation3',relation4='$relation4',relation5='$relation5' WHERE emp_id='$empid'");
+        $qry = $conn->prepare("UPDATE benefitsinfo SET dependent1='$dependent1', age1='$age1', sex1='$sex1', dependent2='$dependent2', age2='$age2', sex2='$sex2', dependent3='$dependent3', age3='$age3', sex3='$sex3', dependent4='$dependent4', age4='$age4', sex4='$sex4', dependent5='$dependent5', age5='$age5', sex5='$sex5',relation1='$relation1',relation2='$relation2',relation3='$relation3',relation4='$relation4',relation5='$relation5' WHERE employeeno = '$emp_no'");
         $qry->execute();
       } else {
-        $qry = $conn->prepare("INSERT INTO benefitsinfo SET dependent1='$dependent1', age1='$age1', sex1='$sex1', dependent2='$dependent2', age2='$age2', sex2='$sex2', dependent3='$dependent3', age3='$age3', sex3='$sex3', dependent4='$dependent4', age4='$age4', sex4='$sex4', dependent5='$dependent5', age5='$age5', sex5='$sex5',relation1='$relation1',relation2='$relation2',relation3='$relation3',relation4='$relation4',relation5='$relation5', emp_id='$empid'");
+        $qry = $conn->prepare("INSERT INTO benefitsinfo SET dependent1='$dependent1', age1='$age1', sex1='$sex1', dependent2='$dependent2', age2='$age2', sex2='$sex2', dependent3='$dependent3', age3='$age3', sex3='$sex3', dependent4='$dependent4', age4='$age4', sex4='$sex4', dependent5='$dependent5', age5='$age5', sex5='$sex5',relation1='$relation1',relation2='$relation2',relation3='$relation3',relation4='$relation4',relation5='$relation5', employeeno = '$emp_no'");
         $qry->execute();
       }
 
@@ -113,7 +113,7 @@ class crud extends db_conn_mysql
       $q->execute();
 
 
-      echo json_encode(array("id"=>$empid));
+      echo json_encode(array("employeeno"=>$emp_no));
 
   }
 

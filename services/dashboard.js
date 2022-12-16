@@ -29,12 +29,12 @@ $(document).ready(function(){
 		});
 
 
-		var emp_id = $('#emp_id').val();
+		var employeeno = $('#employeeno').val();
 		$.ajax({
 			url:"controller/controller.dashboard.php?selectcontact",
 			method:"POST",
 			data:{
-				emp_id:emp_id
+				employeeno:employeeno
 			},success:function(data){
 				var b = $.parseJSON(data);
 				$('#emp_no').val(b.emp_no);
@@ -48,6 +48,7 @@ $(document).ready(function(){
 					document.getElementById("personal_image").src = "usera.png";
 				}else{
 					document.getElementById("personal_image").src = "personal_picture/"+b.emp_no+"/"+b.imagepic;
+					console.log(b.imagepic)
 					// document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
 				}
 				
@@ -111,8 +112,8 @@ $(document).ready(function(){
 			$.Toast("Successfully Saved", successToast);
 			setTimeout(() => {
 				var b = $.parseJSON(data);
-				var id = b.id;
-				window.location.href="dashboard.php?id="+id;
+				var employeeno = b.employeeno;
+				window.location.href="dashboard.php?employeeno="+employeeno;
 			}, 1000)
 	  	}
 	  });
@@ -142,12 +143,12 @@ $(document).ready(function(){
 	}
 
 	function canceledit(){
-		var id = $('#emp_id').val();
-		window.location.href="dashboard.php?id="+id;
+		var employeeno = $('#employeeno').val();
+		window.location.href="dashboard.php?employeeno="+employeeno;
 	}
 
 	function goto(linkk){
-		var id = $('#emp_id').val();
-		var link = linkk+"?id="+id;
+		var employeeno = $('#employeeno').val();
+		var link = linkk+"?employeeno="+employeeno;
 		window.location.href=link;
 	}

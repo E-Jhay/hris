@@ -27,7 +27,7 @@ require_once "header.php";
 
   <div id="div_myinfo" class="div_content">
   	<form name="form" id="form" enctype="multipart/form-data">
-	  	<input type="hidden" id="emp_id" value="<?php echo $_GET['id']; ?>" name="emp_id">
+	  	<input type="hidden" id="employeeno" value="<?php echo $_GET['employeeno']; ?>" name="employeeno">
 		<table class="table-condensed grid3_master master_input">
 			<tr>
 				<td class="text-center"><img  style="border: 1px dashed #a7a7a7; cursor: pointer;" src="" id="personal_image"></td>

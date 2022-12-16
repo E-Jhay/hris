@@ -28,7 +28,7 @@ require_once "header.php";
 <div class="navcontainer">
   	<div id="div_myinfo" class="div_content">
 		<form action="">
-			<input type="hidden" id="emp_id" value="<?php echo $_GET['id']; ?>" name="emp_id">
+			<input type="hidden" id="employeeno" value="<?php echo $_GET['employeeno']; ?>" name="employeeno">
 			<table class="table-condensed grid3_master master_input">
 				<tr>
 					<td class="text-center"><img  style="border: 1px dashed #a7a7a7; cursor: pointer;" src="" id="personal_image"></td>
@@ -123,8 +123,8 @@ require_once "header.php";
       <form id="formModal" enctype="multipart/form-data">
 		<div class="modal-body">
 			<div class="form-group">
-				<input type="hidden" id="idemp" value="<?php echo $_GET['id']; ?>" name="idemp">
-				<input type="hidden" id="employeeno"  name="employeeno">
+				<input type="hidden" id="employeenoModal"  name="employeenoModal" value="<?php echo $_GET['employeeno']; ?>">
+				<input type="text" name="file_name" id="file_name">
 				<input type="hidden" id="action"  name="action">
 				<input type="hidden" id="idsalary" name="idsalary">
 			  <label for="exampleInputEmail1">Position</label>

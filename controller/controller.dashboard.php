@@ -35,12 +35,12 @@ class crud extends db_conn_mysql
   }
 
   function selectcontact(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.* FROM tbl_employee a 
                              LEFT JOIN contactinfo b 
-                             ON a.id = b.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = b.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
 
@@ -86,7 +86,7 @@ class crud extends db_conn_mysql
     $emp_statuss = $_POST['emp_statuss'];
     $company = $_POST['company'];
 
-    $empid = $_POST['emp_id'];
+    // $empid = $_POST['emp_id'];
     $street = $_POST['street'];
     $municipality = $_POST['municipality'];
     $province = $_POST['province'];
@@ -102,17 +102,17 @@ class crud extends db_conn_mysql
     $dept_head_email = $_POST['dept_head_email'];
 
     $conn = $this->connect_mysql();
-    $sql = $conn->prepare("SELECT id FROM contactinfo WHERE emp_id = '$empid'");
+    $sql = $conn->prepare("SELECT employeeno FROM contactinfo WHERE employeeno='$emp_no'");
     $sql->execute();
 
-    $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
+    $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE employeeno='$emp_no'");
     $qry1->execute();
 
     if($sql->fetch()) {
-      $qry = $conn->prepare("UPDATE contactinfo SET street='$street', municipality='$municipality', province='$province', contactno='$contactno', telephoneno='$telephoneno', corp_email='$corp_email', personal_email='$personal_email',nationality='$nationality',driver_license='$driver_license',driver_expdate='$driver_expdate',dept_head_email='$dept_head_email' WHERE emp_id='$empid'");
+      $qry = $conn->prepare("UPDATE contactinfo SET street='$street', municipality='$municipality', province='$province', contactno='$contactno', telephoneno='$telephoneno', corp_email='$corp_email', personal_email='$personal_email',nationality='$nationality',driver_license='$driver_license',driver_expdate='$driver_expdate',dept_head_email='$dept_head_email' WHERE employeeno='$emp_no'");
       $qry->execute();
     } else {
-      $qry = $conn->prepare("INSERT INTO contactinfo SET street='$street', municipality='$municipality', province='$province', contactno='$contactno', telephoneno='$telephoneno', corp_email='$corp_email', personal_email='$personal_email',nationality='$nationality',driver_license='$driver_license',driver_expdate='$driver_expdate',dept_head_email='$dept_head_email', emp_id='$empid'");
+      $qry = $conn->prepare("INSERT INTO contactinfo SET street='$street', municipality='$municipality', province='$province', contactno='$contactno', telephoneno='$telephoneno', corp_email='$corp_email', personal_email='$personal_email',nationality='$nationality',driver_license='$driver_license',driver_expdate='$driver_expdate',dept_head_email='$dept_head_email', employeeno='$emp_no'");
       $qry->execute();
     }
 
@@ -124,7 +124,7 @@ class crud extends db_conn_mysql
     $audittype = "EDIT";
     $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
     $q->execute();
-    echo json_encode(array("id"=>$empid));
+    echo json_encode(array("employeeno"=>$emp_no));
 
   }
 

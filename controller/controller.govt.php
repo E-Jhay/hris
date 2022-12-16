@@ -35,12 +35,12 @@ class crud extends db_conn_mysql
   }
 
   function selectgovt(){
-    $emp_id = $_POST['emp_id'];
+    $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,b.* FROM tbl_employee a 
                              LEFT JOIN govtidinfo b 
-                             ON a.id = b.emp_id
-                             WHERE a.id='$emp_id'");
+                             ON a.employeeno = b.employeeno
+                             WHERE a.employeeno='$employeeno'");
     $query->execute();
     $row = $query->fetch();
     foreach ($row as $key => $input_arr) {
@@ -82,7 +82,7 @@ class crud extends db_conn_mysql
       $emp_statuss = $_POST['emp_statuss'];
       $company = $_POST['company'];
 
-      $empid = $_POST['emp_id'];
+      // $empid = $_POST['emp_id'];
       $tin_no = $_POST['tin_no'];
       $sss_no = $_POST['sss_no'];
       $phic_no = $_POST['phic_no'];
@@ -96,17 +96,17 @@ class crud extends db_conn_mysql
       $department = $_POST['department'];
 
       $conn = $this->connect_mysql();
-      $sql = $conn->prepare("SELECT id FROM govtidinfo WHERE emp_id = '$empid'");
+      $sql = $conn->prepare("SELECT employeeno FROM govtidinfo WHERE employeeno = '$emp_no'");
       $sql->execute();
 
-      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
+      $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE employeeno = '$emp_no'");
       $qry1->execute();
 
       if($sql->fetch()) {
-        $qry = $conn->prepare("UPDATE govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks' WHERE emp_id='$empid'");
+        $qry = $conn->prepare("UPDATE govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks' WHERE employeeno = '$emp_no'");
         $qry->execute();
       } else {
-        $qry = $conn->prepare("INSERT INTO govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks', emp_id='$empid'");
+        $qry = $conn->prepare("INSERT INTO govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks', employeeno = '$emp_no'");
         $qry->execute();
       }
       // $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");
@@ -123,7 +123,7 @@ class crud extends db_conn_mysql
       $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
       $q->execute();
 
-      echo json_encode(array("id"=>$empid));
+      echo json_encode(array("employeeno"=>$emp_no));
 
   }
 

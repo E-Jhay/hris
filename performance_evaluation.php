@@ -89,7 +89,7 @@ require_once "header.php";
                 <td>
                     <b>Title: </b>
                     <input type="text" class="form-control" id="title" name="title" placeholder="Title" required>
-                    <input type="hidden" id="emp_id" value="<?php echo $_GET['id']; ?>" name="emp_id">
+                    <input type="hidden" id="employeeno" value="<?php echo $_GET['employeeno']; ?>" name="employeeno">
                     <input type="hidden" id="employee_number" name="employee_number">
                     <!-- <input type="hidden" id="action" name="action"> -->
                 </td>
