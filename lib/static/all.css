@@ -216,3 +216,9 @@ label{
 .nav-link{
 	font-size: 12px;
 }
+td.reject{
+	color: red;
+}
+td.acknowledged{
+	color: green;
+}

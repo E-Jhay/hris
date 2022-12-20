@@ -30,12 +30,23 @@ $(document).ready(function(){
 			data: formData,
 			processData: false,
 			contentType: false,
+			beforeSend: function(){
+				$("#updateEmployeeBtn").text('Loading....')
+				$("#updateEmployeeBtn").attr('disabled', true)
+			},
+			complete: function(){
+				$("#updateEmployeeBtn").text('Upload')
+				$("#updateEmployeeBtn").attr('disabled', false)
+			},
 			success:function(data){
-				// const b = $.parseJSON(data)
-				// $.Toast("Successfully Saved", successToast);
-				// setTimeout(() => {
-				// 	window.location.href="employee.php";
-				// }, 1000)
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast)
+					$('#tbl_employee').DataTable().destroy();
+					loademployee('Active');
+				}
 				console.log(data)
 			}
 		});

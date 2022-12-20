@@ -29,6 +29,11 @@ require_once "header.php";
 <div class="navcontainer">
 
   <div id="div_memo" class="div_content">
+    <select class="form-control" id="status">
+      <option value="active" selected=""> Active </option>
+      <option value="acknowledge"> Acknowledged </option>
+      <option value="all"> All </option>
+    </select><br />
     <form id="form" enctype="multipart/form-data">
       <div>
         <button type="button" id="addMemoBtn" class="btn btn-primary mb-4">Add Individual Memo</button>
@@ -79,7 +84,7 @@ require_once "header.php";
               <th>Date</th>
               <th>Remarks</th>
               <th>Status</th>
-              <th class="text-center">Action</th>
+              <th width="20em" class="text-center">Action</th>
             </thead>
             <tbody>
               
@@ -88,6 +93,11 @@ require_once "header.php";
   </div>
 
   <div id="div_inter_office_memo" class="div_content">
+    <select class="form-control" id="status2">
+      <option value="active" selected=""> Active </option>
+      <option value="acknowledge"> Acknowledged </option>
+      <option value="all"> All </option>
+    </select><br />
     <form id="form2" name="form2" enctype="multipart/form-data">
                         
         <!-- <table class="table table-striped w-100">
@@ -156,7 +166,7 @@ require_once "header.php";
               <th>Date</th>
               <th>Remarks</th>
               <th>Status</th>
-              <th class="text-center">Action</th>
+              <th width="20em" class="text-center">Action</th>
             </thead>
             <tbody>
               

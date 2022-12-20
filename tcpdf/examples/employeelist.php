@@ -3,6 +3,7 @@
 $type = $_GET['type'];
 $from = $_GET['from'];
 $to  = $_GET['to'];
+$name  = $_GET['name'];
 
 require_once '../../controller/controller.employee.php';
 $employees = new crud();
@@ -137,7 +138,7 @@ $pdf->SetFont('dejavusans', '', 9);
 
 
 
-$backup_name = "employeelist.xls";
+$backup_name = $name.' employeelist.xls';
 header('Content-Type: application/octet-stream');   
 header("Content-Transfer-Encoding: Binary"); 
 header("Content-disposition: attachment; filename=\"".$backup_name."\"");  

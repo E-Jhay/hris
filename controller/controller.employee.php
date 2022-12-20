@@ -386,7 +386,7 @@ class crud extends db_conn_mysql
       $conn->exec("INSERT INTO contractinfo SET emp_id='$id', employeeno='$employeeno', date_hired='$date_hired', eoc='$end_of_contract', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
       $conn->exec("INSERT INTO govtidinfo SET emp_id='$id', employeeno='$employeeno', tin_no='$tin', sss_no='$sss', phic_no='$phic', hdmf_no='$hdmf', atm_no='$atm', bank_name='$bank_name', sss_remarks='', phic_remarks='', hdmf_remarks=''");
       $conn->exec("INSERT INTO otherpersonalinfo SET emp_id='$id', employeeno='$employeeno', nickname='', dateofbirth='$dateofbirth', gender='$gender', height='', weight='', marital_status='$marital_status', birth_place='$birth_place', blood_type='', contact_name='', contact_address='', contact_telno='', contact_celno='', contact_relation=''");
-      $conn->exec("INSERT INTO benefitsinfo SET emp_id='aa$id', employeeno='$employeeno', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5='', relation1='', relation2='', relation3='', relation4='', relation5=''");
+      $conn->exec("INSERT INTO benefitsinfo SET emp_id='$id', employeeno='$employeeno', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5='', relation1='', relation2='', relation3='', relation4='', relation5=''");
       $conn->exec("INSERT INTO disciplinarytracking SET emp_id='$id', employeeno='$employeeno', violation='', specifc_offense='', of_offense='', dateissued='0000-00-00', datecommitted='0000-00-00', action=''");
       $conn->exec("INSERT INTO otheridinfo SET emp_id='$id', employeeno='$employeeno', comp_id_dateissue='0000-00-00', comp_id_vdate='0000-00-00', fac_ap_dateissue='0000-00-00', fac_ap_vdate='0000-00-00', card_number='', driver_id='', driver_exp='0000-00-00', prc_number='', prc_exp='0000-00-00', civil_service=''");
       $conn->exec("INSERT INTO previous_empinfo SET emp_id='$id', employeeno='$employeeno', company1='', naturebusiness1='', year1='', position1='', rate1='', company2='', naturebusiness2='', year2='', position2='', rate2='', yearend1='', yearend2=''");
@@ -410,8 +410,8 @@ class crud extends db_conn_mysql
     } catch (\PDOException $e) {
       echo json_encode(array('type' => 'error', 'message' => 'An error has occured during the process of creating employee. <br /> Please try again'));
       $conn->rollback();
-      exit;
-      // throw $e;
+      // exit;
+      throw $e;
     }
     // $squery = $conn->prepare("INSERT INTO user_account SET employeeno='$employeeno', fullname='$fullname', username='$username', password='$password', empstatus='active', usertype='employee', userrole='3',approver='no'");
     // $squery->execute();
@@ -578,31 +578,199 @@ class crud extends db_conn_mysql
         $getHighestColumnIndex = PHPExcel_Cell::columnIndexFromString($getHighestColumn);
         
         $conn = $this->connect_mysql();
-        $sql = "INSERT INTO tbl_employee (employeeno, id_number, lastname, firstname,	middlename, rank, statuss, employment_status, company, imagepic, leave_balance, job_title, job_category, department, reimbursement_bal) VALUES ";
-        $values = array();
+        $employee_sql = "INSERT INTO tbl_employee (employeeno, id_number, lastname, firstname,	middlename, rank, statuss, employment_status, company, imagepic, leave_balance, job_title, job_category, department, reimbursement_bal) VALUES ";
+
+        $user_sql = "INSERT INTO user_account (employeeno, fullname, username, password, empstatus, usertype, userrole, approver) VALUES ";
+
+        $contact_sql = "INSERT INTO contactinfo (emp_id, employeeno, street, municipality, province, contactno, telephoneno, corp_email, personal_email, nationality, driver_license, driver_expdate, dept_head_email) VALUES ";
+        
+        $contract_sql = "INSERT INTO contractinfo (emp_id, employeeno, date_hired, eoc, regularized, preterm, resigned, retired, terminatedd, lastpay, remarks) VALUES ";
+
+        $govid_sql = "INSERT INTO govtidinfo (emp_id, employeeno, tin_no, sss_no, phic_no, hdmf_no, atm_no, bank_name, aub_no, sss_remarks, phic_remarks, hdmf_remarks) VALUES ";
+
+        $other_personal_sql = "INSERT INTO otherpersonalinfo (emp_id, employeeno, nickname, dateofbirth, gender, height, weight, marital_status, birth_place, blood_type, contact_name, contact_address, contact_telno, contact_celno, contact_relation) VALUES ";
+
+        $employee_table = array();
+        $user_table = array();
+        $contact_table = array();
+        $contract_table = array();
+        $govid_table = array();
+        $other_personal_table = array();
 
         for ($row = 2; $row <= $getHighestRow; $row++) {
-            $employeeno = $sheet->getCellByColumnAndRow(0, $row)->getValue();
-            $id_number = $sheet->getCellByColumnAndRow(1, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(1, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(1, $row)->getValue();
-            $lastname = $sheet->getCellByColumnAndRow(2, $row)->getValue();
-            $firstname = $sheet->getCellByColumnAndRow(3, $row)->getValue();
-            $middlename = $sheet->getCellByColumnAndRow(4, $row)->getValue();
-            $rank = $sheet->getCellByColumnAndRow(5, $row)->getValue();
-            $statuss = $sheet->getCellByColumnAndRow(6, $row)->getValue();
-            $employment_status = $sheet->getCellByColumnAndRow(7, $row)->getValue();
-            $company = $sheet->getCellByColumnAndRow(8, $row)->getValue();
-            $imagepic = 'usera.png';
-            $job_title = $sheet->getCellByColumnAndRow(9, $row)->getValue();
-            $job_category = $sheet->getCellByColumnAndRow(10, $row)->getValue();
-            $department = $sheet->getCellByColumnAndRow(11, $row)->getValue();
-            $values[] = "('$employeeno', '$id_number', '$lastname', '$firstname', '$middlename', '$rank', '$statuss', '$employment_status', '$company', '$imagepic', '0', '$job_title', '$job_category', '$department', '3500')";
+            $employeeno = $sheet->getCellByColumnAndRow(0, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(0, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(0, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(0, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(0, $row)->getValue());
+
+            $id_number = $sheet->getCellByColumnAndRow(1, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(1, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(1, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(1, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(1, $row)->getValue());
+
+            $lastname = ucwords(strtolower($sheet->getCellByColumnAndRow(2, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(2, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(2, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(2, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(2, $row)->getValue())));
+
+            $firstname = ucwords(strtolower($sheet->getCellByColumnAndRow(3, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(3, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(3, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(3, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(3, $row)->getValue())));
+
+            $middlename = ucwords(strtolower($sheet->getCellByColumnAndRow(4, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(4, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(4, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(4, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(4, $row)->getValue())));
+
+            $statuss = ucwords(strtolower($sheet->getCellByColumnAndRow(5, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(5, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(5, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(5, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(5, $row)->getValue())));
+
+            $employment_status = ucwords(strtolower($sheet->getCellByColumnAndRow(6, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(6, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(6, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(6, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(6, $row)->getValue())));
+            
+            $company = $sheet->getCellByColumnAndRow(7, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(7, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(7, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(7, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(7, $row)->getValue());
+
+            $job_title = $sheet->getCellByColumnAndRow(8, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(8, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(8, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(8, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(8, $row)->getValue());
+
+            $imagepic = '';
+            $rank = '';
+
+            $job_category = ucwords(strtolower($sheet->getCellByColumnAndRow(9, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(9, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(9, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(9, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(9, $row)->getValue())));
+
+            $department = ucwords(strtolower($sheet->getCellByColumnAndRow(10, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(10, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(10, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(10, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(10, $row)->getValue())));
+
+
+            // Contact table
+            $street = ucwords(strtolower($sheet->getCellByColumnAndRow(11, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(11, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(11, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(11, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(11, $row)->getValue())));
+
+            $municipality = ucwords(strtolower($sheet->getCellByColumnAndRow(12, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(12, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(12, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(12, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(12, $row)->getValue())));
+
+            $province = ucwords(strtolower($sheet->getCellByColumnAndRow(13, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(13, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(13, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(13, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(13, $row)->getValue())));
+
+            $contact_no = $sheet->getCellByColumnAndRow(14, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(14, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(14, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(14, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(14, $row)->getValue());
+
+            
+            $telephone_no = '';
+            $corp_email = '';
+
+            $personal_email = $sheet->getCellByColumnAndRow(15, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(15, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(15, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(15, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(15, $row)->getValue());
+
+            $nationality = $sheet->getCellByColumnAndRow(16, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(16, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(16, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(16, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(16, $row)->getValue());
+
+            $driver_licence = '';
+            $driver_expdate = '0000-00-00';
+            $dept_head_email = '';
+
+            // Contract table
+
+            $date_hired = $sheet->getCellByColumnAndRow(17, $row)->getFormattedValue();
+
+            $regularized = $sheet->getCellByColumnAndRow(18, $row)->getFormattedValue();
+
+            $eoc = '0000-00-00';
+            $preterm = '0000-00-00';
+            $resigned = '0000-00-00';
+            $retired = '0000-00-00';
+            $terminated = '0000-00-00';
+            $lastpay = '0000-00-00';
+            $remarks = '';
+
+            // Government ID's / Account
+            $tin = $sheet->getCellByColumnAndRow(19, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(19, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(19, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(19, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(19, $row)->getValue());
+
+            $sss = $sheet->getCellByColumnAndRow(20, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(20, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(20, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(20, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(20, $row)->getValue());
+
+            $philhealth = $sheet->getCellByColumnAndRow(21, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(21, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(21, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(21, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(21, $row)->getValue());
+
+            $hdmf = $sheet->getCellByColumnAndRow(22, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(22, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(22, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(22, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(22, $row)->getValue());
+
+            $atm = $sheet->getCellByColumnAndRow(23, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(23, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(23, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(23, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(23, $row)->getValue());
+
+            $bank_name = $sheet->getCellByColumnAndRow(24, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(24, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(24, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(24, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(24, $row)->getValue());
+
+            $aub_no = $sheet->getCellByColumnAndRow(25, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(25, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(25, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(25, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(25, $row)->getValue());
+
+            // Other personal Info
+            $birthday = $sheet->getCellByColumnAndRow(26, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(26, $row)->getValue() == NULL ? '' : $sheet->getCellByColumnAndRow(26, $row)->getFormattedValue();
+            
+            $nickname = ucwords(strtolower($sheet->getCellByColumnAndRow(27, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(27, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(27, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(27, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(27, $row)->getValue())));
+
+            $gender = ucwords(strtolower($sheet->getCellByColumnAndRow(28, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(28, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(28, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(28, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(28, $row)->getValue())));
+
+            $marital_status = ucwords(strtolower($sheet->getCellByColumnAndRow(29, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(29, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(29, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(29, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(29, $row)->getValue())));
+
+            $birth_place = ucwords(strtolower($sheet->getCellByColumnAndRow(30, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(30, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(30, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(30, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(30, $row)->getValue())));
+
+            $blood_type = $sheet->getCellByColumnAndRow(31, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(31, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(31, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(31, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(31, $row)->getValue());
+
+            $height = $sheet->getCellByColumnAndRow(32, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(32, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(32, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(32, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(32, $row)->getValue());
+
+            $weight = $sheet->getCellByColumnAndRow(33, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(33, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(33, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(33, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(33, $row)->getValue());
+
+            $contact_name = ucwords(strtolower($sheet->getCellByColumnAndRow(34, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(34, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(34, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(34, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(34, $row)->getValue())));
+
+            $contact_address = ucwords(strtolower($sheet->getCellByColumnAndRow(35, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(35, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(35, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(35, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(35, $row)->getValue())));
+
+            $contact_telno = '';
+
+            $contact_celno = $sheet->getCellByColumnAndRow(36, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(36, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(36, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(36, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(36, $row)->getValue());
+
+            $contact_relation = ucwords(strtolower($sheet->getCellByColumnAndRow(37, $row)->getValue() == '' || $sheet->getCellByColumnAndRow(37, $row)->getValue() == NULL ? '' : ($sheet->getCellByColumnAndRow(37, $row)->getValue()[0] == '=' ? $sheet->getCellByColumnAndRow(37, $row)->getCalculatedValue() : $sheet->getCellByColumnAndRow(37, $row)->getValue())));
+
+            $fullname = $firstname. " " .$lastname;
+            $username = $firstname. "." .$lastname;
+            $password = 'password';
+
+
+            $employee_table[] = "('$employeeno', '$id_number', '$lastname', '$firstname', '$middlename', '$rank', '$statuss', '$employment_status', '$company', '$imagepic', '0', '$job_title', '$job_category', '$department', '3500')";
+
+            $user_table[] = "('$employeeno', '$fullname', '$username', '$password', 'active', 'employee', '3', 'no')";
+
+            $contact_table[] = "('1', '$employeeno', '$street', '$municipality', '$province', '$contact_no', '$telephone_no', '$corp_email', '$personal_email', '$nationality', '$driver_licence', '$driver_expdate', '$dept_head_email')";
+
+            $contract_table[] = "('1', '$employeeno', '$date_hired', '$eoc', '$regularized', '$preterm', '$resigned', '$retired', '$terminated', '$lastpay', '$remarks')";
+
+            $govid_table[] = "('1', '$employeeno', '$tin', '$sss', '$philhealth', '$hdmf', '$atm', '$bank_name', '$aub_no', 'aa', 'aa', 'aa')";
+
+            $other_personal_table[] = "('1', '$employeeno', 'nickname', '$birthday', 'gender', 'height', 'weight', 'marital_status', 'birth_place', '$blood_type', '$contact_name', '$contact_address', '$contact_telno', '$contact_celno', '$contact_relation')";
         }
         // print_r(implode(',', $values));
-        $sql .= implode(',', $values);
+        $employee_sql .= implode(',', $employee_table);
+        $user_sql .= implode(',', $user_table);
+        $contact_sql .= implode(',', $contact_table);
+        $contract_sql .= implode(',', $contract_table);
+        $govid_sql .= implode(',', $govid_table);
+        $other_personal_sql .= implode(',', $other_personal_table);
         
-        // $query = $conn->prepare($sql);
+
+        try {
+          $conn->beginTransaction();
+
+          // $employeeQuery = $conn->prepare($employee_sql);
+          // $employeeQuery->execute();
+
+          // $userQuery = $conn->prepare($user_sql);
+          // $userQuery->execute();
+
+          // $contactQuery = $conn->prepare($contact_sql);
+          // $contactQuery->execute();
+
+          // $contractQuery = $conn->prepare($contract_sql);
+          // $contractQuery->execute();
+
+          // $govidQuery = $conn->prepare($govid_sql);
+          // $govidQuery->execute();
+
+          // $otherPersonalQuery = $conn->prepare($other_personal_sql);
+          // $otherPersonalQuery->execute();
+
+          $conn->exec($employee_sql);
+          $conn->exec($user_sql);
+          $conn->exec($contact_sql);
+          $conn->exec($contract_sql);
+          $conn->exec($govid_sql);
+          $conn->exec($other_personal_sql);
+          $conn->commit();
+          
+          echo json_encode(array('type' => 'success', 'message' => 'Successfully updated the employee masterlist'));
+          exit;
+
+        } catch (\PDOException $e) {
+          echo json_encode(array('type' => 'error', 'message' => 'Theres an error updating the employees'));
+          exit;
+        }
+
+        // $query = $conn->prepare($other_personal_sql);
         // $query->execute();
-        echo json_encode($values);
+        // echo json_encode($employee_table);
+        // echo json_encode($contact_sql);
+        // echo json_encode($contract_sql);
+        echo json_encode($other_personal_sql);
+        // echo json_encode($other_personal_sql);
     }
   }
 

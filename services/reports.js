@@ -229,7 +229,8 @@ $(document).ready(function(){
   	var newlyfrom = $('#newlyfrom').val();
 	var newlyto = $('#newlyto').val();
 	var report_type = "newly";
-	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+newlyfrom+"&to="+newlyto;
+	const name = $('#newlyfrom').val() + " - " + $('#newlyto').val()
+	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+newlyfrom+"&to="+newlyto+"&name="+name;
   }
 
 
@@ -245,7 +246,8 @@ $(document).ready(function(){
   	var bdayfrom = $('#bdayfrom').val();
 	var bdayto = $('#bdayto').val();
 	var report_type = "bday";
-	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+bdayfrom+"&to="+bdayto;
+	const name = $('#bdayfrom').val() + " - " + $('#bdayto').val()
+	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+bdayfrom+"&to="+bdayto+"&name="+name;
   }
 
   function searchgender(){
@@ -261,7 +263,8 @@ $(document).ready(function(){
   	var gender = $('#gender').val();
   	var a = "";
   	var report_type = "gender";
-  	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+gender+"&to="+a;
+	const name = $('#gender').val()
+  	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+gender+"&to="+a+"&name="+name;
   }
 
   function searchage(){
@@ -276,7 +279,8 @@ $(document).ready(function(){
   	var agefrom = $('#agefrom').val();
 	var ageto = $('#ageto').val();
 	var report_type = "age";
-	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+agefrom+"&to="+ageto;
+	const name = $('#agefrom').val() + " - " + $('#ageto').val()
+	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+agefrom+"&to="+ageto+"&name="+name;
   }
 
   function searchdivision(){
@@ -291,7 +295,8 @@ $(document).ready(function(){
   	var division = $('#division').val();
   	var a = "";
   	var report_type = "division";
-  	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+division+"&to="+a;
+	const name = $('#division').val()
+  	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+division+"&to="+a+"&name="+name;
   }
 
  
@@ -308,7 +313,8 @@ $(document).ready(function(){
   	var employment_status = $('#employment_status').val();
   	var a = "";
   	var report_type = "employment";
-  	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+employment_status+"&to="+a;
+	const name = $('#employment_status').val()
+  	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+employment_status+"&to="+a+"&name="+name;
   }
 
   function searchdept(){
@@ -323,7 +329,8 @@ $(document).ready(function(){
   	var job_category = $('#job_category').val();
   	var a = "";
   	var report_type = "job_category";
-  	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+job_category+"&to="+a;
+	const name = $('#job_category').val()
+  	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+job_category+"&to="+a+"&name="+name;
   }
 
   function searchEvaluation(){
@@ -338,8 +345,9 @@ function exportEvaluation(){
 	var month = $('#evaluationMonth').val();
 	var a = "";
 	var report_type = "evaluation";
+	const name = $("#evaluationMonth option:selected").text()
 	$('#tbl_employee').DataTable().destroy();
-	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+month+"&to="+a;
+	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+month+"&to="+a+"&name="+name;
 }
 
   function loademployee(from,to,type){

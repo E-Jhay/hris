@@ -70,7 +70,7 @@ require_once "header.php";
           </div>
           
           <center>
-            <button type="submit" class="btn btn-sm btn-success">Upload</button>
+            <button type="submit" class="btn btn-sm btn-success" id="updateEmployeeBtn">Upload</button>
           </center>
         </form>
 

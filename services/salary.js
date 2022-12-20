@@ -98,19 +98,18 @@ $(document).ready(function(){
 			processData: false,
 			contentType: false,
 			success:function(data){
-				// var b = $.parseJSON(data);
-				// if(b.type === "error")
-				// 	$.Toast(b.message, errorToast)
-				// else
-				// 	$.Toast(b.message, successToast)
-				// const employeeno = b.employeeno;
-				// clearFields()
-				// $('#salarymodal').modal('hide');
-				// $('#error').addClass('d-none')
-				// $('#tbl_salaryhistory').DataTable().destroy();
-				// loadsalary(employeeno);
-				// $('#btnupd_histo').hide()
-				console.log(data)
+				var b = $.parseJSON(data);
+				if(b.type === "error")
+					$.Toast(b.message, errorToast)
+				else
+					$.Toast(b.message, successToast)
+				const employeeno = b.employeeno;
+				clearFields()
+				$('#salarymodal').modal('hide');
+				$('#error').addClass('d-none')
+				$('#tbl_salaryhistory').DataTable().destroy();
+				loadsalary(employeeno);
+				$('#btnupd_histo').hide()
 			}
 		});
 	}
@@ -197,6 +196,7 @@ $(document).ready(function(){
 		$('#effectdateemp').val("");
 		$('#remarks').val("");
 		$('#hardcopy').val("");
+		$('#file_name').val("");
 
 		$('#btnsave_histo').show();
 		$('#btnupd_histo').hide();

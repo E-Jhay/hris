@@ -29,10 +29,16 @@ $count = $leaves->countLeaves($empno);
 <div class="navcontainer">
 
   <div id="div_incident" class="div_content">
+    <select class="form-control" id="status">
+      <option value="pending" selected=""> Pending </option>
+      <option value="acknowledged"> Acknowledged </option>
+      <option value="rejected"> Rejected </option>
+      <option value="all"> All </option>
+    </select><br />
     <table class="table table-striped w-100" id="tbl_incident">
         <thead>
-            <th>Title</th>
-            <th>Description</th>
+            <th width="15%">Title</th>
+            <th width="25%">Description</th>
             <th>Date</th>
             <th>Status</th>
             <th class="text-center">File</th>
@@ -74,6 +80,8 @@ $count = $leaves->countLeaves($empno);
               </div>
               <center>
                 <button type="submit" class="btn btn-primary btn-sm" id="btn_submit">Acknowledge</button>
+                <button type="button" class="btn btn-danger btn-sm" id="btn_reject">Reject</button>
+                <button type="button" class="btn btn-warning btn-sm" id="btn_cancel">Cancel</button>
               </center>
             </form>
         </div>

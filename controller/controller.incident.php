@@ -43,8 +43,14 @@ class crud extends db_conn_mysql
   }
   function load_employee_incident_all(){
     
+    $status = $_GET['status'];
+    
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM incident ORDER BY date DESC");
+    if($status == 'all'){
+      $query = $conn->prepare("SELECT * FROM incident ORDER BY date DESC");
+    } else {
+      $query = $conn->prepare("SELECT * FROM incident WHERE status = '$status' ORDER BY date DESC");
+    }
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
@@ -55,11 +61,11 @@ class crud extends db_conn_mysql
     $x[$key] = utf8_encode($input_arr);
     }
     
-    $editBtn = $x['status'] == 'active' ? '' : 'disabled';
-    $editTitle = $x['status'] == 'active' ? 'Acknowledge Incident Report' : '';
-    $data = array();
+    // $editBtn = $x['status'] == 'active' ? '' : 'disabled';
+    // $editTitle = $x['status'] == 'active' ? 'Acknowledge Incident Report' : 'Acknowledged';
+    // $data = array();
     $data['action'] = '<div class="text-center">
-    <button title="'.$editTitle.'" style="background-color: green; color: white" onclick="editIncident('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\',\''.$x['employeeno'].'\',\''.$x['date'].'\')" class="btn btn-sm" '.$editBtn.'><i class="fas fa-sm fa-eye"></i>  Acknowledge</button>
+    <button title="View details" style="background-color: green; color: white" onclick="editIncident('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\',\''.$x['employeeno'].'\',\''.$x['date'].'\',\''.$x['status'].'\')" class="btn btn-sm"><i class="fas fa-sm fa-eye"></i>  Details</button>
     </div>';
 
     $data['title'] = ucfirst($x['title']);
@@ -106,7 +112,7 @@ class crud extends db_conn_mysql
             $dateNow = date('Y-m-d');
             if(move_uploaded_file($temp_name,$path_filename_ext)) {
                 $conn = $this->connect_mysql();
-                $qry = $conn->prepare("INSERT INTO incident (employeeno, title, description, date, status, file_name) VALUES ('$employee_number', '$incidentTitle', '$incidentDescription', '$dateNow', 'active', '$fileIncident')");
+                $qry = $conn->prepare("INSERT INTO incident (employeeno, title, description, date, status, file_name) VALUES ('$employee_number', '$incidentTitle', '$incidentDescription', '$dateNow', 'pending', '$fileIncident')");
                 $qry->execute();
 
                 $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
@@ -239,7 +245,7 @@ class crud extends db_conn_mysql
     $conn = $this->connect_mysql();
 
     if($remarks && $incident_id) {
-      $squery = $conn->prepare("UPDATE incident SET remarks='$remarks', status='Acknowledge' WHERE id = '$incident_id'");
+      $squery = $conn->prepare("UPDATE incident SET remarks='$remarks', status='acknowledged' WHERE id = '$incident_id'");
       $squery->execute();
 
       $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
@@ -272,7 +278,7 @@ class crud extends db_conn_mysql
       $mail->Password = "qyegdvkzvbjihbou";
       $mail->SetFrom("no-reply@panamed.com.ph", "");
       
-      $message = 'Your incident report posted last '.$date.' has been acknowledge by HR<br />Remarks: '.$remarks;
+      $message = 'Your incident report posted last '.$date.' has been acknowledge by HR<br /> Status: Acknowledged <br />Remarks: '.$remarks;
       $mail->Subject = "Incident Report";
       $mail->Body = $message;
       $mail->isHTML(true);
@@ -282,6 +288,123 @@ class crud extends db_conn_mysql
       $mail->Send();
 
       echo json_encode(array("message"=>"Incident Report Acknowledge", "type" => "success"));
+      exit;
+    }else {
+      echo json_encode(array("message"=>"Sorry, remarks is required.", "type" => "error"));
+      exit;
+    }
+  }
+
+  function rejectIncidentReport() {
+    $incident_id = $_POST['incident_id'];
+    $employeeno = $_POST['incident_employeeno'];
+    $date = $_POST['incident_date'];
+    $remarks = $_POST['remarks'];
+
+    $conn = $this->connect_mysql();
+
+    if($remarks && $incident_id) {
+      $squery = $conn->prepare("UPDATE incident SET remarks='$remarks', status='rejected' WHERE id = '$incident_id'");
+      $squery->execute();
+
+      $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
+      $qry2->execute();
+      $row = $qry2->fetch();
+
+      $department = $row['department'];
+      $firstname = $row['firstname'];
+      $lastname = utf8_decode($row['lastname']);
+      $id = $row['id'];
+
+      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$id'");
+      $sqry2->execute();
+      $srow2 = $sqry2->fetch();
+      $corp_email = $srow2['corp_email'];
+
+      require 'Exception.php';
+      require 'PHPMailer.php';
+      require 'SMTP.php';
+      require 'PHPMailerAutoload.php';
+      $mail = new PHPMailer();
+      $mail->IsSMTP();
+      $mail->SMTPDebug = 0;
+      $mail->SMTPAuth = true;
+      $mail->SMTPSecure = 'ssl';
+      $mail->Host = "smtp.gmail.com";
+      $mail->Port = 465;
+      $mail->IsHTML(true);
+      $mail->Username = "pmcmailchimp@gmail.com";
+      $mail->Password = "qyegdvkzvbjihbou";
+      $mail->SetFrom("no-reply@panamed.com.ph", "");
+      
+      $message = 'Your incident report posted last '.$date.' has been rejected by HR<br /> Status: Rejected <br /> Remarks: '.$remarks;
+      $mail->Subject = "Incident Report";
+      $mail->Body = $message;
+      $mail->isHTML(true);
+      // $dept_head_email = $row2['dept_head_email'];
+      $mail->AddAddress('bumacodejhay@gmail.com');
+      $mail->AddCC('ejhaybumacod26@gmail.com');
+      $mail->Send();
+
+      echo json_encode(array("message"=>"Incident Report Rejected", "type" => "success"));
+      exit;
+    }else {
+      echo json_encode(array("message"=>"Sorry, remarks is required.", "type" => "error"));
+      exit;
+    }
+  }
+  function cancelIncidentReport() {
+    $incident_id = $_POST['incident_id'];
+    $employeeno = $_POST['incident_employeeno'];
+    $date = $_POST['incident_date'];
+    $remarks = $_POST['remarks'];
+
+    $conn = $this->connect_mysql();
+
+    if($incident_id) {
+      $squery = $conn->prepare("UPDATE incident SET remarks='$remarks', status='pending' WHERE id = '$incident_id'");
+      $squery->execute();
+
+      $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
+      $qry2->execute();
+      $row = $qry2->fetch();
+
+      $department = $row['department'];
+      $firstname = $row['firstname'];
+      $lastname = utf8_decode($row['lastname']);
+      $id = $row['id'];
+
+      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$id'");
+      $sqry2->execute();
+      $srow2 = $sqry2->fetch();
+      $corp_email = $srow2['corp_email'];
+
+      require 'Exception.php';
+      require 'PHPMailer.php';
+      require 'SMTP.php';
+      require 'PHPMailerAutoload.php';
+      $mail = new PHPMailer();
+      $mail->IsSMTP();
+      $mail->SMTPDebug = 0;
+      $mail->SMTPAuth = true;
+      $mail->SMTPSecure = 'ssl';
+      $mail->Host = "smtp.gmail.com";
+      $mail->Port = 465;
+      $mail->IsHTML(true);
+      $mail->Username = "pmcmailchimp@gmail.com";
+      $mail->Password = "qyegdvkzvbjihbou";
+      $mail->SetFrom("no-reply@panamed.com.ph", "");
+      
+      $message = 'Your incident report posted last '.$date.' has been cancelled by HR<br />Status: Pending <br /> Remarks: '.$remarks;
+      $mail->Subject = "Incident Report";
+      $mail->Body = $message;
+      $mail->isHTML(true);
+      // $dept_head_email = $row2['dept_head_email'];
+      $mail->AddAddress('bumacodejhay@gmail.com');
+      $mail->AddCC('ejhaybumacod26@gmail.com');
+      $mail->Send();
+
+      echo json_encode(array("message"=>"Incident Report Cancelled", "type" => "success"));
       exit;
     }else {
       echo json_encode(array("message"=>"Sorry, remarks is required.", "type" => "error"));
@@ -309,6 +432,12 @@ if(isset($_GET['updateIncidentReport'])){
 }
 if(isset($_GET['acknowledgeIncidentReport'])){
   $x->acknowledgeIncidentReport();
+}
+if(isset($_GET['rejectIncidentReport'])){
+  $x->rejectIncidentReport();
+}
+if(isset($_GET['cancelIncidentReport'])){
+  $x->cancelIncidentReport();
 }
 
  ?>

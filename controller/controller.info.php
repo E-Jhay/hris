@@ -8,7 +8,7 @@ class crud extends db_conn_mysql
   function count_incident_reports(){
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM incident a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='active' ORDER BY a.id DESC");
+                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='pending' ORDER BY a.id DESC");
     $query->execute();
 
     $count = $query->rowCount();

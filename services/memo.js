@@ -12,6 +12,19 @@ $(document).ready(function(){
      $('#div_inter_office_memo').hide();
      $('#memo_table').hide();
      $('#memo_table_department').hide();
+
+     load_memo('active', 'active')
+      $('#status').on('change', () => {
+        $('#tbl_inter_office_memo').DataTable().destroy();
+        $('#tbl_memo').DataTable().destroy();
+        load_memo($('#status').val(), 'active')
+      })
+
+      $('#status2').on('change', () => {
+        $('#tbl_inter_office_memo').DataTable().destroy();
+        $('#tbl_memo').DataTable().destroy();
+        load_memo('active', $('#status2').val())
+      })
     //  $('#cancelMemoBtn').hide();
 
 });
@@ -159,9 +172,15 @@ function delete_memo_callback(data){
 
 }
 
-  function load_memo(){
+  function load_memo(status, status2){
     
     	$('#tbl_memo').DataTable({  
+        createdRow: function (row, data, index) {
+          if($('td', row).eq(5)[0].innerText == 'Acknowledge') {
+            $('td', row).eq(5).addClass('acknowledged')
+            console.log($('td', row).eq(5)[0].innerText)
+          }
+        },
               "aaSorting": [],
               "bSearching": true,
               "bFilter": true,
@@ -169,7 +188,7 @@ function delete_memo_callback(data){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
-              "ajax" : "controller/controller.memo.php?load_memo&memo=employee",
+              "ajax" : "controller/controller.memo.php?load_memo&memo=employee&status=" + status,
               "columns" : [
                     
                     { "data" : "employeeno"},
@@ -183,6 +202,12 @@ function delete_memo_callback(data){
                 ],
          });
     	$('#tbl_inter_office_memo').DataTable({  
+        createdRow: function (row, data, index) {
+          if($('td', row).eq(4)[0].innerText == 'Acknowledge') {
+            $('td', row).eq(4).addClass('acknowledged')
+            console.log($('td', row).eq(4)[0].innerText)
+          }
+        },
               "aaSorting": [],
               "bSearching": true,
               "bFilter": true,
@@ -190,7 +215,7 @@ function delete_memo_callback(data){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
-              "ajax" : "controller/controller.memo.php?load_memo&memo=department",
+              "ajax" : "controller/controller.memo.php?load_memo&memo=department&status=" + status2,
               "columns" : [
                     
                     { "data" : "department"},
@@ -203,7 +228,6 @@ function delete_memo_callback(data){
                 ],
          });
   }
-  load_memo();
 
   function btnMemo(){
     $('#div_memo').show();

@@ -983,27 +983,36 @@ $(document).ready(function(){
 		
 		var employeenoo = $('#employeeno').val();
 		$('#tbl_leavelist').DataTable({  
-				"aaSorting": [],
-				"bSearching": true,
-				"bFilter": true,
-				"bInfo": true,
-				"bPaginate": true,
-				"bLengthChange": true,
-				"pagination": true,
-				"ajax" : "controller/controller.leave_app.php?loadleavelist&employeenoo="+employeenoo+"&stat="+stat,
-				"columns" : [
-						
-					{ "data" : "employeeno"},
-					{ "data" : "date"},
-					{ "data" : "leavetype"},
-					{ "data" : "leavebalance"},
-					{ "data" : "numberofdays"},
-					{ "data" : "active_status"},
-					{ "data" : "leave_form"},
-					{ "data" : "action"},
+			createdRow: function (row, data, index) {
+				if ($('td', row).eq(5)[0].innerText == 'Disapproved') {
+					$('td', row).eq(5).addClass('reject')
+					console.log($('td', row).eq(5)[0].innerText)
+				} else if($('td', row).eq(5)[0].innerText == 'Approved') {
+					$('td', row).eq(5).addClass('acknowledged')
+					console.log($('td', row).eq(5)[0].innerText)
+				}
+			},
+			"aaSorting": [],
+			"bSearching": true,
+			"bFilter": true,
+			"bInfo": true,
+			"bPaginate": true,
+			"bLengthChange": true,
+			"pagination": true,
+			"ajax" : "controller/controller.leave_app.php?loadleavelist&employeenoo="+employeenoo+"&stat="+stat,
+			"columns" : [
+					
+				{ "data" : "employeeno"},
+				{ "data" : "date"},
+				{ "data" : "leavetype"},
+				{ "data" : "leavebalance"},
+				{ "data" : "numberofdays"},
+				{ "data" : "active_status"},
+				{ "data" : "leave_form"},
+				{ "data" : "action"},
 
-				],
-			});
+			],
+		});
 	}
 	var stat = "Pending";
 	loadleavelist(stat);

@@ -10,6 +10,12 @@ $(document).ready(function(){
     });
     $('#incident_table').hide()
 
+    load_employee_incident_all('pending')
+    $('#status').on('change', () => {
+        $('#tbl_incident').DataTable().destroy();
+        load_employee_incident_all($('#status').val())
+    })
+
 })
 
 // $('#addIncidentBtn').on('click', () => {
@@ -23,8 +29,17 @@ $(document).ready(function(){
 //     $('#incident_table').hide()
 //   })
 
-function load_employee_incident_all(){
+function load_employee_incident_all(status){
     $('#tbl_incident').DataTable({  
+        createdRow: function (row, data, index) {
+            if ($('td', row).eq(3)[0].innerText == 'Rejected') {
+                $('td', row).eq(3).addClass('reject')
+                console.log($('td', row).eq(3)[0].innerText)
+            } else if($('td', row).eq(3)[0].innerText == 'Acknowledged') {
+                $('td', row).eq(3).addClass('acknowledged')
+                console.log($('td', row).eq(3)[0].innerText)
+            }
+        },
         "aaSorting": [],
         "bSearching": true,
         "bFilter": true,
@@ -32,19 +47,17 @@ function load_employee_incident_all(){
         "bPaginate": true,
         "bLengthChange": true,
         "pagination": true,
-        "ajax" : "controller/controller.incident.php?load_employee_incident_all",
+        "ajax" : "controller/controller.incident.php?load_employee_incident_all&status=" + status,
         "columns" : [
             { "data" : "title"},
             { "data" : "description"},
             { "data" : "date"},
             { "data" : "status"},
             { "data" : "file"},
-            { "data" : "action"}
-
+            { "data" : "action"},
         ],
     });
 }
-load_employee_incident_all();
 
 function count_incident_reports(){
 
@@ -128,13 +141,23 @@ function viewFile(file_name, employee_number) {
 //     });
 // }
 
-function editIncident(id, title, description, file_name, employeeno, date) {
+function editIncident(id, title, description, file_name, employeeno, date, status) {
     $('#edit_modal').modal('show')
     $('#incident_id').val(id)
     $('#incident_title').val(title)
     $('#incident_description').val(description)
     $('#incident_employeeno').val(employeeno)
     $('#incident_date').val(date)
+    if(status !== 'pending'){
+        $('#btn_cancel').show()
+        $('#btn_submit').hide()
+        $('#btn_reject').hide()
+    } else {
+        $('#btn_cancel').hide()
+        $('#btn_submit').show()
+        $('#btn_reject').show()
+    }
+    
 }
 
 $('#incident_form').on('submit', (e) => {
@@ -159,10 +182,14 @@ function update_callback() {
         beforeSend: function(){
             $("#btn_submit").text('Loading....')
             $("#btn_submit").attr('disabled', true)
+            $("#btn_reject").text('Loading....')
+            $("#btn_reject").attr('disabled', true)
         },
         complete: function(){
             $("#btn_submit").text('Acknowledge')
             $("#btn_submit").attr('disabled', false)
+            $("#btn_reject").text('Reject')
+            $("#btn_reject").attr('disabled', false)
         },
         success:function(data){
             const b = $.parseJSON(data)
@@ -173,8 +200,98 @@ function update_callback() {
             $('#edit_modal').modal('hide')
             $('#incident_form').trigger("reset");
             $('#tbl_incident').DataTable().destroy();
-            load_employee_incident_all();
+            load_employee_incident_all('pending');
             count_incident_reports();
+            $('#status').val('pending')
         }
     });
 }
+
+$('#btn_reject').on('click', (e) => {
+    e.preventDefault()
+    confirmed("save",reject_callback, "Do you really want to reject this?", "Yes", "No");
+})
+
+$('#btn_cancel').on('click', (e) => {
+    e.preventDefault()
+    confirmed("save",cancel_callback, "Do you really want to cancel this?", "Yes", "No");
+})
+
+function cancel_callback() {
+    const remarks = $('#incident_remarks').val();
+    const incident_id = $('#incident_id').val();
+    const incident_employeeno = $('#incident_employeeno').val();
+    const incident_date = $('#incident_date').val();
+    $.ajax({
+        url:"controller/controller.incident.php?cancelIncidentReport",
+        method:"POST",
+        data: {
+            remarks : remarks,
+            incident_id : incident_id,
+            incident_employeeno : incident_employeeno,
+            incident_date : incident_date,
+        },
+        beforeSend: function(){
+            $("#btn_cancel").text('Loading....')
+            $("#btn_cancel").attr('disabled', true)
+        },
+        complete: function(){
+            $("#btn_cancel").text('Cancel')
+            $("#btn_cancel").attr('disabled', false)
+        },
+        success:function(data){
+            const b = $.parseJSON(data)
+            if(b.type === "error")
+                $.Toast(b.message, errorToast)
+            else
+                $.Toast(b.message, successToast)
+            $('#edit_modal').modal('hide')
+            $('#incident_form').trigger("reset");
+            $('#tbl_incident').DataTable().destroy();
+            load_employee_incident_all('pending');
+            count_incident_reports();
+            $('#status').val('pending')
+        }
+    });
+} 
+function reject_callback() {
+    const remarks = $('#incident_remarks').val();
+    const incident_id = $('#incident_id').val();
+    const incident_employeeno = $('#incident_employeeno').val();
+    const incident_date = $('#incident_date').val();
+    $.ajax({
+        url:"controller/controller.incident.php?rejectIncidentReport",
+        method:"POST",
+        data: {
+            remarks : remarks,
+            incident_id : incident_id,
+            incident_employeeno : incident_employeeno,
+            incident_date : incident_date,
+        },
+        beforeSend: function(){
+            $("#btn_submit").text('Loading....')
+            $("#btn_submit").attr('disabled', true)
+            $("#btn_reject").text('Loading....')
+            $("#btn_reject").attr('disabled', true)
+        },
+        complete: function(){
+            $("#btn_submit").text('Acknowledge')
+            $("#btn_submit").attr('disabled', false)
+            $("#btn_reject").text('Reject')
+            $("#btn_reject").attr('disabled', false)
+        },
+        success:function(data){
+            const b = $.parseJSON(data)
+            if(b.type === "error")
+                $.Toast(b.message, errorToast)
+            else
+                $.Toast(b.message, successToast)
+            $('#edit_modal').modal('hide')
+            $('#incident_form').trigger("reset");
+            $('#tbl_incident').DataTable().destroy();
+            load_employee_incident_all('pending');
+            count_incident_reports();
+            $('#status').val('pending')
+        }
+    });
+} 

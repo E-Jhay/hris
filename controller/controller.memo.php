@@ -47,10 +47,15 @@ class crud extends db_conn_mysql
   function load_memo(){
     
     $memo = $_GET['memo'];
+    $status = $_GET['status'];
 
     $conn = $this->connect_mysql();
     if ($memo == 'employee'){
-      $query = $conn->prepare("SELECT a.*, b.fullname FROM tbl_memo a LEFT JOIN user_account b ON a.employee_no = b.employeeno WHERE a.employee_no != '' ORDER BY a.datee DESC");
+      if($status == 'all'){
+        $query = $conn->prepare("SELECT a.*, b.fullname FROM tbl_memo a LEFT JOIN user_account b ON a.employee_no = b.employeeno WHERE a.employee_no != '' ORDER BY a.datee DESC");
+      } else {
+        $query = $conn->prepare("SELECT a.*, b.fullname FROM tbl_memo a LEFT JOIN user_account b ON a.employee_no = b.employeeno WHERE a.employee_no != '' AND a.status = '$status' ORDER BY a.datee DESC");
+      }
       $query->execute();
       $row = $query->fetchAll();
       $return = array();
@@ -85,7 +90,11 @@ class crud extends db_conn_mysql
       
       echo json_encode(array('data'=>$return));
     } else if ($memo == 'department') {
+      if($status == 'all'){
         $query = $conn->prepare("SELECT a.*, b.department FROM tbl_memo a LEFT JOIN department b ON a.department = b.department WHERE a.department != '' ORDER BY a.datee DESC");
+      } else {
+        $query = $conn->prepare("SELECT a.*, b.department FROM tbl_memo a LEFT JOIN department b ON a.department = b.department WHERE a.department != '' AND a.status = '$status' ORDER BY a.datee DESC");
+      }
         $query->execute();
         $row = $query->fetchAll();
         $return = array();

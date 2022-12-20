@@ -312,6 +312,15 @@ function btnreports(){
   	var type = "all";
 	var employeeno = $('#employeeno').val();
   	$('#tbl_reimburse_all').DataTable({  
+		createdRow: function (row, data, index) {
+			if ($('td', row).eq(5)[0].innerText == 'Disapproved') {
+				$('td', row).eq(5).addClass('reject')
+				console.log($('td', row).eq(5)[0].innerText)
+			} else if($('td', row).eq(5)[0].innerText == 'Approved') {
+				$('td', row).eq(5).addClass('acknowledged')
+				console.log($('td', row).eq(5)[0].innerText)
+			}
+		},
               "aaSorting": [],
               "bSearching": true,
               "bFilter": true,
