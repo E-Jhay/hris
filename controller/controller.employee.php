@@ -511,65 +511,65 @@ class crud extends db_conn_mysql
     
         $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id";
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno";
       }else if($type=="bday"){
         
          $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE EXTRACT(MONTH FROM c.dateofbirth) BETWEEN '$from' AND '$to'";
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE EXTRACT(MONTH FROM c.dateofbirth) BETWEEN '$from' AND '$to'";
       }else if($type=="gender"){
           if($from=="All"){
               $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id";
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno";
           }else{
               $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE c.gender='$from'";
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE c.gender='$from'";
           }
          
       }else if($type=="employment"){
         
          $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE a.employment_status='$from'";
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE a.employment_status='$from'";
       }else if($type=="division"){
       
           $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE a.department='$from' ORDER BY a.lastname ASC";
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE a.department='$from' ORDER BY a.lastname ASC";
       }else if($type=="job_category"){
         
          $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE a.job_category='$from'";
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE a.job_category='$from'";
       }else if($type=="age"){
         
          $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno
           WHERE YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) BETWEEN '$from' AND '$to'";
       }else if($type=="evaluation"){
         
         $query = "SELECT a.*,b.*,c.*,
            YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                            LEFT JOIN contractinfo b ON a.id=b.emp_id
-                            LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
+                            LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                            LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno
          WHERE (YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5))) AND (YEAR(date_hired) = YEAR(DATE(NOW() - INTERVAL '$from' MONTH)) AND MONTH(date_hired) = MONTH(DATE(NOW() - INTERVAL '$from' MONTH)) AND DAY(date_hired) >= DAY(DATE(NOW() - INTERVAL '$from' MONTH))) ORDER BY a.lastname ASC";
      }else{
         
          $query = "SELECT a.*,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE b.date_hired BETWEEN '$from' AND '$to'";
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE b.date_hired BETWEEN '$from' AND '$to'";
       }
       $stmt = $conn->prepare($query);
       $stmt->execute();

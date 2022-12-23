@@ -229,7 +229,7 @@ $(document).ready(function(){
   	var newlyfrom = $('#newlyfrom').val();
 	var newlyto = $('#newlyto').val();
 	var report_type = "newly";
-	const name = $('#newlyfrom').val() + " - " + $('#newlyto').val()
+	const name = 'Date hired ' + $('#newlyfrom').val() + " - " + $('#newlyto').val()
 	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+newlyfrom+"&to="+newlyto+"&name="+name;
   }
 
@@ -246,7 +246,7 @@ $(document).ready(function(){
   	var bdayfrom = $('#bdayfrom').val();
 	var bdayto = $('#bdayto').val();
 	var report_type = "bday";
-	const name = $('#bdayfrom').val() + " - " + $('#bdayto').val()
+	const name = 'Birthday ' + $('#bdayfrom').val() + " - " + $('#bdayto').val()
 	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+bdayfrom+"&to="+bdayto+"&name="+name;
   }
 
@@ -263,7 +263,7 @@ $(document).ready(function(){
   	var gender = $('#gender').val();
   	var a = "";
   	var report_type = "gender";
-	const name = $('#gender').val()
+	const name = 'Gender ' + $('#gender').val()
   	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+gender+"&to="+a+"&name="+name;
   }
 
@@ -279,7 +279,7 @@ $(document).ready(function(){
   	var agefrom = $('#agefrom').val();
 	var ageto = $('#ageto').val();
 	var report_type = "age";
-	const name = $('#agefrom').val() + " - " + $('#ageto').val()
+	const name = 'Age ' + $('#agefrom').val() + " - " + $('#ageto').val()
 	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+agefrom+"&to="+ageto+"&name="+name;
   }
 
@@ -295,7 +295,7 @@ $(document).ready(function(){
   	var division = $('#division').val();
   	var a = "";
   	var report_type = "division";
-	const name = $('#division').val()
+	const name = $('#division').val() + ' Department'
   	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+division+"&to="+a+"&name="+name;
   }
 
@@ -313,7 +313,7 @@ $(document).ready(function(){
   	var employment_status = $('#employment_status').val();
   	var a = "";
   	var report_type = "employment";
-	const name = $('#employment_status').val()
+	const name = 'Eployment status ' + $('#employment_status').val()
   	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+employment_status+"&to="+a+"&name="+name;
   }
 
@@ -329,7 +329,7 @@ $(document).ready(function(){
   	var job_category = $('#job_category').val();
   	var a = "";
   	var report_type = "job_category";
-	const name = $('#job_category').val()
+	const name = 'Job category ' + $('#job_category').val()
   	window.location.href="tcpdf/examples/employeelist.php?type="+report_type+"&from="+job_category+"&to="+a+"&name="+name;
   }
 

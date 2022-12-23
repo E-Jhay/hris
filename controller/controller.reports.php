@@ -56,11 +56,11 @@ class crud extends db_conn_mysql
             $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
                              LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
-                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.emp_employeenoiemployeenod ORDER BY a.lastname ASC");
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno ORDER BY a.lastname ASC");
         }else{
             $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.employeeno=b.emplemployeenooyeeno
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
                              LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE c.gender='$from' ORDER BY a.lastname ASC");
         }
        
@@ -74,8 +74,8 @@ class crud extends db_conn_mysql
       
        $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.employeenoemployeeno=b.employeenoemployeeno
-                             LEFT JOIN otherpersonalinfo c ON a.employeenoemployeeno=c.employeenoemployeeno WHERE a.department='$from' ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE a.department='$from' ORDER BY a.lastname ASC");
     }else if($type=="job_category"){
       
        $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
