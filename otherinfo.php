@@ -50,7 +50,7 @@ require_once "header.php";
 					<tr>
 						<td><b>Gender: </b>
 							<select class="form-control" id="gender" name="gender">
-										<option selected="" value="" disabled="">-- Select gender --</option>
+										<option selected="" value="">-- Select gender --</option>
 										<option value="Male"> Male </option>
 										<option value="Female"> Female </option>
 							</select>
@@ -65,7 +65,7 @@ require_once "header.php";
 					<tr>
 						<td><b>Marital Status: </b>
 									<select class="form-control" id="marital_status" name="marital_status">
-										<option selected="" value="" disabled="">-- Select Status --</option>
+										<option selected="" value="">-- Select Status --</option>
 										<option value="Single"> Single </option>
 										<option value="Married"> Married </option>
 										<option value="Widowed"> Widowed </option>

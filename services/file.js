@@ -26,13 +26,7 @@ $(document).ready(function(){
 				$('#leave_balance').val(b.leave_balance);
 				$('#emp_no').val(b.emp_no);
 				$('#department').val(b.department);
-
-				if(b.imagepic=="" || b.imagepic==null){
-					document.getElementById("personal_image").src = "usera.png";
-				}else{
-					document.getElementById("personal_image").src = "personal_picture/"+b.emp_no+"/"+b.imagepic;
-					// document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
-				}
+				document.getElementById("personal_image").src = b.imagepic;
 
 				$('#emp_statuss').load('controller/controller.file.php?demp_stat',function(){
 					$('#emp_statuss').val(b.emp_statuss);
@@ -72,11 +66,12 @@ function save_callback(){
 			const response = $.parseJSON(data)
 			if(response.error){
 				$.Toast(response.message, errorToast);
+				$("#empfile").val('')
 			}else {
 				$.Toast(response.message, successToast);
-				setTimeout(() => {
-					window.location.href="file_attach.php?employeeno="+response.employeeno;
-				}, 1000)
+				$('#tbl_file').DataTable().destroy();
+				loadfile($('#emp_no').val());
+				$("#empfile").val('')
 			}
 			
 		}
@@ -126,6 +121,7 @@ function save_callback(){
 		        		var b = $.parseJSON(data);
 		        		if(b.founded !=""){
 		        			alert(b.founded+"\n File already exists ");
+							$("#empfile").val('')
 		        		}
 		        		
 		        	}

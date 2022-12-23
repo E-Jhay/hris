@@ -165,7 +165,7 @@ $(document).ready(function(){
 					id: id,
 					file_name: file_name
 				},success:function(){
-					$.Toast("Successfully Deleted", errorToast);
+					$.Toast("Successfully Deleted", successToast);
 					$('#tbl_news').DataTable().destroy();
 					$('#tbl_inter_office_news').DataTable().destroy();
 					load_news();

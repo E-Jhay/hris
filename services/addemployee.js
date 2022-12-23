@@ -176,11 +176,6 @@ $(document).ready(function(){
 						window.location.href="employee.php";
 					}, 2000)
 				}
-				// $.Toast("Successfully Saved", successToast);
-				// setTimeout(() => {
-				// 	window.location.href="employee.php";
-				// }, 1000)
-				// console.log(data)
 			}
 		});
 	}

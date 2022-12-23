@@ -56,12 +56,7 @@ $(document).ready(function(){
 				$('#company').load('controller/controller.otherinfo.php?dcompany',function(){
 					$('#company').val(b.company);
 				});
-				if(b.imagepic=="" || b.imagepic==null){
-					document.getElementById("personal_image").src = "usera.png";
-				}else{
-					document.getElementById("personal_image").src = "personal_picture/"+b.emp_no+"/"+b.imagepic;
-					// document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
-				}
+				document.getElementById("personal_image").src = b.imagepic;
 
 				$('#department').load('controller/controller.otherinfo.php?ddepartment',function(){
 					$('#department').val(b.department);
@@ -138,6 +133,7 @@ function save_callback(){
 				var employeeno = b.employeeno;
 				window.location.href="otherinfo.php?employeeno="+employeeno;
 			}, 1000)
+			// console.log(data)
 		}
 	});
 }

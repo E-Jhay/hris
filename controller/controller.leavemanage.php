@@ -277,9 +277,9 @@ class crud extends db_conn_mysql
 
     function load_leavebalance(){
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT a.*,b.* FROM tbl_employee a
+    $query = $conn->prepare("SELECT a.*,a.employeeno as emp_no,b.* FROM tbl_employee a
                             LEFT JOIN contractinfo b
-                            ON a.id=b.emp_id WHERE b.emp_id = 1 ORDER BY a.lastname ASC");
+                            ON a.employeeno=b.employeeno ORDER BY a.lastname ASC");
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
@@ -309,7 +309,7 @@ class crud extends db_conn_mysql
             $row3['balance'] = 0;
           }
 
-          $data['employeeno'] = $x['employeeno'];
+          $data['employeeno'] = $x['emp_no'];
           $full_name = $x['lastname'].", ".$x['firstname'];
           $data['fullname'] = utf8_decode($full_name);
 

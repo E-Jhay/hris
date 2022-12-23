@@ -25,7 +25,7 @@ class crud extends db_conn_mysql
     $data['action'] = '<div class="text-center">
     <button title="'.$editTitle.'" style="background-color: green; color: white" onclick="editIncident('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\')" class="btn btn-sm" '.$editBtn.'><i class="fas fa-sm fa-eye"></i>  '.$editText.'</button>'
     ;
-    if($x['status'] == 'active') {
+    if($x['status'] == 'pending') {
       $data['action'] .= ' <button title="Delete" onclick="delete_incident('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></div>';
     }
 
@@ -115,7 +115,7 @@ class crud extends db_conn_mysql
                 $qry = $conn->prepare("INSERT INTO incident (employeeno, title, description, date, status, file_name) VALUES ('$employee_number', '$incidentTitle', '$incidentDescription', '$dateNow', 'pending', '$fileIncident')");
                 $qry->execute();
 
-                $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
+                $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employee_number'");
                 $qry2->execute();
                 $row = $qry2->fetch();
 
@@ -257,10 +257,10 @@ class crud extends db_conn_mysql
       $lastname = utf8_decode($row['lastname']);
       $id = $row['id'];
 
-      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$id'");
-      $sqry2->execute();
-      $srow2 = $sqry2->fetch();
-      $corp_email = $srow2['corp_email'];
+      // $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$id'");
+      // $sqry2->execute();
+      // $srow2 = $sqry2->fetch();
+      // $corp_email = $srow2['corp_email'];
 
       require 'Exception.php';
       require 'PHPMailer.php';

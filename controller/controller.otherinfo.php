@@ -39,7 +39,7 @@ class crud extends db_conn_mysql
   function selectotherinfo(){
     $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT a.*,b.*,YEAR(CURRENT_TIMESTAMP) - YEAR(b.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(b.dateofbirth, 5)) as age FROM tbl_employee a 
+    $query = $conn->prepare("SELECT a.*,a.employeeno as emp_no,b.*,YEAR(CURRENT_TIMESTAMP) - YEAR(b.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(b.dateofbirth, 5)) as age FROM tbl_employee a 
                              LEFT JOIN otherpersonalinfo b 
                              ON a.employeeno = b.employeeno
                              WHERE a.employeeno='$employeeno'");
@@ -50,9 +50,19 @@ class crud extends db_conn_mysql
       $row[$key] = addslashes($input_arr);
       $row[$key] = utf8_encode($input_arr);
     }
+    
+    if($row['imagepic'] == NULL || $row['imagepic'] == ''){
+      $row['imagepic'] = 'personal_picture/usera.png';
+    } else {
+        if(!file_exists('../personal_picture/'.$row['emp_no'].'/'.$row['imagepic'])){
+          $row['imagepic'] = 'personal_picture/'.$row['imagepic'];
+        } else {
+          $row['imagepic'] = 'personal_picture/'.$row['emp_no'].'/'.$row['imagepic'];
+        }
+    }
 
     echo json_encode(array(
-      'emp_no'=>$row['employeeno'],
+      'emp_no'=>$row['emp_no'],
       'f_name'=>$row['firstname'],
       'l_name'=>utf8_decode($row['lastname']),
       'm_name'=>$row['middlename'],
@@ -156,10 +166,10 @@ class crud extends db_conn_mysql
       // $empid = $_POST['emp_id'];
       $nickname = $_POST['nickname'];
       $dateofbirth = $_POST['dateofbirth'] != '' ? $_POST['dateofbirth'] : '0000-00-00';
-      $gender = $_POST['gender'] != '' ? $_POST['gender'] : '';
+      $gender = $_POST['gender'] != '' && $_POST['gender'] != NULL ? $_POST['gender'] : '';
       $height = $_POST['height'];
       $weight = $_POST['weight'];
-      $marital_status = $_POST['marital_status'] != '' ? $_POST['marital_status'] : '';
+      $marital_status = $_POST['marital_status'] != '' && $_POST['marital_status'] != NULL ? $_POST['marital_status'] : '';
       $birth_place = $_POST['birth_place'];
       $blood_type = $_POST['blood_type'];
       $contact_name = $_POST['contact_name'];

@@ -45,7 +45,7 @@ class crud extends db_conn_mysql
     $m = date('m');
     $conn = $this->connect_mysql();
     $stmt = $conn->prepare("SELECT a.imagepic,a.lastname,a.firstname,a.department,b.dateofbirth FROM tbl_employee a
-                            LEFT JOIN otherpersonalinfo b ON a.id=b.emp_id WHERE MONTH(dateofbirth) = '$m' ORDER BY DAY(dateofbirth) ASC");
+                            LEFT JOIN otherpersonalinfo b ON a.employeeno=b.employeeno WHERE MONTH(dateofbirth) = '$m' ORDER BY DAY(dateofbirth) ASC");
     $stmt->execute();
     $row = $stmt->fetchAll();
     return $row;

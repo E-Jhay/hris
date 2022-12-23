@@ -47,7 +47,8 @@ $(document).ready(function(){
 					$('#tbl_employee').DataTable().destroy();
 					loademployee('Active');
 				}
-				console.log(data)
+				$('#update_modal').modal('hide');
+				$('#forformModalm').trigger("reset");
 			}
 		});
 	}

@@ -32,13 +32,14 @@ $(document).ready(function(){
             $('#employee_number').val(b.emp_no);
             $('#performance_evaluation_employee_number').val(b.emp_no);
             $('#department').val(b.department);
+            document.getElementById("personal_image").src = b.imagepic;
 
-            if(b.imagepic=="" || b.imagepic==null){
-                document.getElementById("personal_image").src = "usera.png";
-            }else{
-                document.getElementById("personal_image").src = "personal_picture/"+b.emp_no+"/"+b.imagepic;
-                // document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
-            }
+            // if(b.imagepic=="" || b.imagepic==null){
+            //     document.getElementById("personal_image").src = "usera.png";
+            // }else{
+            //     document.getElementById("personal_image").src = "personal_picture/"+b.emp_no+"/"+b.imagepic;
+            //     // document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
+            // }
 
             $('#emp_statuss').load('controller/controller.file.php?demp_stat',function(){
                 $('#emp_statuss').val(b.emp_statuss);

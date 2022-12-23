@@ -12,23 +12,23 @@ class crud extends db_conn_mysql
 
       $query = $conn->prepare("SELECT a.*,a.id as idd,a.employeeno as employee_no,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno ORDER BY a.lastname ASC");
     
     }else if($statusdd=="Active"){
 
       $query = $conn->prepare("SELECT a.*,a.id as idd,a.employeeno as employee_no,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno
                              WHERE a.statuss='Active' ORDER BY a.lastname ASC");
 
     }else if($statusdd=="Inactive"){
 
       $query = $conn->prepare("SELECT a.*,a.id as idd,a.employeeno as employee_no,b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno
                              WHERE a.statuss='Inactive' ORDER BY a.lastname ASC");
     
     }
@@ -47,13 +47,23 @@ class crud extends db_conn_mysql
           $data = array();
           $data['action'] = '<center><button title="View more" onclick="editemp(\''.$x['employee_no'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
           <button title="Delete" onclick="deleteemp('.$x['idd'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></center>';
-          $imge = utf8_decode($x['imagepic']);
-          $picture = "personal_picture/".$imge;
-          if($x['imagepic']==""){
-            $picture = "usera.png";
+          // $imge = utf8_decode($x['imagepic']);
+          // $picture = "personal_picture/".$imge;
+          // if($x['imagepic']==""){
+          //   $picture = "usera.png";
+          // }
+          // if(!file_exists('../'.$picture)) $picture = "usera.png";
+          
+          if($x['imagepic'] == NULL || $x['imagepic'] == ''){
+            $x['imagepic'] = 'personal_picture/usera.png';
+          } else {
+              if(!file_exists('../personal_picture/'.$x['employee_no'].'/'.$x['imagepic'])){
+                $x['imagepic'] = utf8_decode('personal_picture/'.$x['imagepic']);
+              } else {
+                $x['imagepic'] = utf8_decode('personal_picture/'.$x['employee_no'].'/'.$x['imagepic']);
+              }
           }
-          if(!file_exists('../'.$picture)) $picture = "usera.png";
-          $data['pic'] = '<img src='.$picture.' style="width:40px;height:40px;border-radius:10%">';
+          $data['pic'] = '<img src="'.$x['imagepic'].'" style="width:40px;height:40px;border-radius:10%">';
           $data['employeeno'] = $x['employee_no'];
           $data['lastname'] = utf8_decode($x['lastname']);
           $data['firstname'] = $x['firstname'];
@@ -376,21 +386,21 @@ class crud extends db_conn_mysql
       $conn->beginTransaction();
       $conn->exec("INSERT INTO tbl_employee SET employeeno='$employeeno', id_number='$id_number', lastname='$lastname', firstname='$firstname', middlename='$middlename', rank='',statuss='$statuss' ,employment_status='$employment_status', company='$company',reimbursement_bal='3500', imagepic='$profile', leave_balance='0', job_title='$job_title', job_category='$job_category', department='$department'");
 
-      $id = $conn->lastInsertId();
+      // $id = $conn->lastInsertId();
 
       $fullname = $firstname." ".$lastname;
       $username = $firstname.".".$lastname;
 
       $conn->exec("INSERT INTO user_account SET employeeno='$employeeno', fullname='$fullname', username='$username', password='$password', empstatus='active', usertype='employee', userrole='3',approver='no'");
-      $conn->exec("INSERT INTO contactinfo SET emp_id='$id', employeeno='$employeeno', street='$street', municipality='$municipality', province='$province', contactno='$contact_no', telephoneno='', corp_email='$corp_email', personal_email='$personal_email', nationality='$nationality', driver_license='', driver_expdate='0000-00-00', dept_head_email='$dept_head_email'");
-      $conn->exec("INSERT INTO contractinfo SET emp_id='$id', employeeno='$employeeno', date_hired='$date_hired', eoc='$end_of_contract', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
-      $conn->exec("INSERT INTO govtidinfo SET emp_id='$id', employeeno='$employeeno', tin_no='$tin', sss_no='$sss', phic_no='$phic', hdmf_no='$hdmf', atm_no='$atm', bank_name='$bank_name', sss_remarks='', phic_remarks='', hdmf_remarks=''");
-      $conn->exec("INSERT INTO otherpersonalinfo SET emp_id='$id', employeeno='$employeeno', nickname='', dateofbirth='$dateofbirth', gender='$gender', height='', weight='', marital_status='$marital_status', birth_place='$birth_place', blood_type='', contact_name='', contact_address='', contact_telno='', contact_celno='', contact_relation=''");
-      $conn->exec("INSERT INTO benefitsinfo SET emp_id='$id', employeeno='$employeeno', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5='', relation1='', relation2='', relation3='', relation4='', relation5=''");
-      $conn->exec("INSERT INTO disciplinarytracking SET emp_id='$id', employeeno='$employeeno', violation='', specifc_offense='', of_offense='', dateissued='0000-00-00', datecommitted='0000-00-00', action=''");
-      $conn->exec("INSERT INTO otheridinfo SET emp_id='$id', employeeno='$employeeno', comp_id_dateissue='0000-00-00', comp_id_vdate='0000-00-00', fac_ap_dateissue='0000-00-00', fac_ap_vdate='0000-00-00', card_number='', driver_id='', driver_exp='0000-00-00', prc_number='', prc_exp='0000-00-00', civil_service=''");
-      $conn->exec("INSERT INTO previous_empinfo SET emp_id='$id', employeeno='$employeeno', company1='', naturebusiness1='', year1='', position1='', rate1='', company2='', naturebusiness2='', year2='', position2='', rate2='', yearend1='', yearend2=''");
-      $conn->exec("INSERT INTO medicalinfo SET emp_id='$id', employeeno='$employeeno', type1='', classification1='', status1='', dateofexam1='0000-00-00', remarks1='', type2='', classification2='', status2='', dateofexam2='0000-00-00', remarks2='', type3='', classification3='', status3='', dateofexam3='0000-00-00', remarks3=''");
+      $conn->exec("INSERT INTO contactinfo SET employeeno='$employeeno', street='$street', municipality='$municipality', province='$province', contactno='$contact_no', telephoneno='', corp_email='$corp_email', personal_email='$personal_email', nationality='$nationality', driver_license='', driver_expdate='0000-00-00', dept_head_email='$dept_head_email'");
+      $conn->exec("INSERT INTO contractinfo SET employeeno='$employeeno', date_hired='$date_hired', eoc='$end_of_contract', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
+      $conn->exec("INSERT INTO govtidinfo SET employeeno='$employeeno', tin_no='$tin', sss_no='$sss', phic_no='$phic', hdmf_no='$hdmf', atm_no='$atm', bank_name='$bank_name', sss_remarks='', phic_remarks='', hdmf_remarks=''");
+      $conn->exec("INSERT INTO otherpersonalinfo SET employeeno='$employeeno', nickname='', dateofbirth='$dateofbirth', gender='$gender', height='', weight='', marital_status='$marital_status', birth_place='$birth_place', blood_type='', contact_name='', contact_address='', contact_telno='', contact_celno='', contact_relation=''");
+      $conn->exec("INSERT INTO benefitsinfo SET employeeno='$employeeno', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5='', relation1='', relation2='', relation3='', relation4='', relation5=''");
+      $conn->exec("INSERT INTO disciplinarytracking SET employeeno='$employeeno', violation='', specifc_offense='', of_offense='', dateissued='0000-00-00', datecommitted='0000-00-00', action=''");
+      $conn->exec("INSERT INTO otheridinfo SET employeeno='$employeeno', comp_id_dateissue='0000-00-00', comp_id_vdate='0000-00-00', fac_ap_dateissue='0000-00-00', fac_ap_vdate='0000-00-00', card_number='', driver_id='', driver_exp='0000-00-00', prc_number='', prc_exp='0000-00-00', civil_service=''");
+      $conn->exec("INSERT INTO previous_empinfo SET employeeno='$employeeno', company1='', naturebusiness1='', year1='', position1='', rate1='', company2='', naturebusiness2='', year2='', position2='', rate2='', yearend1='', yearend2=''");
+      $conn->exec("INSERT INTO medicalinfo SET employeeno='$employeeno', type1='', classification1='', status1='', dateofexam1='0000-00-00', remarks1='', type2='', classification2='', status2='', dateofexam2='0000-00-00', remarks2='', type3='', classification3='', status3='', dateofexam3='0000-00-00', remarks3=''");
       $conn->exec("INSERT INTO marriage_contract (employee_number, marriage_contract) VALUES ('$employeeno', '$marriageContract')");
       $conn->exec("INSERT INTO dependents (employee_number, dependent) VALUES ('$employeeno', '$dependent')");
       $conn->exec("INSERT INTO additional_id (employee_number, additional_id) VALUES ('$employeeno', '$additionalId')");
@@ -582,13 +592,13 @@ class crud extends db_conn_mysql
 
         $user_sql = "INSERT INTO user_account (employeeno, fullname, username, password, empstatus, usertype, userrole, approver) VALUES ";
 
-        $contact_sql = "INSERT INTO contactinfo (emp_id, employeeno, street, municipality, province, contactno, telephoneno, corp_email, personal_email, nationality, driver_license, driver_expdate, dept_head_email) VALUES ";
+        $contact_sql = "INSERT INTO contactinfo (employeeno, street, municipality, province, contactno, telephoneno, corp_email, personal_email, nationality, driver_license, driver_expdate, dept_head_email) VALUES ";
         
-        $contract_sql = "INSERT INTO contractinfo (emp_id, employeeno, date_hired, eoc, regularized, preterm, resigned, retired, terminatedd, lastpay, remarks) VALUES ";
+        $contract_sql = "INSERT INTO contractinfo (employeeno, date_hired, eoc, regularized, preterm, resigned, retired, terminatedd, lastpay, remarks) VALUES ";
 
-        $govid_sql = "INSERT INTO govtidinfo (emp_id, employeeno, tin_no, sss_no, phic_no, hdmf_no, atm_no, bank_name, aub_no, sss_remarks, phic_remarks, hdmf_remarks) VALUES ";
+        $govid_sql = "INSERT INTO govtidinfo (employeeno, tin_no, sss_no, phic_no, hdmf_no, atm_no, bank_name, aub_no, sss_remarks, phic_remarks, hdmf_remarks) VALUES ";
 
-        $other_personal_sql = "INSERT INTO otherpersonalinfo (emp_id, employeeno, nickname, dateofbirth, gender, height, weight, marital_status, birth_place, blood_type, contact_name, contact_address, contact_telno, contact_celno, contact_relation) VALUES ";
+        $other_personal_sql = "INSERT INTO otherpersonalinfo (employeeno, nickname, dateofbirth, gender, height, weight, marital_status, birth_place, blood_type, contact_name, contact_address, contact_telno, contact_celno, contact_relation) VALUES ";
 
         $employee_table = array();
         $user_table = array();
@@ -710,21 +720,27 @@ class crud extends db_conn_mysql
 
             $user_table[] = "('$employeeno', '$fullname', '$username', '$password', 'active', 'employee', '3', 'no')";
 
-            $contact_table[] = "('1', '$employeeno', '$street', '$municipality', '$province', '$contact_no', '$telephone_no', '$corp_email', '$personal_email', '$nationality', '$driver_licence', '$driver_expdate', '$dept_head_email')";
+            $contact_table[] = "('$employeeno', '$street', '$municipality', '$province', '$contact_no', '$telephone_no', '$corp_email', '$personal_email', '$nationality', '$driver_licence', '$driver_expdate', '$dept_head_email')";
 
-            $contract_table[] = "('1', '$employeeno', '$date_hired', '$eoc', '$regularized', '$preterm', '$resigned', '$retired', '$terminated', '$lastpay', '$remarks')";
+            $contract_table[] = "('$employeeno', '$date_hired', '$eoc', '$regularized', '$preterm', '$resigned', '$retired', '$terminated', '$lastpay', '$remarks')";
 
-            $govid_table[] = "('1', '$employeeno', '$tin', '$sss', '$philhealth', '$hdmf', '$atm', '$bank_name', '$aub_no', 'aa', 'aa', 'aa')";
+            $govid_table[] = "('$employeeno', '$tin', '$sss', '$philhealth', '$hdmf', '$atm', '$bank_name', '$aub_no', 'aa', 'aa', 'aa')";
 
-            $other_personal_table[] = "('1', '$employeeno', 'nickname', '$birthday', 'gender', 'height', 'weight', 'marital_status', 'birth_place', '$blood_type', '$contact_name', '$contact_address', '$contact_telno', '$contact_celno', '$contact_relation')";
+            $other_personal_table[] = "('$employeeno', 'nickname', '$birthday', 'gender', 'height', 'weight', 'marital_status', 'birth_place', '$blood_type', '$contact_name', '$contact_address', '$contact_telno', '$contact_celno', '$contact_relation')";
         }
         // print_r(implode(',', $values));
         $employee_sql .= implode(',', $employee_table);
+        $employee_sql .=  ' ON DUPLICATE KEY UPDATE lastname=VALUES(lastname), firstname=VALUES(firstname), middlename=VALUES(middlename), rank=VALUES(rank), statuss=VALUES(statuss), employment_status=VALUES(employment_status), company=VALUES(company), leave_balance=VALUES(leave_balance), job_title=VALUES(job_title), job_category=VALUES(job_category), department=VALUES(department), reimbursement_bal=VALUES(reimbursement_bal)';
         $user_sql .= implode(',', $user_table);
+        $user_sql .=  ' ON DUPLICATE KEY UPDATE fullname=VALUES(fullname), username=VALUES(username), password=VALUES(password), empstatus=VALUES(empstatus), usertype=VALUES(usertype), userrole=VALUES(userrole), approver=VALUES(approver)';
         $contact_sql .= implode(',', $contact_table);
+        $contact_sql .=  ' ON DUPLICATE KEY UPDATE employeeno=VALUES(employeeno), street=VALUES(street), municipality=VALUES(municipality), province=VALUES(province), contactno=VALUES(contactno), telephoneno=VALUES(telephoneno), corp_email=VALUES(corp_email), personal_email=VALUES(personal_email), nationality=VALUES(nationality), driver_license=VALUES(driver_license), driver_expdate=VALUES(driver_expdate), dept_head_email=VALUES(dept_head_email)';
         $contract_sql .= implode(',', $contract_table);
+        $contract_sql .=  ' ON DUPLICATE KEY UPDATE date_hired=VALUES(date_hired), eoc=VALUES(eoc), regularized=VALUES(regularized), preterm=VALUES(preterm), resigned=VALUES(resigned), retired=VALUES(retired), terminatedd=VALUES(terminatedd), lastpay=VALUES(lastpay), remarks=VALUES(remarks)';
         $govid_sql .= implode(',', $govid_table);
+        $govid_sql .=  ' ON DUPLICATE KEY UPDATE tin_no=VALUES(tin_no), sss_no=VALUES(sss_no), phic_no=VALUES(phic_no), hdmf_no=VALUES(hdmf_no), atm_no=VALUES(atm_no), bank_name=VALUES(bank_name), aub_no=VALUES(aub_no), sss_remarks=VALUES(sss_remarks), phic_remarks=VALUES(phic_remarks), hdmf_remarks=VALUES(hdmf_remarks)';
         $other_personal_sql .= implode(',', $other_personal_table);
+        $other_personal_sql .=  ' ON DUPLICATE KEY UPDATE nickname=VALUES(nickname), dateofbirth=VALUES(dateofbirth), gender=VALUES(gender), height=VALUES(height), weight=VALUES(weight), marital_status=VALUES(marital_status), birth_place=VALUES(birth_place), blood_type=VALUES(blood_type), contact_name=VALUES(contact_name), contact_address=VALUES(contact_address), contact_telno=VALUES(contact_telno), contact_celno=VALUES(contact_celno), contact_relation=VALUES(contact_relation)';
         
 
         try {
@@ -754,6 +770,12 @@ class crud extends db_conn_mysql
           $conn->exec($contract_sql);
           $conn->exec($govid_sql);
           $conn->exec($other_personal_sql);
+          // $conn->exec('TRUNCATE TABLE tbl_employee;
+          //               TRUNCATE TABLE user_account;
+          //               TRUNCATE TABLE contactinfo;
+          //               TRUNCATE TABLE contractinfo;
+          //               TRUNCATE TABLE govidinfo;
+          //               TRUNCATE TABLE otherpersonalinfo;');
           $conn->commit();
           
           echo json_encode(array('type' => 'success', 'message' => 'Successfully updated the employee masterlist'));
@@ -761,6 +783,7 @@ class crud extends db_conn_mysql
 
         } catch (\PDOException $e) {
           echo json_encode(array('type' => 'error', 'message' => 'Theres an error updating the employees'));
+          throw $e;
           exit;
         }
 
@@ -768,8 +791,8 @@ class crud extends db_conn_mysql
         // $query->execute();
         // echo json_encode($employee_table);
         // echo json_encode($contact_sql);
-        // echo json_encode($contract_sql);
-        echo json_encode($other_personal_sql);
+        echo json_encode($contract_sql);
+        // echo json_encode($employee_sql);
         // echo json_encode($other_personal_sql);
     }
   }

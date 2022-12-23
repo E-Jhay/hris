@@ -7,7 +7,7 @@ class crud extends db_conn_mysql
   function selectotherid(){
     $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT a.*,b.*,c.date_hired FROM tbl_employee a 
+    $query = $conn->prepare("SELECT a.*,a.employeeno as emp_no, b.*,c.date_hired FROM tbl_employee a 
                              LEFT JOIN otheridinfo b 
                              ON a.employeeno = b.employeeno
                              LEFT JOIN contractinfo c
@@ -20,8 +20,18 @@ class crud extends db_conn_mysql
       $row[$key] = addslashes($input_arr);
       $row[$key] = utf8_encode($input_arr);
     }
+    
+    if($row['imagepic'] == NULL || $row['imagepic'] == ''){
+      $row['imagepic'] = 'personal_picture/usera.png';
+    } else {
+        if(!file_exists('../personal_picture/'.$row['emp_no'].'/'.$row['imagepic'])){
+          $row['imagepic'] = 'personal_picture/'.$row['imagepic'];
+        } else {
+          $row['imagepic'] = 'personal_picture/'.$row['emp_no'].'/'.$row['imagepic'];
+        }
+    }
     echo json_encode(array(
-      'emp_no'=>$row['employeeno'],
+      'emp_no'=>$row['emp_no'],
       'f_name'=>$row['firstname'],
       'l_name'=>utf8_decode($row['lastname']),
       'm_name'=>$row['middlename'],
@@ -134,7 +144,7 @@ class crud extends db_conn_mysql
 
               $conn = $this->connect_mysql();
 
-              $squery = $conn->prepare("INSERT INTO salary_history SET emp_id='1', date_hired='$datehiredemp',salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', added_by='Administrator', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks', hardcopy='$attachfile', employeeno='$employeeno'");
+              $squery = $conn->prepare("INSERT INTO salary_history SET date_hired='$datehiredemp',salary_type='$salarytype', salary_rate='$salaryemp',salary_type2='$salarytype2', salary_rate2='$salaryemp2',salary_type3='$salarytype3', salary_rate3='$salaryemp3',salary_type4='$salarytype4', salary_rate4='$salaryemp4', effective_date='$effectdateemp', added_by='Administrator', job_title='$positionemp', employment_status='$statusemp',basic_salary='$basic_salary',remarks='$remarks', hardcopy='$attachfile', employeeno='$employeeno'");
               $squery->execute();
 
               $qry = $conn->prepare("UPDATE tbl_employee SET employment_status='$statusemp',job_title='$positionemp' WHERE employeeno = '$employeeno'");

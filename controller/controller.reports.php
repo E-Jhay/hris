@@ -41,67 +41,67 @@ class crud extends db_conn_mysql
     $conn = $this->connect_mysql();
     if($type=="all"){
     
-      $query = $conn->prepare("SELECT a.*,b.*,c.*,
+      $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id  ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno  ORDER BY a.lastname ASC");
     }else if($type=="bday"){
       
-       $query = $conn->prepare("SELECT a.*,b.*,c.*,
+       $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE EXTRACT(MONTH FROM c.dateofbirth) BETWEEN '$from' AND '$to' ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE EXTRACT(MONTH FROM c.dateofbirth) BETWEEN '$from' AND '$to' ORDER BY a.lastname ASC");
     }else if($type=="gender"){
         if($from=="All"){
-            $query = $conn->prepare("SELECT a.*,b.*,c.*,
+            $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.emp_employeenoiemployeenod ORDER BY a.lastname ASC");
         }else{
-            $query = $conn->prepare("SELECT a.*,b.*,c.*,
+            $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE c.gender='$from' ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeeno=b.emplemployeenooyeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE c.gender='$from' ORDER BY a.lastname ASC");
         }
        
     }else if($type=="employment"){
       
-       $query = $conn->prepare("SELECT a.*,b.*,c.*,
+       $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE a.employment_status='$from' ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE a.employment_status='$from' ORDER BY a.lastname ASC");
     }else if($type=="division"){
       
-       $query = $conn->prepare("SELECT a.*,b.*,c.*,
+       $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE a.department='$from' ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeenoemployeeno=b.employeenoemployeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeenoemployeeno=c.employeenoemployeeno WHERE a.department='$from' ORDER BY a.lastname ASC");
     }else if($type=="job_category"){
       
-       $query = $conn->prepare("SELECT a.*,b.*,c.*,
+       $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE a.job_category='$from' ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE a.job_category='$from' ORDER BY a.lastname ASC");
     }else if($type=="age"){
       
-       $query = $conn->prepare("SELECT a.*,b.*,c.*,
+       $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno
         WHERE YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) BETWEEN '$from' AND '$to' ORDER BY a.lastname ASC");
     }else if($type=="evaluation"){
       
-      $query = $conn->prepare("SELECT a.*,b.*,c.*,
+      $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
            YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                            LEFT JOIN contractinfo b ON a.id=b.emp_id
-                            LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
+                            LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                            LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno
        WHERE (YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5))) AND (YEAR(date_hired) = YEAR(DATE(NOW() - INTERVAL '$from' MONTH)) AND MONTH(date_hired) = MONTH(DATE(NOW() - INTERVAL '$from' MONTH)) AND DAY(date_hired) >= DAY(DATE(NOW() - INTERVAL '$from' MONTH))) ORDER BY a.lastname ASC");
    }else{
       
-       $query = $conn->prepare("SELECT a.*,b.*,c.*,
+       $query = $conn->prepare("SELECT a.*, a.employeeno as emp_no, b.*,c.*,
             YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-                             LEFT JOIN contractinfo b ON a.id=b.emp_id
-                             LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id WHERE b.date_hired BETWEEN '$from' AND '$to' ORDER BY a.lastname ASC");
+                             LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+                             LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno WHERE b.date_hired BETWEEN '$from' AND '$to' ORDER BY a.lastname ASC");
     }
     
     $query->execute();
@@ -123,7 +123,7 @@ class crud extends db_conn_mysql
           
           </center>
           ';
-          $data['employeeno'] = $x['employeeno'];
+          $data['employeeno'] = $x['emp_no'];
           $data['lastname'] = utf8_decode($x['lastname']);
           $data['firstname'] = $x['firstname'];
           $data['middlename'] = $x['middlename'];

@@ -12,9 +12,13 @@ class db_conn_mysql{
 
     protected function connect_mysql() {
 
-        $this->servername = "192.168.101.88:3324";
+        // $this->servername = "192.168.101.88:3324";
+        // $this->username = "root";
+        // $this->password = "moy";
+        // $this->db = "hris";
+        $this->servername = "localhost";
         $this->username = "root";
-        $this->password = "moy";
+        $this->password = "";
         $this->db = "hris";
         try {
 

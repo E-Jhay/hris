@@ -75,6 +75,15 @@ function selectcontact(){
     $row[$key] = addslashes($input_arr);
     $row[$key] = utf8_encode($input_arr);
   }
+  if($row['imagepic'] == NULL || $row['imagepic'] == ''){
+    $row['imagepic'] = 'personal_picture/usera.png';
+  } else {
+      if(!file_exists('../personal_picture/'.$row['employeeno'].'/'.$row['imagepic'])){
+        $row['imagepic'] = 'personal_picture/'.$row['imagepic'];
+      } else {
+        $row['imagepic'] = 'personal_picture/'.$row['employeeno'].'/'.$row['imagepic'];
+      }
+  }
 
   echo json_encode(array(
     'emp_no'=>$row['employeeno'],

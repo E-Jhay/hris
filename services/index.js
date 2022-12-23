@@ -23,6 +23,7 @@ $(document).ready(function(){
 				}else{
 					$.Toast("Invalid Username or Password", errorToast);
 				}
+				// console.log(data)
 			}
 		});
 

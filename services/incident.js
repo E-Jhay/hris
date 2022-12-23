@@ -192,17 +192,18 @@ function update_callback() {
             $("#btn_reject").attr('disabled', false)
         },
         success:function(data){
-            const b = $.parseJSON(data)
-            if(b.type === "error")
-                $.Toast(b.message, errorToast)
-            else
-                $.Toast(b.message, successToast)
-            $('#edit_modal').modal('hide')
-            $('#incident_form').trigger("reset");
-            $('#tbl_incident').DataTable().destroy();
-            load_employee_incident_all('pending');
-            count_incident_reports();
-            $('#status').val('pending')
+            // const b = $.parseJSON(data)
+            // if(b.type === "error")
+            //     $.Toast(b.message, errorToast)
+            // else
+            //     $.Toast(b.message, successToast)
+            // $('#edit_modal').modal('hide')
+            // $('#incident_form').trigger("reset");
+            // $('#tbl_incident').DataTable().destroy();
+            // load_employee_incident_all('pending');
+            // count_incident_reports();
+            // $('#status').val('pending')
+            console.log(data)
         }
     });
 }

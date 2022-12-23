@@ -116,11 +116,11 @@ require_once "header.php";
     <table class="table table-striped w-100" id="tbl_performance_evaluation">
         <thead>
             <th>Employee No</th>
-            <th>Title</th>
-            <th>Description</th>
+            <th width="10em">Title</th>
+            <th width="20em">Description</th>
             <th>Date Created</th>
-            <th class="text-center">File</th>
-            <th class="text-center">Action</th>
+            <th width="12em" class="text-center">File</th>
+            <th width="12em" class="text-center">Action</th>
         </thead>
         <tbody>
             

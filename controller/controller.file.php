@@ -7,7 +7,7 @@ class crud extends db_conn_mysql
   function selectotherid(){
     $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT a.*,b.*,c.date_hired FROM tbl_employee a 
+    $query = $conn->prepare("SELECT a.*,a.employeeno as emp_no,b.*,c.date_hired FROM tbl_employee a 
                              LEFT JOIN otheridinfo b 
                              ON a.employeeno = b.employeeno
                              LEFT JOIN contractinfo c
@@ -20,8 +20,17 @@ class crud extends db_conn_mysql
       $row[$key] = addslashes($input_arr);
       $row[$key] = utf8_encode($input_arr);
     }
+    if($row['imagepic'] == NULL || $row['imagepic'] == ''){
+      $row['imagepic'] = 'personal_picture/usera.png';
+    } else {
+        if(!file_exists('../personal_picture/'.$row['emp_no'].'/'.$row['imagepic'])){
+          $row['imagepic'] = 'personal_picture/'.$row['imagepic'];
+        } else {
+          $row['imagepic'] = 'personal_picture/'.$row['emp_no'].'/'.$row['imagepic'];
+        }
+    }
     echo json_encode(array(
-      'emp_no'=>$row['employeeno'],
+      'emp_no'=>$row['emp_no'],
       'f_name'=>$row['firstname'],
       'l_name'=>utf8_decode($row['lastname']),
       'm_name'=>$row['middlename'],

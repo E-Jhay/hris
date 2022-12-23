@@ -43,13 +43,14 @@ $(document).ready(function(){
 				$('#m_name').val(b.m_name);
 				$('#rank').val(b.rank);
 				$('#statuss').val(b.statuss);
+				document.getElementById("personal_image").src = b.imagepic;
 
-				if(b.imagepic=="" || b.imagepic==null){
-					document.getElementById("personal_image").src = "usera.png";
-				}else{
-					document.getElementById("personal_image").src = "personal_picture/"+b.emp_no+"/"+b.imagepic;
-					// document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
-				}
+				// if(b.imagepic=="" || b.imagepic==null){
+				// 	document.getElementById("personal_image").src = "usera.png";
+				// }else{
+				// 	document.getElementById("personal_image").src = "personal_picture/"+b.emp_no+"/"+b.imagepic;
+				// 	// document.getElementById("personal_image").src = "personal_picture/"+b.imagepic;
+				// }
 				
 				$('#emp_statuss').load('controller/controller.additional_documents.php?demp_stat',function(){
 					$('#emp_statuss').val(b.emp_statuss);
