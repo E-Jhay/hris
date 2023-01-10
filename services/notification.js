@@ -1,11 +1,14 @@
-var errorToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-danger"}
-var successToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-success"}
+const errorToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-danger"}
+const successToast = {'position':'top','align':'right', 'duration': 4000, 'class': "bg-success"}
 $(document).ready(function(){
   $("#ess_notif").addClass("active_tab");
   $('.drawer').hide();
   $('.drawer').on('click',function(){
     $('.navnavnav').slideToggle();
   });
+  
+  $('#div_omnibus').hide();
+  $('#div_overtime').hide();
 
 });
 
@@ -24,8 +27,8 @@ $(document).ready(function(){
 //   }
 //   lb();
 
-  function loadnotifleave(employeenum){
-                          
+  function loadnotifleave(){
+    const currentUser = $('#currentUser').val();
     $('#tbl_notif_leave').DataTable({  
         "aaSorting": [],
         "bSearching": false,
@@ -34,7 +37,7 @@ $(document).ready(function(){
         "bPaginate": true,
         "bLengthChange": false,
         "pagination": false,
-        "ajax" : "controller/controller.notifications.php?loadnotifleave&employeenum="+employeenum,
+        "ajax" : "controller/controller.notifications.php?loadnotifleave&currentUser="+currentUser,
         "columns" : [
               
               { "data" : "trail"},
@@ -43,124 +46,139 @@ $(document).ready(function(){
           ],
     });
   }
-  var employeenum = $('#employeenum').val();
-  loadnotifleave(employeenum);
+  loadnotifleave()
+
+  function loadNotifOmnibus(){
+    const currentUser = $('#currentUser').val();
+    $('#tbl_notif_omnibus').DataTable({  
+        "aaSorting": [],
+        "bSearching": false,
+        "bFilter": false,
+        "bInfo": false,
+        "bPaginate": true,
+        "bLengthChange": false,
+        "pagination": false,
+        "ajax" : "controller/controller.notifications.php?loadNotifOmnibus&currentUser="+currentUser,
+        "columns" : [
+              
+              { "data" : "trail"},
+              { "data" : "date_time"}
+
+          ],
+    });
+  }
+  loadNotifOmnibus()
+
+  function loadNotifOvertime(){
+    const currentUser = $('#currentUser').val();
+    $('#tbl_notif_overtime').DataTable({  
+        "aaSorting": [],
+        "bSearching": false,
+        "bFilter": false,
+        "bInfo": false,
+        "bPaginate": true,
+        "bLengthChange": false,
+        "pagination": false,
+        "ajax" : "controller/controller.notifications.php?loadNotifOvertime&currentUser="+currentUser,
+        "columns" : [
+              
+              { "data" : "trail"},
+              { "data" : "date_time"}
+
+          ],
+    });
+  }
+  loadNotifOvertime()
 
 
   function backmodule(){
   	window.location.href="module.php";
   }
 
-  function goto(linkk){ 
-	  window.location.href=linkk;
 
-    if(linkk=="ess_payslip.php"){
+function btnLeave(){
+  $('#div_leave').show();
+  $('#div_omnibus').hide();
+  $('#div_overtime').hide();
+  $("#leave_tab").addClass("active");
+  $("#omnibus_tab").removeClass("active");
+  $("#overtime_tab").removeClass("active");
+}
 
-      var employeeno = $('#employeeno').val();
-      $.ajax({
-        url:"controller/controller.notifications.php?readpayslip",
-        method:"POST",
-        data:{
-          employeeno:employeeno
-        },success:function(){
-          window.location.href=linkk;
-        }
-      });
-
-    }else{
-      window.location.href=linkk;
+function btnOmnibus(){
+  $('#div_leave').hide();
+  $('#div_omnibus').show();
+  $('#div_overtime').hide();
+  $("#leave_tab").removeClass("active");
+  $("#omnibus_tab").addClass("active");
+  $("#overtime_tab").removeClass("active");
+  const currentUser = $('#currentUser').val();
+  $.ajax({
+    url:"controller/controller.info.php?read_notifications&type=omnibus",
+    method:"POST",
+    data:{
+      currentUser:currentUser
+    },success:function(){
+      countNotifications()
     }
+  });
+  
+}
 
-  }
+function btnOvertime(){
+  $('#div_leave').hide();
+  $('#div_omnibus').hide();
+  $('#div_overtime').show();
+  $("#leave_tab").removeClass("active");
+  $("#omnibus_tab").removeClass("active");
+  $("#overtime_tab").addClass("active");
+  const currentUser = $('#currentUser').val();
+  $.ajax({
+    url:"controller/controller.info.php?read_notifications&type=overtime",
+    method:"POST",
+    data:{
+      currentUser:currentUser
+    },success:function(){
+      countNotifications()
+    }
+  });
+}
 
-  function count_leaveapp(){
-
-    var employeenoo = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.notifications.php?count_leaveapp",
-      method:"POST",
-      data:{
-        employeenoo : employeenoo
-      },success:function(data){
-        var b = $.parseJSON(data);
+function countNotifications() {
+  const currentUser = $('#currentUser').val();
+  $.ajax({
+    url:"controller/controller.info.php?count_notifications",
+    method:"POST",
+    data:{
+        currentUser:currentUser
+    },success:function(data){
+        const b = $.parseJSON(data);
         
-        if(b.count > 0){
-          $('#leave_app_number').show();
-          $('#leave_app_number').html(b.count);
-        }else{
-          $('#leave_app_number').hide();
-        }
-
-      }
-
-    });
-  }
-  count_leaveapp();
-
-  function count_otapp(){
-
-    var employeenoo = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.notifications.php?count_otapp",
-      method:"POST",
-      data:{
-        employeenoo:employeenoo
-      },success:function(data){
-        var b = $.parseJSON(data);
-        
-      if(b.count > 0){
-        $('#ot_app_number').show();
-        $('#ot_app_number').html(b.count);
+      if(b.total > 0){
+          $('#notif_number').show();
+          $('#notif_number').html(b.total);
       }else{
-        $('#ot_app_number').hide();
+          $('#notif_number').hide();
       }
-
-      }
-    });
-  }
-  count_otapp();
-
-  function count_payslip(){
-
-    var employeenoo = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.notifications.php?count_payslip",
-      method:"POST",
-      data:{
-        employeenoo:employeenoo
-      },success:function(data){
-        var b = $.parseJSON(data);
-        
-      if(b.count > 0){
-        $('#payslip_number').show();
-        $('#payslip_number').html(b.count);
+      if(b.leave > 0){
+        $('#leave_notif_count').show();
+        $('#leave_notif_count').html(b.leave);
       }else{
-        $('#payslip_number').hide();
+        $('#leave_notif_count').hide();
       }
-
-      }
-    });
-  }
-  count_payslip();
-
-  function count_reimbursement(){
-
-    var employeenoo = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.notifications.php?count_reimbursement",
-      method:"POST",
-      data:{
-        employeenoo:employeenoo
-      },success:function(data){
-        var b = $.parseJSON(data);
-      if(b.count > 0){
-        $('#reim_app_number').show();
-        $('#reim_app_number').html(b.count);
+      if(b.omnibus > 0){
+          $('#omnibus_notif_count').show();
+          $('#omnibus_notif_count').html(b.omnibus);
       }else{
-        $('#reim_app_number').hide();
+          $('#omnibus_notif_count').hide();
+      }
+      if(b.overtime > 0){
+          $('#overtime_notif_count').show();
+          $('#overtime_notif_count').html(b.overtime);
+      }else{
+          $('#overtime_notif_count').hide();
       }
 
-      }
-    });
-  }
-  count_reimbursement();
+    }
+});
+}

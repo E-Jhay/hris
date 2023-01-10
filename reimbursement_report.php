@@ -57,7 +57,7 @@ $count = $leaves->countLeaves($empno);
 				<th>Amount</th>
 				<th>Date Applied</th>
 				<th>Status</th>
-				<th class="text-center">Action</th>
+				<th class="text-center" style="max-width: 14em">Action</th>
 			</thead>
 			<tbody>
 								
@@ -193,11 +193,13 @@ $count = $leaves->countLeaves($empno);
           </div>
 
           
-          <center>
-	        	<button type="button" class="btn btn-sm btn-success" id="approved_btn" onclick="approved()"> Approved</button>
-	        	<button type="button" class="btn btn-sm btn-danger" id="disapproved_btn" onclick="disapproved()"> Disapproved</button>
-	        	<button type="button" class="btn btn-sm btn-primary" id="undo_btn" onclick="undo()"> Undo </button>
-	        </center>
+		<?php if ($approver=="yes"): ?> 
+			<center>
+				<button type="button" class="btn btn-sm btn-success" id="approved_btn" onclick="approved()"> Approved</button>
+				<button type="button" class="btn btn-sm btn-danger" id="disapproved_btn" onclick="disapproved()"> Disapproved</button>
+				<button type="button" class="btn btn-sm btn-primary" id="undo_btn" onclick="undo()"> Undo </button>
+			</center>
+		<?php endif ?>
 
       </div>
 

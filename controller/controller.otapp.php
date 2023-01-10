@@ -9,34 +9,46 @@ class crud extends db_conn_mysql
       $ot_id = $_POST['ot_id'];
       $ot_remarks = $_POST['ot_remarks'];
       $statuss = $_POST['statuss'];
+      $statusProxy = $_POST['statuss'];
+      $ot_employeeno = $_POST['ot_employeeno'];
       $employeeno = $_POST['employeeno'];
 
+      if($statuss=="Cancelled"){
+        $statusProxy = "Pending";
+      }
+      $dateNow = date('Y-m-d H-i-s');
+
       $conn=$this->connect_mysql();
-      $sql2 = $conn->prepare("UPDATE tbl_overtime SET statuss='$statuss',approved_by='$employeeno',remarks='$ot_remarks' WHERE id='$ot_id'");
+      $sql2 = $conn->prepare("UPDATE tbl_overtime SET statuss='$statusProxy',approved_by='$employeeno',remarks='$ot_remarks', notif_status = 'notread', updated_at = '$dateNow' WHERE id='$ot_id'");
       $sql2->execute();
 
-      $qqy = $conn->prepare("SELECT employeeno FROM tbl_overtime WHERE id='$ot_id'");
-      $qqy->execute();
-      $rowq = $qqy->fetch();
-      $emp_no = $rowq['employeeno'];
+      // $qqy = $conn->prepare("SELECT employeeno FROM tbl_overtime WHERE id='$ot_id'");
+      // $qqy->execute();
+      // $rowq = $qqy->fetch();
+      // $emp_no = $rowq['employeeno'];
 
-      $sqry = $conn->prepare("SELECT id,firstname,lastname,department FROM tbl_employee WHERE employeeno='$emp_no'");
+      $sqry = $conn->prepare("SELECT firstname,lastname,department FROM tbl_employee WHERE employeeno='$ot_employeeno'");
       $sqry->execute();
       $srow = $sqry->fetch();
-      $employee_id = $srow['id'];
+      // $employee_id = $srow['id'];
       $firstname = $srow['firstname'];
       $lastname = utf8_decode($srow['lastname']);
       $department = $srow['department'];
 
-      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
+      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employeeno='$ot_employeeno'");
       $sqry2->execute();
       $srow2 = $sqry2->fetch();
       $corp_email = $srow2['corp_email'];
 
-            // require 'Exception.php';
-            // require 'PHPMailer.php';
-            // require 'SMTP.php';
-            // require 'PHPMailerAutoload.php';
+      $dateFiledStatement = $conn->prepare("SELECT date_filed FROM tbl_overtime WHERE id='$ot_id'");
+      $dateFiledStatement->execute();
+      $dateFiledQuery = $dateFiledStatement->fetch();
+      $dateFiled = $dateFiledQuery['date_filed'];
+
+      require 'Exception.php';
+      require 'PHPMailer.php';
+      require 'SMTP.php';
+      require 'PHPMailerAutoload.php';
 
             // $mail = new PHPMailer();
             // $mail->IsSMTP();
@@ -58,6 +70,41 @@ class crud extends db_conn_mysql
             // } else {
 
             // }
+
+            $mail = new PHPMailer();
+            $mail->IsSMTP();
+            $mail->SMTPDebug = 0;
+            $mail->SMTPAuth = true;
+            $mail->Host = "smtp.ipower.com";
+            $mail->IsHTML(true);
+            $mail->Username = "no-reply@panamed.com.ph";
+            $mail->Password = "Unimex123!!";
+            $mail->SetFrom("no-reply@panamed.com.ph", "");
+            session_start();
+            $currentLogIn = $_SESSION['fullname'];
+            if($statuss == 'Approved') {
+              $message = $currentLogIn. ' approved the overtime application of ' .$firstname. ' ' .$lastname;
+              $mail->Subject = "Overtime Application";
+              $mail->Body = $message;
+              $mail->isHTML(true);
+              $mail->AddAddress($corp_email); //HR email
+              $mail->AddCC('bumacodejhay@gmail.com');
+              $mail->Send();
+            }
+            $message = 'Your request for overtime last '. $dateFiled. ' was '.$statuss.' by ' .$currentLogIn;
+            $mail->Subject = "Overtime Application";
+            $mail->Body = $message;
+            $mail->isHTML(true);
+            // $dept_head_email = $row2['dept_head_email'];
+            $mail->AddAddress('bumacodejhay@gmail.com'); //Employee corporate email
+            $mail->AddCC($corp_email); //HR email
+            if(!$mail->Send()) {
+              echo json_encode(array('type' => 'success', 'message' => 'Overtime successfully ' .$statuss. ' <br /> Email not sent'));
+              exit;
+            } else {
+              echo json_encode(array('type' => 'success', 'message' => 'Overtime successfully ' .$statuss. ' <br /> Email sent'));
+              exit;
+            }
 
   }
 
@@ -87,8 +134,8 @@ class crud extends db_conn_mysql
           
           $data = array();
                   
-          $data['action'] = '<center>
-          <button title="View details" onclick="open_ot('.$x['id'].',\''.$x['firstname'].'\',\''.$x['lastname'].'\',\''.$x['job_title'].'\',\''.$x['reasons'].'\',\''.$x['date_filed'].'\',\''.$x['ot_from'].'\',\''.$x['ot_to'].'\',\''.$x['no_of_hrs'].'\',\''.$x['ot_date'].'\',\''.$x['statuss'].'\',\''.$x['remarks'].'\')" class="btn btn-sm btn-success"><i class="fas fa-eye fa-eye"></i></button>
+          $data['action'] = '<center d-flex justify-content-around>
+          <button title="View details" onclick="open_ot('.$x['id'].',\''.$x['firstname'].'\',\''.$x['lastname'].'\',\''.$x['job_title'].'\',\''.$x['reasons'].'\',\''.$x['date_filed'].'\',\''.$x['ot_from'].'\',\''.$x['ot_to'].'\',\''.$x['no_of_hrs'].'\',\''.$x['ot_date'].'\',\''.$x['statuss'].'\',\''.$x['remarks'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-eye fa-eye"></i></button>
           
           </center>
           ';

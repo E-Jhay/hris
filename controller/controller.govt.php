@@ -71,6 +71,7 @@ class crud extends db_conn_mysql
       'phic_no'=>$row['phic_no'],
       'hdmf_no'=>$row['hdmf_no'],
       'atm_no'=>$row['atm_no'],
+      'aub_no'=>$row['aub_no'],
       'bank_name'=>$row['bank_name'],
       'sss_remarks'=>$row['sss_remarks'],
       'phic_remarks'=>$row['phic_remarks'],
@@ -98,7 +99,8 @@ class crud extends db_conn_mysql
       $phic_no = $_POST['phic_no'];
       $hdmf_no = $_POST['hdmf_no'];
       $atm_no = $_POST['atm_no'];
-      $bank_name = $_POST['bank_name'];
+      // $aub_no = $_POST['aub_no'];
+      // $bank_name = $_POST['bank_name'];
       $sss_remarks = $_POST['sss_remarks'];
       $phic_remarks = $_POST['phic_remarks'];
       $hdmf_remarks = $_POST['hdmf_remarks'];
@@ -113,10 +115,10 @@ class crud extends db_conn_mysql
       $qry1->execute();
 
       if($sql->fetch()) {
-        $qry = $conn->prepare("UPDATE govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks' WHERE employeeno = '$emp_no'");
+        $qry = $conn->prepare("UPDATE govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks' WHERE employeeno = '$emp_no'");
         $qry->execute();
       } else {
-        $qry = $conn->prepare("INSERT INTO govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks', employeeno = '$emp_no'");
+        $qry = $conn->prepare("INSERT INTO govtidinfo SET tin_no='$tin_no', sss_no='$sss_no', phic_no='$phic_no', hdmf_no='$hdmf_no', atm_no='$atm_no', bank_name='$bank_name', sss_remarks='$sss_remarks', phic_remarks='$phic_remarks', hdmf_remarks='$hdmf_remarks', employeeno = '$emp_no', aub_no='$aub_no'");
         $qry->execute();
       }
       // $qry1 = $conn->prepare("UPDATE tbl_employee SET employeeno='$emp_no',lastname='$l_name', firstname='$f_name', middlename='$m_name', rank='$rank', statuss='$statuss', employment_status='$emp_statuss', company='$company',leave_balance='$leave_balance',department='$department' WHERE id='$empid'");

@@ -6,9 +6,15 @@ class crud extends db_conn_mysql
   function load_employee_incident(){
     
     $employee_number = $_GET['employee'];
+    $status = $_GET['status'];
 
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM incident WHERE employeeno = '$employee_number' ORDER BY date DESC");
+    if($status == ''){
+      $query = $conn->prepare("SELECT * FROM incident WHERE employeeno = '$employee_number' ORDER BY date DESC");
+    }
+    else{
+      $query = $conn->prepare("SELECT * FROM incident WHERE employeeno = '$employee_number' AND status = '$status' ORDER BY date DESC");
+    }
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
@@ -18,11 +24,11 @@ class crud extends db_conn_mysql
     $x[$key] = addslashes($input_arr);
     $x[$key] = utf8_encode($input_arr);
     }
-    $editBtn = $x['status'] == 'active' ? '' : 'disabled';
-    $editText = $x['status'] == 'active' ? 'Edit' : 'Acknowledge';
-    $editTitle = $x['status'] == 'active' ? 'Edit Incident Report' : '';
+    $editBtn = $x['status'] == 'pending' ? '' : 'disabled';
+    $editText = $x['status'] == 'pending' ? 'Edit' : 'Acknowledged';
+    $editTitle = $x['status'] == 'pending' ? 'Edit Incident Report' : '';
     $data = array();
-    $data['action'] = '<div class="text-center">
+    $data['action'] = '<div class="text-center d-flex justify-content-around">
     <button title="'.$editTitle.'" style="background-color: green; color: white" onclick="editIncident('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\')" class="btn btn-sm" '.$editBtn.'><i class="fas fa-sm fa-eye"></i>  '.$editText.'</button>'
     ;
     if($x['status'] == 'pending') {
@@ -33,7 +39,7 @@ class crud extends db_conn_mysql
     $data['description'] = strlen($x['description']) > 20 ? ucfirst(substr($x['description'], 0, 20))."..." : ucfirst($x['description']);
     $data['date'] = date('F d, Y',strtotime($x['date']));
     $data['status'] = ucfirst($x['status']);
-    $data['file'] = '<div class="text-center">
+    $data['file'] = '<div class="text-center d-flex justify-content-around">
         <button title="View File" onclick="viewFile(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-primary btn-sm"><i class="fas fa-sm fa-eye"></i> View File</button>
         </div>';
     $return[] = $data;
@@ -94,7 +100,7 @@ class crud extends db_conn_mysql
         $path = pathinfo($file);
         $ext = $path['extension'];
         $temp_name = $_FILES['incidentFile']['tmp_name'];
-        $today = date("Ymd");
+        $today = date("Y-m-d-His");
         $name = explode(".", $file);
         $fileIncident = $name[0]."-".$today.".".$ext;
         $path_filename_ext = $target_dir;
@@ -124,7 +130,7 @@ class crud extends db_conn_mysql
                 $lastname = utf8_decode($row['lastname']);
                 $id = $row['id'];
 
-                $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
+                $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE employeeno='$employee_number'");
                 $qry3->execute();
                 $row2 = $qry3->fetch();
 
@@ -136,25 +142,26 @@ class crud extends db_conn_mysql
                 $mail->IsSMTP();
                 $mail->SMTPDebug = 0;
                 $mail->SMTPAuth = true;
-                $mail->SMTPSecure = 'ssl';
-                $mail->Host = "smtp.gmail.com";
-                $mail->Port = 465;
+                $mail->Host = "smtp.ipower.com";
                 $mail->IsHTML(true);
-                $mail->Username = "pmcmailchimp@gmail.com";
-                $mail->Password = "qyegdvkzvbjihbou";
+                $mail->Username = "no-reply@panamed.com.ph";
+                $mail->Password = "Unimex123!!";
                 $mail->SetFrom("no-reply@panamed.com.ph", "");
                 
                 $message = $firstname.' '.$lastname.' uploaded an incident report <br />Date: '.$dateNow;
                 $mail->Subject = "Incident Report";
                 $mail->Body = $message;
                 $mail->isHTML(true);
-                // $dept_head_email = $row2['dept_head_email'];
-                $mail->AddAddress('bumacodejhay@gmail.com');
+                $dept_head_email = $row2['dept_head_email'];
+                $mail->AddAddress($dept_head_email);
                 $mail->AddCC('ejhaybumacod26@gmail.com');
-                $mail->Send();
-
-                echo json_encode(array('message' => 'Incident Report Submitted Successfully', 'type' => 'success'));
-                exit;
+                if(!$mail->Send()) {
+                  echo json_encode(array('message' => 'Incident Report Submitted Successfully <br /> Email not sent', 'type' => 'success'));
+                  exit;
+                } else {
+                  echo json_encode(array('message' => 'Incident Report Submitted Successfully <br /> Email sent', 'type' => 'success'));
+                  exit;
+                }
             }            
         }       
     }
@@ -248,19 +255,18 @@ class crud extends db_conn_mysql
       $squery = $conn->prepare("UPDATE incident SET remarks='$remarks', status='acknowledged' WHERE id = '$incident_id'");
       $squery->execute();
 
-      $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
-      $qry2->execute();
-      $row = $qry2->fetch();
+      $sqry = $conn->prepare("SELECT id,firstname,lastname,department FROM tbl_employee WHERE employeeno='$employeeno'");
+      $sqry->execute();
+      $srow = $sqry->fetch();
+      $employee_id = $srow['id'];
+      $firstname = $srow['firstname'];
+      $lastname = utf8_decode($srow['lastname']);
+      $department = $srow['department'];
 
-      $department = $row['department'];
-      $firstname = $row['firstname'];
-      $lastname = utf8_decode($row['lastname']);
-      $id = $row['id'];
-
-      // $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$id'");
-      // $sqry2->execute();
-      // $srow2 = $sqry2->fetch();
-      // $corp_email = $srow2['corp_email'];
+      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employeeno='$employeeno'");
+      $sqry2->execute();
+      $srow2 = $sqry2->fetch();
+      $corp_email = $srow2['corp_email'];
 
       require 'Exception.php';
       require 'PHPMailer.php';
@@ -270,25 +276,39 @@ class crud extends db_conn_mysql
       $mail->IsSMTP();
       $mail->SMTPDebug = 0;
       $mail->SMTPAuth = true;
-      $mail->SMTPSecure = 'ssl';
-      $mail->Host = "smtp.gmail.com";
-      $mail->Port = 465;
+      $mail->Host = "smtp.ipower.com";
       $mail->IsHTML(true);
-      $mail->Username = "pmcmailchimp@gmail.com";
-      $mail->Password = "qyegdvkzvbjihbou";
+      $mail->Username = "no-reply@panamed.com.ph";
+      $mail->Password = "Unimex123!!";
       $mail->SetFrom("no-reply@panamed.com.ph", "");
+      session_start();
+      $currentLogIn = $_SESSION['fullname'];
       
-      $message = 'Your incident report posted last '.$date.' has been acknowledge by HR<br /> Status: Acknowledged <br />Remarks: '.$remarks;
+      if(true){
+        $message = $currentLogIn. ' approved the incident report application of ' .$firstname. ' ' .$lastname;
+        $mail->Subject = "Incident Report";
+        $mail->Body = $message;
+        $mail->isHTML(true);
+        $mail->AddAddress($corp_email); //HR email
+        $mail->AddCC('bumacodejhay@gmail.com');
+        $mail->Send();
+      }
+      
+      $message = 'Your incident report posted last '.$date.' has been acknowledge by ' .$currentLogIn. '<br /> Status: Acknowledged <br />Remarks: '.$remarks;
       $mail->Subject = "Incident Report";
       $mail->Body = $message;
       $mail->isHTML(true);
       // $dept_head_email = $row2['dept_head_email'];
-      $mail->AddAddress('bumacodejhay@gmail.com');
-      $mail->AddCC('ejhaybumacod26@gmail.com');
-      $mail->Send();
+      $mail->AddAddress('bumacodejhay@gmail.com'); //Employee corporate email
+      $mail->AddCC($corp_email); //HR email
+      if(!$mail->Send()) {
+        echo json_encode(array("message"=>"Incident Report Acknowledge <br /> Email not sent", "type" => "success"));
+        exit;
+      } else {
+        echo json_encode(array("message"=>"Incident Report Acknowledge <br /> Email sent", "type" => "success"));
+        exit;
+      }
 
-      echo json_encode(array("message"=>"Incident Report Acknowledge", "type" => "success"));
-      exit;
     }else {
       echo json_encode(array("message"=>"Sorry, remarks is required.", "type" => "error"));
       exit;
@@ -311,15 +331,15 @@ class crud extends db_conn_mysql
       $qry2->execute();
       $row = $qry2->fetch();
 
-      $department = $row['department'];
-      $firstname = $row['firstname'];
-      $lastname = utf8_decode($row['lastname']);
-      $id = $row['id'];
+      // $department = $row['department'];
+      // $firstname = $row['firstname'];
+      // $lastname = utf8_decode($row['lastname']);
+      // $id = $row['id'];
 
-      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$id'");
-      $sqry2->execute();
-      $srow2 = $sqry2->fetch();
-      $corp_email = $srow2['corp_email'];
+      // $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employee='$employeeno'");
+      // $sqry2->execute();
+      // $srow2 = $sqry2->fetch();
+      // $corp_email = $srow2['corp_email'];
 
       require 'Exception.php';
       require 'PHPMailer.php';
@@ -329,25 +349,28 @@ class crud extends db_conn_mysql
       $mail->IsSMTP();
       $mail->SMTPDebug = 0;
       $mail->SMTPAuth = true;
-      $mail->SMTPSecure = 'ssl';
-      $mail->Host = "smtp.gmail.com";
-      $mail->Port = 465;
+      $mail->Host = "smtp.ipower.com";
       $mail->IsHTML(true);
-      $mail->Username = "pmcmailchimp@gmail.com";
-      $mail->Password = "qyegdvkzvbjihbou";
+      $mail->Username = "no-reply@panamed.com.ph";
+      $mail->Password = "Unimex123!!";
       $mail->SetFrom("no-reply@panamed.com.ph", "");
+      session_start();
+      $currentLogIn = $_SESSION['fullname'];
       
-      $message = 'Your incident report posted last '.$date.' has been rejected by HR<br /> Status: Rejected <br /> Remarks: '.$remarks;
+      $message = 'Your incident report posted last '.$date.' has been rejected by ' .$currentLogIn. '<br /> Status: Rejected <br /> Remarks: '.$remarks;
       $mail->Subject = "Incident Report";
       $mail->Body = $message;
       $mail->isHTML(true);
       // $dept_head_email = $row2['dept_head_email'];
-      $mail->AddAddress('bumacodejhay@gmail.com');
-      $mail->AddCC('ejhaybumacod26@gmail.com');
-      $mail->Send();
-
-      echo json_encode(array("message"=>"Incident Report Rejected", "type" => "success"));
-      exit;
+      $mail->AddAddress('bumacodejhay@gmail.com'); // Employee corporate email
+      $mail->AddCC('ejhaybumacod26@gmail.com'); //HR email
+      if(!$mail->Send()) {
+        echo json_encode(array("message"=>"Incident Report Rejected <br /> Email not sent", "type" => "success"));
+        exit;
+      } else {
+        echo json_encode(array("message"=>"Incident Report Rejected <br /> Email sent", "type" => "success"));
+        exit;
+      }
     }else {
       echo json_encode(array("message"=>"Sorry, remarks is required.", "type" => "error"));
       exit;
@@ -369,15 +392,15 @@ class crud extends db_conn_mysql
       $qry2->execute();
       $row = $qry2->fetch();
 
-      $department = $row['department'];
-      $firstname = $row['firstname'];
-      $lastname = utf8_decode($row['lastname']);
-      $id = $row['id'];
+      // $department = $row['department'];
+      // $firstname = $row['firstname'];
+      // $lastname = utf8_decode($row['lastname']);
+      // $id = $row['id'];
 
-      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$id'");
-      $sqry2->execute();
-      $srow2 = $sqry2->fetch();
-      $corp_email = $srow2['corp_email'];
+      // $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employeeno='$employeeno'");
+      // $sqry2->execute();
+      // $srow2 = $sqry2->fetch();
+      // $corp_email = $srow2['corp_email'];
 
       require 'Exception.php';
       require 'PHPMailer.php';
@@ -387,25 +410,28 @@ class crud extends db_conn_mysql
       $mail->IsSMTP();
       $mail->SMTPDebug = 0;
       $mail->SMTPAuth = true;
-      $mail->SMTPSecure = 'ssl';
-      $mail->Host = "smtp.gmail.com";
-      $mail->Port = 465;
+      $mail->Host = "smtp.ipower.com";
       $mail->IsHTML(true);
-      $mail->Username = "pmcmailchimp@gmail.com";
-      $mail->Password = "qyegdvkzvbjihbou";
+      $mail->Username = "no-reply@panamed.com.ph";
+      $mail->Password = "Unimex123!!";
       $mail->SetFrom("no-reply@panamed.com.ph", "");
+      session_start();
+      $currentLogIn = $_SESSION['fullname'];
       
-      $message = 'Your incident report posted last '.$date.' has been cancelled by HR<br />Status: Pending <br /> Remarks: '.$remarks;
+      $message = 'Your incident report posted last '.$date.' has been cancelled by ' .$currentLogIn. '<br />Status: Pending <br /> Remarks: '.$remarks;
       $mail->Subject = "Incident Report";
       $mail->Body = $message;
       $mail->isHTML(true);
       // $dept_head_email = $row2['dept_head_email'];
-      $mail->AddAddress('bumacodejhay@gmail.com');
-      $mail->AddCC('ejhaybumacod26@gmail.com');
-      $mail->Send();
-
-      echo json_encode(array("message"=>"Incident Report Cancelled", "type" => "success"));
-      exit;
+      $mail->AddAddress('bumacodejhay@gmail.com'); //Employee corporate email
+      $mail->AddCC('ejhaybumacod26@gmail.com'); //HR email
+      if(!$mail->Send()) {
+        echo json_encode(array("message"=>"Incident Report Cancelled <br /> Email not sent", "type" => "success"));
+        exit;
+      } else {
+        echo json_encode(array("message"=>"Incident Report Cancelled <br /> Email sent", "type" => "success"));
+        exit;
+      }
     }else {
       echo json_encode(array("message"=>"Sorry, remarks is required.", "type" => "error"));
       exit;

@@ -31,13 +31,13 @@ require_once "header.php";
   <div id="div_memo" class="div_content">
     <select class="form-control" id="status">
       <option value="active" selected=""> Active </option>
-      <option value="acknowledge"> Acknowledged </option>
+      <option value="acknowledged"> Acknowledged </option>
       <option value="all"> All </option>
     </select><br />
     <form id="form" enctype="multipart/form-data">
       <div>
-        <button type="button" id="addMemoBtn" class="btn btn-primary mb-4">Add Individual Memo</button>
-        <button type="button" id="cancelMemoBtn" class="btn btn-warning mb-4" style="display: none; ">Cancel</button>
+        <button type="button" id="addMemoBtn" class="btn btn-sm btn-primary mb-4">Add Individual Memo</button>
+        <button type="button" id="cancelMemoBtn" class="btn btn-sm btn-warning mb-4" style="display: none; ">Cancel</button>
       </div>
 
       <table class="table-condensed grid12_master" id="memo_table">
@@ -63,6 +63,27 @@ require_once "header.php";
         </tr>
         <tr>
           <td>
+            <b>Notice to Explain: </b>
+            <select class="form-control" name="notice_to_explain" id="notice_to_explain">
+              <option value="no" selected>No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Published Date: </b>
+            <input type="date" class="form-control" id="publish_date" name="publish_date" required>
+          </td>
+        </tr>
+        <tr class="date">
+          <td>
+            <b>End Date: </b>
+            <input type="date" class="form-control" id="end_date" name="end_date">
+          </td>
+        </tr>
+        <tr>
+          <td>
             <b>Remarks: </b>
             <textarea name="remarks" id="remarks" cols="20" rows="3" class="form-control" placeholder="Remarks"></textarea>
           </td>
@@ -80,11 +101,12 @@ require_once "header.php";
             <thead>
               <th>Employee no</th>
               <th>Employee Name</th>
-              <th>Memo Name</th>
+              <th style="max-width: 10rem">Memo Name</th>
               <th>Date</th>
-              <th>Remarks</th>
+              <th style="max-width: 12rem">Remarks</th>
+              <th>NTE</th>
               <th>Status</th>
-              <th width="20em" class="text-center">Action</th>
+              <th class="text-center" style="max-width: 10rem">Action</th>
             </thead>
             <tbody>
               
@@ -95,7 +117,7 @@ require_once "header.php";
   <div id="div_inter_office_memo" class="div_content">
     <select class="form-control" id="status2">
       <option value="active" selected=""> Active </option>
-      <option value="acknowledge"> Acknowledged </option>
+      <option value="acknowledged"> Acknowledged </option>
       <option value="all"> All </option>
     </select><br />
     <form id="form2" name="form2" enctype="multipart/form-data">
@@ -120,8 +142,8 @@ require_once "header.php";
         </table>   -->
 
         <div>
-          <button type="button" id="addMemoBtnDepartment" class="btn btn-primary mb-4">Add Inter Office Memo</button>
-          <button type="button" id="cancelMemoBtnDepartment" class="btn btn-warning mb-4" style="display: none; ">Cancel</button>
+          <button type="button" id="addMemoBtnDepartment" class="btn btn-sm btn-primary mb-4">Add Inter Office Memo</button>
+          <button type="button" id="cancelMemoBtnDepartment" class="btn btn-sm btn-warning mb-4" style="display: none; ">Cancel</button>
         </div>
         
         <table class="table-condensed grid12_master" id="memo_table_department">
@@ -146,6 +168,15 @@ require_once "header.php";
             </td>
           </tr>
           <tr>
+          <td>
+            <b>Notice to Explain: </b>
+            <select class="form-control" name="notice_to_explain" id="notice_to_explain">
+              <option value="no" selected>No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </td>
+        </tr>
+          <tr>
             <td>
               <b>Remarks: </b>
               <textarea name="remarks" id="remarks" cols="20" rows="3" class="form-control" placeholder="Remarks"></textarea>
@@ -162,11 +193,12 @@ require_once "header.php";
     <table class="table table-striped w-100" id="tbl_inter_office_memo">
             <thead>
               <th>Department Name</th>
-              <th>Memo Name</th>
+              <th style="max-width: 10rem">Memo Name</th>
               <th>Date</th>
-              <th>Remarks</th>
+              <th style="max-width: 12rem">Remarks</th>
+              <th>NTE</th>
               <th>Status</th>
-              <th width="20em" class="text-center">Action</th>
+              <th class="text-center" style="max-width: 10rem">Action</th>
             </thead>
             <tbody>
               

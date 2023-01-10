@@ -6,9 +6,9 @@ class crud extends db_conn_mysql
 
   function loadnotifleave(){
 
-      $employeenum = $_GET['employeenum'];
+      $currentUser = $_GET['currentUser'];
       $conn = $this->connect_mysql();
-      $query = $conn->prepare("SELECT * FROM leave_application WHERE status !='Pending' AND employeeno='$employeenum' ORDER BY  last_update DESC,last_update_time DESC");
+      $query = $conn->prepare("SELECT * FROM leave_application WHERE status !='Pending' AND employeeno='$currentUser' ORDER BY  last_update DESC,last_update_time DESC");
       $query->execute();
       $row = $query->fetchAll();
       $return = array();
@@ -43,69 +43,128 @@ class crud extends db_conn_mysql
 
   }
 
-  function readpayslip(){
+  function loadNotifOmnibus(){
+    $currentUser = $_GET['currentUser'];
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss !='Pending' AND employeeno='$currentUser' ORDER BY datee");
+    $query->execute();
+    $row = $query->fetchAll();
+    $return = array();
+      foreach ($row as $x){
 
-      $employeeno = $_POST['employeeno'];
+          foreach ($x as $key => $input_arr) {
+          $x[$key] = addslashes($input_arr);
 
+          }
+
+          $data = array();
+          $status = $x['statuss'];
+          $data['date_time'] = '<p style="font-size:12px">'.date('M d, Y',strtotime($x['datee'])).'</p>';
+
+          if($status=="Disapproved"){
+            $data['trail'] = '<p style="font-size:12px">Your omnibus request with OR/SI number: <b>'.$x['description'].'</b> this day of <b>'.date('M d, Y',strtotime($x['datee'])).' was '.$x['statuss'].' by Administrator <br>Total credits deducted: <b>0</b></p>';
+          }else{
+            $data['trail'] = '<p style="font-size:12px">Your omnibus request with OR/SI number: <b>'.$x['description'].'</b> this day of <b>'.date('M d, Y',strtotime($x['datee'])).' was '.$x['statuss'].' by Administrator <br>Total credits deducted: <b>' .$x['amount']. '</b></p>';
+          }
+          
+          $return[] = $data;
+      }
+    
+    echo json_encode(array('data'=>$return));
+  }
+
+  function loadNotifOvertime(){
+
+      $currentUser = $_GET['currentUser'];
       $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
+      $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss !='Pending' AND employeeno='$currentUser' ORDER BY date_filed");
       $query->execute();
+      $row = $query->fetchAll();
+      $return = array();
+        foreach ($row as $x){
+
+            foreach ($x as $key => $input_arr) {
+            $x[$key] = addslashes($input_arr);
+
+            }
+
+            $data = array();
+            
+            $data['date_time'] = '<p style="font-size:12px">'.date('M d, Y',strtotime($x['date_filed'])).'</p>';
+
+            $data['trail'] = '<p style="font-size:12px">Your overtime request this day of <b>'.date('M d, Y',strtotime($x['date_filed'])).' was '.$x['statuss'].' by Administrator</p>';
+            
+            $return[] = $data;
+        }
+      
+      echo json_encode(array('data'=>$return));
+
 
   }
 
-  function count_leaveapp(){
+  // function readpayslip(){
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+  //     $employeeno = $_POST['employeeno'];
 
-    $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
-    $sq->execute();
-    $rw = $sq->fetch();
+  //     $conn = $this->connect_mysql();
+  //     $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
+  //     $query->execute();
 
-    $dept = $rw['department'];
+  // }
 
-    $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
-    $query->execute();
+  // function count_leaveapp(){
 
-    $count = $query->rowCount();
+  //   $employeenoo = $_POST['employeenoo'];
+  //   $conn = $this->connect_mysql();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
+  //   $sq->execute();
+  //   $rw = $sq->fetch();
 
-  function count_otapp(){
+  //   $dept = $rw['department'];
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
-    $query->execute();
+  //   $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+  //                            LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_payslip(){
+  // function count_otapp(){
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
+  //   $query->execute();
 
-    $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
-    $query->execute();
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_reimbursement(){
+  // function count_payslip(){
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
-    $query->execute();
+  //   $employeenoo = $_POST['employeenoo'];
+  //   $conn = $this->connect_mysql();
 
-    $count = $query->rowCount();
+  //   $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
+  //   $query->execute();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
+
+  // function count_reimbursement(){
+
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
+  //   $query->execute();
+
+  //   $count = $query->rowCount();
+
+  //   echo json_encode(array("count"=>$count));
+  // }
 
 
 }
@@ -115,25 +174,11 @@ $x = new crud();
 if(isset($_GET['loadnotifleave'])){
   $x->loadnotifleave();
 }
-
-if(isset($_GET['readpayslip'])){
-  $x->readpayslip();
+if(isset($_GET['loadNotifOmnibus'])){
+  $x->loadNotifOmnibus();
 }
-
-if(isset($_GET['count_leaveapp'])){
-  $x->count_leaveapp();
-}
-
-if(isset($_GET['count_otapp'])){
-  $x->count_otapp();
-}
-
-if(isset($_GET['count_payslip'])){
-  $x->count_payslip();
-}
-
-if(isset($_GET['count_reimbursement'])){
-  $x->count_reimbursement();
+if(isset($_GET['loadNotifOvertime'])){
+  $x->loadNotifOvertime();
 }
 
 ?>

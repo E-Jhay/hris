@@ -38,7 +38,7 @@ $count = $leaves->countLeaves($empno);
 
   <div id="div_otlist" class="div_content">
       <label>Status:</label>
-      <select id="filter_status" class="form-control" onchange="filter_stat()">
+      <select id="filter_status" class="form-control">
         <option value="All">All</option>
         <option value="Pending" selected="">Pending</option>
         <option value="Approved">Approved</option>
@@ -56,7 +56,7 @@ $count = $leaves->countLeaves($empno);
           <th>OT Date To</th>
           <th>OT Date From</th>
           <th>Status</th>
-          <th  class="text-center" width="100px">Action</th>
+          <th class="text-center">Action</th>
         </thead>
         <tbody>
                 
@@ -109,9 +109,14 @@ $count = $leaves->countLeaves($empno);
       </div>
       <div class="modal-body">
           <input type="hidden" id="ot_id" name="">
+          <input type="hidden" id="ot_employeeno" name="">
           <div class="form-group">
             <label for="exampleInputEmail1">Employee Name:</label>
             <span class="form-control" id="ot_emp_name"></span>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Status:</label>
+            <span class="form-control" id="ot_status"></span>
           </div>
           
           <div class="form-group">
@@ -157,7 +162,7 @@ $count = $leaves->countLeaves($empno);
 
 
           
-          <?php if ($usertype=="admin" && $approver=="yes"): ?> 
+          <?php if ($approver=="yes"): ?> 
 
           <center>
             <button class="btn btn-success btn-sm" id="btnapprove" onclick="approve()">Approve</button>

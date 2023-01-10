@@ -45,7 +45,7 @@ class crud extends db_conn_mysql
 
           }
           $data = array();
-          $data['action'] = '<center><button title="View more" onclick="editemp(\''.$x['employee_no'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
+          $data['action'] = '<center class="d-flex justify-content-around"><button title="View more" onclick="editemp(\''.$x['employee_no'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
           <button title="Delete" onclick="deleteemp('.$x['idd'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></center>';
           // $imge = utf8_decode($x['imagepic']);
           // $picture = "personal_picture/".$imge;

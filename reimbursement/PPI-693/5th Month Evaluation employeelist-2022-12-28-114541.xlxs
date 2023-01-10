@@ -1,0 +1,75 @@
+<table align="center" width="100%">
+			
+			<tr>
+				<td style="width:100%"><h4><b>EMPLOYEE LIST</h4></b></td>
+			</tr>
+		</table>			
+		
+			<br><br><br><table cellpadding="3" width="100%">
+					<tr>
+						<td><p><b>Date/Time Generated:</b> <span>December 20, 2022 </span> </p></td>
+						
+					</tr>
+				  </table>
+		
+
+				  
+		 <table cellpadding="1" width="100%">
+
+		 	<br>
+		 	<br>
+		 	
+			<tr align="center" style="font-size:10px">
+				<th style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;border-top-width:0px;"><b>EMPLOYEE NO</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>LAST NAME</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>FIRST NAME</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>MIDDLE NAME</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>DATE OF BIRTH</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>AGE</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>GENDER</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>JOB TITLE</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>JOB CATEGORY</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>EMPLOYMENT STATUS</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>DEPARTMENT</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>COMPANY</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>DATE HIRED</b></th>
+				
+			
+			</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-739</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Love</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Aiko</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Linus Richards</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1993-05-05</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">29</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Female</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Inventory Analyst</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Supervisory</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Regular</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Human Resources and Admin</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">INMED CORPORATION</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">2022-06-20</td>
+							
+							
+																																			
+				</tr><tr align="center" style="font-size:10px">
+
+							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">PPI-738</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Munoz</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Jameson</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Jermaine Marquez</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">1989-03-18</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">33</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Male</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Unspecified</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Supervisory</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Regular</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">Human Resources and Admin</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">PANAMED PHILIPPINES, INC</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">2022-06-23</td>
+							
+							
+																																			
+				</tr></table><br><br>
+ <p><b>Total records:</b> <span>2</span> </p>

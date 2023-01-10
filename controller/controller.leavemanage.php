@@ -348,9 +348,9 @@ class crud extends db_conn_mysql
             $data['date_hired'] =  date('F d, Y', strtotime($x['date_hired']));
   
            $data['action'] = '
-           <button onclick="addempleave('.$x['id'].',\''.$x['employeeno'].'\',\''.$fullname.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-plus-circle"></i> Add</button>
+           <center class="d-flex justify-content-around"><button onclick="addempleave('.$x['id'].',\''.$x['employeeno'].'\',\''.$fullname.'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-plus-circle"></i> Add</button>
 
-           <button onclick="viewleave('.$x['id'].',\''.$x['employeeno'].'\',\''.$fullname.'\',\''.$x['job_category'].'\',\''.$x['employment_status'].'\',\''.$x['company'].'\',\''.$x['leave_balance'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-chevron-circle-up"></i> Open</button>';
+           <button onclick="viewleave('.$x['id'].',\''.$x['employeeno'].'\',\''.$fullname.'\',\''.$x['job_category'].'\',\''.$x['employment_status'].'\',\''.$x['company'].'\',\''.$x['leave_balance'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-chevron-circle-up"></i> Open</button></center>';
 
         $return[] = $data;
       }
@@ -404,8 +404,8 @@ class crud extends db_conn_mysql
           $data['leave_stat'] = $x['leave_stat'];
           // $data['points'] = $x['points'];
            $data['action'] = '
-           <button onclick="editleave_type('.$x['id'].',\''.$x['leave_type'].'\',\''.$x['leave_name'].'\',\''.$x['leave_stat'].'\',\''.$x['points'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Edit</button>
-           <button onclick="deleteleave_type('.$x['id'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>';
+           <center class="d-flex justify-content-around"><button onclick="editleave_type('.$x['id'].',\''.$x['leave_type'].'\',\''.$x['leave_name'].'\',\''.$x['leave_stat'].'\',\''.$x['points'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Edit</button>
+           <button onclick="deleteleave_type('.$x['id'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button></center>';
 
         $return[] = $data;
       }

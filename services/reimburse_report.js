@@ -143,13 +143,18 @@ function btnreports(){
 				$("#approved_btn").text('Approve')
 				$("#approved_btn").attr('disabled', false)
 			},
-			success:function(){
-				$.Toast("Successfully Approved", successToast);
-				$('#reimbursement_modal').modal('hide');
-				$('#tbl_reimburse_all').DataTable().destroy();
-				load_reimburse_all("Pending");
-				count_reimbursement();
-				$('#filter_reimbursement').val("Pending");
+			success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast)
+					$('#reimbursement_modal').modal('hide');
+					$('#tbl_reimburse_all').DataTable().destroy();
+					load_reimburse_all("Pending");
+					count_reimbursement();
+					$('#filter_reimbursement').val("Pending");
+				}
 			}
 		});
 	}
@@ -187,13 +192,18 @@ function btnreports(){
 				$("#approved_btn").text('Approve')
 				$("#approved_btn").attr('disabled', false)
 			},
-			success:function(){
-				$.Toast("Successfully Disapproved", successToast);
-				$('#reimbursement_modal').modal('hide');
-				$('#tbl_reimburse_all').DataTable().destroy();
-				load_reimburse_all("Pending");
-				count_reimbursement();
-				$('#filter_reimbursement').val("Pending");
+			success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast);
+					$('#reimbursement_modal').modal('hide');
+					$('#tbl_reimburse_all').DataTable().destroy();
+					load_reimburse_all("Pending");
+					count_reimbursement();
+					$('#filter_reimbursement').val("Pending");
+				}
 			}
 		});
 	}
@@ -228,13 +238,18 @@ function btnreports(){
 				$("#undo_btn").text('Undo')
 				$("#undo_btn").attr('disabled', false)
 			},
-			success:function(){
-				$.Toast("Successfully Cancelled", successToast);
-				$('#reimbursement_modal').modal('hide');
-				$('#tbl_reimburse_all').DataTable().destroy();
-				load_reimburse_all("Pending");
-				count_reimbursement();
-				$('#filter_reimbursement').val("Pending");
+			success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast);
+					$('#reimbursement_modal').modal('hide');
+					$('#tbl_reimburse_all').DataTable().destroy();
+					load_reimburse_all("Pending");
+					count_reimbursement();
+					$('#filter_reimbursement').val("Pending");
+				}
 			}
 		});
 	}
@@ -315,10 +330,8 @@ function btnreports(){
 		createdRow: function (row, data, index) {
 			if ($('td', row).eq(5)[0].innerText == 'Disapproved') {
 				$('td', row).eq(5).addClass('reject')
-				console.log($('td', row).eq(5)[0].innerText)
 			} else if($('td', row).eq(5)[0].innerText == 'Approved') {
 				$('td', row).eq(5).addClass('acknowledged')
-				console.log($('td', row).eq(5)[0].innerText)
 			}
 		},
               "aaSorting": [],

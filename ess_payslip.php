@@ -50,7 +50,7 @@ require_once "header.php";
 
 </div>
 
-<input type="hidden" id="employeenum" value="<?php echo $empno ?>" name="">
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 
 </body>

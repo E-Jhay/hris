@@ -48,10 +48,16 @@ foreach ($birthday as $x) {
 	  <h6 class="admin_tab" id="li_admin" onclick="goto('admin.php')"><i class="fas fa-md fa-user-shield"></i><span class="admin_tab_name">Admin</span></h6>
 	  <?php endif ?>
 	  <?php if ($pim=="tru"): ?>
-	  <h6 class="admin_tab" id="li_pim" onclick="goto('employee.php')"><i class="fas fa-md fa-user-lock"></i><span class="admin_tab_name">PIM</span></h6>
+	  <h6 class="admin_tab" id="li_pim" onclick="goto('employee.php')"><i class="fas fa-md fa-user-lock"></i><span class="admin_tab_name">
+		<?php if($usertype == 'admin'): ?>
+			HR
+		<?php else : ?>
+			Dept Head
+		<?php endif ?>
+	  </span></h6>
 	  <?php endif ?>
 	  <?php if ($ess=="tru"): ?>
-	  <h6 class="admin_tab" id="li_ess" onclick="goto('myinfo.php')"><i class="fas fa-lg fa-portrait"></i><span class="admin_tab_name">ESS</span></h6>
+	  <h6 class="admin_tab" id="li_ess" onclick="goto('myinfo.php')"><i class="fas fa-lg fa-portrait"></i><span class="admin_tab_name">Employee</span></h6>
 	  <?php endif ?>
 	  <br><br>
 	  <h6 class="admin_tab" id="logout"><i class="fas fa-md fa-power-off"></i><span class="admin_tab_name">Logout</span></h6>

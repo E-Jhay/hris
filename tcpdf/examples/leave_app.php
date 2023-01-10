@@ -70,9 +70,11 @@ $pdf->SetFont('dejavusans', '', 9);
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>DATE FROM</b></th>
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>DATE TO</b></th>
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>LEAVE TYPE</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>APPLICATION TYPE</b></th>
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>LEAVE BALANCE</b></th>
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>CREDITS TO DEDUCT</b></th>
 				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>STATUS</b></th>
+				<th style="border-right-width:1px;border-bottom-width:0px;border-top-width:0px;" ><b>WITH / WITHOUT PAY</b></th>
 				
 			</tr>';
 	
@@ -93,11 +95,11 @@ $pdf->SetFont('dejavusans', '', 9);
 					        
 					        
 
-							$dateffrom = $x['date_from'];
-							$apptype = $x['application_type'];
-					        if($apptype=="Whole Day"){
-					          $dateffrom = $x['dateto'];
-					        }
+							// $dateffrom = $x['date_from'];
+							// $apptype = $x['application_type'];
+					        // if($apptype=="Whole Day"){
+					        //   $dateffrom = $x['dateto'];
+					        // }
 
 					        if($x['pay_leave']=="Without Pay"){
 					          $x['no_days'] = 0;
@@ -110,12 +112,14 @@ $pdf->SetFont('dejavusans', '', 9);
 	$html .= '<tr align="center" style="font-size:10px">
 
 							<td style="border-left-width:0px;border-right-width:1px;border-bottom-width:0px;">'.$x['firstname'].' '.$x['lastname'].'</td>
-							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['date_from'].'</td>
-							<td style="border-right-width:1px;border-bottom-width:0px;">'.$dateffrom.'</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['datefrom'].'</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['dateto'].'</td>
 							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['leave_type'].'</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['application_type'].'</td>
 							<td style="border-right-width:1px;border-bottom-width:0px;">'.$balanse.'</td>
 							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['no_days'].'</td>
 							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['status'].'</td>
+							<td style="border-right-width:1px;border-bottom-width:0px;">'.$x['pay_leave'].'</td>
 																																			
 						  </tr>';						  	
 						  }

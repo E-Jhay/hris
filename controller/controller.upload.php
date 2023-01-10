@@ -48,7 +48,7 @@ class crud extends db_conn_mysql
             $srow = $sqry->fetch();
             $employee_id = $srow['id'];
 
-            $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
+            $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employeeno='$employeeddown'");
             $sqry2->execute();
             $srow2 = $sqry2->fetch();
             $corp_email = $srow2 ? $srow2['corp_email'] : '';
@@ -86,23 +86,26 @@ class crud extends db_conn_mysql
             $mail->IsSMTP();
             $mail->SMTPDebug = 0;
             $mail->SMTPAuth = true;
-            $mail->SMTPSecure = 'ssl';
-            $mail->Host = "smtp.gmail.com";
-            $mail->Port = 465;
+            $mail->Host = "smtp.ipower.com";
             $mail->IsHTML(true);
-            $mail->Username = "pmcmailchimp@gmail.com";
-            $mail->Password = "qyegdvkzvbjihbou";
+            $mail->Username = "no-reply@panamed.com.ph";
+            $mail->Password = "Unimex123!!";
             $mail->SetFrom("no-reply@panamed.com.ph", "");
             
-            $message = 'Your payslip was already uploaded to your HRIS account.';
+            $message = 'Your payslip was already uploaded to your HRIS account. <br /> From: ' .$datefrom. ' <br /> To: ' .$dateto;
             $mail->Subject = "Payslip";
             $mail->Body = $message;
             $mail->isHTML(true);
             // $dept_head_email = $row2['dept_head_email'];
             $mail->AddAddress('bumacodejhay@gmail.com');
-            $mail->AddCC('ejhaybumacod26@gmail.com');
-            $mail->Send();
-            echo json_encode(array('type' => 'success', 'message' => 'Payslip uploaded successfully'));
+            $mail->AddCC($corp_email);
+            if(!$mail->Send()) {
+              echo json_encode(array('type' => 'success', 'message' => 'Payslip uploaded successfully <br /> Email not sent'));
+              exit;
+            } else {
+              echo json_encode(array('type' => 'success', 'message' => 'Payslip uploaded successfully <br /> Email sent'));
+              exit;
+            }
           }else {
             echo json_encode(array('type' => 'error', 'message' => 'There\'s an error uploading your file, tyr again.'));
             exit;
@@ -146,7 +149,7 @@ class crud extends db_conn_mysql
           }
 
           $data = array();
-          $data['action'] = '<center>
+          $data['action'] = '<center class="d-flex justify-content-around">
           <button title="View file" onclick="dl_payslip(\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View file</button>
           <button title="Delete" onclick="delete_payslip('.$x['id'].',\''.$x['filename'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
           

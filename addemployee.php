@@ -190,7 +190,7 @@ require_once "header.php";
 				</td>
 			</tr>
 			<tr>
-				<td><h4>Contract Information</h4></td>
+				<td><h4>Employment Information</h4></td>
 			</tr>
 			<tr>
 				<td>
@@ -198,7 +198,7 @@ require_once "header.php";
 					<input type="date" class="form-control" id="date_hired" name="date_hired" required>
 				</td>
 				<td>
-					<b>End of contract: </b>
+					<b>End of probationary: </b>
 					<input type="date" class="form-control" id="end_of_contract" name="end_of_contract">
 				</td>
 				<td>
@@ -229,7 +229,7 @@ require_once "header.php";
 					<input type="text" class="form-control" id="hdmf" name="hdmf" placeholder="0000-0000-0000" maxlength="14">
 				</td>
 				<td>
-					<b>ATM#: </b>
+					<b>Account#: </b>
 					<input type="text" class="form-control" id="atm" name="atm" placeholder="ATM Number">
 				</td>
 				<td>

@@ -7,16 +7,23 @@ $(document).ready(function(){
     $('.drawer').on('click',function(){
       $('.navnavnav').slideToggle();
     });
-
-     var notif_number = $('#notif_number').html();
-    if(notif_number > 0){
-      $('#notif_number').show();
-    }else{
-      $('#notif_number').hide();
-    }
     $('#div_inter_office_memo').hide();
 
     $('#action').val('employee')
+
+    load_memo('active', 'active')
+      $('#status').on('change', () => {
+        $('#tbl_inter_office_memo').DataTable().destroy();
+        $('#tbl_memo').DataTable().destroy();
+        load_memo($('#status').val(), 'active')
+      })
+
+      
+      $('#status2').on('change', () => {
+        $('#tbl_inter_office_memo').DataTable().destroy();
+        $('#tbl_memo').DataTable().destroy();
+        load_memo('active', $('#status2').val())
+      })
 
 	});
 
@@ -42,10 +49,15 @@ $(document).ready(function(){
   }
 
 
-  function load_memo(){
-      var employeeno = $('#employeeno').val();
+  function load_memo(status, status2){
+      var employeeno = $('#currentUser').val();
       var department = $('#department').val();
       $('#tbl_memo').DataTable({  
+              createdRow: function (row, data, index) {
+                if($('td', row).eq(5)[0].innerText == 'Acknowledged') {
+                  $('td', row).eq(5).addClass('acknowledged')
+                }
+              },
               "aaSorting": [],
               "bSearching": true,
               "bFilter": true,
@@ -53,19 +65,25 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
-              "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno + "&department=" + department + "&memo=employee",
+              "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno + "&department=" + department + "&memo=employee&status=" + status,
               "columns" : [
                     
                     { "data" : "employeeno"},
                     { "data" : "memo"},
                     { "data" : "date"},
                     { "data" : "remarks"},
+                    { "data" : "notice_to_explain"},
                     { "data" : "status"},
                     { "data" : "action"}
 
                 ],
          });
       $('#tbl_inter_office_memo').DataTable({  
+              createdRow: function (row, data, index) {
+                if($('td', row).eq(5)[0].innerText == 'Acknowledged') {
+                  $('td', row).eq(5).addClass('acknowledged')
+                }
+              },
               "aaSorting": [],
               "bSearching": true,
               "bFilter": true,
@@ -73,148 +91,58 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
-              "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno + "&department=" + department + "&memo=department",
+              "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno + "&department=" + department + "&memo=department&status=" + status2,
               "columns" : [
                     
                 { "data" : "department"},
                 { "data" : "memo"},
                 { "data" : "date"},
                 { "data" : "remarks"},
+                { "data" : "notice_to_explain"},
                 { "data" : "status"},
                 { "data" : "action"}
 
                 ],
          });
   }
-  load_memo();
+  // load_memo('active', 'active');
   
 
   function backmodule(){
     window.location.href="module.php";
   }
 
-  function goto(linkk){
+  // function goto(linkk){
 
-  if(linkk=="notification.php"){
-    var employeeno = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.essmemo.php?readleave",
-      method:"POST",
-      data:{
-        employeeno:employeeno
-      },success:function(){
-        window.location.href=linkk;
-      }
-    });
-  }else if(linkk=="ess_payslip.php"){
+  // if(linkk=="notification.php"){
+  //   var employeeno = $('#employeeno').val();
+  //   $.ajax({
+  //     url:"controller/controller.essmemo.php?readleave",
+  //     method:"POST",
+  //     data:{
+  //       employeeno:employeeno
+  //     },success:function(){
+  //       window.location.href=linkk;
+  //     }
+  //   });
+  // }else if(linkk=="ess_payslip.php"){
 
-    var employeeno = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.essmemo.php?readpayslip",
-      method:"POST",
-      data:{
-        employeeno:employeeno
-      },success:function(){
-        window.location.href=linkk;
-      }
-    });
+  //   var employeeno = $('#employeeno').val();
+  //   $.ajax({
+  //     url:"controller/controller.essmemo.php?readpayslip",
+  //     method:"POST",
+  //     data:{
+  //       employeeno:employeeno
+  //     },success:function(){
+  //       window.location.href=linkk;
+  //     }
+  //   });
 
-  }else{
-    window.location.href=linkk;
-  }
+  // }else{
+  //   window.location.href=linkk;
+  // }
 
-  }
-
-  function count_leaveapp(){
-
-    var employeenoo = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.essmemo.php?count_leaveapp",
-      method:"POST",
-      data:{
-        employeenoo:employeenoo
-      },success:function(data){
-        var b = $.parseJSON(data);
-        
-      if(b.count > 0){
-        $('#leave_app_number').show();
-        $('#leave_app_number').html(b.count);
-      }else{
-        $('#leave_app_number').hide();
-      }
-
-      }
-    });
-  }
-  count_leaveapp();
-
-  function count_otapp(){
-
-    var employeenoo = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.essmemo.php?count_otapp",
-      method:"POST",
-      data:{
-        employeenoo:employeenoo
-      },success:function(data){
-        var b = $.parseJSON(data);
-        
-      if(b.count > 0){
-        $('#ot_app_number').show();
-        $('#ot_app_number').html(b.count);
-      }else{
-        $('#ot_app_number').hide();
-      }
-
-      }
-    });
-  }
-  count_otapp();
-
-  function count_payslip(){
-
-    var employeenoo = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.essmemo.php?count_payslip",
-      method:"POST",
-      data:{
-        employeenoo:employeenoo
-      },success:function(data){
-        var b = $.parseJSON(data);
-        
-      if(b.count > 0){
-        $('#payslip_number').show();
-        $('#payslip_number').html(b.count);
-      }else{
-        $('#payslip_number').hide();
-      }
-
-      }
-    });
-  }
-  count_payslip();
-
-  function count_reimbursement(){
-
-    var employeenoo = $('#employeeno').val();
-    $.ajax({
-      url:"controller/controller.essmemo.php?count_reimbursement",
-      method:"POST",
-      data:{
-        employeenoo:employeenoo
-      },success:function(data){
-        var b = $.parseJSON(data);
-      if(b.count > 0){
-        $('#reim_app_number').show();
-        $('#reim_app_number').html(b.count);
-      }else{
-        $('#reim_app_number').hide();
-      }
-
-      }
-    });
-  }
-  count_reimbursement();
+  // }
 
   function btnPersonalMemo(){
     $('#div_memo').show();
@@ -262,7 +190,7 @@ $('#acknowledge_form').on('submit', (e) => {
   const form_data = new FormData();
   const file = $("#file").prop("files")[0];
   const memo_id = $("#memo_id").val();
-  const employeeno = $("#employeeno").val();
+  const employeeno = $("#currentUser").val();
   const department = $("#department").val();
   const explanation = $("#explanation").val();
   const action = $("#action").val();
@@ -293,9 +221,10 @@ $('#acknowledge_form').on('submit', (e) => {
         $.Toast(b.message, errorToast);
       } else {
         $.Toast(b.message, successToast);
-        setTimeout(() => {	
-          window.location.href="ess_memo.php";
-        }, 1000)
+        $('#acknowledge_modal').modal('hide');
+	      $('#tbl_memo').DataTable().destroy();
+	      $('#tbl_inter_office_memo').DataTable().destroy();
+        load_memo()
       }
     }
   });

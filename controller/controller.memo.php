@@ -4,6 +4,12 @@ include 'controller.db.php';
 class crud extends db_conn_mysql
 {
 
+  function acknowledgeMemo() {
+    $conn=$this->connect_mysql();
+    $query = $conn->prepare("UPDATE tbl_memo SET status = 'acknowledged' WHERE end_date > DATE(NOW()) AND status = 'active' AND notice_to_explain = 'no'");
+    $query->execute();
+  }
+
   function employeelist(){
 
       $conn=$this->connect_mysql();
@@ -73,7 +79,7 @@ class crud extends db_conn_mysql
           $explanationText = 'Unavailable';
         }
         $data = array();
-        $data['action'] = '<div class="text-center">
+        $data['action'] = '<div class="text-center d-flex justify-content-around">
         <button title="View Explanation" style="background-color: green; color: white" onclick="viewExplanation(\''.$x['explanation'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm" '.$explanationBtn.'><i class="fas fa-sm fa-eye"></i>  '.$explanationText.'</button>
         <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
         <button title="Delete" onclick="delete_memo('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></div>';
@@ -81,6 +87,7 @@ class crud extends db_conn_mysql
         $data['employeeno'] = $x['employee_no'];
         $data['name'] = $x['fullname'];
         $data['memo'] = $x['memo_name'];
+        $data['notice_to_explain'] = ucfirst($x['notice_to_explain']);
         $data['status'] = ucfirst($x['status']);
         $data['remarks'] = strlen($x['remarks']) > 20 ? substr($x['remarks'], 0, 20)."..." : $x['remarks'];
         $data['date'] = date('F d, Y',strtotime($x['datee']));
@@ -91,9 +98,9 @@ class crud extends db_conn_mysql
       echo json_encode(array('data'=>$return));
     } else if ($memo == 'department') {
       if($status == 'all'){
-        $query = $conn->prepare("SELECT a.*, b.department FROM tbl_memo a LEFT JOIN department b ON a.department = b.department WHERE a.department != '' ORDER BY a.datee DESC");
+        $query = $conn->prepare("SELECT * FROM tbl_memo WHERE department != '' ORDER BY datee DESC");
       } else {
-        $query = $conn->prepare("SELECT a.*, b.department FROM tbl_memo a LEFT JOIN department b ON a.department = b.department WHERE a.department != '' AND a.status = '$status' ORDER BY a.datee DESC");
+        $query = $conn->prepare("SELECT * FROM tbl_memo WHERE department != '' AND status = '$status' ORDER BY datee DESC");
       }
         $query->execute();
         $row = $query->fetchAll();
@@ -112,13 +119,14 @@ class crud extends db_conn_mysql
             $explanationText = 'Unavailable';
           }
           $data = array();
-          $data['action'] = '<div class="text-center">
+          $data['action'] = '<div class="text-center d-flex justify-content-around">
           <button title="View Explanation" style="background-color: green; color: white" onclick="viewExplanation(\''.$x['explanation'].'\',\''.$x['department'].'\')" class="btn btn-sm" '.$explanationBtn.'><i class="fas fa-sm fa-eye"></i>  '.$explanationText.'</button>
           <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['department'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
           <button title="Delete" onclick="delete_memo('.$x['id'].',\''.$x['file_name'].'\',\''.$x['department'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></div>';
 
           $data['department'] = $x['department'];
           $data['memo'] = $x['memo_name'];
+          $data['notice_to_explain'] = ucfirst($x['notice_to_explain']);
           $data['status'] = ucfirst($x['status']);
           $data['remarks'] = strlen($x['remarks']) > 20 ? substr($x['remarks'], 0, 20)."..." : $x['remarks'];
           $data['date'] = date('F d, Y',strtotime($x['datee']));
@@ -138,6 +146,9 @@ class crud extends db_conn_mysql
       $departmentList = $_POST['departmentList'];
       $memoname = $_POST['memoname'];
       $remarks = $_POST['remarks'];
+      $notice_to_explain = $_POST['notice_to_explain'];
+      $publish_date = $_POST['publish_date'];
+      $end_date = $_POST['end_date'];
       $datenow = date('Y-m-d');
       // Where the file is going to be stored
       if($employeeddown != '' || $employeeddown != NULL){
@@ -163,32 +174,26 @@ class crud extends db_conn_mysql
             if(!is_dir("../memo/".$employeeddown)){
               mkdir("../memo/".$employeeddown);
             }
+            $auditaction = "Added new memo for ".$employeeddown;
           } else {
             if(!is_dir("../memo/".$departmentList)){
               mkdir("../memo/".$departmentList);
             }
+            $auditaction = "Added new memo for ".$departmentList. "department.";
           }
 
           if(move_uploaded_file($temp_name,$path_filename_ext)){
             $conn=$this->connect_mysql();
-            $sql = $conn->prepare("INSERT INTO tbl_memo SET employee_no='$employeeddown', file_name='$attachfile', datee='$datenow', status='active', memo_name='$memoname', department='$departmentList', remarks='$remarks'");
+            $sql = $conn->prepare("INSERT INTO tbl_memo SET employee_no='$employeeddown', file_name='$attachfile', datee='$datenow', status='active', memo_name='$memoname', department='$departmentList', remarks='$remarks', notice_to_explain = '$notice_to_explain', publish_date = '$publish_date', end_date = '$end_date'");
             $sql->execute();
   
-            if($employeeddown != '' || $employeeddown != NULL){
-              $sqry = $conn->prepare("SELECT id FROM tbl_employee WHERE employeeno='$employeeddown'");
-              $sqry->execute();
-              $srow = $sqry->fetch();
-              $employee_id = $srow['id'];
-              $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
+            if($employeeddown != '' && $employeeddown != NULL){
+              $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employeeno='$employeeddown'");
               $sqry2->execute();
               $srow2 = $sqry2->fetch();
               $emailToSend = $srow2 ? $srow2['corp_email'] : '';
             }else {
-              $sqry = $conn->prepare("SELECT id FROM tbl_employee WHERE department='$departmentList' ORDER BY id DESC LIMIT 1");
-              $sqry->execute();
-              $srow = $sqry->fetch();
-              $employee_id = $srow['id'];
-              $sqry2 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$employee_id'");
+              $sqry2 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE employeeno='$employeeddown'");
               $sqry2->execute();
               $srow2 = $sqry2->fetch();
               $emailToSend = $srow2 ? $srow2['dept_head_email'] : '';
@@ -203,32 +208,34 @@ class crud extends db_conn_mysql
             $mail->IsSMTP();
             $mail->SMTPDebug = 0;
             $mail->SMTPAuth = true;
-            $mail->SMTPSecure = 'ssl';
-            $mail->Host = "smtp.gmail.com";
-            $mail->Port = 465;
+            $mail->Host = "smtp.ipower.com";
             $mail->IsHTML(true);
-            $mail->Username = "pmcmailchimp@gmail.com";
-            $mail->Password = "qyegdvkzvbjihbou";
+            $mail->Username = "no-reply@panamed.com.ph";
+            $mail->Password = "Unimex123!!";
             $mail->SetFrom("no-reply@panamed.com.ph", "");
             
             if($employeeddown != '' || $employeeddown != NULL){
               $message = "There's a memo uploaded by HR for you on your HRIS account";
             } else {
-              $message = "There's a memo uploaded for your department by HR on your HRIS account";
+              $message = "There's a memo uploaded for your department " .$departmentList. " by HR on your HRIS account";
             }
             $mail->Subject = "Memorandum";
             $mail->Body = $message;
             $mail->isHTML(true);
             // $dept_head_email = $row2['dept_head_email'];
-            $mail->AddAddress('bumacodejhay@gmail.com');
-            $mail->AddCC('ejhaybumacod26@gmail.com');
-            $mail->Send();
-            echo json_encode(array('type' => 'success', 'message' => 'Memorandum uploaded', 'email' => $emailToSend));
+            $mail->AddAddress('bumacodejhay@gmail.com'); 
+            $mail->AddCC($emailToSend); // Employee or department email
+            if(!$mail->Send()) {
+              echo json_encode(array('type' => 'success', 'message' => 'Memo uploded successfully <br /> Email not sent'));
+              exit;
+            } else {
+              echo json_encode(array('type' => 'success', 'message' => 'Memo uploded successfully <br /> Email sent'));
+              exit;
+            }
   
             session_start();
             $useraction = $_SESSION['fullname'];
             $dateaction = date('Y-m-d');
-            $auditaction = "Added new memo for ".$departmentList. "department.";
             $audittype = "ADD";
             $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
             $q->execute();
@@ -301,6 +308,7 @@ class crud extends db_conn_mysql
           }
        $option.='<option value="'.$row['department'].'">'.$row['department'].'</option>';
      }
+     $option .= '<option value="For Everyone">For Everyone</option>';
       echo $option;
   }
 
@@ -325,6 +333,9 @@ if(isset($_GET['uploadmemo'])){
 // }
 if(isset($_GET['departmentList'])){
   $x->departmentList();
+}
+if(isset($_GET['acknowledgeMemo'])){
+  $x->acknowledgeMemo();
 }
 
  ?>

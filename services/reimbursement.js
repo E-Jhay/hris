@@ -7,13 +7,6 @@ $(document).ready(function(){
 		   $('.navnavnav').slideToggle();
 		});
 
-		var notif_number = $('#notif_number').html();
-		if(notif_number > 0){
-			$('#notif_number').show();
-		}else{
-			$('#notif_number').hide();
-		}
-
 		var balance = $('#balance').val();
 		if(balance <=0){
 			$.Toast("Insufficient balance", errorToast);
@@ -156,178 +149,62 @@ function myFunction(item, index){
 	alert(item);
 }
 
-	
+function btnapply(){
+	$("#lapply").addClass("active");
+	$("#lmyapply").removeClass("active");
 
-  function goto(linkk){
-	
-	if(linkk=="notification.php"){
+	$("#div_apply").show();
+	$("#div_myapply").hide();
+}
 
-		var employeeno = $('#employeeno').val();
-		$.ajax({
-			url:"controller/controller.reimburse.php?readleave",
-			method:"POST",
-			data:{
-				employeeno:employeeno
-			},success:function(){
-				window.location.href=linkk;
-			}
-		});
+function btnmyapply(){
+	$("#lapply").removeClass("active");
+	$("#lmyapply").addClass("active");
 
-	}else if(linkk=="ess_payslip.php"){
-
-		var employeeno = $('#employeeno').val();
-		$.ajax({
-			url:"controller/controller.reimburse.php?readpayslip",
-			method:"POST",
-			data:{
-				employeeno:employeeno
-			},success:function(){
-				window.location.href=linkk;
-			}
-		});
-
-	}else{
-		window.location.href=linkk;
-	}
-
-  }
-
-	function btnapply(){
-			$("#lapply").addClass("active");
-			$("#lmyapply").removeClass("active");
-
-			$("#div_apply").show();
-			$("#div_myapply").hide();
-	}
-
-	function btnmyapply(){
-			$("#lapply").removeClass("active");
-			$("#lmyapply").addClass("active");
-
-			$("#div_apply").hide();
-			$("#div_myapply").show();
-	}
+	$("#div_apply").hide();
+	$("#div_myapply").show();
+}
 
 
-  function load_myreimburse(statuss){
+function load_myreimburse(statuss){
 	var type = "personal";
 	var employeeno = $('#employeeno').val();
-    $('#tbl_reimburse').DataTable({  
-              "aaSorting": [],
-              "bSearching": true,
-              "bFilter": true,
-              "bInfo": true,
-              "bPaginate": true,
-              "bLengthChange": true,
-              "pagination": true,
-              "ajax" : "controller/controller.reimburse.php?load_myreimburse&type="+type+"&employeeno="+employeeno+"&statuss="+statuss,
-              "columns" : [
-                    
-                    { "data" : "description"},
-                    { "data" : "nature"},
-                    { "data" : "amount"},
-                    { "data" : "datee"},
-                    { "data" : "statuss"},
-                    { "data" : "action"}
+	$('#tbl_reimburse').DataTable({  
+		createdRow: function (row, data, index) {
+			if ($('td', row).eq(4)[0].innerText == 'Disapproved') {
+				$('td', row).eq(4).addClass('reject')
+				// console.log($('td', row).eq(4)[0].innerText)
+			} else if($('td', row).eq(4)[0].innerText == 'Approved') {
+				$('td', row).eq(4).addClass('acknowledged')
+				// console.log($('td', row).eq(9)[0].innerText)
+			}
+		},
+		"aaSorting": [],
+		"bSearching": true,
+		"bFilter": true,
+		"bInfo": true,
+		"bPaginate": true,
+		"bLengthChange": true,
+		"pagination": true,
+		"ajax" : "controller/controller.reimburse.php?load_myreimburse&type="+type+"&employeeno="+employeeno+"&statuss="+statuss,
+		"columns" : [
+			
+			{ "data" : "description"},
+			{ "data" : "nature"},
+			{ "data" : "amount"},
+			{ "data" : "datee"},
+			{ "data" : "statuss"},
+			{ "data" : "action"}
 
-                ],
-         });
-  }
-  var statuss = "";
-  load_myreimburse(statuss);
+		],
+	});
+}
+load_myreimburse('Pending');
 
-//   function count_leaveapp(){
-
-//   	var employeenoo = $('#employeeno').val();
-//   	$.ajax({
-//   		url:"controller/controller.reimburse.php?count_leaveapp",
-//   		method:"POST",
-//   		data:{
-//   			employeenoo:employeenoo
-//   		},success:function(data){
-//   			var b = $.parseJSON(data);
-  			
-// 			if(b.count > 0){
-// 				$('#leave_app_number').show();
-// 				$('#leave_app_number').html(b.count);
-// 			}else{
-// 				$('#leave_app_number').hide();
-// 			}
-
-//   		}
-//   	});
-//   }
-//   count_leaveapp();
-
-//   function count_otapp(){
-
-//   	var employeenoo = $('#employeeno').val();
-//   	$.ajax({
-//   		url:"controller/controller.reimburse.php?count_otapp",
-//   		method:"POST",
-//   		data:{
-//   			employeenoo:employeenoo
-//   		},success:function(data){
-//   			var b = $.parseJSON(data);
-  			
-// 			if(b.count > 0){
-// 				$('#ot_app_number').show();
-// 				$('#ot_app_number').html(b.count);
-// 			}else{
-// 				$('#ot_app_number').hide();
-// 			}
-
-//   		}
-//   	});
-//   }
-//   count_otapp();
-
-
-//   function count_reimbursement(){
-
-//   	var employeenoo = $('#employeeno').val();
-//   	$.ajax({
-//   		url:"controller/controller.reimburse.php?count_reimbursement",
-//   		method:"POST",
-//   		data:{
-//   			employeenoo:employeenoo
-//   		},success:function(data){
-//   			var b = $.parseJSON(data);
-// 			if(b.count > 0){
-// 				$('#reim_app_number').show();
-// 				$('#reim_app_number').html(b.count);
-// 			}else{
-// 				$('#reim_app_number').hide();
-// 			}
-
-//   		}
-//   	});
-//   }
-//   count_reimbursement();
-
-
-//   function count_payslip(){
-
-//   	var employeenoo = $('#employeeno').val();
-//   	$.ajax({
-//   		url:"controller/controller.reimburse.php?count_payslip",
-//   		method:"POST",
-//   		data:{
-//   			employeenoo:employeenoo
-//   		},success:function(data){
-//   			var b = $.parseJSON(data);
-  			
-// 			if(b.count > 0){
-// 				$('#payslip_number').show();
-// 				$('#payslip_number').html(b.count);
-// 			}else{
-// 				$('#payslip_number').hide();
-// 			}
-
-//   		}
-//   	});
-//   }
-//   count_payslip();
+$('#filter_reimbursement').on('change', () => {
+	$('#tbl_reimburse').DataTable().destroy();
+	load_myreimburse($('#filter_reimbursement').val());
+})
 
 	// function submitReimbursement(e){
 	// 	e.preventDefault()

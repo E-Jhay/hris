@@ -23,9 +23,16 @@ $('#addIncidentBtn').on('click', () => {
     $('#incident_table').hide()
   })
 
-function load_employee_incident(){
+function load_employee_incident(status){
     const employee_number = $('#currentUser').val()
     $('#tbl_incident').DataTable({  
+        createdRow: function (row, data, index) {
+            if ($('td', row).eq(3)[0].innerText == 'Pending') {
+                $('td', row).eq(3).addClass('reject')
+            } else if($('td', row).eq(3)[0].innerText == 'Acknowledged') {
+                $('td', row).eq(3).addClass('acknowledged')
+            }
+        }, 
         "aaSorting": [],
         "bSearching": true,
         "bFilter": true,
@@ -33,7 +40,7 @@ function load_employee_incident(){
         "bPaginate": true,
         "bLengthChange": true,
         "pagination": true,
-        "ajax" : "controller/controller.incident.php?load_employee_incident&employee=" + employee_number,
+        "ajax" : "controller/controller.incident.php?load_employee_incident&employee=" + employee_number+"&status="+status,
         "columns" : [
             { "data" : "title"},
             { "data" : "description"},
@@ -45,102 +52,16 @@ function load_employee_incident(){
         ],
     });
 }
-load_employee_incident();
+load_employee_incident('pending');
 
-function count_leaveapp(){
+$('#filter_incident').on('change', () => {
+	$('#tbl_incident').DataTable().destroy();
+	load_employee_incident($('#filter_incident').val());
+})
 
-    var employeenoo = $('#currentUser').val();
-    $.ajax({
-        url:"controller/controller.info.php?count_leaveapp",
-        method:"POST",
-        data:{
-            employeenoo:employeenoo
-        },success:function(data){
-            var b = $.parseJSON(data);
-            
-          if(b.count > 0){
-              $('#leave_app_number').show();
-              $('#leave_app_number').html(b.count);
-          }else{
-              $('#leave_app_number').hide();
-          }
-
-        }
-    });
-}
-count_leaveapp();
-
-function count_otapp(){
-
-    var employeenoo = $('#currentUser').val();
-    $.ajax({
-        url:"controller/controller.info.php?count_otapp",
-        method:"POST",
-        data:{
-            employeenoo:employeenoo
-        },success:function(data){
-            var b = $.parseJSON(data);
-            
-          if(b.count > 0){
-              $('#ot_app_number').show();
-              $('#ot_app_number').html(b.count);
-          }else{
-              $('#ot_app_number').hide();
-          }
-
-        }
-    });
-}
-count_otapp();
-
-function count_payslip(){
-
-    var employeenoo = $('#currentUser').val();
-    $.ajax({
-        url:"controller/controller.info.php?count_payslip",
-        method:"POST",
-        data:{
-            employeenoo:employeenoo
-        },success:function(data){
-            var b = $.parseJSON(data);
-            
-          if(b.count > 0){
-              $('#payslip_number').show();
-              $('#payslip_number').html(b.count);
-          }else{
-              $('#payslip_number').hide();
-          }
-
-        }
-    });
-}
-count_payslip();
-
-function count_reimbursement(){
-
-    var employeenoo = $('#currentUser').val();
-    $.ajax({
-        url:"controller/controller.info.php?count_reimbursement",
-        method:"POST",
-        data:{
-            employeenoo:employeenoo
-        },success:function(data){
-            var b = $.parseJSON(data);
-          if(b.count > 0){
-              $('#reim_app_number').show();
-              $('#reim_app_number').html(b.count);
-          }else{
-              $('#reim_app_number').hide();
-          }
-
-        }
-    });
-}
-count_reimbursement();
-
-function goto(linkk){
-    window.location.href=linkk;
-}
+// function goto(linkk){
+//     window.location.href=linkk;
+// }
 
 function viewFile(file_name, employee_number) {
     const link = "incident_report/"+employee_number+"/"+file_name;
@@ -173,7 +94,7 @@ function save_callback(){
             $.Toast(b.message, successToast);
             $('#form').trigger("reset");
             $('#tbl_incident').DataTable().destroy();
-            load_employee_incident();
+            load_employee_incident('pending');
             $("#addIncidentBtn").show()
             $('#cancelIncidentBtn').hide();
             $('#incident_table').hide()
@@ -238,7 +159,7 @@ function update_callback() {
             $('#edit_modal').modal('hide')
             $('#incident_form').trigger("reset");
             $('#tbl_incident').DataTable().destroy();
-            load_employee_incident();
+            load_employee_incident('pending');
         }
     });
 }

@@ -29,7 +29,7 @@ require_once "header.php";
     <table class="table table-striped w-100" id="tbl_department">
             <thead>
               <th>Department</th>
-              <th>Action</th>
+              <th class="text-center" style="max-width: 15em">Action</th>
             </thead>
             <tbody>
               

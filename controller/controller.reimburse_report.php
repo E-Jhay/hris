@@ -88,8 +88,11 @@ class crud extends db_conn_mysql
 
         }
 
+      
+        $dateNow = date('Y-m-d H-i-s');
+
         
-      $squery = $conn->prepare("UPDATE tbl_reimbursement SET amount='$amount_modal',statuss='$statussProxy',remarks='$remarks' WHERE id='$rem_id'");
+      $squery = $conn->prepare("UPDATE tbl_reimbursement SET amount='$amount_modal',statuss='$statussProxy',remarks='$remarks', notif_status='notread', updated_at = '$dateNow' WHERE id='$rem_id'");
       $squery->execute();
 
 
@@ -101,7 +104,7 @@ class crud extends db_conn_mysql
       $lastname = utf8_decode($srow['lastname']);
       $department = $srow['department'];
 
-      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
+      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employeeno='$employeeno'");
       $sqry2->execute();
       $srow2 = $sqry2->fetch();
       $corp_email = $srow2 ? $srow2['corp_email'] : '';
@@ -136,22 +139,37 @@ class crud extends db_conn_mysql
           $mail->IsSMTP();
           $mail->SMTPDebug = 0;
           $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl';
-          $mail->Host = "smtp.gmail.com";
-          $mail->Port = 465;
+          $mail->Host = "smtp.ipower.com";
           $mail->IsHTML(true);
-          $mail->Username = "pmcmailchimp@gmail.com";
-          $mail->Password = "qyegdvkzvbjihbou";
+          $mail->Username = "no-reply@panamed.com.ph";
+          $mail->Password = "Unimex123!!";
           $mail->SetFrom("no-reply@panamed.com.ph", "");
+          session_start();
+          $currentLogIn = $_SESSION['fullname'];
+          if($statuss == 'Approved') {
+            $message = $currentLogIn. ' approved the omnibus reimbursement application of ' .$firstname. ' ' .$lastname;
+            $mail->Subject = "Omnibus Reimbursement Application";
+            $mail->Body = $message;
+            $mail->isHTML(true);
+            $mail->AddAddress($corp_email); //HR email
+            $mail->AddCC('bumacodejhay@gmail.com');
+            $mail->Send();
+          }
           
-          $message = 'Your request Omnibus reimbursement was '.$statuss.' by HR Assistant - Payroll<br><br>Amount: '.$amount_modal;
+          $message = 'Your request Omnibus reimbursement was '.$statuss.' by ' .$currentLogIn. '<br><br>Amount: '.$amount_modal;
           $mail->Subject = "Omnibus Application Status";
           $mail->Body = $message;
           $mail->isHTML(true);
           // $dept_head_email = $row2['dept_head_email'];
-          $mail->AddAddress('bumacodejhay@gmail.com');
-          $mail->AddCC('ejhaybumacod26@gmail.com');
-          $mail->Send();
+          $mail->AddAddress('bumacodejhay@gmail.com'); //Employee corporate email
+          $mail->AddCC($corp_email); //HR email
+          if(!$mail->Send()) {
+            echo json_encode(array('type' => 'success', 'message' => 'Reimbursement successfully ' .$statuss. ' <br /> Email not sent'));
+            exit;
+          } else {
+            echo json_encode(array('type' => 'success', 'message' => 'Reimbursement successfully ' .$statuss. ' <br /> Email sent'));
+            exit;
+          }
       
 
   }
@@ -197,7 +215,7 @@ class crud extends db_conn_mysql
 
           if($type=="all"){
 
-            $data['action'] = '<center>
+            $data['action'] = '<center class="d-flex justify-content-around">
             <button title="View details" onclick="view_file('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
             <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> View File</button>
             </center>';
@@ -206,7 +224,7 @@ class crud extends db_conn_mysql
 
             if($x['statuss']=="Pending"){
               
-            $data['action'] = '<center>
+            $data['action'] = '<center class="d-flex justify-content-around">
             <button title="View details" onclick="view_file_personal('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
             <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> View File</button>
             <button title="Delete" onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>
@@ -214,7 +232,7 @@ class crud extends db_conn_mysql
 
             }else{
 
-              $data['action'] = '<center>
+              $data['action'] = '<center class="d-flex justify-content-around">
               <button title="View details" onclick="view_file_personal('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button>
               <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> View File</button>
               <button title="Delete" disabled="" onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>

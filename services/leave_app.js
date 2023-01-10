@@ -285,8 +285,6 @@ $(document).ready(function(){
 						$('#date1').val(`${date} 01:00 PM`)
 						$('#date2').val(`${date} 05:PM PM`)
 					}
-					console.log($('#date1').val())
-					console.log($('#date2').val())
 				})
 				$('.assign_leaveampm').on('change',function(){
 					let date = $('#assign_halfdate').val() ? $('#assign_halfdate').val() : new Date().toJSON().slice(0, 10)
@@ -544,7 +542,7 @@ $(document).ready(function(){
 	}
 
 	function cancelapprove_callback(){
-		var emp_id = $('#emp_id').val();
+		var leave_id = $('#leave_id').val();
 		var remarks = $('#remarks').val();
 		var status = "Cancelled";	
 		var emp_number = $('#emp_number').html();
@@ -555,7 +553,7 @@ $(document).ready(function(){
 			url:"controller/controller.leave_app.php?approveleave",
 			method:"POST",
 			data:{
-				emp_id:emp_id,
+				leave_id:leave_id,
 				status:status,
 				remarks:remarks,
 				emp_number:emp_number,
@@ -571,13 +569,18 @@ $(document).ready(function(){
 				$("#btncancelapprove").text('Undo')
 				$("#btncancelapprove").attr('disabled', false)
 			},
-			success:function(){
-				$.Toast("Successfully Cancelled", successToast);
-				$('#tbl_leavelist').DataTable().destroy();
-				var stat = "Pending";
-				$('#filter_status').val(stat)
-				loadleavelist(stat);
-				$('#leavemodal').modal('hide')
+			success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast);
+					$('#tbl_leavelist').DataTable().destroy();
+					var stat = "Pending";
+					$('#filter_status').val(stat)
+					loadleavelist(stat);
+					$('#leavemodal').modal('hide')
+				}
 			}
 		});
 	}
@@ -587,7 +590,7 @@ $(document).ready(function(){
 	}
 
 	function approve_callback(){
-		var emp_id = $('#emp_id').val();
+		var leave_id = $('#leave_id').val();
 		var remarks = $('#remarks').val();
 		var status = "Approved";	
 		var emp_number = $('#emp_number').html();
@@ -598,7 +601,7 @@ $(document).ready(function(){
 			url:"controller/controller.leave_app.php?approveleave",
 			method:"POST",
 			data:{
-				emp_id:emp_id,
+				leave_id:leave_id,
 				status:status,
 				remarks:remarks,
 				emp_number:emp_number,
@@ -639,7 +642,7 @@ $(document).ready(function(){
   	}
 
   	function disapproved_callback(){
-  		var emp_id = $('#emp_id').val();
+  		var leave_id = $('#leave_id').val();
 	  	var remarks = $('#remarks').val();
 	  	var status = "Disapproved";
 	  	var emp_number = $('#emp_number').html();
@@ -650,7 +653,7 @@ $(document).ready(function(){
 			url:"controller/controller.leave_app.php?approveleave",
 			method:"POST",
 			data:{
-				emp_id:emp_id,
+				leave_id:leave_id,
 				status:status,
 				remarks:remarks,
 				emp_number:emp_number,
@@ -670,13 +673,18 @@ $(document).ready(function(){
 				$("#btnapprove").text('Approve')
 				$("#btnapprove").attr('disabled', false)
 			},
-			success:function(){
-				$.Toast("Successfully Disapproved", successToast);
-				$('#tbl_leavelist').DataTable().destroy();
-				var stat = "Pending";
-				$('#filter_status').val(stat)
-				loadleavelist(stat);
-				$('#leavemodal').modal('hide')
+			success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast)
+					$('#tbl_leavelist').DataTable().destroy();
+					var stat = "Pending";
+					$('#filter_status').val(stat)
+					loadleavelist(stat);
+					$('#leavemodal').modal('hide')
+				}
 			}
 		});
   	}
@@ -751,11 +759,30 @@ $(document).ready(function(){
 				data: form_data,
 				processData: false,
 				contentType: false,
+				beforeSend: function(){
+					$("#btndisapprove").text('Loading....')
+					$("#btndisapprove").attr('disabled', true)
+					$("#btnapprove").text('Loading....')
+					$("#btnapprove").attr('disabled', true)
+				},
+				complete: function(){
+					$("#btndisapprove").text('Disapprove')
+					$("#btndisapprove").attr('disabled', false)
+					$("#btnapprove").text('Approve')
+					$("#btnapprove").attr('disabled', false)
+				},
 				success:function(data){
-					$.Toast("Successfully Saved", successToast);
-					setTimeout(() => {	
-						window.location.href="leave_application.php";
-					}, 1000)
+					const b = parseJSON(data)
+					if(b.type === 'error')
+						$.Toast(b.message, errorToast)
+					else {
+						$.Toast(b.message, successToast)
+						$('#tbl_leavelist').DataTable().destroy();
+						var stat = "Pending";
+						$('#filter_status').val(stat)
+						loadleavelist(stat);
+						$('#leavemodal').modal('hide')
+					}
 				}
 			});
 
@@ -844,18 +871,18 @@ $(document).ready(function(){
 		const date2 = new Date(datefrom);
 		const diffTime = Math.abs(date2 - date1);
 		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-		let dayss = 1
-		if(application_type === 'Whole Day'){
-			dayss = diffDays+1;
-		}
+		// let dayss = 1
+		// if(application_type === 'Whole Day'){
+		// 	dayss = diffDays+1;
+		// }
 		
-		$('#emp_days').html(dayss);
+		$('#emp_days').html(no_days);
 
 		$('#fivepm').val(fivepm);
 		$('#sixpm').val(sixpm);
 
 		$('#emp_leavebalancetype').html(balanse);
-		$('#emp_id').val(id);
+		$('#leave_id').val(id);
 		$('#emp_number').html(employeeno);
 		$('#emp_fname').html(fname);
 		$('#emp_leavetype').html(leave_type);
@@ -984,12 +1011,10 @@ $(document).ready(function(){
 		var employeenoo = $('#employeeno').val();
 		$('#tbl_leavelist').DataTable({  
 			createdRow: function (row, data, index) {
-				if ($('td', row).eq(5)[0].innerText == 'Disapproved') {
-					$('td', row).eq(5).addClass('reject')
-					console.log($('td', row).eq(5)[0].innerText)
-				} else if($('td', row).eq(5)[0].innerText == 'Approved') {
-					$('td', row).eq(5).addClass('acknowledged')
-					console.log($('td', row).eq(5)[0].innerText)
+				if ($('td', row).eq(6)[0].innerText == 'Disapproved') {
+					$('td', row).eq(6).addClass('reject')
+				} else if($('td', row).eq(6)[0].innerText == 'Approved') {
+					$('td', row).eq(6).addClass('acknowledged')
 				}
 			},
 			"aaSorting": [],
@@ -1005,6 +1030,7 @@ $(document).ready(function(){
 				{ "data" : "employeeno"},
 				{ "data" : "date"},
 				{ "data" : "leavetype"},
+				{ "data" : "application_type"},
 				{ "data" : "leavebalance"},
 				{ "data" : "numberofdays"},
 				{ "data" : "active_status"},
@@ -1108,6 +1134,13 @@ $(document).ready(function(){
 	function loadleavelistreport(filter_type,filter_from,filter_to){
 		
 		$('#tbl_leavelist_report').DataTable({  
+				createdRow: function (row, data, index) {
+					if ($('td', row).eq(7)[0].innerText == 'Disapproved') {
+						$('td', row).eq(7).addClass('reject')
+					} else if($('td', row).eq(7)[0].innerText == 'Approved') {
+						$('td', row).eq(7).addClass('acknowledged')
+					}
+				},
 				"aaSorting": [],
 				"bSearching": true,
 				"bFilter": true,
@@ -1122,6 +1155,7 @@ $(document).ready(function(){
 					{ "data" : "date_from"},
 					{ "data" : "date_to"},
 					{ "data" : "leavetype"},
+					{ "data" : "application_type"},
 					{ "data" : "leavebalance"},
 					{ "data" : "numberofdays"},
 					{ "data" : "active_status"}

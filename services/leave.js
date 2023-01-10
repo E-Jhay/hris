@@ -7,13 +7,6 @@ $(document).ready(function(){
 		$('.drawer').on('click',function(){
 		   $('.navnavnav').slideToggle();
 		});
-
-		var notif_number = $('#notif_number').html();
-		if(notif_number > 0){
-			$('#notif_number').show();
-		}else{
-			$('#notif_number').hide();
-		}
 		var employeenoo = $('#employeeno').val();
 		$('#employeeddown').load('controller/controller.leave.php?employeelistadmin&employeenoo='+employeenoo);
 		$('#leave_type').load('controller/controller.leave.php?leave_typelist');
@@ -61,6 +54,17 @@ $(document).ready(function(){
 			});
 		});	
 
+		function getBusinessDatesCount(startDate, endDate) {
+			let count = 0;
+			const curDate = new Date(startDate.getTime());
+			while (curDate <= endDate) {
+				const dayOfWeek = curDate.getDay();
+				if(dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+				curDate.setDate(curDate.getDate() + 1);
+			}
+			return count;
+		}
+
 
 		$('#application_type').on('change',function(){
 			var application_type = $('#application_type').val();
@@ -84,22 +88,19 @@ $(document).ready(function(){
 					const datefrom = $('#datefrom').val();
 					const date1 = new Date(datefrom);
 					const date2 = new Date(dateto);
-					if(dateto) {
+					// console.log(getBusinessDatesCount(date1, date2))
+					const points_todeduct = $('#points_todeduct').val();
+					if(dateto){
 						$('#date1').val(date1.toISOString().substring(0, 10))
 						$('#date2').val(date2.toISOString().substring(0, 10))
-						const diffTime = Math.abs(date2 - date1);
-						const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-						const points_todeduct = $('#points_todeduct').val();
-						if(dateto){
-							if(datefrom > dateto){
-								$.Toast("Invalid date range", errorToast);
-								$('#dateto').val("0000-00-00");
-								$('#no_days').val("");
-							}else{
-								// var dayss = diffDays+1;
-								const deduct = (diffDays + 1) * points_todeduct;
-								$('#no_days').val(deduct);
-							}
+						if(datefrom > dateto){
+							$.Toast("Invalid date range", errorToast);
+							$('#dateto').val("0000-00-00");
+							$('#no_days').val("");
+						}else{
+							// var dayss = diffDays+1;
+							const deduct = getBusinessDatesCount(date1, date2) * points_todeduct;
+							$('#no_days').val(deduct);
 						}
 					}
 					
@@ -109,19 +110,34 @@ $(document).ready(function(){
 					const datefrom = $('#datefrom').val();
 					const date1 = new Date(datefrom);
 					const date2 = new Date(dateto);
+					// if(datefrom){
+					// 	$('#date1').val(date1.toISOString().substring(0, 10))
+					// 	$('#date2').val(date2.toISOString().substring(0, 10))
+					// 	const diffTime = Math.abs(date2 - date1);
+					// 	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+					// 	const points_todeduct = $('#points_todeduct').val();
+					// 	if(datefrom > dateto){
+					// 		$.Toast("Invalid date range", errorToast);
+					// 		$('#dateto').val("0000-00-00");
+					// 		$('#no_days').val("");
+					// 	}else{
+					// 		// var dayss = diffDays+1;
+					// 		const deduct = (diffDays + 1) * points_todeduct;
+					// 		$('#no_days').val(deduct);
+					// 	}
+					// }
+					
+					const points_todeduct = $('#points_todeduct').val();
 					if(datefrom){
 						$('#date1').val(date1.toISOString().substring(0, 10))
 						$('#date2').val(date2.toISOString().substring(0, 10))
-						const diffTime = Math.abs(date2 - date1);
-						const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-						const points_todeduct = $('#points_todeduct').val();
 						if(datefrom > dateto){
 							$.Toast("Invalid date range", errorToast);
 							$('#dateto').val("0000-00-00");
 							$('#no_days').val("");
 						}else{
 							// var dayss = diffDays+1;
-							const deduct = (diffDays + 1) * points_todeduct;
+							const deduct = getBusinessDatesCount(date1, date2) * points_todeduct;
 							$('#no_days').val(deduct);
 						}
 					}
@@ -167,7 +183,7 @@ $(document).ready(function(){
 				$('#timefrom_column').show();
 				$('#timeto_column').show();
 				$('#ampm_column').hide();
-				$('#points_todeduct').val(.125);
+				$('#points_todeduct').val(.11);
 				$('#timefrom').on('change',function(){
 					const timeFrom = $('#timefrom').val();
 					const timeTo = $('#timeto').val();
@@ -446,17 +462,15 @@ $(document).ready(function(){
 		// const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 		// var dayss = diffDays+1;
 
-		if(leave_bal=="" || leave_bal==null){
-			$.Toast("No available leave credits", errorToast);
-		}
-		else if(no_days=="" || no_days==null){
+		// if(pay_leave === 'With Pay' leave_bal=="" || leave_bal==null){
+		// 	$.Toast("No available leave credits", errorToast);
+		// }
+		if(no_days=="" || no_days==null){
 			$.Toast("Invalid transaction", errorToast);
 		}else if(comment=="" || comment==null){
 			$.Toast("Please input the reason of your leave.", errorToast);
 		}else if(leaveForm=="" || leaveForm==null){
 			$.Toast("Please input the hardcopy of your leave form.", errorToast);
-		}else if(parseInt(leave_bal) < parseInt(no_days)){
-			$.Toast("Invalid transaction, insufficient leave balance", errorToast);
 		}else{
 
 			// var updatedbalance = leave_bal - no_days;
@@ -542,8 +556,8 @@ $(document).ready(function(){
 					else {
 						$.Toast(b.message, successToast);
 						$('#tbl_myleave').DataTable().destroy();
-						var employeeno = $('#employeeno').val();
-						loadmyleave(employeeno);
+						// var employeeno = $('#employeeno').val();
+						loadmyleave('Pending');
 						$('#form').trigger("reset");
 					}
 				}
@@ -577,41 +591,6 @@ $(document).ready(function(){
 		$("#div_assignleave").hide();
 		$("#div_reports").hide();
 	}
-	
-
-	function goto(linkk){
-		
-		if(linkk=="notification.php"){
-
-			var employeeno = $('#employeeno').val();
-			$.ajax({
-				url:"controller/controller.leave.php?readleave",
-				method:"POST",
-				data:{
-					employeeno:employeeno
-				},success:function(){
-					window.location.href=linkk;
-				}
-			});
-
-		}else if(linkk=="ess_payslip.php"){
-
-			var employeeno = $('#employeeno').val();
-			$.ajax({
-				url:"controller/controller.leave.php?readpayslip",
-				method:"POST",
-				data:{
-					employeeno:employeeno
-				},success:function(){
-					window.location.href=linkk;
-				}
-			});
-
-		}else{
-			window.location.href=linkk;
-		}
-
-	}
 
 	function delete_leave(id, leave_form, employeeno){
 		const data = [id,leave_form,employeeno];
@@ -630,7 +609,7 @@ $(document).ready(function(){
 				$.Toast("Successfully Deleted", successToast);
 				$('#tbl_myleave').DataTable().destroy();
 				var employeeno = $('#employeeno').val();
-				loadmyleave(employeeno);
+				loadmyleave('Pending');
 			}
 		});
 	}
@@ -642,12 +621,12 @@ $(document).ready(function(){
 		const diffTime = Math.abs(date2 - date1);
 		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-		let dayss = 1
-		if(application_type === 'Whole Day'){
-			dayss = diffDays+1;
-		}
+		// let dayss = 1
+		// if(application_type === 'Whole Day'){
+		// 	dayss = diffDays+1;
+		// }
 		
-		$('#emp_days').val(dayss);
+		$('#emp_days').val(no_days);
 
 		$('#fivepm').val(fivepm);
 		$('#sixpm').val(sixpm);
@@ -667,6 +646,7 @@ $(document).ready(function(){
 		$('#remarks').val(remarks);
 		$('#emp_application_type').html(application_type);
 		$('#pay_leave_span').html(pay_leave);
+		console.log(pay_leave)
 		// $('#emp_rate').val(deduct_rate);
 
 		if(status=="Disapproved"){
@@ -686,9 +666,19 @@ $(document).ready(function(){
 		$('#leavemodal').modal('show');
 	}
 
-	function loadmyleave(employeeno){
+	function loadmyleave(status){
+		const employeeno = $('#currentUser').val();
 							
-		$('#tbl_myleave').DataTable({  
+		$('#tbl_myleave').DataTable({
+			createdRow: function (row, data, index) {
+				if ($('td', row).eq(5)[0].innerText == 'Disapproved') {
+					$('td', row).eq(5).addClass('reject')
+					console.log($('td', row).eq(5)[0].innerText)
+				} else if($('td', row).eq(5)[0].innerText == 'Approved') {
+					$('td', row).eq(5).addClass('acknowledged')
+					console.log($('td', row).eq(5)[0].innerText)
+				}
+			},  
 			"aaSorting": [],
 			"bSearching": true,
 			"bFilter": true,
@@ -696,7 +686,7 @@ $(document).ready(function(){
 			"bPaginate": true,
 			"bLengthChange": true,
 			"pagination": true,
-			"ajax" : "controller/controller.leave.php?loadmyleave&employeeno="+employeeno,
+			"ajax" : "controller/controller.leave.php?loadmyleave&employeeno="+employeeno+"&status="+status,
 			"columns" : [
 					
 				{ "data" : "employeeno"},
@@ -710,8 +700,12 @@ $(document).ready(function(){
 			],
 		});
 	}
-	var employeeno = $('#employeeno').val();
-	loadmyleave(employeeno);
+	// var employeeno = $('#employeeno').val();
+	loadmyleave('Pending');
+	$('#filter_leave').on('change', () => {
+		$('#tbl_myleave').DataTable().destroy();
+		loadmyleave($('#filter_leave').val());
+	})
 
 
 // 	function loadleavelist(){
@@ -740,112 +734,3 @@ $(document).ready(function(){
 // 		});
 // 	}
 // 	loadleavelist();
-
-
-// 	function count_leaveapp(){
-
-// 		var employeenoo = $('#employeeno').val();
-// 		$.ajax({
-// 			url:"controller/controller.leave.php?count_leaveapp",
-// 			method:"POST",
-// 			data:{
-// 				employeenoo:employeenoo
-// 			},success:function(data){
-// 				var b = $.parseJSON(data);
-				
-// 				if(b.count > 0){
-// 					$('#leave_app_number').show();
-// 					$('#leave_app_number').html(b.count);
-// 				}else{
-// 					$('#leave_app_number').hide();
-// 				}
-
-// 			}
-// 		});
-// 	}
-// 	count_leaveapp();
-
-// 	function count_otapp(){
-
-// 		var employeenoo = $('#employeeno').val();
-// 		$.ajax({
-// 			url:"controller/controller.leave.php?count_otapp",
-// 			method:"POST",
-// 			data:{
-// 				employeenoo:employeenoo
-// 			},success:function(data){
-// 				var b = $.parseJSON(data);
-				
-// 				if(b.count > 0){
-// 					$('#ot_app_number').show();
-// 					$('#ot_app_number').html(b.count);
-// 				}else{
-// 					$('#ot_app_number').hide();
-// 				}
-
-// 			}
-// 		});
-// 	}
-// 	count_otapp();
-
-
-// 	function count_payslip(){
-
-// 		var employeenoo = $('#employeeno').val();
-// 		$.ajax({
-// 			url:"controller/controller.leave.php?count_payslip",
-// 			method:"POST",
-// 			data:{
-// 				employeenoo:employeenoo
-// 			},success:function(data){
-// 				var b = $.parseJSON(data);
-				
-// 				if(b.count > 0){
-// 					$('#payslip_number').show();
-// 					$('#payslip_number').html(b.count);
-// 				}else{
-// 					$('#payslip_number').hide();
-// 				}
-
-// 			}
-// 		});
-// 	}
-// 	count_payslip();
-
-// 	function count_reimbursement(){
-
-// 		var employeenoo = $('#employeeno').val();
-// 		$.ajax({
-// 			url:"controller/controller.leave.php?count_reimbursement",
-// 			method:"POST",
-// 			data:{
-// 				employeenoo:employeenoo
-// 			},success:function(data){
-// 				var b = $.parseJSON(data);
-// 				if(b.count > 0){
-// 					$('#reim_app_number').show();
-// 					$('#reim_app_number').html(b.count);
-// 				}else{
-// 					$('#reim_app_number').hide();
-// 				}
-
-// 			}
-// 		});
-// 	}
-// 	count_reimbursement();
-
-	
-// // 	function lb(){
-
-// // 		$.ajax({
-// // 		 url:"controller/controller.leavebalance.php?leave_credits_load",
-// // 		 method:"POST",
-// // 		 data:{
-// // 		   id:""
-// // 		 },success:function(){
- 
-// // 		 }
-// // 	   });
-		
-// //    }
-// //    lb();

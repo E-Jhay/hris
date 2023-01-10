@@ -34,10 +34,8 @@ function load_employee_incident_all(status){
         createdRow: function (row, data, index) {
             if ($('td', row).eq(3)[0].innerText == 'Rejected') {
                 $('td', row).eq(3).addClass('reject')
-                console.log($('td', row).eq(3)[0].innerText)
             } else if($('td', row).eq(3)[0].innerText == 'Acknowledged') {
                 $('td', row).eq(3).addClass('acknowledged')
-                console.log($('td', row).eq(3)[0].innerText)
             }
         },
         "aaSorting": [],
@@ -192,18 +190,17 @@ function update_callback() {
             $("#btn_reject").attr('disabled', false)
         },
         success:function(data){
-            // const b = $.parseJSON(data)
-            // if(b.type === "error")
-            //     $.Toast(b.message, errorToast)
-            // else
-            //     $.Toast(b.message, successToast)
-            // $('#edit_modal').modal('hide')
-            // $('#incident_form').trigger("reset");
-            // $('#tbl_incident').DataTable().destroy();
-            // load_employee_incident_all('pending');
-            // count_incident_reports();
-            // $('#status').val('pending')
-            console.log(data)
+            const b = $.parseJSON(data)
+            if(b.type === "error")
+                $.Toast(b.message, errorToast)
+            else
+                $.Toast(b.message, successToast)
+            $('#edit_modal').modal('hide')
+            $('#incident_form').trigger("reset");
+            $('#tbl_incident').DataTable().destroy();
+            load_employee_incident_all('pending');
+            count_incident_reports();
+            $('#status').val('pending')
         }
     });
 }

@@ -199,6 +199,12 @@ $count = $leaves->countLeaves($empno);
   </div>
 
   <div id="div_myleave" class="div_content" style="display: none;">
+  <select id="filter_ot" class="form-control">
+			<option value=""> All </option>
+			<option value="Pending" selected=""> Pending </option>
+			<option value="Approved"> Approved </option>
+			<option value="Disapproved"> Disapproved </option>
+		</select>
   		<table class="table table-striped w-100" id="tbl_myot">
 				<thead>
 					<th>Employee Name</th>
@@ -212,7 +218,7 @@ $count = $leaves->countLeaves($empno);
 					<th>OT Date To</th>
 					<th>Status</th>
 					<th>Remarks</th>
-					<th></th>
+					<th class="text-center">Action</th>
 				</thead>
 				<tbody>
 								
@@ -224,6 +230,7 @@ $count = $leaves->countLeaves($empno);
 
 <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 <input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
  
 </body>
 <script src="services/overtime.js"></script>

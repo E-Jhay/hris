@@ -102,6 +102,12 @@ $count = $leaves->countLeaves($empno);
 
 	<div id="div_myapply" style="display: none;">
 
+  <select id="filter_reimbursement" class="form-control">
+			<option value=""> All </option>
+			<option value="Pending" selected=""> Pending </option>
+			<option value="Approved"> Approved </option>
+			<option value="Disapproved"> Disapproved </option>
+		</select>
 		<table class="table table-striped w-100" id="tbl_reimburse">
 			<thead>
 				<th>OR/SI Number</th>
@@ -109,7 +115,7 @@ $count = $leaves->countLeaves($empno);
 				<th>Amount</th>
 				<th>Date Applied</th>
 				<th>Status</th>
-				<th>Action</th>
+				<th class="text-center w-25">Action</th>
 			</thead>
 			<tbody>
 								
@@ -193,6 +199,7 @@ $count = $leaves->countLeaves($empno);
 
 <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 <input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
  
 </body>
 <script src="services/reimbursement.js"></script>

@@ -11,7 +11,7 @@ class crud extends db_conn_mysql
       // Select all regular employees
       $query = $conn->prepare("SELECT a.*,b.* FROM tbl_employee a
                               LEFT JOIN contractinfo b
-                              ON a.id=b.emp_id ORDER BY a.id_number ASC");
+                              ON a.employeeno=b.employeeno ORDER BY a.id_number ASC");
       $query->execute();
       $row = $query->fetchAll();
 
@@ -83,7 +83,7 @@ class crud extends db_conn_mysql
             break;
           case 1:
             if($row2['balance'] == 0 && $row3['balance'] == 0){
-              if(date('n') == 12){
+              if(date('n') == 1){
                 $earnedPoints = 5;
               }
               else $earnedPoints = 0;
@@ -272,7 +272,7 @@ class crud extends db_conn_mysql
   public function getleavebal()
   {
     $conn = $this->connect_mysql();
-    $query = "SELECT a.*,b.* FROM tbl_employee a LEFT JOIN contractinfo b ON a.id=b.emp_id";
+    $query = "SELECT a.*,b.* FROM tbl_employee a LEFT JOIN contractinfo b ON a.employeeno=b.employeeno";
     $stmt = $conn->prepare($query);
     $stmt->execute();
     $row = $stmt->fetchAll();

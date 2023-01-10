@@ -37,8 +37,8 @@ require_once "header.php";
             <thead>
               <th>Leave Type</th>
               <th>Leave Name</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th style="max-width: 10em">Status</th>
+              <th class="text-center" style="max-width: 13em">Action</th>
             </thead>
             <tbody>
               
@@ -56,7 +56,7 @@ require_once "header.php";
               <th>No. of Years</th>
               <th>SL balance</th>
               <th>VL balance</th>
-              <th>Action</th>
+              <th class="text-center" style="max-width: 12em">Action</th>
             </thead>
             <tbody>
               

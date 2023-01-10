@@ -37,7 +37,7 @@ require_once "header.php";
             <thead>
               <th>Job Title</th>
 							<th>Job Description</th>
-							<th>Action</th>
+							<th class="text-center" style="max-width: 14em">Action</th>
             </thead>
             <tbody>
               

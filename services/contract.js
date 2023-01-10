@@ -82,12 +82,13 @@ $(document).ready(function(){
 	        	method:"POST",
 	        	data: $('form').serialize(),
 	        	success:function(data){
-					$.Toast("Successfully Saved", successToast);
-					setTimeout(() => {
-						var b = $.parseJSON(data);
-						var employeeno = b.employeeno;
-						window.location.href="contractinfo.php?employeeno="+employeeno;
-					}, 1000)
+					// $.Toast("Successfully Saved", successToast);
+					// setTimeout(() => {
+					// 	var b = $.parseJSON(data);
+					// 	var employeeno = b.employeeno;
+					// 	window.location.href="contractinfo.php?employeeno="+employeeno;
+					// }, 1000)
+					console.log(data)
 	        	}
 	    });
 	}

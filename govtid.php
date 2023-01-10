@@ -45,11 +45,15 @@ require_once "header.php";
 						<td><b>HDMF#: </b><input type="text" class="form-control" id="hdmf_no" name="hdmf_no" placeholder="0000-0000-0000" maxlength="14"></td>
 					</tr>
 					<tr>
-						<td><b>ATM#: </b><input type="number" class="form-control" id="atm_no" name="atm_no"></td>
+						<td><b>Account#: </b><input type="text" class="form-control" id="atm_no" name="atm_no"></td>
 					</tr>
-					<tr>
+					<!-- <tr>
 						<td><b>Bank Name: </b><input type="text" class="form-control" id="bank_name" name="bank_name"></td>
 					</tr>
+					</tr>
+					<tr>
+						<td><b>AUB#: </b><input type="text" class="form-control" id="aub_no" name="aub_no" placeholder="0000-0000-0000-0000" maxlength="19"></td>
+					</tr> -->
 					<tr>
 						<td><b>SSS Remarks: </b><textarea class="form-control" id="sss_remarks" name="sss_remarks"></textarea></td>
 					</tr>

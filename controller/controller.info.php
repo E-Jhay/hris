@@ -34,6 +34,26 @@ class crud extends db_conn_mysql
 
     echo json_encode(array("count"=>$count));
   }
+  function count_notifications(){
+
+    $currentUser = $_POST['currentUser'];
+    $conn = $this->connect_mysql();
+
+    $query = $conn->prepare("SELECT * FROM leave_application WHERE employeeno='$currentUser' AND readd='notread'");
+    $query->execute();
+    $query2 = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE employeeno='$currentUser' AND notif_status='notread'");
+    $query2->execute();
+    $query3 = $conn->prepare("SELECT * FROM tbl_overtime WHERE employeeno='$currentUser' AND notif_status='notread'");
+    $query3->execute();
+
+    $count1 = $query->rowCount();
+    $count2 = $query2->rowCount();
+    $count3 = $query3->rowCount();
+
+    $total = $count1 + $count2 + $count3;
+
+    echo json_encode(array("total"=>$total, 'leave' => $count1, 'omnibus' => $count2, 'overtime' => $count3));
+  }
 
   function count_otapp(){
 
@@ -48,10 +68,10 @@ class crud extends db_conn_mysql
 
   function count_payslip(){
 
-    $employeenoo = $_POST['employeenoo'];
+    $currentUser = $_POST['currentUser'];
     $conn = $this->connect_mysql();
 
-    $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
+    $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$currentUser' AND stat='posted'");
     $query->execute();
     $count = $query->rowCount();
 
@@ -69,10 +89,36 @@ class crud extends db_conn_mysql
     echo json_encode(array("count"=>$count));
   }
 
+  function read_payslips(){
+
+    $currentUser = $_POST['currentUser'];
+
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$currentUser'");
+    $query->execute();
+
+}
+
+function read_notifications(){
+  $type = $_GET['type'];
+  $currentUser = $_POST['currentUser'];
+
+  $conn = $this->connect_mysql();
+  if($type == 'leave')
+    $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$currentUser'");
+  elseif($type == 'omnibus')
+    $query = $conn->prepare("UPDATE tbl_reimbursement SET notif_status='read' WHERE employeeno='$currentUser'");
+  elseif($type == 'overtime')
+    $query = $conn->prepare("UPDATE tbl_overtime SET notif_status='read' WHERE employeeno='$currentUser'");
+
+  $query->execute();
+
+}
+
   function getmyinfo(){
     $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT a.employeeno,a.lastname,a.firstname,a.middlename,a.imagepic,b.date_hired,c.dateofbirth,c.gender,c.marital_status,d.nationality FROM tbl_employee a LEFT JOIN contractinfo b ON a.id=b.emp_id LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id LEFT JOIN contactinfo d ON a.id=d.emp_id WHERE a.employeeno='$employeeno'");
+    $query = $conn->prepare("SELECT a.employeeno,a.lastname,a.firstname,a.middlename,a.imagepic,b.date_hired,c.dateofbirth,c.gender,c.marital_status,d.nationality FROM tbl_employee a LEFT JOIN contractinfo b ON a.employeeno=b.employeeno LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno LEFT JOIN contactinfo d ON a.employeeno=d.employeeno WHERE a.employeeno='$employeeno'");
 
     $query->execute();
     $row = $query->fetch();
@@ -353,6 +399,15 @@ if(isset($_GET['readpayslip'])){
 }
 if(isset($_GET['addDocuments'])){
   $x->addDocuments();
+}
+if(isset($_GET['count_notifications'])){
+  $x->count_notifications();
+}
+if(isset($_GET['read_payslips'])){
+  $x->read_payslips();
+}
+if(isset($_GET['read_notifications'])){
+  $x->read_notifications();
 }
 
  ?>

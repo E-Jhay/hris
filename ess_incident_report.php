@@ -35,8 +35,8 @@ $count = $leaves->countLeaves($empno);
   <div id="div_incident" class="div_content">
     <form id="form" enctype="multipart/form-data">
         <div>
-        <button type="button" id="addIncidentBtn" class="btn btn-primary mb-4">Add Incident Report</button>
-        <button type="button" id="cancelIncidentBtn" class="btn btn-warning mb-4" style="display: none; ">Cancel</button>
+        <button type="button" id="addIncidentBtn" class="btn btn-primary btn-sm mb-4">Add Incident Report</button>
+        <button type="button" id="cancelIncidentBtn" class="btn btn-warning btn-sm mb-4" style="display: none; ">Cancel</button>
         </div>
 
         <table class="table-condensed grid12_master" id="incident_table">
@@ -66,6 +66,12 @@ $count = $leaves->countLeaves($empno);
             </tr>
         </table>
     </form>
+
+    <select id="filter_incident" class="form-control">
+			<option value=""> All </option>
+			<option value="pending" selected=""> Pending </option>
+			<option value="acknowledged"> Acknowledged </option>
+		</select>
     <table class="table table-striped w-100" id="tbl_incident">
         <thead>
             <th>Title</th>

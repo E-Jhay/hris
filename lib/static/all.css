@@ -222,3 +222,10 @@ td.reject{
 td.acknowledged{
 	color: green;
 }
+
+.notif_span {
+	background-color: #ff4d4d;
+	color: rgb(0, 0, 0);
+	padding: .3rem .5rem;
+	border-radius: 20px;
+}

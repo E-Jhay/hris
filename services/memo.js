@@ -12,6 +12,7 @@ $(document).ready(function(){
      $('#div_inter_office_memo').hide();
      $('#memo_table').hide();
      $('#memo_table_department').hide();
+     
 
      load_memo('active', 'active')
       $('#status').on('change', () => {
@@ -20,10 +21,20 @@ $(document).ready(function(){
         load_memo($('#status').val(), 'active')
       })
 
+      
       $('#status2').on('change', () => {
         $('#tbl_inter_office_memo').DataTable().destroy();
         $('#tbl_memo').DataTable().destroy();
         load_memo('active', $('#status2').val())
+      })
+      $('#notice_to_explain').on('change', () => {
+        if ($('#notice_to_explain').val() === 'yes') {
+          $('.date').hide()
+          $('#end_date').attr('required', false)
+        } else {
+          $('.date').show()
+          $('#end_date').attr('required', true)
+        }
       })
     //  $('#cancelMemoBtn').hide();
 
@@ -38,6 +49,8 @@ $(document).ready(function(){
     $("#addMemoBtn").show()
     $('#cancelMemoBtn').hide();
     $('#memo_table').hide();
+    $('#form').trigger("reset");
+    $('.date').show()
   })
   $('#addMemoBtnDepartment').on('click', () => {
     $("#addMemoBtnDepartment").hide()
@@ -76,14 +89,20 @@ $(document).ready(function(){
 				$(".btn_submit").attr('disabled', false)
 			},
 			success:function(data){
-				$.Toast("Successfully Saved", successToast);
-        $('#form').trigger("reset");
-        $("#addMemoBtn").show()
-        $('#cancelMemoBtn').hide();
-        $('#memo_table').hide();
-        $('#tbl_inter_office_memo').DataTable().destroy();
-        $('#tbl_memo').DataTable().destroy();
-        load_memo();
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+          $.Toast(b.message, successToast);
+          $('#form').trigger("reset");
+          $('.date').show()
+          $("#addMemoBtn").show()
+          $('#cancelMemoBtn').hide();
+          $('#memo_table').hide();
+          $('#tbl_inter_office_memo').DataTable().destroy();
+          $('#tbl_memo').DataTable().destroy();
+          load_memo('active', 'active')
+        }
 				// setTimeout(() => {
 				// 	window.location.href="memo.php";
 				// }, 1000)
@@ -107,14 +126,19 @@ $(document).ready(function(){
 				$(".btn_submit").attr('disabled', false)
 			},
 			success:function(data){
-				$.Toast("Successfully Saved", successToast);
-        $('#form2').trigger("reset");
-        $("#addMemoBtnDepartment").show()
-        $('#cancelMemoBtnDepartment').hide();
-        $('#memo_table_department').hide();
-        $('#tbl_inter_office_memo').DataTable().destroy();
-        $('#tbl_memo').DataTable().destroy();
-        load_memo();
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+          $.Toast(b.message, successToast);
+          $('#form2').trigger("reset");
+          $("#addMemoBtnDepartment").show()
+          $('#cancelMemoBtnDepartment').hide();
+          $('#memo_table_department').hide();
+          $('#tbl_inter_office_memo').DataTable().destroy();
+          $('#tbl_memo').DataTable().destroy();
+          load_memo('active', 'active')
+        }
 				// setTimeout(() => {
 				// 	window.location.href="memo.php";
 				// }, 1000)
@@ -166,7 +190,7 @@ function delete_memo_callback(data){
         $.Toast("Successfully Deleted", successToast);
         $('#tbl_memo').DataTable().destroy();
         $('#tbl_inter_office_memo').DataTable().destroy();
-        load_memo();
+        load_memo('active', 'active');
       }
     });
 
@@ -176,9 +200,8 @@ function delete_memo_callback(data){
     
     	$('#tbl_memo').DataTable({  
         createdRow: function (row, data, index) {
-          if($('td', row).eq(5)[0].innerText == 'Acknowledge') {
-            $('td', row).eq(5).addClass('acknowledged')
-            console.log($('td', row).eq(5)[0].innerText)
+          if($('td', row).eq(6)[0].innerText == 'Acknowledged') {
+            $('td', row).eq(6).addClass('acknowledged')
           }
         },
               "aaSorting": [],
@@ -196,6 +219,7 @@ function delete_memo_callback(data){
                     { "data" : "memo"},
                     { "data" : "date"},
                     { "data" : "remarks"},
+                    { "data" : "notice_to_explain"},
                     { "data" : "status"},
                     { "data" : "action"}
 
@@ -203,9 +227,8 @@ function delete_memo_callback(data){
          });
     	$('#tbl_inter_office_memo').DataTable({  
         createdRow: function (row, data, index) {
-          if($('td', row).eq(4)[0].innerText == 'Acknowledge') {
-            $('td', row).eq(4).addClass('acknowledged')
-            console.log($('td', row).eq(4)[0].innerText)
+          if($('td', row).eq(5)[0].innerText == 'Acknowledged') {
+            $('td', row).eq(5).addClass('acknowledged')
           }
         },
               "aaSorting": [],
@@ -222,6 +245,7 @@ function delete_memo_callback(data){
                     { "data" : "memo"},
                     { "data" : "date"},
                     { "data" : "remarks"},
+                    { "data" : "notice_to_explain"},
                     { "data" : "status"},
                     { "data" : "action"}
 

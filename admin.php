@@ -88,11 +88,6 @@ require_once "header.php";
           <div class="form-group">
             <label for="exampleInputEmail1">Usertype</label>
             <select class="form-control" id="usertype" name="usertype"></select>
-            <select class="form-control" id="approverr" name="approverr">
-              <option value="" selected=""> --Choose type--</option>
-              <option value="yes"> Approver </option>
-              <option value="no"> Not approver </option>
-            </select>
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Status</label>
@@ -106,7 +101,7 @@ require_once "header.php";
             <input type="hidden" id="user_id" name="">
           </div>
           <div class="form-group">
-            <label for="exampleInputEmail1">PIM</label>
+            <label for="exampleInputEmail1">Dept Head</label>
             <input type="checkbox" id="1" name="role" value="1">
           </div>
           <div class="form-group">
@@ -114,9 +109,14 @@ require_once "header.php";
             <input type="checkbox" id="2" name="role" value="2">
           </div>
           <div class="form-group">
-            <label for="exampleInputEmail1">ESS</label>
+            <label for="exampleInputEmail1">Employee</label>
             <input type="checkbox" id="3" name="role" value="3" disabled>
           </div>
+          <select class="form-control" id="approverr" name="approverr">
+            <option value="" selected=""> --Choose type--</option>
+            <option value="yes"> Approver </option>
+            <option value="no"> Not approver </option>
+          </select>
           <center>
           <button type="button" onclick="updateuser()" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>
           </center>

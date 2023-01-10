@@ -75,6 +75,25 @@ $(document).ready(function(){
 
 
 		});
+		$('#aub_no').on('keyup',function(){
+			var aub_no = $('#aub_no').val();
+			var len = aub_no.length;
+			if(len==4){
+				
+				$('#aub_no').val(aub_no+"-");
+			}
+
+			if(len==9){
+				
+				$('#aub_no').val(aub_no+"-");
+			}
+			if(len==14){
+				
+				$('#aub_no').val(aub_no+"-");
+			}
+
+
+		});
 
 
 
@@ -113,6 +132,7 @@ $(document).ready(function(){
 				$('#phic_no').val(b.phic_no);
 				$('#hdmf_no').val(b.hdmf_no);
 				$('#atm_no').val(b.atm_no);
+				$('#aub_no').val(b.aub_no);
 				$('#bank_name').val(b.bank_name);
 				$('#sss_remarks').val(b.sss_remarks);
 				$('#phic_remarks').val(b.phic_remarks);

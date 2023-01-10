@@ -180,6 +180,9 @@ $count = $leaves->countLeaves($empno);
   </div>
 </div>
 
+
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
+
 </body>
 <script src="services/info.js"></script>
 </html>

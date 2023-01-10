@@ -112,7 +112,7 @@ class crud extends db_conn_mysql
 
   function approveleave(){
 
-    $emp_id = $_POST['emp_id'];
+    $leave_id = $_POST['leave_id'];
     $status = $_POST['status'];
     $remarks = $_POST['remarks'];
     $emp_number = $_POST['emp_number'];
@@ -141,10 +141,10 @@ class crud extends db_conn_mysql
         $balance = $roww['balance'];
         $points_deduct = $_POST['emp_nodays'];
 
-        if($balance < $points_deduct){
-          echo json_encode(array('type' => 'error', 'message' => 'An error has occured, Insufficient balance'));
-          exit;
-        }else{
+        // if($balance < $points_deduct){
+        //   echo json_encode(array('type' => 'error', 'message' => 'An error has occured, Insufficient balance'));
+        //   exit;
+        // }else{
           $n_balance = $balance - $points_deduct;
 
           $sql4 = $conn->prepare("UPDATE leave_balance SET balance='$n_balance' WHERE employee_no='$emp_number' AND leave_type='$emp_leavetype'");
@@ -158,8 +158,8 @@ class crud extends db_conn_mysql
 
           $sql3 = $conn->prepare("UPDATE tbl_employee SET leave_balance='$new_balance' WHERE employeeno='$emp_number'");
           $sql3->execute();
-          echo json_encode(array('type' => 'success', 'message' => 'Leave Approved'));
-        }
+          // echo json_encode(array('type' => 'success', 'message' => 'Leave Approved'));
+        // }
 
     }else if($status=="Cancelled" && $emp_status=="Approved"){
 
@@ -187,7 +187,7 @@ class crud extends db_conn_mysql
     }
 
 
-      $sql = $conn->prepare("UPDATE leave_application SET status='$statusProxy', remarks='$remarks', approved_by='Administrator', readd='notread',last_update='$datenow',last_update_time='$timenow' WHERE id='$emp_id'");
+      $sql = $conn->prepare("UPDATE leave_application SET status='$statusProxy', remarks='$remarks', approved_by='Administrator', readd='notread',last_update='$datenow',last_update_time='$timenow' WHERE id='$leave_id'");
       $sql->execute();
 
       $sqry = $conn->prepare("SELECT id,firstname,lastname,department FROM tbl_employee WHERE employeeno='$emp_number'");
@@ -198,17 +198,17 @@ class crud extends db_conn_mysql
       $lastname = utf8_decode($srow['lastname']);
       $department = $srow['department'];
 
-      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
+      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employeeno='$emp_number'");
       $sqry2->execute();
       $srow2 = $sqry2->fetch();
       $corp_email = $srow2 ? $srow2['corp_email'] : '';
 
-            /////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////
 
-            require 'Exception.php';
-            require 'PHPMailer.php';
-            require 'SMTP.php';
-            require 'PHPMailerAutoload.php';
+      require 'Exception.php';
+      require 'PHPMailer.php';
+      require 'SMTP.php';
+      require 'PHPMailerAutoload.php';
 
             // $mail = new PHPMailer();
             // $mail->IsSMTP();
@@ -234,29 +234,69 @@ class crud extends db_conn_mysql
 
             // }
 
+        // $mail = new PHPMailer();
+        // $mail->IsSMTP();
+        // $mail->SMTPDebug = 0;
+        // $mail->SMTPAuth = true;
+        // $mail->SMTPSecure = 'ssl';
+        // $mail->Host = "smtp.gmail.com";
+        // $mail->Port = 465;
+        // $mail->IsHTML(true);
+        // $mail->Username = "pmcmailchimp@gmail.com";
+        // $mail->Password = "qyegdvkzvbjihbou";
+        // $mail->SetFrom("no-reply@panamed.com.ph", "");
+        
+        // if($status == 'Cancelled')
+        //   $message = 'Your request '.$emp_leavetype.' was '.$status.' by HR Assistant-Payroll';
+        // else
+        //   $message = 'Your request '.$emp_leavetype.' was '.$status.' by HR Assistant-Payroll<br />No. of Credits to be deducted: '.$emp_nodays;
+        // $mail->Subject = "Leave Application";
+        // $mail->Body = $message;
+        // $mail->isHTML(true);
+        // $mail->AddAddress($corp_email);
+        // // $mail->AddCC('ejhaybumacod26@gmail.com');
+        // $mail->Send();
+
         $mail = new PHPMailer();
         $mail->IsSMTP();
         $mail->SMTPDebug = 0;
         $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'ssl';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 465;
+        $mail->Host = "smtp.ipower.com";
         $mail->IsHTML(true);
-        $mail->Username = "pmcmailchimp@gmail.com";
-        $mail->Password = "qyegdvkzvbjihbou";
+        $mail->Username = "no-reply@panamed.com.ph";
+        $mail->Password = "Unimex123!!";
         $mail->SetFrom("no-reply@panamed.com.ph", "");
+        if($status=="Disapproved"){
+          $emp_nodays = 0;
+        }
+
+        session_start();
+        $currentLogIn = $_SESSION['fullname'];
+
+        if($status == 'Approved') {
+          $message = $currentLogIn. ' aprroved the ' .$emp_leavetype. ' application of ' .$firstname. ' ' .$lastname;
+          $mail->Subject = "Leave Application";
+          $mail->Body = $message;
+          $mail->isHTML(true);
+          $mail->AddAddress($corp_email); //HR email
+          $mail->AddCC('bumacodejhay@gmail.com');
+          $mail->Send();
+        }
         
         if($status == 'Cancelled')
-          $message = 'Your request '.$emp_leavetype.' was '.$status.' by HR Assistant-Payroll';
+          $message = 'Your request '.$emp_leavetype.' was '.$status.' by ' .$currentLogIn;
         else
-          $message = 'Your request '.$emp_leavetype.' was '.$status.' by HR Assistant-Payroll<br />No. of Credits to be deducted: '.$emp_nodays;
+          $message = 'Your request '.$emp_leavetype.' was '.$status.' by ' .$currentLogIn.'<br />No. of Credits to be deducted: '.$emp_nodays;
         $mail->Subject = "Leave Application";
         $mail->Body = $message;
         $mail->isHTML(true);
-        // $dept_head_email = $row2['dept_head_email'];
-        $mail->AddAddress('bumacodejhay@gmail.com');
-        $mail->AddCC('ejhaybumacod26@gmail.com');
-        $mail->Send();
+        $mail->AddAddress($corp_email); //employee corporate email
+        $mail->AddCC('bumacodejhay@gmail.com'); //Hr email
+        if(!$mail->Send()) {
+          echo json_encode(array('type' => 'success', 'message' => 'Leave successfully ' .$status. '<br /> Email not sent.'));
+        } else {
+          echo json_encode(array('type' => 'success', 'message' => 'Leave successfully ' .$status. '<br /> Emai sent'));
+        }
 
             /////////////////////////////////////////////////////////////////////
 
@@ -320,6 +360,11 @@ class crud extends db_conn_mysql
       // $qry3->execute();
       // $row2 = $qry3->fetch();
 
+      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employeeno='$employeeno'");
+      $sqry2->execute();
+      $srow2 = $sqry2->fetch();
+      $corp_email = $srow2 ? $srow2['corp_email'] : '';
+
 
           /////////////////////////////////////////////////////////////////////
 
@@ -382,14 +427,19 @@ class crud extends db_conn_mysql
         $mail->Password = "qyegdvkzvbjihbou";
         $mail->SetFrom("no-reply@panamed.com.ph", "");
         
-        $message = $firstname.' '.$lastname.' applied '.$leave_type.' <strong>'. $application_type.'</strong> From: '.$datefrom.' To: '.$dateto;
+        $message = 'The HR department assigned a '.$leave_type.' leave <strong>'. $application_type.'</strong> From: '.$datefrom.' To: '.$dateto. ' for you.';
         $mail->Subject = "Leave Application";
         $mail->Body = $message;
         $mail->isHTML(true);
         // $dept_head_email = $row2['dept_head_email'];
-        $mail->AddAddress('bumacodejhay@gmail.com');
-        $mail->AddCC('ejhaybumacod26@gmail.com');
-        $mail->Send();
+        $mail->AddAddress($corp_email);
+        $mail->AddCC('bumacodejhay@gmail.com');
+
+        if(!$mail->Send()) {
+          echo json_encode(array('type' => 'success', 'message' => 'Successfully assigned a leave. <br /> Email not sent.'));
+          exit;
+        }
+        echo json_encode(array('type' => 'Success', 'message' => 'Successfully assigned a leave. <br  /> Emai sent'));
 
           /////////////////////////////////////////////////////////////////////
 
@@ -515,18 +565,19 @@ class crud extends db_conn_mysql
           $sql->execute();
           $rowww = $sql->fetch();
           $balanse = $rowww['balance'];
-          if($balanse < 0){
-            $balanse = 0;
-          }
+          // if($balanse < 0){
+          //   $balanse = 0;
+          // }
           
           $fname = utf8_decode($x['firstname'].' '.$x['lastname']);
           $data = array();
-          $data['action'] = '<center>
+          $data['action'] = '<center class="d-flex justify-content-around">
           <button title="View details" onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> View</button> 
           </center>';
           $data['employeeno'] = utf8_decode($x['firstname'].' '.$x['lastname']);
           $data['date'] = $x['date_applied'];
           $data['leavetype'] = $x['leave_type'];
+          $data['application_type'] = $x['application_type'];
           $data['leavebalance'] = $balanse;
           // $data['numberofdays'] = round($x['no_days'],2);
           if($x['pay_leave']=="Without Pay"){
@@ -538,7 +589,7 @@ class crud extends db_conn_mysql
           }
           
           $data['active_status'] = $x['status'];
-          $data['leave_form'] = '<center>
+          $data['leave_form'] = '<center class="d-flex justify-content-around">
                                 <button title="View leave form" class="btn btn-sm btn-success" onclick="viewLeaveForm('.'\''.$x['leave_form'].'\',\''.$x['employeeno'].'\')"><i class="fas fa-sm fa-eye"></i> Leave Form</button> 
                                 </center>';
         $return[] = $data;
@@ -642,18 +693,16 @@ class crud extends db_conn_mysql
               </center>
               ';
               $data['employeeno'] = utf8_decode($x['firstname'].' '.$x['lastname']);
-              $apptype = $x['application_type'];
+              // $apptype = $x['application_type'];
               
-              $dateffrom = $x['date_from'];
-              if($apptype=="Whole Day"){
-                $dateffrom = $x['dateto'];
-              }
-              $data['date_from'] = $x['date_from'];
-              $data['date_to'] =  $dateffrom;
+              // $dateffrom = $x['date_from'];
+              // if($apptype=="Whole Day"){
+              //   $dateffrom = $x['dateto'];
+              // }
+              $data['application_type'] = $x['application_type'];
+              $data['date_from'] = $x['datefrom'];
+              $data['date_to'] =  $x['dateto'];
               $data['leavetype'] = $x['leave_type'];
-              if ($balanse < 0){
-                $balanse = 0;
-              }
               $data['leavebalance'] = $balanse;
               if($x['pay_leave']=="Without Pay"){
                 $data['numberofdays'] = 0;

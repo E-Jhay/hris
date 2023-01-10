@@ -29,251 +29,257 @@ class crud extends db_conn_mysql
     unlink($link_file);
  }
 
- function load_myreimburse(){
+function load_myreimburse(){
 
-    $type = $_GET['type'];
-    $employeeno = $_GET['employeeno'];
-    $conn = $this->connect_mysql();
-    if($type=="all"){
-      $statuss = $_GET['statuss'];
-      if($statuss==""){
-        $query = $conn->prepare("SELECT a.*,b.lastname,b.firstname,b.reimbursement_bal FROM tbl_reimbursement a
-                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno ORDER BY a.datee DESC");
-      }else{
-        $query = $conn->prepare("SELECT a.*,b.lastname,b.firstname,b.reimbursement_bal FROM tbl_reimbursement a
-                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.statuss='$statuss' ORDER BY a.datee DESC");
-      }
-      
-    }else if($type="personal"){
+  $type = $_GET['type'];
+  $employeeno = $_GET['employeeno'];
+  $statuss = $_GET['statuss'];
+  $conn = $this->connect_mysql();
+  if($type=="all"){
+    if($statuss==""){
       $query = $conn->prepare("SELECT a.*,b.lastname,b.firstname,b.reimbursement_bal FROM tbl_reimbursement a
-                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.employeeno='$employeeno' ORDER BY a.datee DESC");
+                              LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno ORDER BY a.datee DESC");
+    }else{
+      $query = $conn->prepare("SELECT a.*,b.lastname,b.firstname,b.reimbursement_bal FROM tbl_reimbursement a
+                              LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.statuss='$statuss' ORDER BY a.datee DESC");
     }
-    $query->execute();
-    $row = $query->fetchAll();
-    $return = array();
-      foreach ($row as $x){
+    
+  }else if($type="personal"){
+    if($statuss=="") {
+      $query = $conn->prepare("SELECT a.*,b.lastname,b.firstname,b.reimbursement_bal FROM tbl_reimbursement a
+                              LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.employeeno='$employeeno' ORDER BY a.datee DESC");
+    } else{
+      $query = $conn->prepare("SELECT a.*,b.lastname,b.firstname,b.reimbursement_bal FROM tbl_reimbursement a
+                                LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.employeeno='$employeeno' AND a.statuss='$statuss' ORDER BY a.datee DESC");
+    }
+  }
+  $query->execute();
+  $row = $query->fetchAll();
+  $return = array();
+    foreach ($row as $x){
 
-          foreach ($x as $key => $input_arr) {
-          $x[$key] = addslashes($input_arr);
-          $x[$key] = utf8_encode($input_arr);
-          }
-          $data = array();
-          
-          
-          // <button onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="inv-button-sm btn btn-xs btn-danger" style="font-size:10px"><i class="fa fa-trash"></i> Delete</button>
-          $data['employee_name'] = utf8_decode($x['lastname'].', '.$x['firstname']);
-          $data['description'] = $x['description'];
-          $data['nature'] = $x['nature'];
-          $data['amount'] = $x['amount'];
-          $data['datee'] = $x['datee'];
-          $data['statuss'] = $x['statuss'];
+        foreach ($x as $key => $input_arr) {
+        $x[$key] = addslashes($input_arr);
+        $x[$key] = utf8_encode($input_arr);
+        }
+        $data = array();
+        
+        
+        // <button onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="inv-button-sm btn btn-xs btn-danger" style="font-size:10px"><i class="fa fa-trash"></i> Delete</button>
+        $data['employee_name'] = utf8_decode($x['lastname'].', '.$x['firstname']);
+        $data['description'] = $x['description'];
+        $data['nature'] = $x['nature'];
+        $data['amount'] = $x['amount'];
+        $data['datee'] = $x['datee'];
+        $data['statuss'] = $x['statuss'];
 
-          if($type=="all"){
+        if($type=="all"){
 
-            $data['action'] = '<center>
-            <button title="View details" onclick="view_file('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
-            <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> File</button>
-            </center>';
+          $data['action'] = '<center>
+          <button title="View details" onclick="view_file('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
+          <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> File</button>
+          </center>';
+
+        }else{
+
+          if($x['statuss']=="Pending"){
+            
+          $data['action'] = '<center class="d-flex justify-content-around">
+          <button title="View details" onclick="view_file_personal('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i> Details</button>
+          <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> File</button>
+          <button title="Delete" onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
+          </center>';
 
           }else{
 
-            if($x['statuss']=="Pending"){
-              
             $data['action'] = '<center>
             <button title="View details" onclick="view_file_personal('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
-            <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-eye"></i> File</button>
-            <button title="Delete" onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
+            <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-download"></i>File</button>
+            <button title="Delete" disabled="" onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
             </center>';
 
-            }else{
-
-              $data['action'] = '<center>
-              <button title="View details" onclick="view_file_personal('.$x['id'].',\''.$x['employeeno'].'\',\''.$x['description'].'\',\''.$x['nature'].'\',\''.$x['datee'].'\',\''.$x['amount'].'\',\''.$x['file_name'].'\',\''.$x['remarks'].'\',\''.$x['orig_amount'].'\',\''.$x['statuss'].'\',\''.$x['lastname'].'\',\''.$x['firstname'].'\',\''.$x['reimbursement_bal'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
-              <button title="View file" onclick="dl_file(\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-info"><i class="fas fa-sm fa-download"></i> Download File</button>
-              <button title="Delete" disabled="" onclick="delete_file('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
-              </center>';
-
-            }
-
-            
-
           }
 
-        $return[] = $data;
-      }
-    
-    echo json_encode(array('data'=>$return));
-  }
+          
 
-  function readleave(){
+        }
 
-      $employeeno = $_POST['employeeno'];
+      $return[] = $data;
+    }
+  
+  echo json_encode(array('data'=>$return));
+}
 
-      $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
-      $query->execute();
+// function readleave(){
 
-  }
+//     $employeeno = $_POST['employeeno'];
 
-  function readpayslip(){
+//     $conn = $this->connect_mysql();
+//     $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
+//     $query->execute();
 
-      $employeeno = $_POST['employeeno'];
+// }
 
-      $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
-      $query->execute();
+// function readpayslip(){
 
-  }
+//     $employeeno = $_POST['employeeno'];
 
-  function count_leaveapp(){
+//     $conn = $this->connect_mysql();
+//     $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
+//     $query->execute();
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+// }
 
-    $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
-    $sq->execute();
-    $rw = $sq->fetch();
+// function count_leaveapp(){
 
-    $dept = $rw['department'];
+//   $employeenoo = $_POST['employeenoo'];
+//   $conn = $this->connect_mysql();
 
-    $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
-    $query->execute();
+//   $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
+//   $sq->execute();
+//   $rw = $sq->fetch();
 
-    $count = $query->rowCount();
+//   $dept = $rw['department'];
 
-    echo json_encode(array("count"=>$count));
-  }
+//   $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+//                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
+//   $query->execute();
 
-  function count_otapp(){
+//   $count = $query->rowCount();
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
-    $query->execute();
+//   echo json_encode(array("count"=>$count));
+// }
 
-    $count = $query->rowCount();
+// function count_otapp(){
 
-    echo json_encode(array("count"=>$count));
-  }
+//   $conn = $this->connect_mysql();
+//   $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
+//   $query->execute();
 
-  function count_payslip(){
+//   $count = $query->rowCount();
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+//   echo json_encode(array("count"=>$count));
+// }
 
-    $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
-    $query->execute();
-    $count = $query->rowCount();
+// function count_payslip(){
 
-    echo json_encode(array("count"=>$count));
-  }
+//   $employeenoo = $_POST['employeenoo'];
+//   $conn = $this->connect_mysql();
 
-  function count_reimbursement(){
+//   $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
+//   $query->execute();
+//   $count = $query->rowCount();
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
-    $query->execute();
+//   echo json_encode(array("count"=>$count));
+// }
 
-    $count = $query->rowCount();
+// function count_reimbursement(){
 
-    echo json_encode(array("count"=>$count));
-  }
+//   $conn = $this->connect_mysql();
+//   $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
+//   $query->execute();
 
-  function uploadreimbursement(){
-    $reimbursement_bal = $_POST['reimbursement_bal'];
-    if($reimbursement_bal <=0){
-      echo json_encode(array('type' => 'error', 'message' => 'Insufficient balance'));
-      exit;
-    }else{
-      if (($_FILES['empfile']['name']!="")){
-        $description = $_POST['description'];
-        $nature = $_POST['nature'];
-        $amount = $_POST['amount'];
-        // $empfile = $_POST['empfile'];
-        $emp_no = $_POST['emp_no'];
-        $datenow = date('Y-m-d');
-        // Where the file is going to be stored
-        $target_dir = "../reimbursement/".$emp_no."/";
-        $file = $_FILES['empfile']['name'];
-        $path = pathinfo($file);
-        $filename = $path['filename'];
-        $ext = $path['extension'];
-        $today = date("Y-m-d-His");
-        $attachfile = $filename."-".$today.".".$ext;
-        $temp_name = $_FILES['empfile']['tmp_name'];
-        $path_filename_ext = $target_dir.$attachfile;
+//   $count = $query->rowCount();
 
-        if (file_exists($path_filename_ext)) {
-          echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error"));
-          exit;
-        }else{
-          if(!is_dir("../reimbursement/".$emp_no."/")){
-            mkdir("../reimbursement/".$emp_no."/", 0777, true);
-          }
-          if(move_uploaded_file($temp_name,$path_filename_ext)) {
-            $conn=$this->connect_mysql();
-            $sql = $conn->prepare("INSERT INTO tbl_reimbursement SET employeeno='$emp_no', description='$description', nature='$nature', datee='$datenow', amount='$amount', file_name='$attachfile', statuss='Pending', remarks='',orig_amount='$amount'");
-            $sql->execute();
+//   echo json_encode(array("count"=>$count));
+// }
 
-            $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$emp_no'");
-            $qry2->execute();
-            $row = $qry2->fetch();
+function uploadreimbursement(){
+  $reimbursement_bal = $_POST['reimbursement_bal'];
+  if($reimbursement_bal <=0){
+    echo json_encode(array('type' => 'error', 'message' => 'Insufficient balance'));
+    exit;
+  }else{
+    if (($_FILES['empfile']['name']!="")){
+      $description = $_POST['description'];
+      $nature = $_POST['nature'];
+      $amount = $_POST['amount'];
+      // $empfile = $_POST['empfile'];
+      $emp_no = $_POST['emp_no'];
+      $datenow = date('Y-m-d');
+      // Where the file is going to be stored
+      $target_dir = "../reimbursement/".$emp_no."/";
+      $file = $_FILES['empfile']['name'];
+      $path = pathinfo($file);
+      $filename = $path['filename'];
+      $ext = $path['extension'];
+      $today = date("Y-m-d-His");
+      $attachfile = $filename."-".$today.".".$ext;
+      $temp_name = $_FILES['empfile']['tmp_name'];
+      $path_filename_ext = $target_dir.$attachfile;
 
-            $department = $row['department'];
-            $firstname = $row['firstname'];
-            $lastname = utf8_decode($row['lastname']);
-            $id = $row['id'];
+      if (file_exists($path_filename_ext)) {
+        echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error"));
+        exit;
+      }else{
+        if(!is_dir("../reimbursement/".$emp_no."/")){
+          mkdir("../reimbursement/".$emp_no."/", 0777, true);
+        }
+        if(move_uploaded_file($temp_name,$path_filename_ext)) {
+          $conn=$this->connect_mysql();
+          $sql = $conn->prepare("INSERT INTO tbl_reimbursement SET employeeno='$emp_no', description='$description', nature='$nature', datee='$datenow', amount='$amount', file_name='$attachfile', statuss='Pending', remarks='',orig_amount='$amount'");
+          $sql->execute();
 
-            $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
-            $qry3->execute();
-            $row2 = $qry3->fetch();
+          $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$emp_no'");
+          $qry2->execute();
+          $row = $qry2->fetch();
 
-            require 'Exception.php';
-            require 'PHPMailer.php';
-            require 'SMTP.php';
-            require 'PHPMailerAutoload.php';
+          $department = $row['department'];
+          $firstname = $row['firstname'];
+          $lastname = utf8_decode($row['lastname']);
+          $id = $row['id'];
 
-            $mail = new PHPMailer();
-            $mail->IsSMTP();
-            $mail->SMTPDebug = 0;
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = 'ssl';
-            $mail->Host = "smtp.gmail.com";
-            $mail->Port = 465;
-            $mail->IsHTML(true);
-            $mail->Username = "pmcmailchimp@gmail.com";
-            $mail->Password = "qyegdvkzvbjihbou";
-            $mail->SetFrom("no-reply@panamed.com.ph", "");
-            
-            $message = $firstname.' '.$lastname.' uploaded a reimbursement report <br/> Date: '.date('Y-m-d H:i:s');
-            $mail->Subject = "Reimbursement Application";
-            $mail->Body = $message;
-            $mail->isHTML(true);
-            // $dept_head_email = $row2['dept_head_email'];
-            $mail->AddAddress('bumacodejhay@gmail.com');
-            $mail->AddCC('ejhaybumacod26@gmail.com');
-            $mail->Send();
+          $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE employeeno='$emp_no'");
+          $qry3->execute();
+          $row2 = $qry3->fetch();
 
-            echo json_encode(array('type' => 'success', 'message' => 'Reimbursement requested successfully'));
+          require 'Exception.php';
+          require 'PHPMailer.php';
+          require 'SMTP.php';
+          require 'PHPMailerAutoload.php';
+
+          $mail = new PHPMailer();
+          $mail->IsSMTP();
+          $mail->SMTPDebug = 0;
+          $mail->SMTPAuth = true;
+          $mail->Host = "smtp.ipower.com";
+          $mail->IsHTML(true);
+          $mail->Username = "no-reply@panamed.com.ph";
+          $mail->Password = "Unimex123!!";
+          $mail->SetFrom("no-reply@panamed.com.ph", "");
+          
+          $message = $firstname.' '.$lastname.' uploaded a reimbursement report <br/> Date: '.date('Y-m-d H:i:s');
+          $mail->Subject = "Reimbursement Application";
+          $mail->Body = $message;
+          $mail->isHTML(true);
+          $dept_head_email = $row2['dept_head_email'];
+          $mail->AddAddress($dept_head_email);
+          $mail->AddCC('ejhaybumacod26@gmail.com');
+          if(!$mail->Send()) {
+            echo json_encode(array('type' => 'success', 'message' => 'Reimbursement requested successfully <br /> Email not sent'));
             exit;
           } else {
-            echo json_encode(array('type' => 'error', 'message' => 'There\'s an error uploading your file'));
+            echo json_encode(array('type' => 'success', 'message' => 'Reimbursement requested successfully <br /> Email sent'));
             exit;
           }
+        } else {
+          echo json_encode(array('type' => 'error', 'message' => 'There\'s an error uploading your file'));
+          exit;
         }
       }
     }
   }
+}
 
-  public function getallreimburse()
-  {
-    $conn=$this->connect_mysql();
-    $query = "SELECT lastname,firstname,reimbursement_bal FROM tbl_employee";
-    $stmt = $conn->prepare($query);
-    $stmt->execute();
-    $row = $stmt->fetchAll();
-    return $row;
-  }
+public function getallreimburse()
+{
+  $conn=$this->connect_mysql();
+  $query = "SELECT lastname,firstname,reimbursement_bal FROM tbl_employee";
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $row = $stmt->fetchAll();
+  return $row;
+}
 
 
 }

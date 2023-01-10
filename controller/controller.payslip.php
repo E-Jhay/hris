@@ -35,57 +35,57 @@ class crud extends db_conn_mysql
 
   }
   
-  function readleave(){
+  // function readleave(){
 
-      $employeeno = $_POST['employeeno'];
+  //     $employeeno = $_POST['employeeno'];
 
-      $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
-      $query->execute();
+  //     $conn = $this->connect_mysql();
+  //     $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
+  //     $query->execute();
 
-  }
+  // }
 
-  function count_leaveapp(){
+  // function count_leaveapp(){
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+  //   $employeenoo = $_POST['employeenoo'];
+  //   $conn = $this->connect_mysql();
 
-    $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
-    $sq->execute();
-    $rw = $sq->fetch();
+  //   $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
+  //   $sq->execute();
+  //   $rw = $sq->fetch();
 
-    $dept = $rw['department'];
+  //   $dept = $rw['department'];
 
-    $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
-    $query->execute();
+  //   $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+  //                            LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_otapp(){
+  // function count_otapp(){
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_reimbursement(){
+  // function count_reimbursement(){
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
 
 }

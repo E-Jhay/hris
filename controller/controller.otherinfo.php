@@ -128,9 +128,9 @@ class crud extends db_conn_mysql
           }
           if(move_uploaded_file($temp_name,$path_filename_ext)){
             if($file_name != '' || $file_name != NULL){
-              $link_file = $target_dir.$file_name;
-              if(file_exists($link_file))
-              unlink($link_file);
+              $link_file = '../'.$file_name;
+              if(file_exists($link_file)){
+              unlink($link_file);}
             }
             $conn=$this->connect_mysql();
             $sql = $conn->prepare("UPDATE tbl_employee SET imagepic='$profile' WHERE employeeno = '$emp_no'");

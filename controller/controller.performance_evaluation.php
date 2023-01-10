@@ -14,24 +14,24 @@ class crud extends db_conn_mysql
     $return = array();
     foreach ($row as $x){
 
-    foreach ($x as $key => $input_arr) {
-    $x[$key] = addslashes($input_arr);
-    $x[$key] = utf8_encode($input_arr);
-    }
-    $data = array();
-    $data['action'] = '<div class="text-center">
-    <button title="Edit" style="background-color: green; color: white" onclick="editEvaluation('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\')" class="btn btn-sm"><i class="fas fa-sm fa-eye"></i>  Edit</button> 
-    <button title="Delete" onclick="deleteEvaluation('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
-    </div>'
-    ;
-    $data['employee_no'] = ucfirst($x['employee_no']);
-    $data['title'] = ucfirst($x['title']);
-    $data['description'] = strlen($x['description']) > 20 ? ucfirst(substr($x['description'], 0, 20))."..." : ucfirst($x['description']);
-    $data['date_created'] = date('F d, Y',strtotime($x['created_at']));
-    $data['file'] = '<div class="text-center">
-        <button title="View File" onclick="viewFile(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-primary btn-sm"><i class="fas fa-sm fa-eye"></i> Hardcopy</button>
-        </div>';
-    $return[] = $data;
+      foreach ($x as $key => $input_arr) {
+        $x[$key] = addslashes($input_arr);
+        $x[$key] = utf8_encode($input_arr);
+      }
+      $data = array();
+      $data['action'] = '<div class="text-center">
+      <button title="Edit" style="background-color: green; color: white" onclick="editEvaluation('.$x['id'].',\''.$x['title'].'\',\''.$x['description'].'\',\''.$x['file_name'].'\')" class="btn btn-sm"><i class="fas fa-sm fa-eye"></i>  Edit</button> 
+      <button title="Delete" onclick="deleteEvaluation('.$x['id'].',\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
+      </div>'
+      ;
+      $data['employee_no'] = ucfirst($x['employee_no']);
+      $data['title'] = ucfirst($x['title']);
+      $data['description'] = strlen($x['description']) > 20 ? ucfirst(substr($x['description'], 0, 20))."..." : ucfirst($x['description']);
+      $data['date_created'] = date('F d, Y',strtotime($x['created_at']));
+      $data['file'] = '<div class="text-center">
+          <button title="View File" onclick="viewFile(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-primary btn-sm"><i class="fas fa-sm fa-eye"></i> Hardcopy</button>
+          </div>';
+      $return[] = $data;
     }
     
     echo json_encode(array('data'=>$return));

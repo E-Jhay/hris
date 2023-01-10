@@ -191,6 +191,23 @@ $(document).ready(function(){
          });
   }
   loaduser_role();
+  
+  $('#1').on('change', function() { 
+      // From the other examples
+      if (this.checked) {
+        $('#approverr').show();
+      } else {
+        $('#approverr').hide();
+      }
+  });
+  $('#2').on('change', function() { 
+      // From the other examples
+      if (this.checked) {
+        $('#approverr').show();
+      } else {
+        $('#approverr').hide();
+      }
+  });
 
   function edituser(id,fullname,username,password,empstatus,usertype,userrole,approverr){
     $('#1').prop("checked",false);
@@ -205,11 +222,11 @@ $(document).ready(function(){
         }
     }
     
-         if(usertype=="admin"){
-          $('#approverr').show();
-        }else{
-          $('#approverr').hide();
-        }
+    if(usertype=="admin"){
+      $('#approverr').show();
+    }else{
+      $('#approverr').hide();
+    }
 
 
   	$('#usermodal').modal('show');

@@ -180,8 +180,8 @@ class crud extends db_conn_mysql
           $x[$key] = utf8_encode($input_arr);
           }
           $data = array();
-          $data['action'] = '<button onclick="editjob_title('.$x['id'].',\''.$x['job_title'].'\',\''.$x['job_desc'].'\')" class="btn btn-sm btn-success" ><i class="fas fa-sm fa-edit"></i> Edit</button>
-          <button onclick="deletejob_title('.$x['id'].')" class="btn btn-sm btn-danger" ><i class="fa fa-trash-alt"></i> Delete</button>';
+          $data['action'] = '<center class="d-flex justify-content-around"><button onclick="editjob_title('.$x['id'].',\''.$x['job_title'].'\',\''.$x['job_desc'].'\')" class="btn btn-sm btn-success" ><i class="fas fa-sm fa-edit"></i> Edit</button>
+          <button onclick="deletejob_title('.$x['id'].')" class="btn btn-sm btn-danger" ><i class="fa fa-trash-alt"></i> Delete</button></center>';
           $data['job_title'] = $x['job_title'];
           $data['job_desc'] = $x['job_desc'];
 

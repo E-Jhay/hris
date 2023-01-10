@@ -42,7 +42,7 @@ $count = $leaves->countLeaves($empno);
           <th>File Name</th>
           <th>Payroll Period</th>
           <th>Process Date</th>
-          <th class="text-center">Action</th>
+          <th class="text-center" style="width: 14em">Action</th>
         </thead>
         <tbody>
                 

@@ -16,7 +16,7 @@ $(document).ready(function(){
 		}
 		var employeenoo = $('#employeeno').val();
 		$('#filter_status').on('change',function(){
-			var filter_status = $('#filter_status').val();
+			const filter_status = $('#filter_status').val();
 			$('#tbl_myot').DataTable().destroy();
 			loadallot(filter_status);
 		});
@@ -51,7 +51,7 @@ function btnreports(){
   $('#div_reports').show();
 }
 
-  function open_ot(id,firstname,lastname,job_title,reasons,date_filed,ot_from,ot_to,no_of_hrs,ot_date,statuss,remarks){
+  function open_ot(id,firstname,lastname,job_title,reasons,date_filed,ot_from,ot_to,no_of_hrs,ot_date,statuss,remarks, employeeno){
   	$('#overtimedetail_modal').modal('show');
 
   	$('#ot_id').val(id);
@@ -64,6 +64,8 @@ function btnreports(){
 	$('#ot_no_of_hrs').html(no_of_hrs);
 	$('#ot_date').html(ot_date);
 	$('#ot_remarks').val(remarks);
+	$('#ot_status').text(statuss);
+	$('#ot_employeeno').val(employeeno);
 	if(statuss=="Pending"){
 		$('#btnapprove').show();
 		$('#btndisapprove').show();
@@ -87,6 +89,7 @@ function btnreports(){
   	var ot_remarks = $('#ot_remarks').val();
   	var statuss = "Approved";
   	var employeeno = $('#employeeno').val();
+  	var ot_employeeno = $('#ot_employeeno').val();
 
   		$.ajax({
   			url:"controller/controller.otapp.php?approveot",
@@ -95,9 +98,36 @@ function btnreports(){
   				ot_id: ot_id,
 				ot_remarks: ot_remarks,
 				statuss: statuss,
-				employeeno: employeeno
-  			},success:function(){
-  				window.location.href="ot_application.php";
+				employeeno: employeeno,
+				ot_employeeno: ot_employeeno,
+  			},
+			  beforeSend: function(){
+				  $("#btnapprove").text('Loading....')
+				  $("#btnapprove").attr('disabled', true)
+				  $("#btndisapprove").text('Loading....')
+				  $("#btndisapprove").attr('disabled', true)
+				  $("#btncancelapprove").text('Loading....')
+				  $("#btncancelapprove").attr('disabled', true)
+			  },
+			  complete: function(){
+				  $("#btnapprove").text('Approved')
+				  $("#btnapprove").attr('disabled', false)
+				  $("#btndisapprove").text('Disapproved')
+				  $("#btndisapprove").attr('disabled', false)
+				  $("#btncancelapprove").text('Cancel')
+				  $("#btncancelapprove").attr('disabled', false)
+			  },
+			  success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast)
+					$('#overtimedetail_modal').modal('hide');
+					$('#filter_status').val('Pending');
+					$('#tbl_myot').DataTable().destroy();
+					loadallot('Pending');
+				}
   			}
   		});
   }
@@ -110,6 +140,7 @@ function btnreports(){
   	var ot_remarks = $('#ot_remarks').val();
   	var statuss = "Disapproved";
   	var employeeno = $('#employeeno').val();
+  	var ot_employeeno = $('#ot_employeeno').val();
 
   		$.ajax({
   			url:"controller/controller.otapp.php?approveot",
@@ -118,9 +149,36 @@ function btnreports(){
   				ot_id: ot_id,
 				ot_remarks: ot_remarks,
 				statuss: statuss,
-				employeeno: employeeno
-  			},success:function(){
-  				window.location.href="ot_application.php";
+				employeeno: employeeno,
+				ot_employeeno: ot_employeeno,
+  			},
+			  beforeSend: function(){
+				  $("#btnapprove").text('Loading....')
+				  $("#btnapprove").attr('disabled', true)
+				  $("#btndisapprove").text('Loading....')
+				  $("#btndisapprove").attr('disabled', true)
+				  $("#btncancelapprove").text('Loading....')
+				  $("#btncancelapprove").attr('disabled', true)
+			  },
+			  complete: function(){
+				  $("#btnapprove").text('Approved')
+				  $("#btnapprove").attr('disabled', false)
+				  $("#btndisapprove").text('Disapproved')
+				  $("#btndisapprove").attr('disabled', false)
+				  $("#btncancelapprove").text('Cancel')
+				  $("#btncancelapprove").attr('disabled', false)
+			  },
+			  success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast)
+					$('#overtimedetail_modal').modal('hide');
+					$('#filter_status').val('Pending');
+					$('#tbl_myot').DataTable().destroy();
+					loadallot('Pending');
+				}
   			}
   		});
   }
@@ -132,8 +190,9 @@ function btnreports(){
   function cancelapprove_callback(){
   	var ot_id = $('#ot_id').val();
   	var ot_remarks = "";
-  	var statuss = "Pending";
+  	var statuss = "Cancelled";
   	var employeeno = $('#employeeno').val();
+  	var ot_employeeno = $('#ot_employeeno').val();
   		$.ajax({
   			url:"controller/controller.otapp.php?approveot",
   			method:"POST",
@@ -141,9 +200,36 @@ function btnreports(){
   				ot_id: ot_id,
 				ot_remarks: ot_remarks,
 				statuss: statuss,
-				employeeno: employeeno
-  			},success:function(){
-  				window.location.href="ot_application.php";
+				employeeno: employeeno,
+				ot_employeeno: ot_employeeno,
+  			},
+			beforeSend: function(){
+				$("#btnapprove").text('Loading....')
+				$("#btnapprove").attr('disabled', true)
+				$("#btndisapprove").text('Loading....')
+				$("#btndisapprove").attr('disabled', true)
+				$("#btncancelapprove").text('Loading....')
+				$("#btncancelapprove").attr('disabled', true)
+			},
+			complete: function(){
+				$("#btnapprove").text('Approved')
+				$("#btnapprove").attr('disabled', false)
+				$("#btndisapprove").text('Disapproved')
+				$("#btndisapprove").attr('disabled', false)
+				$("#btncancelapprove").text('Cancel')
+				$("#btncancelapprove").attr('disabled', false)
+			},
+			success:function(data){
+				const b = $.parseJSON(data)
+				if(b.type === 'error')
+					$.Toast(b.message, errorToast)
+				else {
+					$.Toast(b.message, successToast)
+					$('#overtimedetail_modal').modal('hide');
+					$('#filter_status').val('Pending');
+					$('#tbl_myot').DataTable().destroy();
+					loadallot('Pending');
+				}
   			}
   		});
   }
@@ -153,10 +239,10 @@ function btnreports(){
 		createdRow: function (row, data, index) {
 			if ($('td', row).eq(9)[0].innerText == 'Disapproved') {
 				$('td', row).eq(9).addClass('reject')
-				console.log($('td', row).eq(9)[0].innerText)
+				// console.log($('td', row).eq(9)[0].innerText)
 			} else if($('td', row).eq(9)[0].innerText == 'Approved') {
 				$('td', row).eq(9).addClass('acknowledged')
-				console.log($('td', row).eq(9)[0].innerText)
+				// console.log($('td', row).eq(9)[0].innerText)
 			}
 		},
               "aaSorting": [],
@@ -190,6 +276,15 @@ function btnreports(){
 
   function loadallot_list(filter_status_report,filter_from,filter_to){
     $('#tbl_otlist').DataTable({  
+			createdRow: function (row, data, index) {
+				if ($('td', row).eq(9)[0].innerText == 'Disapproved') {
+					$('td', row).eq(9).addClass('reject')
+					// console.log($('td', row).eq(9)[0].innerText)
+				} else if($('td', row).eq(9)[0].innerText == 'Approved') {
+					$('td', row).eq(9).addClass('acknowledged')
+					// console.log($('td', row).eq(9)[0].innerText)
+				}
+			},
               "aaSorting": [],
               "bSearching": true,
               "bFilter": true,

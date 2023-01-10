@@ -42,14 +42,20 @@ $count = $leaves->countLeaves($empno);
 <div class="navcontainer">
 
   <div id="div_memo" class="div_content">
+    <select class="form-control" id="status">
+      <option value="active" selected=""> Active </option>
+      <option value="acknowledged"> Acknowledged </option>
+      <option value="all"> All </option>
+    </select><br />
       <table class="table table-striped w-100" id="tbl_memo">
         <thead>
           <th>Employee no</th>
           <th>Memo Name</th>
           <th>Date</th>
           <th>Remarks</th>
-              <th>Status</th>
-          <th class="text-center">Action</th>
+          <th>NTE</th>
+          <th>Status</th>
+          <th class="text-center w-25">Action</th>
         </thead>
         <tbody>
                 
@@ -57,14 +63,20 @@ $count = $leaves->countLeaves($empno);
       </table>
   </div>
   <div id="div_inter_office_memo" class="div_content">
+    <select class="form-control" id="status2">
+      <option value="active" selected=""> Active </option>
+      <option value="acknowledged"> Acknowledged </option>
+      <option value="all"> All </option>
+    </select><br />
   <table class="table table-striped w-100" id="tbl_inter_office_memo">
             <thead>
               <th>Department Name</th>
               <th>Memo Name</th>
               <th>Date</th>
               <th>Remarks</th>
+              <th>NTE</th>
               <th>Status</th>
-              <th class="text-center">Action</th>
+              <th class="text-center w-25">Action</th>
             </thead>
             <tbody>
               
@@ -78,7 +90,7 @@ $count = $leaves->countLeaves($empno);
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Memo Details</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Upload Incident Report</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -100,7 +112,7 @@ $count = $leaves->countLeaves($empno);
               <input type="text" disabled class="form-control" id="remarks"></input>
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Upload Explanation:</label>
+              <label for="exampleInputEmail1">Upload Incident Report File (Explanation):</label>
               <input type="file" name="file" id="file" class="form-control" required>
             </div>
             <center>
@@ -114,7 +126,7 @@ $count = $leaves->countLeaves($empno);
 </div>
 
 <input type="hidden" id="employeenum" value="<?php echo $empno ?>" name="">
-<input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="">
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 <input type="hidden" id="department" value="<?php echo $_SESSION['department'] ?>" name="">
 <input type="text" id="action" name="">
 <input type="hidden" id="explanation" name="">

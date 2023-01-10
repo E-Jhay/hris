@@ -43,10 +43,9 @@ $balance = $leaves->getleavebalance($empno);
 
   <div id="div_apply" class="div_content">
   		<?php 
-  		foreach ($balance as $a) { 
-			if($a['balance'] < 0){ $a['balance'] = 0; } ?>
-				<span class="mr-5"> <b><?= $a['leave_type']; ?> =</b> <span><?= $a['balance']; ?></span></span>
-		  <?php } ?>
+  		foreach ($balance as $a) { ?>
+      <span class="mr-5"> <b><?= $a['leave_type']; ?> =</b> <span><?= $a['balance']; ?></span></span>
+      <?php } ?>
 		  <br><br>
 			<form action="" id="form" enctype="multipart/form-data">
         <table class="table w-100">
@@ -148,6 +147,12 @@ $balance = $leaves->getleavebalance($empno);
   </div>
 
   <div id="div_myleave" class="div_content">
+  <select id="filter_leave" class="form-control">
+			<option value=""> All </option>
+			<option value="Pending" selected=""> Pending </option>
+			<option value="Approved"> Approved </option>
+			<option value="Disapproved"> Disapproved </option>
+		</select>
 
     <table class="table table-striped w-100" id="tbl_myleave">
             <thead>
@@ -157,7 +162,7 @@ $balance = $leaves->getleavebalance($empno);
 							<th>Remaining Balance</th>
 							<th>Deducted Credits</th>
 							<th>Status</th>
-							<th>Action</th>
+							<th class="text-center">Action</th>
             </thead>
             <tbody>
               
@@ -318,6 +323,7 @@ $balance = $leaves->getleavebalance($empno);
 
 <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 <input type="hidden" id="datenow" value="<?php echo date('Y-m-d') ?>" name="">
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
  
 </body>
 <script src="services/leave.js"></script>

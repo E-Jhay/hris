@@ -30,19 +30,19 @@ $count = $leaves->countLeaves($empno);
 
   <div id="div_incident" class="div_content">
     <select class="form-control" id="status">
+      <option value="all"> All </option>
       <option value="pending" selected=""> Pending </option>
       <option value="acknowledged"> Acknowledged </option>
       <option value="rejected"> Rejected </option>
-      <option value="all"> All </option>
     </select><br />
     <table class="table table-striped w-100" id="tbl_incident">
         <thead>
-            <th width="15%">Title</th>
-            <th width="25%">Description</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th class="text-center">File</th>
-            <th class="text-center">Action</th>
+            <th width="20%">Title</th>
+            <th width="20%">Description</th>
+            <th width="14%">Date</th>
+            <th width="10%">Status</th>
+            <th class="text-center" width="18%">File</th>
+            <th class="text-center" width="18%">Action</th>
         </thead>
         <tbody>
             
@@ -78,11 +78,14 @@ $count = $leaves->countLeaves($empno);
                 <!-- <input type="text" class="form-control" id="incident_remarks" name="incident_remarks"></input> -->
                 <textarea class="form-control" name="incident_remarks" id="incident_remarks" cols="30" rows="2"></textarea>
               </div>
-              <center>
-                <button type="submit" class="btn btn-primary btn-sm" id="btn_submit">Acknowledge</button>
-                <button type="button" class="btn btn-danger btn-sm" id="btn_reject">Reject</button>
-                <button type="button" class="btn btn-warning btn-sm" id="btn_cancel">Cancel</button>
-              </center>
+
+              <?php if ($approver=="yes"): ?> 
+                <center>`
+                  <button type="submit" class="btn btn-primary btn-sm" id="btn_submit">Acknowledge</button>
+                  <button type="button" class="btn btn-danger btn-sm" id="btn_reject">Reject</button>
+                  <button type="button" class="btn btn-primary btn-sm" id="btn_cancel">Undo</button>
+                </center>`
+              <?php endif ?>
             </form>
         </div>
 

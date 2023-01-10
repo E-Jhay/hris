@@ -8,16 +8,21 @@ class crud extends db_conn_mysql
 
     $employeeno = $_GET['employeeno'];
     $department = $_GET['department'];
+    $status = $_GET['status'];
     $memo = $_GET['memo'];
     $conn = $this->connect_mysql();
     if($memo == 'employee'){
-      $query = $conn->prepare("SELECT * FROM tbl_memo WHERE employee_no='$employeeno' ORDER BY datee DESC");
+      if($status == 'all'){
+        $query = $conn->prepare("SELECT * FROM tbl_memo WHERE employee_no='$employeeno' ORDER BY datee DESC");
+      } else {
+        $query = $conn->prepare("SELECT * FROM tbl_memo WHERE employee_no='$employeeno' AND status = '$status' ORDER BY datee DESC");
+      }
       $query->execute();
       $row = $query->fetchAll();
       $return = array();
         foreach ($row as $x){
           $disabled = '';
-          if($x['status'] == 'acknowledge'){
+          if($x['status'] == 'acknowledged'){
             $disabled = 'disabled';
           }
 
@@ -26,16 +31,22 @@ class crud extends db_conn_mysql
             $x[$key] = utf8_encode($input_arr);
             }
             $data = array();
+            if($x['notice_to_explain'] == 'yes') {
+              $acknowledgeButton = ' <button ' .$disabled. ' title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="btn btn-sm btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>';
+            } else {
+              $acknowledgeButton = '';
+            }
             $data['action'] = '<center>
-            <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View Memo</button>
-            <button '.$disabled.' title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
-            </center>
+            <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['employee_no'].'\')" class="btn btn-sm btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View Memo</button>'
+            .$acknowledgeButton.
+            '</center>
             ';
 
             $data['employeeno'] = $x['employee_no'];
             $data['memo'] = $x['memo_name'];
             $data['status'] = ucfirst($x['status']);
             $data['remarks'] = $x['remarks'];
+            $data['notice_to_explain'] = ucfirst($x['notice_to_explain']);
             $data['date'] = $x['datee'];
 
           $return[] = $data;
@@ -43,13 +54,18 @@ class crud extends db_conn_mysql
       
       echo json_encode(array('data'=>$return));
     } else if($memo == 'department') {
-      $query = $conn->prepare("SELECT * FROM tbl_memo WHERE department='$department' ORDER BY datee DESC");
+      if($status == 'all'){
+        $query = $conn->prepare("SELECT * FROM tbl_memo WHERE department='$department' OR department = 'For Everyone' ORDER BY datee DESC");
+      } else {
+        $query = $conn->prepare("SELECT * FROM tbl_memo WHERE department='$department' OR department = 'For Everyone' AND status = '$status' ORDER BY datee DESC");
+      }
+      
       $query->execute();
       $row = $query->fetchAll();
       $return = array();
       foreach ($row as $x){
         $disabled = '';
-        if($x['status'] == 'acknowledge'){
+        if($x['status'] == 'acknowledged'){
           $disabled = 'disabled';
         }
 
@@ -65,15 +81,21 @@ class crud extends db_conn_mysql
           $explanationText = 'Unavailable';
         }
         $data = array();
+        if($x['notice_to_explain'] == 'yes') {
+          $acknowledgeButton = ' <button '.$disabled.' title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="btn btn-sm btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>';
+        } else {
+          $acknowledgeButton = '';
+        }
         $data['action'] = '<div class="text-center">
-          <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['department'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View Memo</button>
-          <button '.$disabled.' title="Acknowledge" onclick="uploadExplain(\''.$x['id'].'\',\''.$x['datee'].'\',\''.$x['memo_name'].'\',\''.$x['remarks'].'\',\''.$x['explanation'].'\')" class="inv-button-sm btn btn-xs btn-primary" style="font-size:10px"><i class="fa fa-upload"></i> Acknowledge</button>
-        </div>';
+          <button title="View Memo" onclick="dl_memo(\''.$x['file_name'].'\',\''.$x['department'].'\')" class="btn btn-sm btn-primary" style="font-size:10px"><i class="fa fa-eye"></i> View Memo</button>'
+          .$acknowledgeButton.
+        '</div>';
 
         $data['department'] = $x['department'];
         $data['memo'] = $x['memo_name'];
         $data['status'] = ucfirst($x['status']);
         $data['remarks'] = strlen($x['remarks']) > 20 ? substr($x['remarks'], 0, 20)."..." : $x['remarks'];
+        $data['notice_to_explain'] = ucfirst($x['notice_to_explain']);
         $data['date'] = date('F d, Y',strtotime($x['datee']));
 
         $return[] = $data;
@@ -91,32 +113,36 @@ class crud extends db_conn_mysql
     $explanation = $_POST['explanation'];
     if(!empty($_FILES["file"]["name"])) {
       if($action == 'employee'){
-        $target_dir = "../memo/Explanation/".$employeeno."/";
+        $target_dir = "../memo/explanation/".$employeeno."/";
       } else {
-        $target_dir = "../memo/Explanation/".$department."/";
+        $target_dir = "../memo/explanation/".$department."/";
       }
       $file = $_FILES['file']['name'];
       $path = pathinfo($file);
       $ext = $path['extension'];
       $temp_name = $_FILES['file']['tmp_name'];
-      $today = date("Ymd");
+      $today = date("Y-m-d-His");
       $name = explode(".", $file);
       $fileExplanation = $name[0]."-".$today.".".$ext;
       $path_filename_ext = $target_dir;
       if(!is_dir($path_filename_ext)){
-        mkdir($path_filename_ext, 0755);
+        mkdir($path_filename_ext, 0777, true);
       }
       $path_filename_ext .= $fileExplanation;
     
-      if (move_uploaded_file($temp_name,$path_filename_ext)) {
+      if(move_uploaded_file($temp_name,$path_filename_ext)) {
         if($explanation != '' || $explanation != NULL){
           $link_file = $target_dir.$explanation;
           if(file_exists($link_file))
           unlink($link_file);
         }
         $conn = $this->connect_mysql();
-        $qry = $conn->prepare("UPDATE tbl_memo SET explanation='$fileExplanation', status='acknowledge' WHERE id = '$memo_id'");
+        $qry = $conn->prepare("UPDATE tbl_memo SET explanation='$fileExplanation', status='acknowledged' WHERE id = '$memo_id'");
         $qry->execute();
+
+        $deptHeadStatement = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE employeeno='$employeeno'");
+        $deptHeadStatement->execute();
+        $deptHeadQuery = $deptHeadStatement->fetch();
 
         require 'Exception.php';
         require 'PHPMailer.php';
@@ -127,12 +153,10 @@ class crud extends db_conn_mysql
         $mail->IsSMTP();
         $mail->SMTPDebug = 0;
         $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'ssl';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 465;
+        $mail->Host = "smtp.ipower.com";
         $mail->IsHTML(true);
-        $mail->Username = "pmcmailchimp@gmail.com";
-        $mail->Password = "qyegdvkzvbjihbou";
+        $mail->Username = "no-reply@panamed.com.ph";
+        $mail->Password = "Unimex123!!";
         $mail->SetFrom("no-reply@panamed.com.ph", "");
 
         
@@ -144,91 +168,95 @@ class crud extends db_conn_mysql
         $mail->Subject = "Memorandum";
         $mail->Body = $message;
         $mail->isHTML(true);
-        // $dept_head_email = $row2['dept_head_email'];
-        $mail->AddAddress('bumacodejhay@gmail.com');
-        $mail->AddCC('ejhaybumacod26@gmail.com');
-        $mail->Send();
+        $dept_head_email = $deptHeadQuery['dept_head_email'];
+        $mail->AddAddress($dept_head_email); // HR email
+        $mail->AddCC('bumacodejhay@gmail.com'); // DEPT HEAD email
+        if(!$mail->Send()) {
+          echo json_encode(array('message' => 'Explanation Uploaded Successfully <br /> Email not sent', 'type' => 'success'));
+          exit;
+        } else {
+          echo json_encode(array('message' => 'Explanation Uploaded Successfully <br /> Email sent', 'type' => 'success'));
+          exit;
+        }
 
-        echo json_encode(array('message' => 'Explanation Uploaded Successfully', 'type' => 'success'));
-        exit;
       }
     }
     echo json_encode(array('message' => 'An Error Occured', 'type' => 'error'));
   }
 
-  function readleave(){
+  // function readleave(){
 
-    $employeeno = $_POST['employeeno'];
+  //   $employeeno = $_POST['employeeno'];
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
+  //   $query->execute();
 
-  }
+  // }
 
-  function readpayslip(){
+  // function readpayslip(){
 
-    $employeeno = $_POST['employeeno'];
+  //   $employeeno = $_POST['employeeno'];
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
+  //   $query->execute();
 
-  }  
+  // }  
 
-  function count_leaveapp(){
+  // function count_leaveapp(){
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+  //   $employeenoo = $_POST['employeenoo'];
+  //   $conn = $this->connect_mysql();
 
-    $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
-    $sq->execute();
-    $rw = $sq->fetch();
+  //   $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
+  //   $sq->execute();
+  //   $rw = $sq->fetch();
 
-    $dept = $rw['department'];
+  //   $dept = $rw['department'];
 
-    $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
-    $query->execute();
+  //   $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+  //                            LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_otapp(){
+  // function count_otapp(){
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_payslip(){
+  // function count_payslip(){
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+  //   $employeenoo = $_POST['employeenoo'];
+  //   $conn = $this->connect_mysql();
 
-    $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
-    $query->execute();
-    $count = $query->rowCount();
+  //   $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
+  //   $query->execute();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_reimbursement(){
+  // function count_reimbursement(){
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
 }
 

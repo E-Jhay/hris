@@ -31,7 +31,7 @@ require_once "header.php";
   	<button type="button" class="btn btn-sm btn-success" onclick="btnaddnews('all')"><i class="fa fa-plus"></i> Add New Announcement</button><br><br>
     <table class="table table-striped w-100" id="tbl_news">
             <thead>
-              <th>Topic</th>
+              <th width="25%">Topic</th>
 							<th>Published Date</th>
 							<th>End Date</th>
 							<th>Acknowledgment Status</th>
@@ -47,7 +47,7 @@ require_once "header.php";
     <table class="table table-striped w-100" id="tbl_inter_office_news">
             <thead>
               <th>Department</th>
-              <th>Topic</th>
+              <th width="25%">Topic</th>
 							<th>Published Date</th>
 							<th>End Date</th>
 							<th>Acknowledgment Status</th>

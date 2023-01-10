@@ -7,13 +7,6 @@ $(document).ready(function(){
 		$('.drawer').on('click',function(){
 		   $('.navnavnav').slideToggle();
 		});
-
-		var notif_number = $('#notif_number').html();
-		if(notif_number > 0){
-			$('#notif_number').show();
-		}else{
-			$('#notif_number').hide();
-		}
 		var employeenoo = $('#employeeno').val();
 		
 
@@ -98,7 +91,7 @@ $(document).ready(function(){
 					clearFields()
 					$('#tbl_myot').DataTable().destroy();
 					var employeeno = $('#employeeno').val();
-					loadmyot(employeeno);
+					loadmyot('Pending');
 				}
 			}
 		});
@@ -164,41 +157,6 @@ $(document).ready(function(){
 		$("#div_reports").hide();
 	}
 	
-
-  function goto(linkk){
-	
-	if(linkk=="notification.php"){
-
-		var employeeno = $('#employeeno').val();
-		$.ajax({
-			url:"controller/controller.overtime.php?readleave",
-			method:"POST",
-			data:{
-				employeeno:employeeno
-			},success:function(){
-				window.location.href=linkk;
-			}
-		});
-
-	}else if(linkk=="ess_payslip.php"){
-
-		var employeeno = $('#employeeno').val();
-		$.ajax({
-			url:"controller/controller.overtime.php?readpayslip",
-			method:"POST",
-			data:{
-				employeeno:employeeno
-			},success:function(){
-				window.location.href=linkk;
-			}
-		});
-
-	}else{
-		window.location.href=linkk;
-	}
-
-  }
-
   function delete_myot(id){
   	confirmed("delete",delete_myot_callback, "Do you really want to delete this?", "Yes", "No", id);
   }
@@ -219,9 +177,19 @@ $(document).ready(function(){
   		});
   }
 
-  function loadmyot(employeeno){
+  function loadmyot(status){
+	const employeeno = $('#currentUser').val();
                           
     $('#tbl_myot').DataTable({  
+				createdRow: function (row, data, index) {
+					if ($('td', row).eq(9)[0].innerText == 'Disapproved') {
+						$('td', row).eq(9).addClass('reject')
+						console.log($('td', row).eq(9)[0].innerText)
+					} else if($('td', row).eq(9)[0].innerText == 'Approved') {
+						$('td', row).eq(9).addClass('acknowledged')
+						console.log($('td', row).eq(9)[0].innerText)
+					}
+				},
               "aaSorting": [],
               "bSearching": true,
               "bFilter": true,
@@ -229,7 +197,7 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
-              "ajax" : "controller/controller.overtime.php?loadmyot&employeeno="+employeeno,
+              "ajax" : "controller/controller.overtime.php?loadmyot&employeeno="+employeeno+"&status="+status,
               "columns" : [
         
                     { "data" : "employeeno"},
@@ -249,97 +217,9 @@ $(document).ready(function(){
                 ],
          });
   }
-  var employeeno = $('#employeeno').val();
-  loadmyot(employeeno);
+  loadmyot('Pending');
 
-
-  function count_leaveapp(){
-
-  	var employeenoo = $('#employeeno').val();
-  	$.ajax({
-  		url:"controller/controller.overtime.php?count_leaveapp",
-  		method:"POST",
-  		data:{
-  			employeenoo:employeenoo
-  		},success:function(data){
-  			var b = $.parseJSON(data);
-  			
-			if(b.count > 0){
-				$('#leave_app_number').show();
-				$('#leave_app_number').html(b.count);
-			}else{
-				$('#leave_app_number').hide();
-			}
-
-  		}
-  	});
-  }
-  count_leaveapp();
-
-    function count_otapp(){
-
-  	var employeenoo = $('#employeeno').val();
-  	$.ajax({
-  		url:"controller/controller.overtime.php?count_otapp",
-  		method:"POST",
-  		data:{
-  			employeenoo:employeenoo
-  		},success:function(data){
-  			var b = $.parseJSON(data);
-  			
-			if(b.count > 0){
-				$('#ot_app_number').show();
-				$('#ot_app_number').html(b.count);
-			}else{
-				$('#ot_app_number').hide();
-			}
-
-  		}
-  	});
-  }
-  count_otapp();
-
-
-  function count_payslip(){
-
-  	var employeenoo = $('#employeeno').val();
-  	$.ajax({
-  		url:"controller/controller.overtime.php?count_payslip",
-  		method:"POST",
-  		data:{
-  			employeenoo:employeenoo
-  		},success:function(data){
-  			var b = $.parseJSON(data);
-  			
-			if(b.count > 0){
-				$('#payslip_number').show();
-				$('#payslip_number').html(b.count);
-			}else{
-				$('#payslip_number').hide();
-			}
-
-  		}
-  	});
-  }
-  count_payslip();
-  function count_reimbursement(){
-
-  	var employeenoo = $('#employeeno').val();
-  	$.ajax({
-  		url:"controller/controller.overtime.php?count_reimbursement",
-  		method:"POST",
-  		data:{
-  			employeenoo:employeenoo
-  		},success:function(data){
-  			var b = $.parseJSON(data);
-			if(b.count > 0){
-				$('#reim_app_number').show();
-				$('#reim_app_number').html(b.count);
-			}else{
-				$('#reim_app_number').hide();
-			}
-
-  		}
-  	});
-  }
-  count_reimbursement();
+  $('#filter_ot').on('change', () => {
+	$('#tbl_myot').DataTable().destroy();
+	loadmyot($('#filter_ot').val());
+})

@@ -172,11 +172,12 @@ $count = $leaves->countLeaves($empno);
 					<th>Employee Name</th>
 					<th>Date Applied</th>
 					<th>Leave Type</th>
+					<th>Application Type</th>
 					<th>Leave Balance</th>
 					<th>Credits to Deduct</th>
 					<th>Status</th>
-					<th class="text-center">Leave Form</th>
-					<th class="text-center">Action</th>
+					<th class="text-center" style="width: 10em">Leave Form</th>
+					<th class="text-center" style="width: 8em">Action</th>
 				</thead>
 				<tbody>
 				</tbody>
@@ -203,6 +204,7 @@ $count = $leaves->countLeaves($empno);
 				<th>Date From</th>
 				<th>Date To</th>
 				<th>Leave Type</th>
+				<th>Application Type</th>
 				<th>Leave Balance</th>
 				<th>Credits to Deduct</th>
 				<th>Status</th>
@@ -228,7 +230,7 @@ $count = $leaves->countLeaves($empno);
         </button>
       </div>
       <div class="modal-body">
-      		<input type="hidden" id="emp_id" name="">
+      		<input type="hidden" id="leave_id" name="">
           <div class="form-group">
             <label for="exampleInputEmail1">Employee No</label>
             <span class="form-control" id="emp_number"></span>
@@ -342,7 +344,7 @@ $count = $leaves->countLeaves($empno);
             <textarea id="remarks" class="form-control"></textarea>
           </div>
 
-          <?php if ($usertype=="admin" && $approver=="yes"): ?>	
+          <?php if ($approver=="yes"): ?>	
 	      	<center>
 	      		<button class="btn btn-success btn-sm" id="btnapprove" onclick="approve()">Approve</button>
 	      		<button class="btn btn-danger btn-sm" id="btndisapprove" onclick="disapproved()">Disapprove</button>

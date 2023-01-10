@@ -4,76 +4,76 @@ include 'controller.db.php';
 class crud extends db_conn_mysql
 {
 
-  function count_leaveapp(){
+  // function count_leaveapp(){
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+  //   $employeenoo = $_POST['employeenoo'];
+  //   $conn = $this->connect_mysql();
 
-    $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
-    $sq->execute();
-    $rw = $sq->fetch();
+  //   $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
+  //   $sq->execute();
+  //   $rw = $sq->fetch();
 
-    $dept = $rw['department'];
+  //   $dept = $rw['department'];
 
-    $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
-    $query->execute();
+  //   $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+  //                            LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
-  function count_otapp(){
+  //   echo json_encode(array("count"=>$count));
+  // }
+  // function count_otapp(){
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
-  function count_payslip(){
+  //   echo json_encode(array("count"=>$count));
+  // }
+  // function count_payslip(){
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+  //   $employeenoo = $_POST['employeenoo'];
+  //   $conn = $this->connect_mysql();
 
-    $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
-    $query->execute();
-    $count = $query->rowCount();
+  //   $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
+  //   $query->execute();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
-  function count_reimbursement(){
+  //   echo json_encode(array("count"=>$count));
+  // }
+  // function count_reimbursement(){
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-    function readleave(){
+  //   function readleave(){
 
-      $employeeno = $_POST['employeeno'];
+  //     $employeeno = $_POST['employeeno'];
 
-      $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
-      $query->execute();
+  //     $conn = $this->connect_mysql();
+  //     $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
+  //     $query->execute();
 
-    }
+  //   }
 
-    function readpayslip(){
+  //   function readpayslip(){
 
-      $employeeno = $_POST['employeeno'];
+  //     $employeeno = $_POST['employeeno'];
 
-      $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
-      $query->execute();
+  //     $conn = $this->connect_mysql();
+  //     $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
+  //     $query->execute();
 
-    }
+  //   }
 
     function employeelistadmin(){
 
@@ -211,7 +211,7 @@ class crud extends db_conn_mysql
       $lastname = utf8_decode($srow['lastname']);
       $department = $srow['department'];
 
-      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE emp_id='$employee_id'");
+      $sqry2 = $conn->prepare("SELECT corp_email FROM contactinfo WHERE employeeno='$emp_number'");
       $sqry2->execute();
       $srow2 = $sqry2->fetch();
       $corp_email = $srow2['corp_email'];
@@ -225,10 +225,10 @@ class crud extends db_conn_mysql
             $mail->IsSMTP();
             $mail->SMTPDebug = 0;
             $mail->SMTPAuth = true;
-            $mail->Host = "mail.panamed.com.ph";
+            $mail->Host = "smtp.ipower.com";
             $mail->IsHTML(true);
             $mail->Username = "no-reply@panamed.com.ph";
-            $mail->Password = "Unimex123!";
+            $mail->Password = "Unimex123!!";
             $mail->SetFrom("no-reply@panamed.com.ph", "");
             $mail->Subject = "Leave Application Status";
             if($statt=="Disapproved"){
@@ -389,9 +389,9 @@ class crud extends db_conn_mysql
       $department = $row['department'];
       $firstname = $row['firstname'];
       $lastname = utf8_decode($row['lastname']);
-      $id = $row['id'];
+      // $id = $row['id'];
 
-      $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
+      $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE employeeno='$employeeno'");
       $qry3->execute();
       $row2 = $qry3->fetch();
 
@@ -400,25 +400,27 @@ class crud extends db_conn_mysql
       require 'SMTP.php';
       require 'PHPMailerAutoload.php';
 
-      //       // $mail = new PHPMailer();
-      //       // $mail->IsSMTP();
-      //       // $mail->SMTPDebug = 0;
-      //       // $mail->SMTPAuth = true;
-      //       // $mail->Host = "mail.panamed.com.ph";
-      //       // $mail->IsHTML(true);
-      //       // $mail->Username = "no-reply@panamed.com.ph";
-      //       // $mail->Password = "Unimex123!";
-      //       // $mail->SetFrom("no-reply@panamed.com.ph", "");
-      //       // $mail->Subject = "Leave Application";
-      //       // $msg = $firstname.' '.$lastname.' applied '.$leave_type.' From: '.$datefrom.' To: '.$dateto;
-      //       // $mail->Body = $msg;
-      //       // $dept_head_email = $row2['dept_head_email'];
-      //       // $mail->AddAddress($dept_head_email);
-      //       // if(!$mail->Send()) {
-      //       //     echo "Mailer Error: " . $mail->ErrorInfo;
-      //       // } else {
-      //       //     echo "success";
-      //       // }
+      $mail = new PHPMailer();
+      $mail->IsSMTP();
+      $mail->SMTPDebug = 0;
+      $mail->SMTPAuth = true;
+      $mail->Host = "smtp.ipower.com";
+      $mail->IsHTML(true);
+      $mail->Username = "no-reply@panamed.com.ph";
+      $mail->Password = "Unimex123!!";
+      $mail->SetFrom("no-reply@panamed.com.ph", "");
+      $mail->Subject = "Leave Application";
+      $message = $firstname.' '.$lastname.' applied '.$leave_type.' <strong>'. $application_type.'</strong> From: '.$datefrom.' To: '.$dateto;
+      $mail->Body = $message;
+      $dept_head_email = $row2['dept_head_email'];
+      $mail->AddAddress($dept_head_email);
+      $mail->AddCC('bumacodejhay@gmail.com');
+
+      if(!$mail->Send()) {
+        echo json_encode(array('type' => 'success', 'message' => 'Successful application of leave. <br /> Email not sent.'));
+        exit;
+      }
+      echo json_encode(array('type' => 'Success', 'message' => 'Successful application of leave. <br  /> Emai sent'));
 
       //       $mail = new PHPMailer();
       //       $mail->IsSMTP();
@@ -442,28 +444,28 @@ class crud extends db_conn_mysql
       //         echo "success";
       //       }
 
-        $mail = new PHPMailer();
-        $mail->IsSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'ssl';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 465;
-        $mail->IsHTML(true);
-        $mail->Username = "pmcmailchimp@gmail.com";
-        $mail->Password = "qyegdvkzvbjihbou";
-        $mail->SetFrom("no-reply@panamed.com.ph", "");
-        
-        $message = $firstname.' '.$lastname.' applied '.$leave_type.' <strong>'. $application_type.'</strong> From: '.$datefrom.' To: '.$dateto;
-        $mail->Subject = "Leave Application";
-        $mail->Body = $message;
-        $mail->isHTML(true);
+        // $mail = new PHPMailer();
+        // $mail->IsSMTP();
+        // $mail->SMTPDebug = 0;
+        // $mail->SMTPAuth = true;
+        // $mail->SMTPSecure = 'ssl';
+        // $mail->Host = "smtp.gmail.com";
+        // $mail->Port = 465;
+        // $mail->IsHTML(true);
+        // $mail->Username = "pmcmailchimp@gmail.com";
+        // $mail->Password = "qyegdvkzvbjihbou";
+        // $mail->SetFrom("no-reply@panamed.com.ph", "");
         // $dept_head_email = $row2['dept_head_email'];
-        $mail->AddAddress('bumacodejhay@gmail.com');
-        $mail->AddCC('ejhaybumacod26@gmail.com');
-        $mail->Send();
+        
+        // $message = $firstname.' '.$lastname.' applied '.$leave_type.' <strong>'. $application_type.'</strong> From: '.$datefrom.' To: '.$dateto. ' dept_head_email: ' .$dept_head_email;
+        // $mail->Subject = "Leave Application";
+        // $mail->Body = $message;
+        // $mail->isHTML(true);
+        // $mail->AddAddress($dept_head_email);
+        // $mail->AddCC('ejhaybumacod26@gmail.com');
+        // $mail->Send();
 
-        echo json_encode(array('type' => 'success', 'message' => 'Successful application of leave'));
+        // echo json_encode(array('type' => 'success', 'message' => 'Successful application of leave', 'dept_head_email' => $dept_head_email));
 
       // $qry1 = $conn->prepare("UPDATE tbl_employee SET leave_balance='$updatedbalance' WHERE employeeno='$employeeno'");
       // $qry1->execute();
@@ -487,10 +489,18 @@ class crud extends db_conn_mysql
   function loadmyleave(){
 
     $employeeno = $_GET['employeeno'];
+    $status = $_GET['status'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+    if($status == ''){
+      $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
                              LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno
                              WHERE a.employeeno='$employeeno' ORDER BY a.id DESC");
+    } else {
+      $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+      LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno
+      WHERE a.employeeno='$employeeno' AND a.status = '$status' ORDER BY a.id DESC");
+    }
+    
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
@@ -506,9 +516,9 @@ class crud extends db_conn_mysql
           $sql->execute();
           $rowww = $sql->fetch();
           $balanse = $rowww['balance'];
-          if($balanse < 0 ){
-            $balanse = 0;
-          }
+          // if($balanse < 0 ){
+          //   $balanse = 0;
+          // }
           $fname = $x['firstname'].' '.$x['lastname'];
           $fname = utf8_decode($fname);
           $data = array();
@@ -535,9 +545,9 @@ class crud extends db_conn_mysql
             }else{
               $data['numberofdays'] = $x['no_days'];
             }
-            $data['action'] = '<center>
-            <button title="View" onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" style="font-size:10px;color: white;background: #4c91cd;border-color: #4c91cd;"><i class="fa fa-eye"></i></button>
-            <button title="Delete" disabled="" onclick="delete_leave('.$x['idd'].')" style="font-size:10px;color: white;background: #ff8080;border-color: #ff8080;"><i class="fa fa-trash"></i></button>
+            $data['action'] = '<center class="d-flex justify-content-around">
+            <button class="btn btn-primary btn-sm" title="View" onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')"><i class="fa fa-eye"></i></button>
+            <button class="btn btn-danger btn-sm" title="Delete" disabled="" onclick="delete_leave('.$x['idd'].')"><i class="fa fa-trash"></i></button>
             </center>
             ';
           }

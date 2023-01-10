@@ -33,23 +33,6 @@ $(document).ready(function(){
 				$('#department').load('controller/controller.medical.php?ddepartment',function(){
 					$('#department').val(b.department);
 				});
-
-				$('#type1').val(b.type1);
-				$('#classification1').val(b.classification1);
-				$('#status1').val(b.status1);
-				$('#dateofexam1').val(b.dateofexam1 !== '0000-00-00' ? b.dateofexam1 : '');
-				$('#remarks1').val(b.remarks1);
-				$('#type2').val(b.type2);
-				$('#classification2').val(b.classification2);
-				$('#status2').val(b.status2);
-				$('#dateofexam2').val(b.dateofexam2 !== '0000-00-00' ? b.dateofexam2 : '');
-				$('#remarks2').val(b.remarks2);
-				$('#type3').val(b.type3);
-				$('#classification3').val(b.classification3);
-				$('#status3').val(b.status3);
-				$('#dateofexam3').val(b.dateofexam3 !== '0000-00-00' ? b.dateofexam3 : '');
-				$('#remarks3').val(b.remarks3);
-				$('#leave_balance').val(b.leave_balance);
 			}
 		});
 
@@ -62,62 +45,152 @@ $(document).ready(function(){
 			}
 		});
 
+		$('#medical_table').hide()
+
+		$('#addBtn').on('click', () => {
+			$("#addBtn").hide()
+			$('#cancelBtn').show();
+			$('#medical_table').show()
+			$('#action').val('insert')
+		})
+		$('#cancelBtn').on('click', () => {
+			$("#addBtn").show()
+			$('#cancelBtn').hide();
+			$('#medical_table').hide()
+		})
+
+		load_medical()
+
 	});
 
 
-	$('form').on('submit', function (e) {
-
-            e.preventDefault();
-            confirmed("save",save_callback, "Do you really want to save this?", "Yes", "No");
-            
-      });
+$('#form').on('submit', (e) => {
+    e.preventDefault()
+    confirmed("save",save_callback, "Do you really want to save this?", "Yes", "No");
+})
 
 function save_callback(){
-					$.ajax({
-	        	url:"controller/controller.medical.php?editmedical",
-	        	method:"POST",
-	        	data: $('form').serialize(),
-	        	success:function(data){
-					$.Toast("Successfully Saved", successToast);
-					setTimeout(() => {
-						var b = $.parseJSON(data);
-						var employeeno = b.employeeno;
-						window.location.href="medical.php?employeeno="+employeeno;
-					}, 1000)
-	        		
-	        	}
-	        });
+    var formData = new FormData($("#form")[0]);
+    $.ajax({
+        url:"controller/controller.medical.php?addMedical",
+        method:"POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success:function(data){
+            const b = $.parseJSON(data)
+            if(b.type === 'success'){
+                $.Toast(b.message, successToast)
+                $('#form').trigger("reset");
+                $('#tbl_medical').DataTable().destroy();
+                load_medical();
+                $("#addBtn").show()
+                $('#cancelBtn').hide();
+                $('#medical_table').hide()
+            }
+            else
+                $.Toast(b.message, errorToast)
+            // setTimeout(() => {
+            // 	window.location.href="memo.php";
+            // }, 1000)
+        }
+    });
 }
-	// function lb(){
 
- //       $.ajax({
- //        url:"controller/controller.leavebalance.php?leave_credits_load",
- //        method:"POST",
- //        data:{
- //          id:""
- //        },success:function(){
+function load_medical(){
+    const employeeno = $('#employeeno').val()
+    $('#tbl_medical').DataTable({  
+        "aaSorting": [],
+        "bSearching": true,
+        "bFilter": true,
+        "bInfo": true,
+        "bPaginate": true,
+        "bLengthChange": true,
+        "pagination": true,
+        "ajax" : "controller/controller.medical.php?load_medical&employeeno=" + employeeno,
+        "columns" : [
+            { "data" : "type"},
+            { "data" : "classification"},
+            { "data" : "status"},
+            { "data" : "date_of_examination"},
+            { "data" : "remarks"},
+            { "data" : "file"},
+            { "data" : "action"},
 
- //        }
- //      });
-       
- //  }
- //  lb();
+        ],
+    });
+}
 
-	function editcontact(){
-		$('.master_input').addClass('master_input_open');
-		$('.master_input').removeClass('master_input');
-		$('#btnsave').removeClass('d-none');
-		$('#btncancel').removeClass('d-none');
-		$('#btnedit').addClass('d-none');
-	}
+function viewFile(file_name, employee_number) {
+    const link = "medical/"+employee_number+"/"+file_name;
+    window.open(link);
+}
 
-	function canceledit(){
-		var employeeno = $('#employeeno').val();
-		window.location.href="medical.php?employeeno="+employeeno;
-	}
+function deleteMedical(id, file_name, employeeno) {
+    var data = [id, file_name, employeeno];
+    confirmed("delete",delete_medical_callback, "Do you really want to delete this?", "Yes", "No",data);
+}
 
-	function goto(linkk){
-		var employeeno = $('#employeeno').val();
-		var link = linkk+"?employeeno="+employeeno;
-		window.location.href=link;
-	}
+function delete_medical_callback(data){
+    var id = data[0];
+    var file_name = data[1];
+    var employeeno = data[2];
+    $.ajax({
+      url:"controller/controller.medical.php?deleteMedical",
+      method:"POST",
+      data:{
+        id: id,
+        file_name: file_name,
+        employeeno: employeeno
+      },success:function(){
+        $.Toast("Successfully Deleted", successToast);
+        $('#tbl_medical').DataTable().destroy();
+        load_medical();
+      }
+    });
+}
+
+function edit(id, type, classification, status, date_of_examination, remarks, file_name, employeeno) {
+    $('#edit_modal').modal('show')
+    $('#medical_id').val(id)
+    $('#medical_type').val(type)
+    $('#medical_classification').val(classification)
+    $('#medical_status').val(status)
+    $('#medical_date_of_examination').val(date_of_examination)
+    $('#medical_remarks').val(remarks)
+    $('#medical_file_name').val(file_name)
+    $('#medical_employeeno').val(employeeno)
+}
+
+$('#medical_form').on('submit', (e) => {
+    e.preventDefault()
+    confirmed("save",update_callback, "Do you really want to update this?", "Yes", "No");
+})
+
+function update_callback() {
+    const formData = new FormData($("#medical_form")[0]);
+    $.ajax({
+        url:"controller/controller.medical.php?updateMedical",
+        method:"POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success:function(data){
+            const b = $.parseJSON(data)
+            if(b.type === "error")
+                $.Toast(b.message, errorToast)
+            else
+                $.Toast(b.message, successToast)
+            $('#edit_modal').modal('hide')
+            $('#medical_form').trigger("reset");
+            $('#tbl_medical').DataTable().destroy();
+            load_medical();
+        }
+    });
+}
+
+function goto(linkk){
+	var employeeno = $('#employeeno').val();
+	var link = linkk+"?employeeno="+employeeno;
+	window.location.href=link;
+}

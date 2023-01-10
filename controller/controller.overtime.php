@@ -27,9 +27,9 @@ class crud extends db_conn_mysql
     $department = $row['department'];
     $firstname = $row['firstname'];
     $lastname = utf8_decode($row['lastname']);
-    $id = $row['id'];
+    // $id = $row['id'];
 
-    $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE emp_id='$id'");
+    $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE employeeno='$employeeno'");
     $qry3->execute();
     $row2 = $qry3->fetch();
 
@@ -63,45 +63,48 @@ class crud extends db_conn_mysql
       $mail->IsSMTP();
       $mail->SMTPDebug = 0;
       $mail->SMTPAuth = true;
-      $mail->SMTPSecure = 'ssl';
-      $mail->Host = "smtp.gmail.com";
-      $mail->Port = 465;
+      $mail->Host = "smtp.ipower.com";
       $mail->IsHTML(true);
-      $mail->Username = "pmcmailchimp@gmail.com";
-      $mail->Password = "qyegdvkzvbjihbou";
+      $mail->Username = "no-reply@panamed.com.ph";
+      $mail->Password = "Unimex123!!";
       $mail->SetFrom("no-reply@panamed.com.ph", "");
+      $dept_head_email = $row2['dept_head_email'];
       
       $message = $firstname." ".$lastname." applied Overtime From: ".$ot_date." (".$ot_from.") To: ".$ot_date_to." (".$ot_to.")\n\nReason: ".$reasons;
       $mail->Subject = "Overtime Application";
       $mail->Body = $message;
       $mail->isHTML(true);
-      // $dept_head_email = $row2['dept_head_email'];
       $mail->AddAddress('bumacodejhay@gmail.com');
       $mail->AddCC('ejhaybumacod26@gmail.com');
-      $mail->Send();
-      echo json_encode(array('type' => 'success', 'message' => 'Overtime applied successfully'));
+      if(!$mail->Send()) {
+        echo json_encode(array('type' => 'success', 'message' => 'Overtime applied successfully <br /> Email not sent'));
+        exit;
+      } else {
+        echo json_encode(array('type' => 'success', 'message' => 'Overtime applied successfully <br /> Email sent'));
+        exit;
+      }
 
   }
 
-  function readleave(){
+  // function readleave(){
 
-      $employeeno = $_POST['employeeno'];
+  //     $employeeno = $_POST['employeeno'];
 
-      $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
-      $query->execute();
+  //     $conn = $this->connect_mysql();
+  //     $query = $conn->prepare("UPDATE leave_application SET readd='read' WHERE employeeno='$employeeno'");
+  //     $query->execute();
 
-  }
+  // }
 
-  function readpayslip(){
+  // function readpayslip(){
 
-      $employeeno = $_POST['employeeno'];
+  //     $employeeno = $_POST['employeeno'];
 
-      $conn = $this->connect_mysql();
-      $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
-      $query->execute();
+  //     $conn = $this->connect_mysql();
+  //     $query = $conn->prepare("UPDATE payslips SET stat='read' WHERE employeeno='$employeeno'");
+  //     $query->execute();
 
-  }
+  // }
 
   function delete_otapply(){
       $id = $_POST['id'];
@@ -113,10 +116,18 @@ class crud extends db_conn_mysql
   function loadmyot(){
 
     $employeeno = $_GET['employeeno'];
+    $status = $_GET['status'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT a.*,a.id as idd,b.firstname,b.lastname,b.job_title FROM tbl_overtime a
+    if($status == ''){
+      $query = $conn->prepare("SELECT a.*,a.id as idd,b.firstname,b.lastname,b.job_title FROM tbl_overtime a
                              LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno
                              WHERE a.employeeno='$employeeno' ORDER BY a.id DESC");
+    }else {
+      $query = $conn->prepare("SELECT a.*,a.id as idd,b.firstname,b.lastname,b.job_title FROM tbl_overtime a
+                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno
+                             WHERE a.employeeno='$employeeno' AND a.statuss='$status' ORDER BY a.id DESC");
+    }
+    
     $query->execute();
     $row = $query->fetchAll();
     $return = array();
@@ -141,9 +152,9 @@ class crud extends db_conn_mysql
           $data['ot_date_to'] = $x['ot_date_to'];
           $data['status'] = $x['statuss'];
           if($x['statuss']=="Pending"){
-            $data['action'] = "<button type='button' onclick='delete_myot(".$x['idd'].")' class='btn btn-sm btn-danger'><i class='fa fa-trash'></i> Delete</button>";
+            $data['action'] = "<center><button type='button' onclick='delete_myot(".$x['idd'].")' class='btn btn-sm btn-danger'><i class='fa fa-trash'></i> Delete</button></center>";
           }else{
-            $data['action'] = "<button disabled='' type='button' onclick='delete_myot(".$x['idd'].")' class='btn btn-sm btn-danger'><i class='fa fa-trash'></i> Delete</button>";
+            $data['action'] = "<center><button disabled='' type='button' class='btn btn-sm btn-danger'><i class='fa fa-trash'></i> Delete</button></center>";
           }
           
 
@@ -153,59 +164,59 @@ class crud extends db_conn_mysql
     echo json_encode(array('data'=>$return));
   }
 
-  function count_leaveapp(){
+  // function count_leaveapp(){
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+  //   $employeenoo = $_POST['employeenoo'];
+  //   $conn = $this->connect_mysql();
 
-    $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
-    $sq->execute();
-    $rw = $sq->fetch();
+  //   $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
+  //   $sq->execute();
+  //   $rw = $sq->fetch();
 
-    $dept = $rw['department'];
+  //   $dept = $rw['department'];
 
-    $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
-    $query->execute();
+  //   $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+  //                            LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_otapp(){
+  // function count_otapp(){
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_overtime WHERE statuss='Pending' ORDER BY id DESC");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_payslip(){
+  // function count_payslip(){
 
-    $employeenoo = $_POST['employeenoo'];
-    $conn = $this->connect_mysql();
+  //   $employeenoo = $_POST['employeenoo'];
+  //   $conn = $this->connect_mysql();
 
-    $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
-    $query->execute();
-    $count = $query->rowCount();
+  //   $query = $conn->prepare("SELECT * FROM payslips WHERE employeeno='$employeenoo' AND stat='posted'");
+  //   $query->execute();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
-  function count_reimbursement(){
+  // function count_reimbursement(){
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
-    $query->execute();
+  //   $conn = $this->connect_mysql();
+  //   $query = $conn->prepare("SELECT * FROM tbl_reimbursement WHERE statuss='Pending'");
+  //   $query->execute();
 
-    $count = $query->rowCount();
+  //   $count = $query->rowCount();
 
-    echo json_encode(array("count"=>$count));
-  }
+  //   echo json_encode(array("count"=>$count));
+  // }
 
 }
 

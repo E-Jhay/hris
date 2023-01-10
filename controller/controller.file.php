@@ -7,9 +7,7 @@ class crud extends db_conn_mysql
   function selectotherid(){
     $employeeno = $_POST['employeeno'];
     $conn = $this->connect_mysql();
-    $query = $conn->prepare("SELECT a.*,a.employeeno as emp_no,b.*,c.date_hired FROM tbl_employee a 
-                             LEFT JOIN otheridinfo b 
-                             ON a.employeeno = b.employeeno
+    $query = $conn->prepare("SELECT a.*,a.employeeno as emp_no,c.date_hired FROM tbl_employee a 
                              LEFT JOIN contractinfo c
                              ON a.employeeno = c.employeeno
                              WHERE a.employeeno='$employeeno'");
@@ -38,21 +36,11 @@ class crud extends db_conn_mysql
       'statuss'=>$row['statuss'],
       'emp_statuss'=>$row['employment_status'],
       'company'=>$row['company'],
-      'comp_id_dateissue'=>$row['comp_id_dateissue'],
-      'comp_id_vdate'=>$row['comp_id_vdate'],
-      'fac_ap_dateissue'=>$row['fac_ap_dateissue'],
-      'fac_ap_vdate'=>$row['fac_ap_vdate'],
       'leave_balance'=>$row['leave_balance'],
       'imagepic'=>utf8_decode($row['imagepic']),
       'department'=>$row['department'],
       'job_title'=>$row['job_title'],
       'date_hired'=>$row['date_hired'],
-      'card_number'=>$row['card_number'],
-      'driver_id'=>$row['driver_id'],
-      'driver_exp'=>$row['driver_exp'],
-      'prc_number'=>$row['prc_number'],
-      'prc_exp'=>$row['prc_exp'],
-      'civil_service'=>$row['civil_service']
 
     ));
   }

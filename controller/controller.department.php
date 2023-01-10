@@ -76,9 +76,9 @@ class crud extends db_conn_mysql
           $data = array();
           $id = $x['id'];
           $data['department'] = $x['department'];
-          $data['action'] = '<button onclick="update_dept('.$x['id'].',\''.$x['department'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Update</button>
+          $data['action'] = '<center class="d-flex justify-content-around"><button onclick="update_dept('.$x['id'].',\''.$x['department'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Update</button>
 
-           <button onclick="delete_dept('.$x['id'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>';
+           <button onclick="delete_dept('.$x['id'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button></center>';
 
         $return[] = $data;
       }
