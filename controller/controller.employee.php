@@ -46,7 +46,7 @@ class crud extends db_conn_mysql
           }
           $data = array();
           $data['action'] = '<center class="d-flex justify-content-around"><button title="View more" onclick="editemp(\''.$x['employee_no'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
-          <button title="Delete" onclick="deleteemp('.$x['idd'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></center>';
+          <button title="Delete" onclick="deleteemp(\''.$x['employee_no'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button></center>';
           // $imge = utf8_decode($x['imagepic']);
           // $picture = "personal_picture/".$imge;
           // if($x['imagepic']==""){
@@ -94,50 +94,52 @@ class crud extends db_conn_mysql
 // jerico
   function deleteemployee(){
 
-    $id = $_POST['id'];
+    $employeeno = $_POST['employeeno'];
 
     $conn = $this->connect_mysql();
+    $query = $conn->prepare("UPDATE tbl_employee SET statuss = 'Deleted' WHERE employeeno = '$employeeno'");
+    $query->execute();
 
-    $que = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$id'");
-    $que->execute();
-    $row = $que->fetch();
-    $emplono = $row['employeeno'];
+    // $que = $conn->prepare("SELECT employeeno FROM tbl_employee WHERE id='$id'");
+    // $que->execute();
+    // $row = $que->fetch();
+    // $emplono = $row['employeeno'];
 
-    $qry0 = $conn->prepare("DELETE FROM leave_balance WHERE employee_no='$emplono'");
-    $qry0->execute();
+    // $qry0 = $conn->prepare("DELETE FROM leave_balance WHERE employee_no='$emplono'");
+    // $qry0->execute();
 
-    $qry0 = $conn->prepare("DELETE FROM user_account WHERE employeeno='$emplono'");
-    $qry0->execute();
+    // $qry0 = $conn->prepare("DELETE FROM user_account WHERE employeeno='$emplono'");
+    // $qry0->execute();
 
-    $qry = $conn->prepare("DELETE FROM tbl_employee WHERE id='$id'");
-    $qry->execute();
+    // $qry = $conn->prepare("DELETE FROM tbl_employee WHERE id='$id'");
+    // $qry->execute();
 
-    $qry1 = $conn->prepare("DELETE FROM contactinfo WHERE emp_id='$id'");
-    $qry1->execute();
+    // $qry1 = $conn->prepare("DELETE FROM contactinfo WHERE emp_id='$id'");
+    // $qry1->execute();
 
-    $qry2 = $conn->prepare("DELETE FROM contractinfo WHERE emp_id='$id'");
-    $qry2->execute();
+    // $qry2 = $conn->prepare("DELETE FROM contractinfo WHERE emp_id='$id'");
+    // $qry2->execute();
 
-    $qry3 = $conn->prepare("DELETE FROM govtidinfo WHERE emp_id='$id'");
-    $qry3->execute();
+    // $qry3 = $conn->prepare("DELETE FROM govtidinfo WHERE emp_id='$id'");
+    // $qry3->execute();
 
-    $qry4 = $conn->prepare("DELETE FROM otherpersonalinfo WHERE emp_id='$id'");
-    $qry4->execute();
+    // $qry4 = $conn->prepare("DELETE FROM otherpersonalinfo WHERE emp_id='$id'");
+    // $qry4->execute();
 
-    $qry5 = $conn->prepare("DELETE FROM benefitsinfo WHERE emp_id='$id'");
-    $qry5->execute();
+    // $qry5 = $conn->prepare("DELETE FROM benefitsinfo WHERE emp_id='$id'");
+    // $qry5->execute();
 
-    $qry6 = $conn->prepare("DELETE FROM disciplinarytracking WHERE emp_id='$id'");
-    $qry6->execute();
+    // $qry6 = $conn->prepare("DELETE FROM disciplinarytracking WHERE emp_id='$id'");
+    // $qry6->execute();
 
-    $qry7 = $conn->prepare("DELETE FROM otheridinfo WHERE emp_id='$id'");
-    $qry7->execute();
+    // $qry7 = $conn->prepare("DELETE FROM otheridinfo WHERE emp_id='$id'");
+    // $qry7->execute();
 
-    $qry8 = $conn->prepare("DELETE FROM previous_empinfo WHERE emp_id='$id'");
-    $qry8->execute();
+    // $qry8 = $conn->prepare("DELETE FROM previous_empinfo WHERE emp_id='$id'");
+    // $qry8->execute();
 
-    $qry9 = $conn->prepare("DELETE FROM medicalinfo WHERE emp_id='$id'");
-    $qry9->execute();
+    // $qry9 = $conn->prepare("DELETE FROM medicalinfo WHERE emp_id='$id'");
+    // $qry9->execute();
 
     session_start();
     $useraction = $_SESSION['fullname'];
@@ -396,17 +398,17 @@ class crud extends db_conn_mysql
       $conn->exec("INSERT INTO contractinfo SET employeeno='$employeeno', date_hired='$date_hired', eoc='$end_of_contract', regularized='$regularized', preterm='0000-00-00', resigned='0000-00-00', retired='0000-00-00', terminatedd='0000-00-00', lastpay='0000-00-00', remarks=''");
       $conn->exec("INSERT INTO govtidinfo SET employeeno='$employeeno', tin_no='$tin', sss_no='$sss', phic_no='$phic', hdmf_no='$hdmf', atm_no='$atm', bank_name='$bank_name', sss_remarks='', phic_remarks='', hdmf_remarks=''");
       $conn->exec("INSERT INTO otherpersonalinfo SET employeeno='$employeeno', nickname='', dateofbirth='$dateofbirth', gender='$gender', height='', weight='', marital_status='$marital_status', birth_place='$birth_place', blood_type='', contact_name='', contact_address='', contact_telno='', contact_celno='', contact_relation=''");
-      $conn->exec("INSERT INTO benefitsinfo SET employeeno='$employeeno', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5='', relation1='', relation2='', relation3='', relation4='', relation5=''");
-      $conn->exec("INSERT INTO disciplinarytracking SET employeeno='$employeeno', violation='', specifc_offense='', of_offense='', dateissued='0000-00-00', datecommitted='0000-00-00', action=''");
-      $conn->exec("INSERT INTO otheridinfo SET employeeno='$employeeno', comp_id_dateissue='0000-00-00', comp_id_vdate='0000-00-00', fac_ap_dateissue='0000-00-00', fac_ap_vdate='0000-00-00', card_number='', driver_id='', driver_exp='0000-00-00', prc_number='', prc_exp='0000-00-00', civil_service=''");
-      $conn->exec("INSERT INTO previous_empinfo SET employeeno='$employeeno', company1='', naturebusiness1='', year1='', position1='', rate1='', company2='', naturebusiness2='', year2='', position2='', rate2='', yearend1='', yearend2=''");
-      $conn->exec("INSERT INTO medicalinfo SET employeeno='$employeeno', type1='', classification1='', status1='', dateofexam1='0000-00-00', remarks1='', type2='', classification2='', status2='', dateofexam2='0000-00-00', remarks2='', type3='', classification3='', status3='', dateofexam3='0000-00-00', remarks3=''");
-      $conn->exec("INSERT INTO marriage_contract (employee_number, marriage_contract) VALUES ('$employeeno', '$marriageContract')");
-      $conn->exec("INSERT INTO dependents (employee_number, dependent) VALUES ('$employeeno', '$dependent')");
-      $conn->exec("INSERT INTO additional_id (employee_number, additional_id) VALUES ('$employeeno', '$additionalId')");
-      $conn->exec("INSERT INTO proof_of_billing (employee_number, proof_of_billing) VALUES ('$employeeno', '$proofOFBilling')");
-      $conn->exec("INSERT INTO leave_balance SET employee_no='$employeeno',leave_type='SL',balance='0',earned='no',what_month='0', stat='', decem=''");
-      $conn->exec("INSERT INTO leave_balance SET employee_no='$employeeno',leave_type='VL',balance='0',earned='no',what_month='0', stat='', decem=''");
+      // $conn->exec("INSERT INTO benefitsinfo SET employeeno='$employeeno', dependent1='', age1='', sex1='', dependent2='', age2='', sex2='', dependent3='', age3='', sex3='', dependent4='', age4='', sex4='', dependent5='', age5='', sex5='', relation1='', relation2='', relation3='', relation4='', relation5=''");
+      // $conn->exec("INSERT INTO disciplinarytracking SET employeeno='$employeeno', violation='', specifc_offense='', of_offense='', dateissued='0000-00-00', datecommitted='0000-00-00', action=''");
+      // $conn->exec("INSERT INTO otheridinfo SET employeeno='$employeeno', comp_id_dateissue='0000-00-00', comp_id_vdate='0000-00-00', fac_ap_dateissue='0000-00-00', fac_ap_vdate='0000-00-00', card_number='', driver_id='', driver_exp='0000-00-00', prc_number='', prc_exp='0000-00-00', civil_service=''");
+      // $conn->exec("INSERT INTO previous_empinfo SET employeeno='$employeeno', company1='', naturebusiness1='', year1='', position1='', rate1='', company2='', naturebusiness2='', year2='', position2='', rate2='', yearend1='', yearend2=''");
+      // $conn->exec("INSERT INTO medicalinfo SET employeeno='$employeeno', type1='', classification1='', status1='', dateofexam1='0000-00-00', remarks1='', type2='', classification2='', status2='', dateofexam2='0000-00-00', remarks2='', type3='', classification3='', status3='', dateofexam3='0000-00-00', remarks3=''");
+      // $conn->exec("INSERT INTO marriage_contract (employee_number, marriage_contract) VALUES ('$employeeno', '$marriageContract')");
+      // $conn->exec("INSERT INTO dependents (employee_number, dependent) VALUES ('$employeeno', '$dependent')");
+      // $conn->exec("INSERT INTO additional_id (employee_number, additional_id) VALUES ('$employeeno', '$additionalId')");
+      // $conn->exec("INSERT INTO proof_of_billing (employee_number, proof_of_billing) VALUES ('$employeeno', '$proofOFBilling')");
+      // $conn->exec("INSERT INTO leave_balance SET employee_no='$employeeno',leave_type='SL',balance='0',earned='no',what_month='0', stat='', decem=''");
+      // $conn->exec("INSERT INTO leave_balance SET employee_no='$employeeno',leave_type='VL',balance='0',earned='no',what_month='0', stat='', decem=''");
       session_start();
       $useraction = $_SESSION['fullname'];
       $dateaction = date('Y-m-d');
@@ -795,6 +797,29 @@ class crud extends db_conn_mysql
         // echo json_encode($employee_sql);
         // echo json_encode($other_personal_sql);
     }
+  }
+
+  function exportEmployeeMasterFile() {
+
+    $conn = $this->connect_mysql();
+
+    $query = $conn->prepare("
+      SELECT a.employeeno, a.id_number, a.lastname, a.firstname, a.middlename, a.statuss, a.employment_status, a.company, a.job_title, a.job_category, a.department,
+      b.street, b.municipality, b.province, b.contactno, b.personal_email, b.nationality,
+      c.date_hired, c.regularized,
+      d.tin_no, d.sss_no, d.phic_no, d.hdmf_no, d.atm_no, d.bank_name, d.aub_no,
+      e.dateofbirth, e.nickname, e.gender, e.marital_status, e.birth_place, e.blood_type, e.height, e.weight, e.contact_name, e.contact_address, e.contact_celno, e.contact_relation
+      FROM tbl_employee a 
+      LEFT JOIN contactinfo b ON a.employeeno = b.employeeno
+      LEFT JOIN contractinfo c ON a.employeeno = c.employeeno
+      LEFT JOIN govtidinfo d ON a.employeeno = d.employeeno
+      LEFT JOIN otherpersonalinfo e ON a.employeeno = e.employeeno
+    ");
+
+    $query->execute();
+    $row = $query->fetchAll();
+    return $row;
+    
   }
 
   // function sendNotificationEvaluation() {

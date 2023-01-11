@@ -36,6 +36,15 @@ $(document).ready(function(){
           $('#end_date').attr('required', true)
         }
       })
+      $('#notice_to_explain2').on('change', () => {
+        if ($('#notice_to_explain2').val() === 'yes') {
+          $('.date2').hide()
+          $('#end_date2').attr('required', false)
+        } else {
+          $('.date2').show()
+          $('#end_date2').attr('required', true)
+        }
+      })
     //  $('#cancelMemoBtn').hide();
 
 });

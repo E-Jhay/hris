@@ -106,7 +106,7 @@ require_once "header.php";
               <th style="max-width: 12rem">Remarks</th>
               <th>NTE</th>
               <th>Status</th>
-              <th class="text-center" style="max-width: 10rem">Action</th>
+              <th class="text-center w-25">Action</th>
             </thead>
             <tbody>
               
@@ -170,10 +170,22 @@ require_once "header.php";
           <tr>
           <td>
             <b>Notice to Explain: </b>
-            <select class="form-control" name="notice_to_explain" id="notice_to_explain">
+            <select class="form-control" name="notice_to_explain" id="notice_to_explain2">
               <option value="no" selected>No</option>
               <option value="yes">Yes</option>
             </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Published Date: </b>
+            <input type="date" class="form-control" id="publish_date2" name="publish_date" required>
+          </td>
+        </tr>
+        <tr class="date2">
+          <td>
+            <b>End Date: </b>
+            <input type="date" class="form-control" id="end_date2" name="end_date">
           </td>
         </tr>
           <tr>
@@ -198,7 +210,7 @@ require_once "header.php";
               <th style="max-width: 12rem">Remarks</th>
               <th>NTE</th>
               <th>Status</th>
-              <th class="text-center" style="max-width: 10rem">Action</th>
+              <th class="text-center w-25">Action</th>
             </thead>
             <tbody>
               

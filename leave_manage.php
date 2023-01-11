@@ -38,7 +38,7 @@ require_once "header.php";
               <th>Leave Type</th>
               <th>Leave Name</th>
               <th style="max-width: 10em">Status</th>
-              <th class="text-center" style="max-width: 13em">Action</th>
+              <th class="text-center w-25">Action</th>
             </thead>
             <tbody>
               
@@ -56,7 +56,7 @@ require_once "header.php";
               <th>No. of Years</th>
               <th>SL balance</th>
               <th>VL balance</th>
-              <th class="text-center" style="max-width: 12em">Action</th>
+              <th class="text-center w-25">Action</th>
             </thead>
             <tbody>
               
@@ -64,7 +64,7 @@ require_once "header.php";
     </table>
     <center>
       <button type="button" onclick="reset_balance()" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-sync-alt"></i> RESET</button>
-      <button type="button" onclick="exportleave_balance()" class="btn btn-sm btn-warning text-white"><i class="fas fa-sm fa-file-excel"></i> EXPORT TO EXCEL</button>
+      <button type="button" onclick="exportleave_balance()" class="btn btn-sm btn-warning"><i class="fas fa-sm fa-file-excel"></i> EXPORT TO EXCEL</button>
       <button type="button" onclick="slconversion()" class="btn btn-sm btn-info"><i class="fas fa-sm fa-retweet"></i> SL CONVERSION</button>
     </center>
   </div>

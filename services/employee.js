@@ -101,16 +101,16 @@ $(document).ready(function(){
   function editemp(employeeno){
   	window.location.href="dashboard.php?employeeno="+employeeno;
   }
-  function deleteemp(id){
-  	confirmed("delete",deleteemp_callback, "Do you really want to delete this?", "Yes", "No",id);
+  function deleteemp(employeeno){
+  	confirmed("delete",deleteemp_callback, "Do you really want to delete this?", "Yes", "No",employeeno);
   }
 
-  function deleteemp_callback(id){
+  function deleteemp_callback(employeeno){
   		$.ajax({
 	  		url:"controller/controller.employee.php?deleteemployee",
 	  		method:"POST",
 	  		data:{
-	  			id:id
+	  			employeeno:employeeno
 	  		},success:function(){
 	  			$.Toast("Successfully Deleted", successToast);
 	  			$('#myModal').modal('hide');
@@ -218,4 +218,7 @@ $(document).ready(function(){
 
 function updateEmployees(){
 	$('#update_modal').modal('show');
-  }
+}
+function exportEmployees(){
+	window.location.href="tcpdf/examples/masterFileList.php"
+}

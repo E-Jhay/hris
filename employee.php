@@ -31,7 +31,10 @@ require_once "header.php";
 			<option value="Inactive"> Inactive </option>
 			<option value="All"> All </option>
 		</select><br><br>
-    <div class="text-right"><button onclick="updateEmployees()" id="updatedEmployeesBtn" class="btn btn-success btn-md">Update Employees</button></div>
+    <div class="text-right">
+      <button onclick="updateEmployees()" id="updatedEmployeesBtn" class="btn btn-success btn-sm">Update Employees</button>
+      <button onclick="exportEmployees()" id="exportEmployeesBtn" class="btn btn-warning btn-sm">Export Employee List</button>
+    </div>
     <br />
     <table class="table table-striped w-100" id="tbl_employee">
             <thead>

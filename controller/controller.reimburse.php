@@ -253,8 +253,8 @@ function uploadreimbursement(){
           $mail->Body = $message;
           $mail->isHTML(true);
           $dept_head_email = $row2['dept_head_email'];
-          $mail->AddAddress($dept_head_email);
-          $mail->AddCC('ejhaybumacod26@gmail.com');
+          $mail->AddAddress($dept_head_email); // HR email
+          $mail->AddCC('bumacodejhay@gmail.com'); // DEpt head email
           if(!$mail->Send()) {
             echo json_encode(array('type' => 'success', 'message' => 'Reimbursement requested successfully <br /> Email not sent'));
             exit;

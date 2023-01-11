@@ -532,21 +532,34 @@ class crud extends db_conn_mysql
 
   function loadleavelist(){
 
+    session_start();
+    $department = $_SESSION['department'];
     $employeenoo = $_GET['employeenoo'];
     $stat = $_GET['stat'];
     $conn = $this->connect_mysql();
 
-    $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
-    $sq->execute();
-    $rw = $sq->fetch();
+    // $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
+    // $sq->execute();
+    // $rw = $sq->fetch();
 
-    $dept = $rw['department'];
+    // $dept = $rw['department'];
     if($stat=="All"){
-      $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno ORDER BY a.id DESC");
+      if($_SESSION['usertype'] == 'admin') {
+        $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+        LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno ORDER BY a.id DESC");
+      } else {
+        $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.department = '$department' ORDER BY a.id DESC");
+      }
     }else{
-      $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+      if($_SESSION['usertype'] == 'admin') {
+        $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
                              LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='$stat' ORDER BY a.id DESC");
+      } else {
+        $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='$stat' AND a.department = '$department' ORDER BY a.id DESC");
+      }
+      
     }
     
     $query->execute();

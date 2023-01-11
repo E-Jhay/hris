@@ -116,8 +116,8 @@ class crud extends db_conn_mysql
           $x[$key] = utf8_encode($input_arr);
           }
           $data = array();
-          $data['action'] = '<button onclick="edituser_role('.$x['id'].',\''.$x['usertype'].'\',\''.$x['userrole'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Edit</button>
-          <button onclick="deleteuser_role('.$x['id'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>';
+          $data['action'] = '<center class="d-flex justify-content-around"><button onclick="edituser_role('.$x['id'].',\''.$x['usertype'].'\',\''.$x['userrole'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Edit</button>
+          <button onclick="deleteuser_role('.$x['id'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button></center>';
           $data['user_role'] = $x['userrole'];
           $data['user_role_type'] = $x['usertype'];
 

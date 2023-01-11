@@ -57,7 +57,7 @@ $count = $leaves->countLeaves($empno);
 				<th>Amount</th>
 				<th>Date Applied</th>
 				<th>Status</th>
-				<th class="text-center" style="max-width: 14em">Action</th>
+				<th class="text-center w-25">Action</th>
 			</thead>
 			<tbody>
 								

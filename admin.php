@@ -51,7 +51,7 @@ require_once "header.php";
             <thead>
               <th>User Role</th>
               <th>User Role Type</th>
-              <th>Action</th>
+              <th class="text-center w-25">Action</th>
             </thead>
             <tbody>
 

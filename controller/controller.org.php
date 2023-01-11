@@ -148,8 +148,8 @@ class crud extends db_conn_mysql
           }
 
           $data = array();
-          $data['action'] = '<button onclick="edit_location('.$x['id'].',\''.$x['name'].'\',\''.$x['city'].'\',\''.$x['country'].'\',\''.$x['phone'].'\',\''.$x['numberofemp'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Edit</button>
-          <button onclick="delete_location('.$x['id'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button>';
+          $data['action'] = '<center class="d-flex justify-content-around"><button onclick="edit_location('.$x['id'].',\''.$x['name'].'\',\''.$x['city'].'\',\''.$x['country'].'\',\''.$x['phone'].'\',\''.$x['numberofemp'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Edit</button>
+          <button onclick="delete_location('.$x['id'].')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i> Delete</button></center>';
           $data['name'] = $x['name'];
           $data['city'] = $x['city'];
           $data['country'] = $x['country'];

@@ -162,7 +162,7 @@ $balance = $leaves->getleavebalance($empno);
 							<th>Remaining Balance</th>
 							<th>Deducted Credits</th>
 							<th>Status</th>
-							<th class="text-center">Action</th>
+							<th class="text-center" width="8%">Action</th>
             </thead>
             <tbody>
               

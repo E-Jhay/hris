@@ -17,17 +17,12 @@ class crud extends db_conn_mysql
   }
   function count_leaveapp(){
 
-    $employeenoo = $_POST['employeenoo'];
     $conn = $this->connect_mysql();
-
-    $sq = $conn->prepare("SELECT department FROM tbl_employee WHERE employeeno='$employeenoo'");
-    $sq->execute();
-    $rw = $sq->fetch();
-
-    $dept = $rw['department'];
+    session_Start();
+    $department = $_SESSION['department'];
 
     $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' ORDER BY a.id DESC");
+                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' AND a.department = '$department' ORDER BY a.id DESC");
     $query->execute();
 
     $count = $query->rowCount();

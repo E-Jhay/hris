@@ -176,8 +176,8 @@ $count = $leaves->countLeaves($empno);
 					<th>Leave Balance</th>
 					<th>Credits to Deduct</th>
 					<th>Status</th>
-					<th class="text-center" style="width: 10em">Leave Form</th>
-					<th class="text-center" style="width: 8em">Action</th>
+					<th class="text-center">Leave Form</th>
+					<th class="text-center">Action</th>
 				</thead>
 				<tbody>
 				</tbody>

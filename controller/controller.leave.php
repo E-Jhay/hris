@@ -377,9 +377,11 @@ class crud extends db_conn_mysql
       }
 
 
+      session_start();
+      $department = $_SESSION['department'];
 
       $conn = $this->connect_mysql();
-      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$datefrom', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', date_applied='$date_applied',previous_bal='$leave_bal', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='0',date_from='',pay_leave='$pay_leave', remarks='', approved_by='', readd='', last_update='$datenow', last_update_time='$timenow', leave_form='$leaveForm'");
+      $qry = $conn->prepare("INSERT INTO leave_application SET leave_type='$leave_type', datefrom='$datefrom', dateto='$dateto', comment='$comment', status='$stat', employeeno='$employeeno', department = '$department', date_applied='$date_applied',previous_bal='$leave_bal', no_days='$no_days',application_type='$application_type',deduct_rate='$points_todeduct',fivepm='0',sixpm='0',date_from='',pay_leave='$pay_leave', remarks='', approved_by='', readd='', last_update='$datenow', last_update_time='$timenow', leave_form='$leaveForm'");
       $qry->execute();
 
       $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
@@ -531,7 +533,7 @@ class crud extends db_conn_mysql
           $stados = $x['status'];
           if($stados=="Pending"){
             $data['numberofdays'] = "";
-            $data['action'] = '<center>
+            $data['action'] = '<center class="d-flex justify-content-around">
             <button title="View" onclick="edit_leave('.$x['idd'].',\''.$fname.'\',\''.$x['employeeno'].'\',\''.$x['leave_type'].'\',\''.$x['date_applied'].'\',\''.$x['leave_balance'].'\',\''.$x['datefrom'].'\',\''.$x['dateto'].'\',\''.$x['no_days'].'\',\''.$x['status'].'\',\''.$x['comment'].'\',\''.$x['remarks'].'\',\''.$x['application_type'].'\',\''.$x['deduct_rate'].'\','.$x['fivepm'].','.$x['sixpm'].',\''.$balanse.'\',\''.$x['pay_leave'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-eye"></i></button>
             <button title="Delete" onclick="delete_leave('.$x['idd'].',\''.$x['leave_form'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
             </center>

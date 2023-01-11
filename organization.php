@@ -89,7 +89,7 @@ require_once "header.php";
 							<th>Country</th>
 							<th>Phone</th>
 							<th>Number of Employee</th>
-							<th>Action</th>
+							<th class="text-center w-25">Action</th>
             </thead>
             <tbody>
               

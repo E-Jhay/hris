@@ -37,7 +37,7 @@ require_once "header.php";
             <thead>
               <th>Job Title</th>
 							<th>Job Description</th>
-							<th class="text-center" style="max-width: 14em">Action</th>
+							<th class="text-center w-25">Action</th>
             </thead>
             <tbody>
               
@@ -50,7 +50,7 @@ require_once "header.php";
     <table class="table table-striped w-100" id="tbl_employment_status">
             <thead>
               <th>Employment Status</th>
-							<th>Action</th>
+							<th class="text-center w-25">Action</th>
             </thead>
             <tbody>
               
@@ -63,7 +63,7 @@ require_once "header.php";
     <table class="table table-striped w-100" id="tbl_job_categories">
             <thead>
               <th>Job Category</th>
-							<th>Action</th>
+							<th class="text-center w-25">Action</th>
             </thead>
             <tbody>
               

@@ -205,8 +205,8 @@ class crud extends db_conn_mysql
           }
 
           $data = array();
-          $data['action'] = '<button onclick="edit_empstatus('.$x['id'].',\''.$x['employment_status'].'\')" class="btn btn-sm btn-success" ><i class="fas fa-sm fa-edit"></i> Edit</button>
-          <button onclick="delete_empstatus('.$x['id'].')" class="btn btn-sm btn-danger" ><i class="fas fa-sm fa-trash-alt"></i> Delete</button>';
+          $data['action'] = '<center class="d-flex justify-content-around"><button onclick="edit_empstatus('.$x['id'].',\''.$x['employment_status'].'\')" class="btn btn-sm btn-success" ><i class="fas fa-sm fa-edit"></i> Edit</button>
+          <button onclick="delete_empstatus('.$x['id'].')" class="btn btn-sm btn-danger" ><i class="fas fa-sm fa-trash-alt"></i> Delete</button></center>';
           $data['employment_status'] = $x['employment_status'];
 
         $return[] = $data;
@@ -229,8 +229,8 @@ class crud extends db_conn_mysql
           }
 
           $data = array();
-          $data['action'] = '<button onclick="edit_jobcategory('.$x['id'].',\''.$x['job_category'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Edit</button>
-          <button onclick="delete_jobcategory('.$x['id'].')" class="btn btn-sm btn-danger" ><i class="fas fa-sm fa-trash-alt"></i> Delete</button>';
+          $data['action'] = '<center class="d-flex justify-content-around"><button onclick="edit_jobcategory('.$x['id'].',\''.$x['job_category'].'\')" class="btn btn-sm btn-success"><i class="fas fa-sm fa-edit"></i> Edit</button>
+          <button onclick="delete_jobcategory('.$x['id'].')" class="btn btn-sm btn-danger" ><i class="fas fa-sm fa-trash-alt"></i> Delete</button></center>';
           $data['job_category'] = $x['job_category'];
 
         $return[] = $data;
