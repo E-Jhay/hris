@@ -123,10 +123,6 @@ class crud extends db_conn_mysql
       if($balance=="" || $balance==null){
           echo json_encode(array("bal"=>"wala"));
       }else{  
-
-          if($balance <=0){
-            $balance = 0;
-          }
           echo json_encode(array("bal"=>$balance,"points"=>$points));
       }
 
@@ -362,7 +358,7 @@ class crud extends db_conn_mysql
         $path = pathinfo($file);
         $ext = $path['extension'];
         $temp_name = $_FILES['leaveForm']['tmp_name'];
-        $today = date("Y-md-His");
+        $today = date("Y-m-d-His");
         $name = explode(".", $file);
         $leaveForm = $name[0]."-".$today.".".$ext;
         $path_filename_ext = $target_dir;
@@ -415,7 +411,7 @@ class crud extends db_conn_mysql
       $message = $firstname.' '.$lastname.' applied '.$leave_type.' <strong>'. $application_type.'</strong> From: '.$datefrom.' To: '.$dateto;
       $mail->Body = $message;
       $dept_head_email = $row2['dept_head_email'];
-      $mail->AddAddress($dept_head_email);
+      $mail->AddAddress($dept_head_email); // HR email
       $mail->AddCC('bumacodejhay@gmail.com');
 
       if(!$mail->Send()) {

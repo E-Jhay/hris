@@ -2,6 +2,7 @@
 session_start();
 $usertype = $_SESSION['usertype'];
 $userrole = $_SESSION['userrole'];
+$employeeno = $_SESSION['employeeno'];
 if(!isset($_SESSION['fullname'])){
   header("location:index.php");
 }
@@ -10,7 +11,7 @@ require_once "header.php";
 
 <div class="sidenavigation">
   <?php 
-  require_once "master_tab.php";
+  require_once "ess_tab.php";
    ?>
 </div>
 
@@ -196,7 +197,7 @@ require_once "header.php";
                 <td>
                     <b>Name of dependent: </b>
                     <input type="text" class="form-control" id="name_of_dependent" name="name_of_dependent" placeholder="Name of dependent" required>
-                    <input type="hidden" id="employeeno" value="<?php echo $_GET['employeeno']; ?>" name="employeeno">
+                    <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno']; ?>" name="employeeno">
                     <!-- <input type="hidden" id="employee_number" name="employee_number"> -->
                     <!-- <input type="hidden" id="action" name="action"> -->
                 </td>
@@ -267,7 +268,7 @@ require_once "header.php";
             <div class="form-group">
               <input type="hidden" id="dependent_id" name="dependent_id">
               <input type="text" class="form-control" id="dependent_birth_certificate" name="dependent_birth_certificate"></input>
-			<input type="hidden" id="dependent_employee_number" name="dependent_employee_number" value="<?php echo $_GET['employeeno']; ?>">
+			<input type="hidden" id="dependent_employee_number" name="dependent_employee_number" value="<?php echo $_SESSION['employeeno']; ?>">
               <label for="exampleInputEmail1">Name:</label>
               <input type="text" class="form-control" id="dependent_name" name="dependent_name"></input>
             </div>
@@ -301,7 +302,8 @@ require_once "header.php";
     </div>
   </div>
 </div>
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 
 </body>
-<script src="services/benefits.js"></script>
+<script src="services/ess_beneficiaries.js"></script>
 </html>

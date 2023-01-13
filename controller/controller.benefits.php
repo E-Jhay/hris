@@ -37,29 +37,9 @@ class crud extends db_conn_mysql
       'statuss'=>$row['statuss'],
       'emp_statuss'=>$row['employment_status'],
       'company'=>$row['company'],
-      'dependent1'=>$row['dependent1'],
-      'age1'=>$row['age1'],
-      'sex1'=>$row['sex1'],
-      'dependent2'=>$row['dependent2'],
-      'age2'=>$row['age2'],
-      'sex2'=>$row['sex2'],
-      'dependent3'=>$row['dependent3'],
-      'age3'=>$row['age3'],
-      'sex3'=>$row['sex3'],
-      'dependent4'=>$row['dependent4'],
-      'age4'=>$row['age4'],
-      'sex4'=>$row['sex4'],
-      'dependent5'=>$row['dependent5'],
-      'age5'=>$row['age5'],
-      'sex5'=>$row['sex5'],
       'leave_balance'=>$row['leave_balance'],
       'imagepic'=>utf8_decode($row['imagepic']),
-      'department'=>$row['department'],
-      'relation1'=>$row['relation1'],
-      'relation2'=>$row['relation2'],
-      'relation3'=>$row['relation3'],
-      'relation4'=>$row['relation4'],
-      'relation5'=>$row['relation5']
+      'department'=>$row['department']
     ));
   }
 
@@ -155,6 +135,191 @@ class crud extends db_conn_mysql
       echo $option;
   }
 
+  function addDependent(){
+
+    $employeeno = $_POST['employeeno'];
+    $name_of_dependent = $_POST['name_of_dependent'];
+    $gender_of_dependent = $_POST['gender_of_dependent'];
+    $age_of_dependent = $_POST['age_of_dependent'];
+    $relation = $_POST['relation'];
+    // $dateNow = date('Y-m-d');
+
+    if (($_FILES['file']['name']!="")){
+      // Where the file is going to be stored
+      $target_dir = "../dependents/".$employeeno."/";
+      $file = $_FILES['file']['name'];
+      $path = pathinfo($file);
+      $filename = $path['filename'];
+      $ext = $path['extension'];
+      $attachfile = $filename.date('Y-m-d-His').".".$ext;
+      $temp_name = $_FILES['file']['tmp_name'];
+      $path_filename_ext = $target_dir.$attachfile;
+
+      // Check if file already exists
+      if (file_exists($path_filename_ext)) {
+        echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error", "employeeno" => $employeeno));
+        exit;
+      }else{
+        if(!is_dir("../dependents/".$employeeno."/")){
+          mkdir("../dependents/".$employeeno."/");
+        }
+
+          if(move_uploaded_file($temp_name,$path_filename_ext)){
+
+            $conn = $this->connect_mysql();
+
+            $qry = $conn->prepare("INSERT INTO benefitsinfo (employeeno, name, gender, age, birth_certificate, relation) VALUES ('$employeeno', '$name_of_dependent', '$gender_of_dependent', '$age_of_dependent', '$attachfile', '$relation')");
+            $qry->execute();
+
+            session_start();
+            $useraction = $_SESSION['fullname'];
+            $dateaction = date('Y-m-d');
+            $auditaction = "Added new Dependent for Employee no ".$employeeno;
+            $audittype = "Add";
+            $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
+            $q->execute();
+
+            echo json_encode(array('message' => 'Dependent Submitted Successfully', 'type' => 'success'));
+            exit;
+          }
+      }
+    }
+    else {
+        echo json_encode(array('message' => 'Dependent Birth Certificate is Required', 'type' => 'error'));
+        exit;
+    }
+
+  }
+
+  function load_dependent(){
+    
+    $employee_number = $_GET['employeeno'];
+    $type = $_GET['type'];
+    
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("SELECT * FROM benefitsinfo WHERE employeeno = '$employee_number' ORDER BY name ASC");
+    $query->execute();
+    $row = $query->fetchAll();
+    $return = array();
+    foreach ($row as $x){
+
+      foreach ($x as $key => $input_arr) {
+        $x[$key] = addslashes($input_arr);
+        $x[$key] = utf8_encode($input_arr);
+      }
+      $data = array();
+      if($type == "hr"){
+        $data['action'] = '<div class="text-center">
+        <button title="Edit" style="background-color: green; color: white" onclick="editDependent('.$x['id'].',\''.$x['name'].'\',\''.$x['gender'].'\',\''.$x['age'].'\',\''.$x['birth_certificate'].'\',\''.$x['relation'].'\')" class="btn btn-sm"><i class="fas fa-sm fa-eye"></i>  Edit</button> 
+        <button title="Delete" onclick="deleteDependent('.$x['id'].',\''.$x['birth_certificate'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
+        </div>'
+        ;
+      } else {
+        $data['action'] = '<div class="text-center">
+        <button disabled title="Edit" style="background-color: green; color: white" onclick="editDependent('.$x['id'].',\''.$x['name'].'\',\''.$x['gender'].'\',\''.$x['age'].'\',\''.$x['birth_certificate'].'\',\''.$x['relation'].'\')" class="btn btn-sm"><i class="fas fa-sm fa-eye"></i>  Edit</button> 
+        <button disabled title="Delete" onclick="deleteDependent('.$x['id'].',\''.$x['birth_certificate'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-danger"><i class="fas fa-sm fa-trash-alt"></i></button>
+        </div>'
+        ;
+      }
+      $data['employeeno'] = $x['employeeno'];
+      $data['name'] = ucfirst($x['name']);
+      $data['gender'] = ucfirst($x['gender']);
+      $data['age'] = $x['age'];
+      $data['relation'] = ucfirst($x['relation']);
+      $data['birth_certificate'] = '<div class="text-center">
+          <button title="View Birth Certificate" onclick="viewFile(\''.$x['birth_certificate'].'\',\''.$x['employeeno'].'\')" class="btn btn-primary btn-sm"><i class="fas fa-sm fa-eye"></i> Birth Certificate</button>
+          </div>';
+      $return[] = $data;
+    }
+    
+    echo json_encode(array('data'=>$return));
+  }
+
+  function deleteDependent() {
+    $id = $_POST['id'];
+    $birth_certificate = $_POST['birth_certificate'];
+    $employeeno = $_POST['employeeno'];
+
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("DELETE FROM benefitsinfo WHERE id='$id'");
+    $query->execute();
+
+    $link_file = "../dependents/".$employeeno."/".$birth_certificate;
+    unlink($link_file);
+  }
+
+  function updateDependent() {
+    $id = $_POST['dependent_id'];
+    $employee_number = $_POST['dependent_employee_number'];
+    $name = $_POST['dependent_name'];
+    $gender = $_POST['dependent_gender'];
+    $relation = $_POST['dependent_relation'];
+    $age = $_POST['dependent_age'];
+    $currentFile = $_POST['dependent_birth_certificate'];
+    $dateNow = date('Y-m-d');
+
+    $conn = $this->connect_mysql();
+    if($_FILES['dependent_file']['size'] > 0) {
+      // Where the file is going to be stored
+      $target_dir = "../dependents/".$employee_number."/";
+      $file = $_FILES['dependent_file']['name'];
+      $path = pathinfo($file);
+      $filename = $path['filename'];
+      $ext = $path['extension'];
+      $attachfile = $filename.date('Y-m-d-His').".".$ext;
+      $temp_name = $_FILES['dependent_file']['tmp_name'];
+      $path_filename_ext = $target_dir.$attachfile;
+
+      // Check if file already exists
+      if (file_exists($path_filename_ext)) {
+        echo json_encode(array("message"=>"Sorry, file already exists.", "type" => "error", "employeeno" => $employee_number));
+        exit;
+      }else{
+        if(!is_dir("../dependents/".$employee_number."/")){
+          mkdir("../dependents/".$employee_number."/");
+        }
+
+          if(move_uploaded_file($temp_name,$path_filename_ext)){
+            if($currentFile != '' || $currentFile != NULL){
+              $link_file = $target_dir.$currentFile;
+              if(file_exists($link_file))
+              unlink($link_file);
+            }
+
+            $conn = $this->connect_mysql();
+
+            $qry = $conn->prepare("UPDATE benefitsinfo SET name='$name', gender='$gender', age='$age', relation='$relation', birth_certificate='$attachfile' WHERE id='$id'");
+            $qry->execute();
+
+            session_start();
+            $useraction = $_SESSION['fullname'];
+            $dateaction = date('Y-m-d');
+            $auditaction = "Update the Dependents info of Employee no ".$employee_number;
+            $audittype = "EDIT";
+            $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
+            $q->execute();
+
+            echo json_encode(array('message' => 'Dependent Updated Successfully', 'type' => 'success'));
+            exit;
+          }
+      }
+    }
+    else {
+      $query = $conn->prepare("UPDATE benefitsinfo SET name='$name', gender='$gender', age='$age', relation='$relation' WHERE id='$id'");
+      $query->execute();
+
+      session_start();
+      $useraction = $_SESSION['fullname'];
+      $dateaction = date('Y-m-d');
+      $auditaction = "Update the Dependents ifo of Employee no ".$employee_number;
+      $audittype = "EDIT";
+      $q = $conn->prepare("INSERT INTO audit_trail SET audit_date='$dateaction', end_user='$useraction', audit_action='$auditaction', action_type='$audittype'");
+      $q->execute();
+      echo json_encode(array("message"=>"Dependent Updated Successfully", "type" => "success", "employeeno" => $employee_number));
+      exit;
+    }
+  }
+
 
 
 }
@@ -166,6 +331,18 @@ if(isset($_GET['selectbenefit'])){
 }
 if(isset($_GET['editbenefits'])){
   $x->editbenefits();
+}
+if(isset($_GET['addDependent'])){
+  $x->addDependent();
+}
+if(isset($_GET['load_dependent'])){
+  $x->load_dependent();
+}
+if(isset($_GET['deleteDependent'])){
+  $x->deleteDependent();
+}
+if(isset($_GET['updateDependent'])){
+  $x->updateDependent();
 }
 
 if(isset($_GET['demp_stat'])){

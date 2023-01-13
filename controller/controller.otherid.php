@@ -47,6 +47,7 @@ class crud extends db_conn_mysql
   }
   function load_other_id(){
     $employeeno = $_GET['employeeno'];
+    $type = $_GET['type'];
     $conn = $this->connect_mysql();
     $query = $conn->prepare("SELECT * FROM otheridinfo
                              WHERE employeeno='$employeeno'");
@@ -61,16 +62,29 @@ class crud extends db_conn_mysql
         $x[$key] = utf8_encode($input_arr);
       }
       $data = array();
-      $data['action'] = '<center class="d-flex justify-content-around">
-                            <button title="Edit" onclick="edit(\''.$x['id'].'\',\''.$x['id_type'].'\',\''.$x['card_number'].'\',\''.$x['description'].'\',\''.$x['date_issued'].'\',\''.$x['validity_date'].'\',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')"  class="btn btn-warning btn-sm">
-                              <i class="fas fa-sm fa-edit"></i>
-                              Edit
-                            </button>
-                            <button title="Delete" onclick="deleteId(\''.$x['id'].'\',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')"  class="btn btn-danger btn-sm">
-                              <i class="fas fa-sm fa-trash"></i>
-                              Delete
-                            </button>
-                          </center> ';
+      if($type == "hr") {
+        $data['action'] = '<center class="d-flex justify-content-around">
+                              <button title="Edit" onclick="edit(\''.$x['id'].'\',\''.$x['id_type'].'\',\''.$x['card_number'].'\',\''.$x['description'].'\',\''.$x['date_issued'].'\',\''.$x['validity_date'].'\',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')"  class="btn btn-warning btn-sm">
+                                <i class="fas fa-sm fa-edit"></i>
+                                Edit
+                              </button>
+                              <button title="Delete" onclick="deleteId(\''.$x['id'].'\',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')"  class="btn btn-danger btn-sm">
+                                <i class="fas fa-sm fa-trash"></i>
+                                Delete
+                              </button>
+                            </center> ';
+      } else {
+        $data['action'] = '<center class="d-flex justify-content-around">
+                              <button disabled title="Edit" onclick="edit(\''.$x['id'].'\',\''.$x['id_type'].'\',\''.$x['card_number'].'\',\''.$x['description'].'\',\''.$x['date_issued'].'\',\''.$x['validity_date'].'\',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')"  class="btn btn-warning btn-sm">
+                                <i class="fas fa-sm fa-edit"></i>
+                                Edit
+                              </button>
+                              <button disabled title="Delete" onclick="deleteId(\''.$x['id'].'\',\''.$x['file_name'].'\',\''.$x['employeeno'].'\')"  class="btn btn-danger btn-sm">
+                                <i class="fas fa-sm fa-trash"></i>
+                                Delete
+                              </button>
+                            </center> ';
+      }
       // $data['employeeno'] = $x['employeeno'];
       $data['id_type'] = ucfirst($x['id_type']);
       $data['card_number'] = $x['card_number'];

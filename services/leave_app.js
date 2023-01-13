@@ -43,12 +43,12 @@ $(document).ready(function(){
 						$('#assign_points_todeduct').val("");
 						$('#assigno_days').val("");
 					}else{
-						if(b.bal <= 0){
-							$('#pay_leave').val("Without Pay");
-							$('#withPay').prop('disabled', true);
-						}else{
-							$('#pay_leave').val("With Pay");
-						}
+						// if(b.bal <= 0){
+						// 	$('#pay_leave').val("Without Pay");
+						// 	$('#withPay').prop('disabled', true);
+						// }else{
+						// 	$('#pay_leave').val("With Pay");
+						// }
 						$('#assignleavebal').val(b.bal);
 						// if(application_type=="Half Day"){
 						// }
@@ -202,6 +202,17 @@ $(document).ready(function(){
 		// 	}
 		// });
 
+		function getBusinessDatesCount(startDate, endDate) {
+			let count = 0;
+			const curDate = new Date(startDate.getTime());
+			while (curDate <= endDate) {
+				const dayOfWeek = curDate.getDay();
+				if(dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+				curDate.setDate(curDate.getDate() + 1);
+			}
+			return count;
+		}
+
 		$('#assign_application_type').on('change',function(){
 			var application_type = $('#assign_application_type').val();
 
@@ -226,19 +237,22 @@ $(document).ready(function(){
 					const datefrom = $('#assignfromdate').val();
 					const date1 = new Date(datefrom);
 					const date2 = new Date(dateto);
+					const points_todeduct = $('#assign_points_todeduct').val();
 					if(dateto) {
 						$('#date1').val(date1.toISOString().substring(0, 10))
 						$('#date2').val(date2.toISOString().substring(0, 10))
-						const diffTime = Math.abs(date2 - date1);
-						const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-						const points_todeduct = $('#assign_points_todeduct').val();
+						// const diffTime = Math.abs(date2 - date1);
+						// const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+						// const points_todeduct = $('#assign_points_todeduct').val();
 						if(datefrom > dateto){
 							$.Toast("Invalid date range", errorToast);
 							$('#assigntodate').val("0000-00-00");
 							$('#assigno_days').val("");
 						}else{
 							// var dayss = diffDays+1;
-							const deduct = (diffDays + 1) * points_todeduct;
+							// const deduct = (diffDays + 1) * points_todeduct;
+							// $('#assigno_days').val(deduct);
+							const deduct = getBusinessDatesCount(date1, date2) * points_todeduct;
 							$('#assigno_days').val(deduct);
 						}
 					}
@@ -249,19 +263,38 @@ $(document).ready(function(){
 					const datefrom = $('#assignfromdate').val();
 					const date1 = new Date(datefrom);
 					const date2 = new Date(dateto);
+					// if(dateto) {
+					// 	$('#date1').val(date1.toISOString().substring(0, 10))
+					// 	$('#date2').val(date2.toISOString().substring(0, 10))
+					// 	const diffTime = Math.abs(date2 - date1);
+					// 	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+					// 	const points_todeduct = $('#assign_points_todeduct').val();
+					// 	if(datefrom > dateto){
+					// 		$.Toast("Invalid date range", errorToast);
+					// 		$('#assigntodate').val("0000-00-00");
+					// 		$('#assigno_days').val("");
+					// 	}else{
+					// 		// var dayss = diffDays+1;
+					// 		const deduct = (diffDays + 1) * points_todeduct;
+					// 		$('#assigno_days').val(deduct);
+					// 	}
+					// }
+					const points_todeduct = $('#assign_points_todeduct').val();
 					if(dateto) {
 						$('#date1').val(date1.toISOString().substring(0, 10))
 						$('#date2').val(date2.toISOString().substring(0, 10))
-						const diffTime = Math.abs(date2 - date1);
-						const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-						const points_todeduct = $('#assign_points_todeduct').val();
+						// const diffTime = Math.abs(date2 - date1);
+						// const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+						// const points_todeduct = $('#assign_points_todeduct').val();
 						if(datefrom > dateto){
 							$.Toast("Invalid date range", errorToast);
 							$('#assigntodate').val("0000-00-00");
 							$('#assigno_days').val("");
 						}else{
 							// var dayss = diffDays+1;
-							const deduct = (diffDays + 1) * points_todeduct;
+							// const deduct = (diffDays + 1) * points_todeduct;
+							// $('#assigno_days').val(deduct);
+							const deduct = getBusinessDatesCount(date1, date2) * points_todeduct;
 							$('#assigno_days').val(deduct);
 						}
 					}
@@ -719,17 +752,15 @@ $(document).ready(function(){
 		// const diffTime = Math.abs(date2 - date1);
 		// const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 		// var dayss = diffDays+1;
-		if(leave_bal=="" || leave_bal==null){
-			$.Toast("No available leave credits", errorToast);
-		}
-		else if(no_days=="" || no_days==null){
+		// if(leave_bal=="" || leave_bal==null){
+		// 	$.Toast("No available leave credits", errorToast);
+		// }
+		if(no_days=="" || no_days==null){
 			$.Toast("Invalid transaction", errorToast);
 		}else if(comment=="" || comment==null){
 			$.Toast("Please input the reason of your leave.", errorToast);
 		}else if(leaveForm=="" || leaveForm==null){
 			$.Toast("Please input the hardcopy of your leave form.", errorToast);
-		}else if(parseInt(leave_bal) < parseInt(no_days)){
-			$.Toast("Invalid transaction, insufficient leave balance", errorToast);
 		}else{
 			// var updatedbalance = leave_value - no_days;
 			var form_data = new FormData();
@@ -772,16 +803,17 @@ $(document).ready(function(){
 					$("#btnapprove").attr('disabled', false)
 				},
 				success:function(data){
-					const b = parseJSON(data)
+					const b = $.parseJSON(data)
 					if(b.type === 'error')
 						$.Toast(b.message, errorToast)
 					else {
 						$.Toast(b.message, successToast)
 						$('#tbl_leavelist').DataTable().destroy();
-						var stat = "Pending";
-						$('#filter_status').val(stat)
-						loadleavelist(stat);
+						// var stat = "Pending";
+						// $('#filter_status').val(stat)
+						loadleavelist('Pending');
 						$('#leavemodal').modal('hide')
+						$('#form').trigger("reset");
 					}
 				}
 			});

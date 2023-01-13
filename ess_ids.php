@@ -10,7 +10,7 @@ require_once "header.php";
 
 <div class="sidenavigation">
   <?php 
-  require_once "master_tab.php";
+  require_once "ess_tab.php";
    ?>
 </div>
 
@@ -133,7 +133,7 @@ require_once "header.php";
                 <td>
                     <b>ID Type (Company / FAP / Others): </b>
                     <input type="text" class="form-control" id="id_type" name="id_type" placeholder="ID Type" required>
-                    <input type="hidden" id="employeeno" value="<?php echo $_GET['employeeno']; ?>" name="employeeno">
+                    <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno']; ?>" name="employeeno">
                 </td>
             </tr>
             <tr>
@@ -243,7 +243,8 @@ require_once "header.php";
     </div>
   </div>
 </div>
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 
 </body>
-<script src="services/otherid.js"></script>
+<script src="services/ess_ids.js"></script>
 </html>

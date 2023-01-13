@@ -1,0 +1,107 @@
+========== SHOP ADMIN ACCOUNT ==========
+Senz TMS Live Shop
+cpascual107@gmail.com
+1234
+
+Senz TMS Live Admin Dashboard
+admin
+default
+
+Admin Dashboard Medicalshop, Inmed & Panamed
+admin
+pmcg6872192
+
+
+============ IPOWER ACCOUNT ===========
+IPOWER Senzmedical
+senzmedicalcom
+S-m@6872190#1
+
+IPOWER TMS
+medicalshopcomph1
+Tms7318493!!
+
+IPOWER INMED
+inmedph
+Ic@025719912!
+
+IPOWER PMC
+pmcphcom
+Pmc@6564981
+
+IPOWER PANAMED
+panamedc
+Ppi@6872190
+
+IPOWER MCHANJO
+mchanjocom
+McH6564981!
+
+IPOWER GCI
+globalcrit
+Gci123!
+
+IPOWER OPUS
+magnumopusfestival
+Foresightlf@5635
+
+servername: magnumopusfestival.ipowermysql.com
+username: opus_cms
+password: opus_cms
+database name: opus
+
+======== YOURWEBHOSTING ACCOUNT =======
+PMCGROUP
+pmcgroup
+p-6872190
+
+================ EMAIL ===============
+TMS EMAIL:
+info@medicalshop.ph
+
+CLEANSPACE EMAIL:
+info@cleanspace.ph
+Unimex123
+
+APPLICATION FOR EMPLOYMENT EMAIL:
+pmcmailchimp@gmail.com
+default password: 1_pmcmailchimp@gmail.com
+app password: qyegdvkzvbjihbou
+number use: 09466840618
+
+
+============ RADMIN ACCOUNT ===========
+ANTEL
+admin
+pmcg6872192
+
+p7318493
+
+INMED
+admin
+ic5711888
+
+PMC
+admin
+pmc6564981
+
+============ RANDOM NOTES ============
+WMS LOCAL SERVER ANYDESK
+924 193 511
+p7318493
+
+OPENCART MrSPEEDY TMS:
+https://medicalshop.ph/admin/index.php?route=extension/shipping/dvbusiness/orders&user_token=kVDiuaFdrdP0xcF7Jt88PfRCFvX2ozdq
+
+OPENCART MrSPEEDY LOCALHOST:
+http://localhost/ocv3/upload/admin/index.php?route=extension/shipping/dvbusiness/orders&user_token=52Z6wZ7LI1zryA3jNgFZB0e403duyAIe
+
+================= ETC  ================
+ngerome031@gmail.com
+
+no-reply@medicalshop.com.ph
+Unimex123!
+
+ALWAYS RESET THE TWIG IN ADMIN->DESIGN->THEME EDITOR
+
+dacuno@pmcgroup.com

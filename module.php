@@ -49,11 +49,7 @@ foreach ($birthday as $x) {
 	  <?php endif ?>
 	  <?php if ($pim=="tru"): ?>
 	  <h6 class="admin_tab" id="li_pim" onclick="goto('employee.php')"><i class="fas fa-md fa-user-lock"></i><span class="admin_tab_name">
-		<?php if($usertype == 'admin'): ?>
-			HR
-		<?php else : ?>
-			Dept Head
-		<?php endif ?>
+		HR Staff
 	  </span></h6>
 	  <?php endif ?>
 	  <?php if ($ess=="tru"): ?>

@@ -47,15 +47,12 @@ $count = $leaves->countLeaves($empno);
       <table class="table table-striped w-100" id="tbl_myot">
         <thead>
           <th>Employee Name</th>
-          <th>Position</th>
-          <th>Reasons</th>
-          <th>Date Filed</th>
           <th>From</th>
           <th>To</th>
           <th>No. of hrs</th>
-          <th>OT Date To</th>
-          <th>OT Date From</th>
+          <th>OT Date</th>
           <th>Status</th>
+          <th class="text-center">OT Form</th>
           <th class="text-center">Action</th>
         </thead>
         <tbody>
@@ -79,14 +76,10 @@ $count = $leaves->countLeaves($empno);
       <table class="table table-striped w-100" id="tbl_otlist">
         <thead>
           <th>Employee Name</th>
-          <th>Position</th>
-          <th>Reasons</th>
-          <th>Date Filed</th>
           <th>From</th>
           <th>To</th>
           <th>No. of hrs</th>
-          <th>OT Date From</th>
-          <th>OT Date To</th>
+          <th>OT Date</th>
           <th>Status</th>
         </thead>
         <tbody>

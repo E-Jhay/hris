@@ -237,11 +237,11 @@ function btnreports(){
   function loadallot(filter_status){
     $('#tbl_myot').DataTable({  
 		createdRow: function (row, data, index) {
-			if ($('td', row).eq(9)[0].innerText == 'Disapproved') {
-				$('td', row).eq(9).addClass('reject')
-				// console.log($('td', row).eq(9)[0].innerText)
-			} else if($('td', row).eq(9)[0].innerText == 'Approved') {
-				$('td', row).eq(9).addClass('acknowledged')
+			if ($('td', row).eq(5)[0].innerText == 'Disapproved') {
+				$('td', row).eq(5).addClass('reject')
+				// console.log($('td', row).eq(5)[0].innerText)
+			} else if($('td', row).eq(5)[0].innerText == 'Approved') {
+				$('td', row).eq(5).addClass('acknowledged')
 				// console.log($('td', row).eq(9)[0].innerText)
 			}
 		},
@@ -256,15 +256,12 @@ function btnreports(){
               "columns" : [
         
                     { "data" : "employeeno"},
-                    { "data" : "position"},
-                    { "data" : "reasons"},
-                    { "data" : "date_filed"},
                     { "data" : "ot_from"},
                     { "data" : "ot_to"},
                     { "data" : "no_of_hrs"},
                     { "data" : "ot_date"},
-                    { "data" : "ot_date_to"},
                     { "data" : "status"},
+                    { "data" : "overtime_form"},
                     { "data" : "action"}
 
 
@@ -277,11 +274,11 @@ function btnreports(){
   function loadallot_list(filter_status_report,filter_from,filter_to){
     $('#tbl_otlist').DataTable({  
 			createdRow: function (row, data, index) {
-				if ($('td', row).eq(9)[0].innerText == 'Disapproved') {
-					$('td', row).eq(9).addClass('reject')
-					// console.log($('td', row).eq(9)[0].innerText)
-				} else if($('td', row).eq(9)[0].innerText == 'Approved') {
-					$('td', row).eq(9).addClass('acknowledged')
+				if ($('td', row).eq(5)[0].innerText == 'Disapproved') {
+					$('td', row).eq(5).addClass('reject')
+					// console.log($('td', row).eq(5)[0].innerText)
+				} else if($('td', row).eq(5)[0].innerText == 'Approved') {
+					$('td', row).eq(5).addClass('acknowledged')
 					// console.log($('td', row).eq(9)[0].innerText)
 				}
 			},
@@ -296,14 +293,10 @@ function btnreports(){
               "columns" : [
         
                     { "data" : "employeeno"},
-                    { "data" : "position"},
-                    { "data" : "reasons"},
-                    { "data" : "date_filed"},
                     { "data" : "ot_from"},
                     { "data" : "ot_to"},
                     { "data" : "no_of_hrs"},
                     { "data" : "ot_date"},
-                    { "data" : "ot_date_to"},
                     { "data" : "status"}
 
 
@@ -363,6 +356,11 @@ function btnreports(){
 		window.location.href=linkk;
 	}
 
+  }
+
+  function viewOvertimeForm(filename, employeeno){
+    var link = "static/overtime_form/" + employeeno + '/' + filename;
+    window.open(link);
   }
 
 

@@ -185,9 +185,11 @@ class crud extends db_conn_mysql
         $sql3->execute();
 
     }
+    session_start();
+    $currentLogIn = $_SESSION['fullname'];
 
 
-      $sql = $conn->prepare("UPDATE leave_application SET status='$statusProxy', remarks='$remarks', approved_by='Administrator', readd='notread',last_update='$datenow',last_update_time='$timenow' WHERE id='$leave_id'");
+      $sql = $conn->prepare("UPDATE leave_application SET status='$statusProxy', remarks='$remarks', approved_by='Administrator', readd='notread',last_update='$datenow',last_update_time='$timenow', approved_by = '$currentLogIn' WHERE id='$leave_id'");
       $sql->execute();
 
       $sqry = $conn->prepare("SELECT id,firstname,lastname,department FROM tbl_employee WHERE employeeno='$emp_number'");
@@ -270,18 +272,15 @@ class crud extends db_conn_mysql
           $emp_nodays = 0;
         }
 
-        session_start();
-        $currentLogIn = $_SESSION['fullname'];
-
-        if($status == 'Approved') {
-          $message = $currentLogIn. ' aprroved the ' .$emp_leavetype. ' application of ' .$firstname. ' ' .$lastname;
-          $mail->Subject = "Leave Application";
-          $mail->Body = $message;
-          $mail->isHTML(true);
-          $mail->AddAddress($corp_email); //HR email
-          $mail->AddCC('bumacodejhay@gmail.com');
-          $mail->Send();
-        }
+        // if($status == 'Approved') {
+        //   $message = $currentLogIn. ' aprroved the ' .$emp_leavetype. ' application of ' .$firstname. ' ' .$lastname;
+        //   $mail->Subject = "Leave Application";
+        //   $mail->Body = $message;
+        //   $mail->isHTML(true);
+        //   $mail->AddAddress($corp_email); //HR email
+        //   $mail->AddCC('bumacodejhay@gmail.com');
+        //   $mail->Send();
+        // }
         
         if($status == 'Cancelled')
           $message = 'Your request '.$emp_leavetype.' was '.$status.' by ' .$currentLogIn;
@@ -414,17 +413,14 @@ class crud extends db_conn_mysql
           // } else {
           //   echo "success";
           // }
-
         $mail = new PHPMailer();
         $mail->IsSMTP();
         $mail->SMTPDebug = 0;
         $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'ssl';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 465;
+        $mail->Host = "smtp.ipower.com";
         $mail->IsHTML(true);
-        $mail->Username = "pmcmailchimp@gmail.com";
-        $mail->Password = "qyegdvkzvbjihbou";
+        $mail->Username = "no-reply@panamed.com.ph";
+        $mail->Password = "Unimex123!!";
         $mail->SetFrom("no-reply@panamed.com.ph", "");
         
         $message = 'The HR department assigned a '.$leave_type.' leave <strong>'. $application_type.'</strong> From: '.$datefrom.' To: '.$dateto. ' for you.';
@@ -432,7 +428,7 @@ class crud extends db_conn_mysql
         $mail->Body = $message;
         $mail->isHTML(true);
         // $dept_head_email = $row2['dept_head_email'];
-        $mail->AddAddress($corp_email);
+        $mail->AddAddress($corp_email); // Employee email
         $mail->AddCC('bumacodejhay@gmail.com');
 
         if(!$mail->Send()) {
@@ -532,8 +528,6 @@ class crud extends db_conn_mysql
 
   function loadleavelist(){
 
-    session_start();
-    $department = $_SESSION['department'];
     $employeenoo = $_GET['employeenoo'];
     $stat = $_GET['stat'];
     $conn = $this->connect_mysql();
@@ -544,21 +538,15 @@ class crud extends db_conn_mysql
 
     // $dept = $rw['department'];
     if($stat=="All"){
-      if($_SESSION['usertype'] == 'admin') {
-        $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-        LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno ORDER BY a.id DESC");
-      } else {
-        $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                               LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.department = '$department' ORDER BY a.id DESC");
-      }
+      $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+      LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno ORDER BY a.date_applied DESC");
     }else{
-      if($_SESSION['usertype'] == 'admin') {
-        $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='$stat' ORDER BY a.id DESC");
-      } else {
-        $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='$stat' AND a.department = '$department' ORDER BY a.id DESC");
+      $order = 'DESC';
+      if($stat=="Pending") {
+        $order = 'ASC';
       }
+      $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
+                           LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='$stat' ORDER BY a.date_applied $order");
       
     }
     

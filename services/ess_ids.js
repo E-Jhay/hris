@@ -107,7 +107,7 @@ function load_other_id(){
         "bPaginate": true,
         "bLengthChange": true,
         "pagination": true,
-        "ajax" : "controller/controller.otherid.php?load_other_id&type=hr&employeeno=" + employeeno,
+        "ajax" : "controller/controller.otherid.php?load_other_id&type=employee&employeeno=" + employeeno,
         "columns" : [
             { "data" : "id_type"},
             { "data" : "card_number"},

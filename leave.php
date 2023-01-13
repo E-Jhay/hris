@@ -131,8 +131,8 @@ $balance = $leaves->getleavebalance($empno);
           </tr>
           <tr>
             <td>
-              <label>Upload Leave Form:</label>
-              <input type="file" class="form-control" id="leaveForm" name"leaveForm">
+              <label>Upload Approved Leave Form:</label>
+              <input type="file" class="form-control" id="leaveForm" name"leaveForm" required>
               <input type="hidden" class="form-control" id="date1">
               <input type="hidden" class="form-control" id="date2">
             </td>

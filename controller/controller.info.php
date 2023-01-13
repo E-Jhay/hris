@@ -18,11 +18,9 @@ class crud extends db_conn_mysql
   function count_leaveapp(){
 
     $conn = $this->connect_mysql();
-    session_Start();
-    $department = $_SESSION['department'];
 
     $query = $conn->prepare("SELECT a.*,a.id as idd,b.* FROM leave_application a
-                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending' AND a.department = '$department' ORDER BY a.id DESC");
+                             LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno WHERE a.status='Pending'  ORDER BY a.id DESC");
     $query->execute();
 
     $count = $query->rowCount();
@@ -198,10 +196,10 @@ function read_notifications(){
     try {
       $employeeno = $_POST['employeeno'];
       $file_name = $_POST['file_name'];
-      $prevMarriageContract = $_POST['prevMarriageContract'];
-      $prevDependent = $_POST['prevDependent'];
-      $prevAdditionalId = $_POST['prevAdditionalId'];
-      $prevProofOfBilling = $_POST['prevProofOfBilling'];
+      // $prevMarriageContract = $_POST['prevMarriageContract'];
+      // $prevDependent = $_POST['prevDependent'];
+      // $prevAdditionalId = $_POST['prevAdditionalId'];
+      // $prevProofOfBilling = $_POST['prevProofOfBilling'];
       $conn=$this->connect_mysql();
       if (($_FILES['profile']['name']!="")){
 
@@ -234,122 +232,122 @@ function read_notifications(){
 
       }
 
-      if(!empty($_FILES["marriageContract"]["name"])) {
-        $target_dir = "../documents/".$employeeno."/marriage_contract/";
-        $file = $_FILES['marriageContract']['name'];
-        $path = pathinfo($file);
-        $ext = $path['extension'];
-        $temp_name = $_FILES['marriageContract']['tmp_name'];
-        $today = date("Ymd");
-        $name = explode(".", $file);
-        $marriageContract = $name[0]."-".$today.".".$ext;
-        $path_filename_ext = $target_dir;
-        if(!is_dir($path_filename_ext)){
-          mkdir("../documents/".$employeeno."/marriage_contract/", 0777, true);
-        }
-        $path_filename_ext .= $marriageContract;
+      // if(!empty($_FILES["marriageContract"]["name"])) {
+      //   $target_dir = "../documents/".$employeeno."/marriage_contract/";
+      //   $file = $_FILES['marriageContract']['name'];
+      //   $path = pathinfo($file);
+      //   $ext = $path['extension'];
+      //   $temp_name = $_FILES['marriageContract']['tmp_name'];
+      //   $today = date("Ymd");
+      //   $name = explode(".", $file);
+      //   $marriageContract = $name[0]."-".$today.".".$ext;
+      //   $path_filename_ext = $target_dir;
+      //   if(!is_dir($path_filename_ext)){
+      //     mkdir("../documents/".$employeeno."/marriage_contract/", 0777, true);
+      //   }
+      //   $path_filename_ext .= $marriageContract;
 
-        if(move_uploaded_file($temp_name,$path_filename_ext)) {
-          if($prevMarriageContract != '' || $prevMarriageContract != NULL){
-            $link_file = $target_dir.$prevMarriageContract;
-            if(file_exists($link_file))
-            unlink($link_file);
-          }
-          $query = $conn->prepare("UPDATE marriage_contract SET marriage_contract = '$marriageContract' WHERE employee_number = '$employeeno'");
-          $query->execute();
-        }
-      } else {
-        $marriageContract = '';
-      }
+      //   if(move_uploaded_file($temp_name,$path_filename_ext)) {
+      //     if($prevMarriageContract != '' || $prevMarriageContract != NULL){
+      //       $link_file = $target_dir.$prevMarriageContract;
+      //       if(file_exists($link_file))
+      //       unlink($link_file);
+      //     }
+      //     $query = $conn->prepare("UPDATE marriage_contract SET marriage_contract = '$marriageContract' WHERE employee_number = '$employeeno'");
+      //     $query->execute();
+      //   }
+      // } else {
+      //   $marriageContract = '';
+      // }
 
-      if(!empty($_FILES["dependent"]["name"])) {
-        $target_dir = "../documents/".$employeeno."/dependent/";
-        $file = $_FILES['dependent']['name'];
-        $path = pathinfo($file);
-        $ext = $path['extension'];
-        $temp_name = $_FILES['dependent']['tmp_name'];
-        $today = date("Ymd");
-        $name = explode(".", $file);
-        $dependent = $name[0]."-".$today.".".$ext;
-        $path_filename_ext = $target_dir;
-        if(!is_dir($path_filename_ext)){
-          mkdir("../documents/".$employeeno."/dependent/", 0777, true);
-        }
-        $path_filename_ext .= $dependent;
+      // if(!empty($_FILES["dependent"]["name"])) {
+      //   $target_dir = "../documents/".$employeeno."/dependent/";
+      //   $file = $_FILES['dependent']['name'];
+      //   $path = pathinfo($file);
+      //   $ext = $path['extension'];
+      //   $temp_name = $_FILES['dependent']['tmp_name'];
+      //   $today = date("Ymd");
+      //   $name = explode(".", $file);
+      //   $dependent = $name[0]."-".$today.".".$ext;
+      //   $path_filename_ext = $target_dir;
+      //   if(!is_dir($path_filename_ext)){
+      //     mkdir("../documents/".$employeeno."/dependent/", 0777, true);
+      //   }
+      //   $path_filename_ext .= $dependent;
 
-        if(move_uploaded_file($temp_name,$path_filename_ext)) {
-          if($prevDependent != '' || $prevDependent != NULL){
-            $link_file = $target_dir.$prevDependent;
-            if(file_exists($link_file))
-            unlink($link_file);
-          }
-          $query2 = $conn->prepare("UPDATE dependents SET dependent = '$dependent' WHERE employee_number = '$employeeno'");
-          $query2->execute();
-        }
+      //   if(move_uploaded_file($temp_name,$path_filename_ext)) {
+      //     if($prevDependent != '' || $prevDependent != NULL){
+      //       $link_file = $target_dir.$prevDependent;
+      //       if(file_exists($link_file))
+      //       unlink($link_file);
+      //     }
+      //     $query2 = $conn->prepare("UPDATE dependents SET dependent = '$dependent' WHERE employee_number = '$employeeno'");
+      //     $query2->execute();
+      //   }
 
-      } else {
-        $dependent = '';
-      }
+      // } else {
+      //   $dependent = '';
+      // }
 
-      if(!empty($_FILES["additionalId"]["name"])) {
-        $target_dir = "../documents/".$employeeno."/additional_id/";
-        $file = $_FILES['additionalId']['name'];
-        $path = pathinfo($file);
-        $ext = $path['extension'];
-        $temp_name = $_FILES['additionalId']['tmp_name'];
-        $today = date("Ymd");
-        $name = explode(".", $file);
-        $additionalId = $name[0]."-".$today.".".$ext;
-        $path_filename_ext = $target_dir;
-        if(!is_dir($path_filename_ext)){
-          mkdir("../documents/".$employeeno."/additional_id/", 0777, true);
-        }
-        $path_filename_ext .= $additionalId;
+      // if(!empty($_FILES["additionalId"]["name"])) {
+      //   $target_dir = "../documents/".$employeeno."/additional_id/";
+      //   $file = $_FILES['additionalId']['name'];
+      //   $path = pathinfo($file);
+      //   $ext = $path['extension'];
+      //   $temp_name = $_FILES['additionalId']['tmp_name'];
+      //   $today = date("Ymd");
+      //   $name = explode(".", $file);
+      //   $additionalId = $name[0]."-".$today.".".$ext;
+      //   $path_filename_ext = $target_dir;
+      //   if(!is_dir($path_filename_ext)){
+      //     mkdir("../documents/".$employeeno."/additional_id/", 0777, true);
+      //   }
+      //   $path_filename_ext .= $additionalId;
 
-        if(move_uploaded_file($temp_name,$path_filename_ext)) {
-          if($prevAdditionalId != '' || $prevAdditionalId != NULL){
-            $link_file = $target_dir.$prevAdditionalId;
-            if(file_exists($link_file))
-            unlink($link_file);
-          }
-          $query3 = $conn->prepare("UPDATE additional_id SET additional_id = '$additionalId' WHERE employee_number = '$employeeno'");
-          $query3->execute();
-        }
+      //   if(move_uploaded_file($temp_name,$path_filename_ext)) {
+      //     if($prevAdditionalId != '' || $prevAdditionalId != NULL){
+      //       $link_file = $target_dir.$prevAdditionalId;
+      //       if(file_exists($link_file))
+      //       unlink($link_file);
+      //     }
+      //     $query3 = $conn->prepare("UPDATE additional_id SET additional_id = '$additionalId' WHERE employee_number = '$employeeno'");
+      //     $query3->execute();
+      //   }
 
-      } else {
-        $additionalId = '';
-      }
+      // } else {
+      //   $additionalId = '';
+      // }
 
-      if(!empty($_FILES["proofOFBilling"]["name"])) {
-        $target_dir = "../documents/".$employeeno."/proof_of_billing/";
-        $file = $_FILES['proofOFBilling']['name'];
-        $path = pathinfo($file);
-        // $proofOFBilling = $path['filename'];
-        $ext = $path['extension'];
-        // $attachfile = $filename.".".$ext;
-        $temp_name = $_FILES['proofOFBilling']['tmp_name'];
-        $today = date("Ymd");
-        $name = explode(".", $file);
-        $proofOFBilling = $name[0]."-".$today.".".$ext;
-        $path_filename_ext = $target_dir;
-        if(!is_dir($path_filename_ext)){
-          mkdir("../documents/".$employeeno."/proof_of_billing/", 0777, true);
-        }
-        $path_filename_ext .= $proofOFBilling;
+      // if(!empty($_FILES["proofOFBilling"]["name"])) {
+      //   $target_dir = "../documents/".$employeeno."/proof_of_billing/";
+      //   $file = $_FILES['proofOFBilling']['name'];
+      //   $path = pathinfo($file);
+      //   // $proofOFBilling = $path['filename'];
+      //   $ext = $path['extension'];
+      //   // $attachfile = $filename.".".$ext;
+      //   $temp_name = $_FILES['proofOFBilling']['tmp_name'];
+      //   $today = date("Ymd");
+      //   $name = explode(".", $file);
+      //   $proofOFBilling = $name[0]."-".$today.".".$ext;
+      //   $path_filename_ext = $target_dir;
+      //   if(!is_dir($path_filename_ext)){
+      //     mkdir("../documents/".$employeeno."/proof_of_billing/", 0777, true);
+      //   }
+      //   $path_filename_ext .= $proofOFBilling;
 
-        if(move_uploaded_file($temp_name,$path_filename_ext)) {
-          if($prevProofOfBilling != '' || $prevProofOfBilling != NULL){
-            $link_file = $target_dir.$prevProofOfBilling;
-            if(file_exists($link_file))
-            unlink($link_file);
-          }
-          $query4 = $conn->prepare("UPDATE proof_of_billing SET proof_of_billing = '$proofOFBilling' WHERE employee_number = '$employeeno'");
-          $query4->execute();
-        }
+      //   if(move_uploaded_file($temp_name,$path_filename_ext)) {
+      //     if($prevProofOfBilling != '' || $prevProofOfBilling != NULL){
+      //       $link_file = $target_dir.$prevProofOfBilling;
+      //       if(file_exists($link_file))
+      //       unlink($link_file);
+      //     }
+      //     $query4 = $conn->prepare("UPDATE proof_of_billing SET proof_of_billing = '$proofOFBilling' WHERE employee_number = '$employeeno'");
+      //     $query4->execute();
+      //   }
 
-      } else {
-        $proofOFBilling = '';
-      }
+      // } else {
+      //   $proofOFBilling = '';
+      // }
 
       echo json_encode(array('message' => 'Successfully Saved', 'type' => 'success'));
 

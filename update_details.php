@@ -10,7 +10,7 @@ require_once "header.php";
 
 <div class="sidenavigation">
   <?php 
-  require_once "master_tab.php";
+  require_once "ess_tab.php";
    ?>
 </div>
 
@@ -18,7 +18,7 @@ require_once "header.php";
       
       <ul class="nav nav-tabs bb-none">
         <li class="nav-item">
-          <a class="nav-link active" id="" href="#">Other ID information</a>
+          <a class="nav-link active" id="" href="#">Details to update</a>
         </li>
       </ul>
 
@@ -27,48 +27,6 @@ require_once "header.php";
 <div class="navcontainer">
 
   <div id="div_myinfo" class="div_content">
-  	<!-- <form action="">
-
-
-		<table class="table-condensed grid12_master master_input">
-			<tr>
-				<td><b>COMPANY ID </b></td>
-			</tr>
-			<tr>
-				<td><b>Date issued: </b><input type="date" class="form-control" id="comp_id_dateissue" name="comp_id_dateissue"></td>
-			</tr>
-			<tr>
-				<td><b>Validity Date: </b><input type="date" class="form-control" id="comp_id_vdate" name="comp_id_vdate"></td>
-			</tr>
-			<tr>
-				<td><b>FACILITY ACCESS PASS </b></td>
-			</tr>
-			<tr>
-				<td><b>Proximity Card Number: </b><input type="text" class="form-control" id="fac_card_number" name="fac_card_number"></td>
-			</tr>
-			<tr>
-				<td><b>Date issued: </b><input type="date" class="form-control" id="fac_ap_dateissue" name="fac_ap_dateissue"></td>
-			</tr>
-			<tr>
-				<td><b>Validity Date: </b><input type="date" class="form-control" id="fac_ap_vdate" name="fac_ap_vdate"></td>
-			</tr>
-			<tr>
-				<td><b>Driver License Number: </b><input type="text" class="form-control" id="driver_id" name="driver_id"></td>
-			</tr>
-			<tr>
-				<td><b>License Expiry: </b><input type="date" class="form-control" id="driver_exp" name="driver_exp"></td>
-			</tr>
-			<tr>
-				<td><b>PRC Number: </b><input type="text" class="form-control" id="prc_number" name="prc_number"></td>
-			</tr>
-			<tr>
-				<td><b>PRC Expiry: </b><input type="date" class="form-control" id="prc_exp" name="prc_exp"></td>
-			</tr>
-			<tr>
-				<td><b>Civil Service Number: </b><input type="text" class="form-control" id="civil_service" name="civil_service"></td>
-			</tr>
-		</table>
-	</form> -->
 	<table class="table-condensed grid3_master master_input">
         <tr>
             <td class="text-center"><img  style="border: 1px dashed #a7a7a7; cursor: pointer;" src="" id="personal_image"></td>
@@ -122,73 +80,82 @@ require_once "header.php";
                     
     </table>
 
-	<form name="form" id="form" enctype="multipart/form-data" style="width: 100%; float: left; padding: 1em">
+	<!-- <form name="form" id="form" enctype="multipart/form-data" style="width: 100%; float: left; padding: 1em">
         <div>
         <button type="button" id="addBtn" class="btn btn-sm btn-primary mb-4">Add ID</button>
         <button type="button" id="cancelBtn" class="btn btn-sm btn-warning mb-4" style="display: none; ">Cancel</button>
         </div>
         
-        <table class="table-condensed" id="other_id_table" style="width: 100%; float: left; padding: 1em">
-            <tr>
-                <td>
-                    <b>ID Type (Company / FAP / Others): </b>
-                    <input type="text" class="form-control" id="id_type" name="id_type" placeholder="ID Type" required>
-                    <input type="hidden" id="employeeno" value="<?php echo $_GET['employeeno']; ?>" name="employeeno">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Card Number: </b>
-                    <input type="text" class="form-control" id="card_number" name="card_number" placeholder="Card Number" required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Description: </b>
-                    <input type="text" class="form-control" id="description" name="description" placeholder="Description" required>
-                </td>
-            </tr>
-			<tr>
-				<td>
-					<b>Date Issued: </b>
-					<input type="date" class="form-control" id="date_issued" name="date_issued">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b>Validity Date: </b>
-					<input type="date" class="form-control" id="validity_date" name="validity_date">
-				</td>
-			</tr>
-            <tr>
-                <td>
-                    <b>Upload Hardcopy: </b>
-                    <input class="form-control" id="file" type="file" name="file"/>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-center">
-                <button type="submit" class="btn btn-md btn-success"><i class="fas fa-sm fa-save"></i> Save</button>
-                </td>
-            </tr>
-        </table>
+	</form> -->
+
+  <div class="grid12_master" style="margin-bottom: 0">
+    <button type="button" id="civilStatusBtn" class="btn btn-sm btn-primary mb-4">Update Civil Status</button>
+    <button type="button" id="addressBtn" class="btn btn-sm btn-warning mb-4">Update Address</button>
+  </div>
+
+  <form name="civilStatusForm" id="civilStatusForm" enctype="multipart/form-data">
+    <table class="table-condensed" id="civilStatusTable" style="width: 100%; float: left; padding: 1em">
+      <tr>
+        <td>
+          <b>Status:</b>
+          <select class="form-control" name="civilStatus" id="civilStatus" required>
+            <option value="Single"> Single </option>
+            <option value="Married"> Married </option>
+            <option value="Widowed"> Widowed </option>
+            <option value="Annulled"> Annulled </option>
+          </select>
+          <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno']; ?>" name="employeeno">
+          <input type="hidden" id="marriage_contract" name="marriage_contract">
+        </td>
+      </tr>
+      <tr id="marriage_contract_panel">
+        <td>
+          <b>Upload Marriage Contract: </b>
+          <input class="form-control" id="marriageContractFile" type="file" name="marriageContractFile"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-center">
+          <button class="btn btn-primary" type="submit"><i class="fas fa-sm fa-save"></i> Save</button>
+        </td>
+      </tr>
+    </table>
 	</form>
 
-	<table class="table table-striped w-100" id="tbl_other_id">
-		<thead>
-			<th>ID Type</th>
-			<th>Card No</th>
-			<th>Description</th>
-			<th>Date Issued</th>
-			<th>Validity Date</th>
-			<th class="text-center" style="min-width: 10em">File</th>
-			<th class="text-center" style="max-width: 14em">Action</th>
-		</thead>
-		<tbody>
-			
-		</tbody>
+  <form name="addressForm" id="addressForm" enctype="multipart/form-data">
+    <table class="table-condensed" id="addressTable" style="width: 100%; float: left; padding: 1em">
+      <tr>
+        <td><h4>Address</h4></td>
+        <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno']; ?>" name="employeeno">
+        <input type="hidden" id="proof_of_billing" name="proof_of_billing">
+      </tr>
+      <tr>
+        <td>
+          <b>Street / Barangay: </b>
+          <input type="text" class="form-control" id="street" name="street" placeholder="Street">
+        </td>
+        <td>
+          <b>Municipality: </b>
+          <input type="text" class="form-control" id="municipality" name="municipality" placeholder="Municipality">
+        </td>
+        <td>
+          <b>Province: </b>
+          <input type="text" class="form-control" id="province" name="province" placeholder="Province">
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <b>Upload Proof of Billing: </b>
+          <input class="form-control" id="addressFile" type="file" name="addressFile"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-center" colspan="3">
+          <button class="btn btn-primary" type="submit"><i class="fas fa-sm fa-save"></i> Save</button>
+        </td>
+      </tr>
     </table>
-  </div>
+	</form>
  
 </div>
 
@@ -243,7 +210,8 @@ require_once "header.php";
     </div>
   </div>
 </div>
+<input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 
 </body>
-<script src="services/otherid.js"></script>
+<script src="services/update_details.js"></script>
 </html>

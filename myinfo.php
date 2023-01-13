@@ -62,7 +62,7 @@ $count = $leaves->countLeaves($empno);
   </div>
     <div class="row">
       <div class="col-md-6 col-lg-3">
-        <button type="button" onclick="documentsModal()" class="btn btn-success btn-sm"><i class="fas fa-sm fa-pen"></i> Upload Additional Documents</button>
+        <button type="button" onclick="documentsModal()" class="btn btn-success btn-sm"><i class="fas fa-sm fa-pen"></i> Upload Profile Picture</button>
       </div>
       <div class="col-md-6 col-lg-4">
         <button type="button" onclick="change()" class="btn btn-success btn-sm"><i class="fas fa-sm fa-lock"></i> Change Password</button>
@@ -102,7 +102,7 @@ $count = $leaves->countLeaves($empno);
 </div>
 
 <div class="modal fade" id="documentsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Upload Documents</h5>
@@ -126,7 +126,7 @@ $count = $leaves->countLeaves($empno);
               <input class="d-none" id="profile" type="file" name="profile" accept="image/png, image/gif, image/jpeg, application/pdf">
             </div>
           </div>
-          <div class="row" style="margin-bottom: 4em;">
+          <!-- <div class="row" style="margin-bottom: 4em;">
             <div class="col d-flex justify-content-center">
                 <div class="text-center" style="height: 120px; width: 160px; border: 1px dashed #a7a7a7; cursor: pointer; margin-bottom: 4em">
                   <img class="mb-4" title="Marriage Contract" id="marriage_contract_image" width="100%" height="100%" src="static/card-thumbnail.jpg">
@@ -165,11 +165,11 @@ $count = $leaves->countLeaves($empno);
               <input type="hidden" id="prevAdditionalId" name="prevAdditionalId">
               <input type="hidden" id="prevProofOfBilling" name="prevProofOfBilling">
             </div>
-          </div>
+          </div> -->
         </div>
         <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno'] ?>" name="employeeno">
         <center style="margin: 6em 0 2em 0">
-        <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Save Changes</button>
+        <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Submit</button>
         </center>
       </form>
           

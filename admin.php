@@ -101,7 +101,7 @@ require_once "header.php";
             <input type="hidden" id="user_id" name="">
           </div>
           <div class="form-group">
-            <label for="exampleInputEmail1">Dept Head</label>
+            <label for="exampleInputEmail1">HR Staff</label>
             <input type="checkbox" id="1" name="role" value="1">
           </div>
           <div class="form-group">

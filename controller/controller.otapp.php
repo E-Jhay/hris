@@ -114,12 +114,16 @@ class crud extends db_conn_mysql
     if($filter_status=="All"){
       $query = $conn->prepare("SELECT a.*,b.firstname,b.lastname,b.job_title FROM tbl_overtime a
                              LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno
-                             ORDER BY a.id DESC");
+                             ORDER BY a.date_filed DESC");
     }else{
+      $order = 'DESC';
+      if($filter_status=="Pending") {
+        $order = 'ASC';
+      }
       $query = $conn->prepare("SELECT a.*,b.firstname,b.lastname,b.job_title FROM tbl_overtime a
                              LEFT JOIN tbl_employee b ON a.employeeno=b.employeeno
-                             WHERE a.statuss='$filter_status';
-                             ORDER BY a.id DESC");
+                             WHERE a.statuss='$filter_status'
+                             ORDER BY a.date_filed $order");
     }
     
     $query->execute();
@@ -133,8 +137,14 @@ class crud extends db_conn_mysql
           }
           
           $data = array();
+          
+          $data['overtime_form'] = '
+          <center class="d-flex justify-content-around">
+            <button title="View leave form" class="btn btn-sm btn-success" onclick="viewOvertimeForm('.'\''.$x['file_name'].'\',\''.$x['employeeno'].'\')"><i class="fas fa-sm fa-eye"></i> OT Form</button> 
+          </center>
+          ';
                   
-          $data['action'] = '<center d-flex justify-content-around>
+          $data['action'] = '<center class="d-flex justify-content-around">
           <button title="View details" onclick="open_ot('.$x['id'].',\''.$x['firstname'].'\',\''.$x['lastname'].'\',\''.$x['job_title'].'\',\''.$x['reasons'].'\',\''.$x['date_filed'].'\',\''.$x['ot_from'].'\',\''.$x['ot_to'].'\',\''.$x['no_of_hrs'].'\',\''.$x['ot_date'].'\',\''.$x['statuss'].'\',\''.$x['remarks'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-eye fa-eye"></i></button>
           
           </center>
@@ -147,7 +157,6 @@ class crud extends db_conn_mysql
           $data['ot_to'] = $x['ot_to'];
           $data['no_of_hrs'] = $x['no_of_hrs'];
           $data['ot_date'] = $x['ot_date'];
-          $data['ot_date_to'] = $x['ot_date_to'];
           $data['status'] = $x['statuss'];
 
 
@@ -198,7 +207,6 @@ class crud extends db_conn_mysql
           $data['ot_to'] = $x['ot_to'];
           $data['no_of_hrs'] = $x['no_of_hrs'];
           $data['ot_date'] = $x['ot_date'];
-          $data['ot_date_to'] = $x['ot_date_to'];
           $data['status'] = $x['statuss'];
 
 

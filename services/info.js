@@ -36,7 +36,6 @@ $(document).ready(function(){
                 $('#personal_image').attr('src', e.target.result);
             }
             reader.readAsDataURL(this.files[0]);
-			console.log('changed')
         }
 		});
 		$('#dependent').on('change',function(){
@@ -101,10 +100,10 @@ $(document).ready(function(){
 				// document.getElementById("personal_pic").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
 				// document.getElementById("personal_image").src = "personal_picture/"+b.employeeno+"/"+b.imagepic;
 				$('#file_name').val(b.imagepic);
-				$('#prevMarriageContract').val(b.marriage_contract);
-				$('#prevDependent').val(b.dependent);
-				$('#prevAdditionalId').val(b.additional_id);
-				$('#prevProofOfBilling').val(b.proof_of_billing);
+				// $('#prevMarriageContract').val(b.marriage_contract);
+				// $('#prevDependent').val(b.dependent);
+				// $('#prevAdditionalId').val(b.additional_id);
+				// $('#prevProofOfBilling').val(b.proof_of_billing);
 				$('#fname').html(b.firstname);
 				$('#mname').html(b.middlename);
 				$('#lname').html(b.lastname);
@@ -196,7 +195,7 @@ function removeFile(button, image) {
 			const b = $.parseJSON(data)
 			if(b.type === 'error')
 				$.Toast(b.message, errorToast);
-			else
+			else{
 				$.Toast(b.message, successToast);
 				$('#documentsModal').modal('hide');
 				setTimeout(() => {
@@ -204,6 +203,7 @@ function removeFile(button, image) {
 					var id = b.id;
 					window.location.href="myinfo.php";
 				}, 1000)
+			}
 		}
 	});
 

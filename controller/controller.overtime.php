@@ -5,7 +5,6 @@ class crud extends db_conn_mysql
 {
 
   function apply_overtime(){
-
     $employeeno = $_POST['employeeno'];
     $reasons = $_POST['reasons'];
     $date_filed = $_POST['date_filed'];
@@ -13,76 +12,105 @@ class crud extends db_conn_mysql
     $ot_to = $_POST['ot_to'];
     $no_of_hrs = $_POST['no_of_hrs'];
     $ot_date = $_POST['ot_date'];
-    $ot_date_to = $_POST['ot_date_to'];
 
-    $conn = $this->connect_mysql();
-    $query = $conn->prepare("INSERT INTO tbl_overtime SET employeeno='$employeeno', reasons='$reasons', date_filed='$date_filed', ot_from='$ot_from', ot_to='$ot_to', no_of_hrs='$no_of_hrs', ot_date='$ot_date', statuss='Pending', approved_by='',ot_date_to='$ot_date_to', remarks=''");
-    $query->execute();
+    if(!empty($_FILES["overtimeForm"]["name"])) {
 
+      $target_dir = "../static/overtime_form/".$employeeno.'/';
+      $file = $_FILES['overtimeForm']['name'];
+      $path = pathinfo($file);
+      $ext = $path['extension'];
+      $temp_name = $_FILES['overtimeForm']['tmp_name'];
+      $today = date("Y-m-d-His");
+      $name = explode(".", $file);
+      $overtimeForm = $name[0]."-".$today.".".$ext;
+      $path_filename_ext = $target_dir;
+      if(!is_dir($path_filename_ext)){
+        mkdir($path_filename_ext, 0755);
+      }
 
-    $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
-    $qry2->execute();
-    $row = $qry2->fetch();
-
-    $department = $row['department'];
-    $firstname = $row['firstname'];
-    $lastname = utf8_decode($row['lastname']);
-    // $id = $row['id'];
-
-    $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE employeeno='$employeeno'");
-    $qry3->execute();
-    $row2 = $qry3->fetch();
-
-
-      require 'Exception.php';
-      require 'PHPMailer.php';
-      require 'SMTP.php';
-      require 'PHPMailerAutoload.php';
-
-      // $mail = new PHPMailer();
-      // $mail->IsSMTP();
-      // $mail->SMTPDebug = 0;
-      // $mail->SMTPAuth = true;
-      // $mail->Host = "mail.panamed.com.ph";
-      // $mail->IsHTML(true);
-      // $mail->Username = "no-reply@panamed.com.ph";
-      // $mail->Password = "Unimex123!";
-      // $mail->SetFrom("no-reply@panamed.com.ph", "");
-      // $mail->Subject = "Overtime Application";
-      // $msg = $firstname." ".$lastname." applied Overtime From: ".$ot_date." (".$ot_from.") To: ".$ot_date_to." (".$ot_to.")\n\nReason: ".$reasons;
-      // $mail->Body = $msg;
-      // $dept_head_email = $row2['dept_head_email'];
-      // $mail->AddAddress($dept_head_email);
-      // if(!$mail->Send()) {
-      //     echo "Mailer Error: " . $mail->ErrorInfo;
-      // } else {
-      //     echo "success";
-      // }
-
-      $mail = new PHPMailer();
-      $mail->IsSMTP();
-      $mail->SMTPDebug = 0;
-      $mail->SMTPAuth = true;
-      $mail->Host = "smtp.ipower.com";
-      $mail->IsHTML(true);
-      $mail->Username = "no-reply@panamed.com.ph";
-      $mail->Password = "Unimex123!!";
-      $mail->SetFrom("no-reply@panamed.com.ph", "");
-      $dept_head_email = $row2['dept_head_email'];
-      
-      $message = $firstname." ".$lastname." applied Overtime From: ".$ot_date." (".$ot_from.") To: ".$ot_date_to." (".$ot_to.")\n\nReason: ".$reasons;
-      $mail->Subject = "Overtime Application";
-      $mail->Body = $message;
-      $mail->isHTML(true);
-      $mail->AddAddress('bumacodejhay@gmail.com');
-      $mail->AddCC('ejhaybumacod26@gmail.com');
-      if(!$mail->Send()) {
-        echo json_encode(array('type' => 'success', 'message' => 'Overtime applied successfully <br /> Email not sent'));
-        exit;
+      $path_filename_ext .= $overtimeForm;
+    
+      if(move_uploaded_file($temp_name,$path_filename_ext)) {
+    
+        $conn = $this->connect_mysql();
+        $query = $conn->prepare("INSERT INTO tbl_overtime SET employeeno='$employeeno', reasons='$reasons', date_filed='$date_filed', ot_from='$ot_from', ot_to='$ot_to', no_of_hrs='$no_of_hrs', ot_date='$ot_date', statuss='Pending', approved_by='', file_name = '$overtimeForm', remarks=''");
+        $query->execute();
+    
+    
+        $qry2 = $conn->prepare("SELECT id,department,firstname,lastname FROM tbl_employee WHERE employeeno='$employeeno'");
+        $qry2->execute();
+        $row = $qry2->fetch();
+    
+        $department = $row['department'];
+        $firstname = $row['firstname'];
+        $lastname = utf8_decode($row['lastname']);
+        // $id = $row['id'];
+    
+        $qry3 = $conn->prepare("SELECT dept_head_email FROM contactinfo WHERE employeeno='$employeeno'");
+        $qry3->execute();
+        $row2 = $qry3->fetch();
+    
+    
+          require 'Exception.php';
+          require 'PHPMailer.php';
+          require 'SMTP.php';
+          require 'PHPMailerAutoload.php';
+    
+          // $mail = new PHPMailer();
+          // $mail->IsSMTP();
+          // $mail->SMTPDebug = 0;
+          // $mail->SMTPAuth = true;
+          // $mail->Host = "mail.panamed.com.ph";
+          // $mail->IsHTML(true);
+          // $mail->Username = "no-reply@panamed.com.ph";
+          // $mail->Password = "Unimex123!";
+          // $mail->SetFrom("no-reply@panamed.com.ph", "");
+          // $mail->Subject = "Overtime Application";
+          // $msg = $firstname." ".$lastname." applied Overtime From: ".$ot_date." (".$ot_from.") To: ".$ot_date_to." (".$ot_to.")\n\nReason: ".$reasons;
+          // $mail->Body = $msg;
+          // $dept_head_email = $row2['dept_head_email'];
+          // $mail->AddAddress($dept_head_email);
+          // if(!$mail->Send()) {
+          //     echo "Mailer Error: " . $mail->ErrorInfo;
+          // } else {
+          //     echo "success";
+          // }
+    
+          $mail = new PHPMailer();
+          $mail->IsSMTP();
+          $mail->SMTPDebug = 0;
+          $mail->SMTPAuth = true;
+          $mail->Host = "smtp.ipower.com";
+          $mail->IsHTML(true);
+          $mail->Username = "no-reply@panamed.com.ph";
+          $mail->Password = "Unimex123!!";
+          $mail->SetFrom("no-reply@panamed.com.ph", "");
+          $dept_head_email = $row2['dept_head_email'];
+          
+          $message = $firstname." ".$lastname." applied Overtime From: ".$ot_from." To: ".$ot_to." on  " .$ot_date. "<br />Reason: ".$reasons;
+          $mail->Subject = "Overtime Application";
+          $mail->Body = $message;
+          $mail->isHTML(true);
+          $mail->AddAddress('bumacodejhay@gmail.com');
+          $mail->AddCC('ejhaybumacod26@gmail.com');
+          if(!$mail->Send()) {
+            echo json_encode(array('type' => 'success', 'message' => 'Overtime applied successfully <br /> Email not sent'));
+            exit;
+          } else {
+            echo json_encode(array('type' => 'success', 'message' => 'Overtime applied successfully <br /> Email sent'));
+            exit;
+          }
       } else {
-        echo json_encode(array('type' => 'success', 'message' => 'Overtime applied successfully <br /> Email sent'));
+        echo json_encode(array('type' => 'error', 'message' => 'An error has occured upon uploading the form. Try again later.'));
         exit;
       }
+
+    } else {
+      echo json_encode(array('type' => 'error', 'message' => 'Approved overtime application is required'));
+      exit;
+    }
+
+    
 
   }
 
@@ -149,12 +177,16 @@ class crud extends db_conn_mysql
           $data['ot_to'] = $x['ot_to'];
           $data['no_of_hrs'] = $x['no_of_hrs'];
           $data['ot_date'] = $x['ot_date'];
-          $data['ot_date_to'] = $x['ot_date_to'];
           $data['status'] = $x['statuss'];
           if($x['statuss']=="Pending"){
-            $data['action'] = "<center><button type='button' onclick='delete_myot(".$x['idd'].")' class='btn btn-sm btn-danger'><i class='fa fa-trash'></i> Delete</button></center>";
+            $data['action'] = '<center class="d-flex justify-content-around">
+              <button title="View details" onclick="open_ot('.$x['id'].',\''.$x['firstname'].'\',\''.$x['lastname'].'\',\''.$x['job_title'].'\',\''.$x['reasons'].'\',\''.$x['date_filed'].'\',\''.$x['ot_from'].'\',\''.$x['ot_to'].'\',\''.$x['no_of_hrs'].'\',\''.$x['ot_date'].'\',\''.$x['statuss'].'\',\''.$x['remarks'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-eye fa-eye"></i></button>
+              <button type="button" onclick="delete_myot('.$x['idd'].')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+            </center>';
           }else{
-            $data['action'] = "<center><button disabled='' type='button' class='btn btn-sm btn-danger'><i class='fa fa-trash'></i> Delete</button></center>";
+            $data['action'] = '<center class="d-flex justify-content-around">
+            <button title="View details" onclick="open_ot('.$x['id'].',\''.$x['firstname'].'\',\''.$x['lastname'].'\',\''.$x['job_title'].'\',\''.$x['reasons'].'\',\''.$x['date_filed'].'\',\''.$x['ot_from'].'\',\''.$x['ot_to'].'\',\''.$x['no_of_hrs'].'\',\''.$x['ot_date'].'\',\''.$x['statuss'].'\',\''.$x['remarks'].'\',\''.$x['employeeno'].'\')" class="btn btn-sm btn-success"><i class="fas fa-eye fa-eye"></i></button>
+            <button disabled class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button></center>';
           }
           
 

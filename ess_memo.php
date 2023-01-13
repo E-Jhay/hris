@@ -128,7 +128,7 @@ $count = $leaves->countLeaves($empno);
 <input type="hidden" id="employeenum" value="<?php echo $empno ?>" name="">
 <input type="hidden" id="currentUser" value="<?php echo $_SESSION['employeeno'] ?>" name="">
 <input type="hidden" id="department" value="<?php echo $_SESSION['department'] ?>" name="">
-<input type="text" id="action" name="">
+<input type="hidden" id="action" name="">
 <input type="hidden" id="explanation" name="">
 
 </body>
