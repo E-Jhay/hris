@@ -204,6 +204,7 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+			  "scrollX": true,
               "ajax" : "controller/controller.announcement.php?load_news&news=all",
               "columns" : [
                     
@@ -223,6 +224,7 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+			  "scrollX": true,
               "ajax" : "controller/controller.announcement.php?load_news&news=department",
               "columns" : [
                     

@@ -6,7 +6,7 @@ class crud extends db_conn_mysql
 
   function acknowledgeMemo() {
     $conn=$this->connect_mysql();
-    $query = $conn->prepare("UPDATE tbl_memo SET status = 'acknowledged' WHERE end_date > DATE(NOW()) AND status = 'active' AND notice_to_explain = 'no'");
+    $query = $conn->prepare("UPDATE tbl_memo SET status = 'acknowledged' WHERE end_date < DATE(NOW()) AND status = 'active' AND notice_to_explain = 'no'");
     $query->execute();
   }
 

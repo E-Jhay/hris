@@ -252,6 +252,7 @@ function btnreports(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+			  "scrollX": true,
               "ajax" : "controller/controller.otapp.php?loadallot&filter_status="+filter_status,
               "columns" : [
         
@@ -289,6 +290,7 @@ function btnreports(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+			  "scrollX": true,
               "ajax" : "controller/controller.otapp.php?loadallot2&filter_status="+filter_status_report+"&filter_from="+filter_from+"&filter_to="+filter_to,
               "columns" : [
         

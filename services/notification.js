@@ -37,6 +37,7 @@ $(document).ready(function(){
         "bPaginate": true,
         "bLengthChange": false,
         "pagination": false,
+			  "scrollX": true,
         "ajax" : "controller/controller.notifications.php?loadnotifleave&currentUser="+currentUser,
         "columns" : [
               
@@ -58,6 +59,7 @@ $(document).ready(function(){
         "bPaginate": true,
         "bLengthChange": false,
         "pagination": false,
+        "scrollX": true,
         "ajax" : "controller/controller.notifications.php?loadNotifOmnibus&currentUser="+currentUser,
         "columns" : [
               
@@ -79,6 +81,7 @@ $(document).ready(function(){
         "bPaginate": true,
         "bLengthChange": false,
         "pagination": false,
+        "scrollX": true,
         "ajax" : "controller/controller.notifications.php?loadNotifOvertime&currentUser="+currentUser,
         "columns" : [
               

@@ -33,6 +33,7 @@ function loadpayslip(employeeno){
       "bLengthChange": true,
       "pagination": true,
       "pageLength": 5,
+      "scrollX": true,
       "ajax" : "controller/controller.payslip.php?loadpayslip_ess&employeeno="+employeeno,
       "columns" : [
             

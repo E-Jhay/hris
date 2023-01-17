@@ -80,6 +80,7 @@ function load_performance_evaluation(){
         "bPaginate": true,
         "bLengthChange": true,
         "pagination": true,
+        "scrollX": true,
         "ajax" : "controller/controller.performance_evaluation.php?load_performance_evaluation&employeeno=" + employeeno,
         "columns" : [
             { "data" : "employee_no"},

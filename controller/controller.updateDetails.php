@@ -92,7 +92,7 @@ class crud extends db_conn_mysql
         echo json_encode(array('message' => 'Address Updated Successfully', 'type' => 'success'));
         exit;
       } else {
-        echo json_encode(array('message' => 'There is an error during the ploading of file. Please try again', 'type' => 'error'));
+        echo json_encode(array('message' => 'There is an error during the uploading of file. Please try again', 'type' => 'error'));
         exit;
       }
     } else {

@@ -65,6 +65,7 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+              "scrollX": true,
               "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno + "&department=" + department + "&memo=employee&status=" + status,
               "columns" : [
                     
@@ -91,6 +92,7 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+              "scrollX": true,
               "ajax" : "controller/controller.essmemo.php?load_memoess&employeeno="+employeeno + "&department=" + department + "&memo=department&status=" + status2,
               "columns" : [
                     

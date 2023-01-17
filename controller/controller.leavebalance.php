@@ -32,15 +32,42 @@ class crud extends db_conn_mysql
         $q3->execute();
         $countvl = $q3->rowCount();
 
+        // $q4 = $conn->prepare("SELECT * FROM leave_balance WHERE employee_no='$employee_no' AND leave_type='ML'");
+        // $q4->execute();
+        // $countml = $q4->rowCount();
+
+        // $q5 = $conn->prepare("SELECT * FROM leave_balance WHERE employee_no='$employee_no' AND leave_type='PL'");
+        // $q5->execute();
+        // $countpl = $q5->rowCount();
+
+        // $q6 = $conn->prepare("SELECT * FROM leave_balance WHERE employee_no='$employee_no' AND leave_type='SPL'");
+        // $q6->execute();
+        // $countspl = $q6->rowCount();
+
         if($countsl <= 0){
-          $q4 = $conn->prepare("INSERT INTO leave_balance SET employee_no='$employee_no',leave_type='SL',balance='0',earned='no',what_month='0', stat='', decem=''");
-          $q4->execute();
+          $q7 = $conn->prepare("INSERT INTO leave_balance SET employee_no='$employee_no',leave_type='SL',balance='0',earned='no',what_month='0', stat='', decem=''");
+          $q7->execute();
         }
 
         if($countvl <= 0){
-          $q4 = $conn->prepare("INSERT INTO leave_balance SET employee_no='$employee_no',leave_type='VL',balance='0',earned='no',what_month='0', stat='', decem=''");
-          $q4->execute();
+          $q8 = $conn->prepare("INSERT INTO leave_balance SET employee_no='$employee_no',leave_type='VL',balance='0',earned='no',what_month='0', stat='', decem=''");
+          $q8->execute();
         }
+        
+        // if($countml <= 0){
+        //   $q9 = $conn->prepare("INSERT INTO leave_balance SET employee_no='$employee_no',leave_type='ML',balance='0',earned='no',what_month='0', stat='', decem=''");
+        //   $q9->execute();
+        // }
+
+        // if($countpl <= 0){
+        //   $q10 = $conn->prepare("INSERT INTO leave_balance SET employee_no='$employee_no',leave_type='PL',balance='0',earned='no',what_month='0', stat='', decem=''");
+        //   $q10->execute();
+        // }
+
+        // if($countspl <= 0){
+        //   $q11 = $conn->prepare("INSERT INTO leave_balance SET employee_no='$employee_no',leave_type='SPL',balance='0',earned='no',what_month='0', stat='', decem=''");
+        //   $q11->execute();
+        // }
 
         $query2 = $conn->prepare("SELECT what_month,balance FROM leave_balance WHERE employee_no='$employee_no' AND leave_type='SL'");
         $query2->execute();

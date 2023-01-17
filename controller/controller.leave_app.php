@@ -4,6 +4,12 @@ include 'controller.db.php';
 class crud extends db_conn_mysql
 {
 
+  function resetLeaveBalance() {
+    $conn=$this->connect_mysql();
+    $query = $conn->prepare("UPDATE leave_balance SET balance = 0, what_month = 0");
+    $query->execute();
+  }
+
   function employeelistadmin(){
 
       $employeenoo = $_GET['employeenoo'];
@@ -824,6 +830,9 @@ if(isset($_GET['count_reimbursement'])){
 
 if(isset($_GET['loadleavelistreport'])){
   $x->loadleavelistreport();
+}
+if(isset($_GET['resetLeaveBalance'])){
+  $x->resetLeaveBalance();
 }
 
 

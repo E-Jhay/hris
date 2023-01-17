@@ -107,6 +107,7 @@ function load_medical(){
         "bPaginate": true,
         "bLengthChange": true,
         "pagination": true,
+        "scrollX": true,
         "ajax" : "controller/controller.medical.php?load_medical&employeeno=" + employeeno,
         "columns" : [
             { "data" : "type"},

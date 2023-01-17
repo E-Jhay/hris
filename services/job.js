@@ -309,6 +309,7 @@ $(document).ready(function(){
               "bLengthChange": true,
               "pagination": true,
               "pageLength":50,
+              "scrollX": true,
               "ajax" : "controller/controller.job.php?loadjobtitle",
               "columns" : [
                     
@@ -331,6 +332,7 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+              "scrollX": true,
               "ajax" : "controller/controller.job.php?loademployment_status",
               "columns" : [
 
@@ -352,6 +354,7 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+              "scrollX": true,
               "ajax" : "controller/controller.job.php?loadjobcategory",
               "columns" : [
 

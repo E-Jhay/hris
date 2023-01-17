@@ -229,3 +229,7 @@ td.acknowledged{
 	padding: .3rem .5rem;
 	border-radius: 20px;
 }
+
+.dataTables_scrollBody thead tr[role="row"]{
+    visibility: collapse !important;
+}

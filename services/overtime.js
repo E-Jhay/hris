@@ -237,6 +237,7 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+			  "scrollX": true,
               "ajax" : "controller/controller.overtime.php?loadmyot&employeeno="+employeeno+"&status="+status,
               "columns" : [
         

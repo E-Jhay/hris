@@ -116,25 +116,25 @@ function read_notifications(){
     $query->execute();
     $row = $query->fetch();
 
-    $query1 = $conn->prepare("SELECT marriage_contract FROM marriage_contract WHERE employee_number='$employeeno'");
-    $query1->execute();
-    $marriage_temp = $query1->fetch();
-    $marriage_contract = $marriage_temp ? $marriage_temp : array('marriage_contract' => '');
+    // $query1 = $conn->prepare("SELECT marriage_contract FROM marriage_contract WHERE employee_number='$employeeno'");
+    // $query1->execute();
+    // $marriage_temp = $query1->fetch();
+    // $marriage_contract = $marriage_temp ? $marriage_temp : array('marriage_contract' => '');
 
-    $query2 = $conn->prepare("SELECT dependent FROM dependents WHERE employee_number='$employeeno'");
-    $query2->execute();
-    $dependent_temp = $query2->fetch();
-    $dependent = $dependent_temp ? $dependent_temp : array('dependent' => '');
+    // $query2 = $conn->prepare("SELECT dependent FROM dependents WHERE employee_number='$employeeno'");
+    // $query2->execute();
+    // $dependent_temp = $query2->fetch();
+    // $dependent = $dependent_temp ? $dependent_temp : array('dependent' => '');
 
-    $query3 = $conn->prepare("SELECT additional_id FROM additional_id WHERE employee_number='$employeeno'");
-    $query3->execute();
-    $additional_id_temp = $query3->fetch();
-    $additional_id = $additional_id_temp ? $additional_id_temp : array('additional_id' => '');
+    // $query3 = $conn->prepare("SELECT additional_id FROM additional_id WHERE employee_number='$employeeno'");
+    // $query3->execute();
+    // $additional_id_temp = $query3->fetch();
+    // $additional_id = $additional_id_temp ? $additional_id_temp : array('additional_id' => '');
 
-    $query4 = $conn->prepare("SELECT proof_of_billing FROM proof_of_billing WHERE employee_number='$employeeno'");
-    $query4->execute();
-    $proof_of_billing_temp = $query4->fetch();
-    $proof_of_billing = $proof_of_billing_temp ? $proof_of_billing_temp : array('proof_of_billing' => '');
+    // $query4 = $conn->prepare("SELECT proof_of_billing FROM proof_of_billing WHERE employee_number='$employeeno'");
+    // $query4->execute();
+    // $proof_of_billing_temp = $query4->fetch();
+    // $proof_of_billing = $proof_of_billing_temp ? $proof_of_billing_temp : array('proof_of_billing' => '');
     
     $firstname = $row['firstname'] ?  $row['firstname'] : '';
     $lastname = $row['lastname'] ? utf8_decode($row['lastname']) : '';
@@ -149,7 +149,7 @@ function read_notifications(){
     session_start();
     $username = $_SESSION['username'];
     $password = $_SESSION['password'];
-    echo json_encode(array("firstname"=>$firstname,"lastname"=>$lastname,"middlename"=>$middlename,"imagepic"=>$imagepic,"employeeno"=>$employeeno,"dateofbirth"=>$dateofbirth,"marital_status"=>$marital_status,"gender"=>$gender,"date_hired"=>$date_hired,"nationality"=>$nationality,"username"=>$username,"password"=>$password, "marriage_contract" => $marriage_contract['marriage_contract'], "dependent" => $dependent['dependent'], "additional_id" => $additional_id['additional_id'], "proof_of_billing" => $proof_of_billing['proof_of_billing']));
+    echo json_encode(array("firstname"=>$firstname,"lastname"=>$lastname,"middlename"=>$middlename,"imagepic"=>$imagepic,"employeeno"=>$employeeno,"dateofbirth"=>$dateofbirth,"marital_status"=>$marital_status,"gender"=>$gender,"date_hired"=>$date_hired,"nationality"=>$nationality,"username"=>$username,"password"=>$password));
   }
 
   function changepassword(){

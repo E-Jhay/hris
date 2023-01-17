@@ -361,6 +361,7 @@ function exportEvaluation(){
               "bLengthChange": true,
               "pagination": true,
               "pageLength":50,
+			  "scrollX": true,
               "ajax" : "controller/controller.reports.php?loademployeereport&type="+type+"&from="+from+"&to="+to,
               "columns" : [
                     

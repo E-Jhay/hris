@@ -34,6 +34,7 @@ $(document).ready(function(){
               "bLengthChange": true,
               "pagination": true,
               "pageLength":50,
+              "scrollX": true,
               "ajax" : "controller/controller.announcement.php?load_audit",
               "columns" : [
                     

@@ -94,7 +94,7 @@ require_once "header.php";
   </div>
 
   <form name="civilStatusForm" id="civilStatusForm" enctype="multipart/form-data">
-    <table class="table-condensed" id="civilStatusTable" style="width: 100%; float: left; padding: 1em">
+    <table class="table-condensed" id="civilStatusTable" style="width: 100%;">
       <tr>
         <td>
           <b>Status:</b>
@@ -123,7 +123,7 @@ require_once "header.php";
 	</form>
 
   <form name="addressForm" id="addressForm" enctype="multipart/form-data">
-    <table class="table-condensed" id="addressTable" style="width: 100%; float: left; padding: 1em">
+    <table class="table-condensed" id="addressTable" style="width: 100%;">
       <tr>
         <td><h4>Address</h4></td>
         <input type="hidden" id="employeeno" value="<?php echo $_SESSION['employeeno']; ?>" name="employeeno">

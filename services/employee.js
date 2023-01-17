@@ -78,7 +78,8 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
-              "pageLength":50,
+              "pageLength":10,
+			  "scrollX": true,
               "ajax" : "controller/controller.employee.php?loademployee&statusdd="+statusdd,
               "columns" : [
 

@@ -189,7 +189,7 @@ $(document).ready(function(){
         data:{
           id: id
         },success:function(){
-          $.Toast("Successfully Deleted", errorToast);
+          $.Toast("Successfully Deleted", successToast);
           $('#tbl_leavetype').DataTable().destroy();
           load_tbl_leavetype();
         }
@@ -242,6 +242,7 @@ $(document).ready(function(){
               "bPaginate": false,
               "bLengthChange": false,
               "pagination": false,
+              "scrollX": true,
               "ajax" : "controller/controller.leavemanage.php?load_leaveemployee&employeeno="+employeeno,
               "columns" : [
                     
@@ -352,7 +353,7 @@ function myForeach(item) {
           emp_leavebal: emp_leavebal,
           employee_no: employee_no
         },success:function(){
-          $.Toast("Successfully Deleted", errorToast);
+          $.Toast("Successfully Deleted", successToast);
           $('#tbl_leave').DataTable().destroy();
           load_leave();
           $('#leave_modal').modal('hide');
@@ -388,6 +389,7 @@ function myForeach(item) {
               "bLengthChange": true,
               "pagination": true,
               "pageLength":50,
+              "scrollX": true,
               "ajax" : "controller/controller.leavemanage.php?load_leavebalance",
               "columns" : [
                     
@@ -416,6 +418,7 @@ function myForeach(item) {
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+              "scrollX": true,
               "ajax" : "controller/controller.leavemanage.php?load_leavemonitoring",
               "columns" : [
                     
@@ -444,6 +447,7 @@ function myForeach(item) {
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+              "scrollX": true,
               "ajax" : "controller/controller.leavemanage.php?load_leavetype",
               "columns" : [
                     

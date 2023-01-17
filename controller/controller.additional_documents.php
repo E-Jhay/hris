@@ -265,23 +265,23 @@ function update(){
 
 $x = new crud();
 
-if(isset($_GET['demp_stat'])){
-$x->demp_stat();
-}
-if(isset($_GET['dcompany'])){
-$x->dcompany();
-}
-if(isset($_GET['ddepartment'])){
-$x->ddepartment();
-}
-if(isset($_GET['selectcontact'])){
-$x->selectcontact();
-}
-if(isset($_GET['update'])){
-$x->update();
-}
+// if(isset($_GET['demp_stat'])){
+// $x->demp_stat();
+// }
+// if(isset($_GET['dcompany'])){
+// $x->dcompany();
+// }
+// if(isset($_GET['ddepartment'])){
+// $x->ddepartment();
+// }
+// if(isset($_GET['selectcontact'])){
+// $x->selectcontact();
+// }
+// if(isset($_GET['update'])){
+// $x->update();
+// }
 
-if(isset($_GET['selectAdditionalDocuments'])){
-  $x->selectAdditionalDocuments();
-}
+// if(isset($_GET['selectAdditionalDocuments'])){
+//   $x->selectAdditionalDocuments();
+// }
  ?>

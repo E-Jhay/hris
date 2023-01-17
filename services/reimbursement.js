@@ -186,6 +186,7 @@ function load_myreimburse(statuss){
 		"bPaginate": true,
 		"bLengthChange": true,
 		"pagination": true,
+		"scrollX": true,
 		"ajax" : "controller/controller.reimburse.php?load_myreimburse&type="+type+"&employeeno="+employeeno+"&statuss="+statuss,
 		"columns" : [
 			

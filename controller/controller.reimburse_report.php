@@ -4,6 +4,17 @@ include 'controller.db.php';
 class crud extends db_conn_mysql
 {
 
+  function resetOmnibus() {
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("UPDATE tbl_employee SET reimbursement_bal = 0");
+    $query->execute();
+  }
+  function addOmnibus() {
+    $conn = $this->connect_mysql();
+    $query = $conn->prepare("UPDATE tbl_employee SET reimbursement_bal = 3500");
+    $query->execute();
+  }
+
   function employeelistadmin(){
 
       $employeenoo = $_GET['employeenoo'];
@@ -404,6 +415,12 @@ if(isset($_GET['count_reimbursement'])){
 }
 if(isset($_GET['uploadreimbursement'])){
   $x->uploadreimbursement();
+}
+if(isset($_GET['resetOmnibus'])){
+  $x->resetOmnibus();
+}
+if(isset($_GET['addOmnibus'])){
+  $x->addOmnibus();
 }
 
  ?>

@@ -686,6 +686,7 @@ $(document).ready(function(){
 			"bPaginate": true,
 			"bLengthChange": true,
 			"pagination": true,
+			"scrollX": true,
 			"ajax" : "controller/controller.leave.php?loadmyleave&employeeno="+employeeno+"&status="+status,
 			"columns" : [
 					

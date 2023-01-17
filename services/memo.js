@@ -220,6 +220,7 @@ function delete_memo_callback(data){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+              "scrollX": true,
               "ajax" : "controller/controller.memo.php?load_memo&memo=employee&status=" + status,
               "columns" : [
                     
@@ -247,6 +248,7 @@ function delete_memo_callback(data){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+              "scrollX": true,
               "ajax" : "controller/controller.memo.php?load_memo&memo=department&status=" + status2,
               "columns" : [
                     

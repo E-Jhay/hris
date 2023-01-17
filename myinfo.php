@@ -116,7 +116,7 @@ $count = $leaves->countLeaves($empno);
         <div class="container">
           <div class="row mb-4">
             <div class="col d-flex justify-content-center">
-                <div class="text-center" style="height: 180px; width: 180px; border: 1px dashed #a7a7a7; cursor: pointer; margin-bottom: 4em">
+                <div class="text-center" style="height: 180px; width: 180px; border: 1px dashed #a7a7a7; cursor: pointer;">
                   <img class="mb-4" title="Profile Picture" src="" id="personal_image" width="100%" height="100%">
                   <input type="hidden" class="form-control" id="file_name" name="file_name">
                   <span style="font-size: 18px;">Profile Picture</span>

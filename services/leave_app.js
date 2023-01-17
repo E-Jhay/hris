@@ -1055,7 +1055,8 @@ $(document).ready(function(){
 			"bInfo": true,
 			"bPaginate": true,
 			"bLengthChange": true,
-			"pagination": true,
+			"pagination": true,              
+			"scrollX": true,
 			"ajax" : "controller/controller.leave_app.php?loadleavelist&employeenoo="+employeenoo+"&stat="+stat,
 			"columns" : [
 					
@@ -1180,6 +1181,7 @@ $(document).ready(function(){
 				"bPaginate": true,
 				"bLengthChange": true,
 				"pagination": true,
+				"scrollX": true,
 				"ajax" : "controller/controller.leave_app.php?loadleavelistreport&filter_type="+filter_type+"&filter_from="+filter_from+"&filter_to="+filter_to,
 				"columns" : [
 						

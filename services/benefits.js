@@ -95,6 +95,7 @@ function load_dependent(){
         "bPaginate": true,
         "bLengthChange": true,
         "pagination": true,
+        "scrollX": true,
         "ajax" : "controller/controller.benefits.php?load_dependent&type=hr&employeeno=" + employeeno,
         "columns" : [
             { "data" : "name"},

@@ -121,6 +121,7 @@ function delete_payslip_callback(data){
               "bLengthChange": true,
               "pagination": true,
               "pageLength": 20,
+              "scrollX": true,
               "ajax" : "controller/controller.upload.php?loadpayslip",
               "columns" : [
                     

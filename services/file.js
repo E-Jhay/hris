@@ -198,6 +198,7 @@ function save_callback(){
               "bLengthChange": true,
               "pagination": true,
               "pageLength": 20,
+			  "scrollX": true,
               "ajax" : "controller/controller.file.php?loadfile&employeeno="+employeeno,
               "columns" : [
                     

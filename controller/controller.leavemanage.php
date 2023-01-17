@@ -169,9 +169,9 @@ class crud extends db_conn_mysql
           $x[$key] = addslashes($input_arr);
 
           }
-          if ($x['balance'] < 0){
-            $x['balance'] = 0;
-          }
+          // if ($x['balance'] < 0){
+          //   $x['balance'] = 0;
+          // }
           $data = array();
           $id = "emp_leavebal".$x['id'];
           $data['leave_type'] = $x['leave_type'];
@@ -298,16 +298,16 @@ class crud extends db_conn_mysql
           $query2 = $conn->prepare("SELECT balance FROM leave_balance WHERE employee_no='$employeeno' AND leave_type='SL'");
           $query2->execute();
           $row2 = $query2->fetch();
-          if($row2['balance']=="" || $row2['balance'] < 0){
-            $row2['balance'] = 0;
-          }
+          // if($row2['balance']=="" || $row2['balance'] < 0){
+          //   $row2['balance'] = 0;
+          // }
 
           $query3 = $conn->prepare("SELECT balance FROM leave_balance WHERE employee_no='$employeeno' AND leave_type='VL'");
           $query3->execute();
           $row3 = $query3->fetch();
-          if($row3['balance']=="" || $row3['balance'] < 0){
-            $row3['balance'] = 0;
-          }
+          // if($row3['balance']=="" || $row3['balance'] < 0){
+          //   $row3['balance'] = 0;
+          // }
 
           $data['employeeno'] = $x['emp_no'];
           $full_name = $x['lastname'].", ".$x['firstname'];
@@ -315,16 +315,36 @@ class crud extends db_conn_mysql
 
           // date today = 10-06-2022
           // date hired = 04-10-2018
-          $date_today = date('Y-m-d');
-          $em = date('m',strtotime($date_today));
-          $ed = date('d',strtotime($date_today));
+          // $date_today = date('Y-m-d');
+          // $em = date('m',strtotime($date_today));
+          // $ed = date('d',strtotime($date_today));
 
-          $years=  date('Y',strtotime($date_today)) - date('Y', strtotime($x['date_hired'])); // 2018 - 2022 = 4
-          // $months = date('m',strtotime($date_today)) - date('m', strtotime($x['date_hired'])); // 06 - 10 = 4
-          $months = date('m',strtotime($date_today)); // 06 - 10 = 4
-          $days = date('d',strtotime($date_today)) - date('d', strtotime($x['date_hired'])); // 01 - 10 = 9
+          // $years=  date('Y',strtotime($date_today)) - date('Y', strtotime($x['date_hired'])); // 2018 - 2022 = 4
+          // // $months = date('m',strtotime($date_today)) - date('m', strtotime($x['date_hired'])); // 06 - 10 = 4
+          // $months = date('m',strtotime($date_today)); // 06 - 10 = 4
+          // $days = date('d',strtotime($date_today)) - date('d', strtotime($x['date_hired'])); // 01 - 10 = 9
 
-          $diffmonth = $years * 12 + $months; // 5 x 12 + 7 = 67
+          // $diffmonth = $years * 12 + $months; // 5 x 12 + 7 = 67
+
+          $hiredate = $x['date_hired'];
+          $htime = strtotime($hiredate);
+
+          $years = date('Y') - date('Y', $htime);
+
+          if (date('m') < date('m', $htime)) {
+              $years--;
+              $months = date('n') + 12 - date('n', $htime);
+          }
+          elseif (date('m') == date('m', $htime))
+          {
+              if (date('d') < date('d', $htime))
+              {
+                  $years--;
+                  $months = 11;    
+              }
+              else $months = 0;
+          }
+          else $months = date('n') - date('n', $htime);
 
           // if($days < 0){ // if days less than to 0
 
@@ -342,7 +362,11 @@ class crud extends db_conn_mysql
           // echo $x['date_hired']."<br>";
             
 
-            $data['noofyears'] = $years;
+            if($years <= 0){
+              $data['noofyears'] = $months. " months";
+            } else {
+              $data['noofyears'] = $years. " years and ". $months. " months";
+            }
             $data['s_leave'] = $row2['balance'];
             $data['v_leave'] =  $row3['balance'];
             $data['date_hired'] =  date('F d, Y', strtotime($x['date_hired']));

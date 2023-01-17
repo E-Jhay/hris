@@ -12,22 +12,22 @@ $(document).ready(function(){
 		$('#personal_image').on('click', function(){
 			$('#profile').click();
 		});
-		$('#dependent_image').css('cursor','pointer');
-		$('#dependent_image').on('click', function(){
-			$('#dependent').click();
-		});
-		$('#marriage_contract_image').css('cursor','pointer');
-		$('#marriage_contract_image').on('click', function(){
-			$('#marriageContract').click();
-		});
-		$('#additional_id_image').css('cursor','pointer');
-		$('#additional_id_image').on('click', function(){
-			$('#additionalId').click();
-		});
-		$('#proofOFBilling_image').css('cursor','pointer');
-		$('#proofOFBilling_image').on('click', function(){
-			$('#proofOFBilling').click();
-		});
+		// $('#dependent_image').css('cursor','pointer');
+		// $('#dependent_image').on('click', function(){
+		// 	$('#dependent').click();
+		// });
+		// $('#marriage_contract_image').css('cursor','pointer');
+		// $('#marriage_contract_image').on('click', function(){
+		// 	$('#marriageContract').click();
+		// });
+		// $('#additional_id_image').css('cursor','pointer');
+		// $('#additional_id_image').on('click', function(){
+		// 	$('#additionalId').click();
+		// });
+		// $('#proofOFBilling_image').css('cursor','pointer');
+		// $('#proofOFBilling_image').on('click', function(){
+		// 	$('#proofOFBilling').click();
+		// });
 
 		$('#profile').on('change',function(){
 				if (this.files && this.files[0]) {
@@ -38,42 +38,42 @@ $(document).ready(function(){
             reader.readAsDataURL(this.files[0]);
         }
 		});
-		$('#dependent').on('change',function(){
-				if (this.files && this.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#dependent_image').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(this.files[0]);
-        }
-		});
-		$('#marriageContract').on('change',function(){
-				if (this.files && this.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#marriage_contract_image').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(this.files[0]);
-        }
-		});
-		$('#additionalId').on('change',function(){
-				if (this.files && this.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#additional_id_image').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(this.files[0]);
-        }
-		});
-		$('#proofOFBilling').on('change',function(){
-				if (this.files && this.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#proofOFBilling_image').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(this.files[0]);
-        }
-		});
+		// $('#dependent').on('change',function(){
+		// 		if (this.files && this.files[0]) {
+        //     var reader = new FileReader();
+        //     reader.onload = function (e) {
+        //         $('#dependent_image').attr('src', e.target.result);
+        //     }
+        //     reader.readAsDataURL(this.files[0]);
+        // }
+		// });
+		// $('#marriageContract').on('change',function(){
+		// 		if (this.files && this.files[0]) {
+        //     var reader = new FileReader();
+        //     reader.onload = function (e) {
+        //         $('#marriage_contract_image').attr('src', e.target.result);
+        //     }
+        //     reader.readAsDataURL(this.files[0]);
+        // }
+		// });
+		// $('#additionalId').on('change',function(){
+		// 		if (this.files && this.files[0]) {
+        //     var reader = new FileReader();
+        //     reader.onload = function (e) {
+        //         $('#additional_id_image').attr('src', e.target.result);
+        //     }
+        //     reader.readAsDataURL(this.files[0]);
+        // }
+		// });
+		// $('#proofOFBilling').on('change',function(){
+		// 		if (this.files && this.files[0]) {
+        //     var reader = new FileReader();
+        //     reader.onload = function (e) {
+        //         $('#proofOFBilling_image').attr('src', e.target.result);
+        //     }
+        //     reader.readAsDataURL(this.files[0]);
+        // }
+		// });
 
 		$('#removeImage').on('click', (e) => {
 			e.preventDefault()

@@ -822,82 +822,82 @@ class crud extends db_conn_mysql
     
   }
 
-  // function sendNotificationEvaluation() {
-  //   // SEnd notification for employees who is for regularization and 18th month evaluation
-  //   $conn = $this->connect_mysql();
-  //   $stmt18Month = $conn->prepare("SELECT a.*,b.*,c.*,
-  //       YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-  //       LEFT JOIN contractinfo b ON a.id=b.emp_id
-  //       LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
-  //       WHERE (YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5))) AND (YEAR(date_hired) = YEAR(DATE(NOW() - INTERVAL 18 MONTH)) AND MONTH(date_hired) = MONTH(DATE(NOW() - INTERVAL 18 MONTH)) AND DAY(date_hired) >= DAY(DATE(NOW() - INTERVAL 18 MONTH))) ORDER BY a.lastname ASC");
-  //   $stmt18Month->execute();
-  //   $eighteenMonths = $stmt18Month->fetchAll();
+  function sendNotificationEvaluation() {
+    // SEnd notification for employees who is for regularization and 18th month evaluation
+    $conn = $this->connect_mysql();
+    $stmt18Month = $conn->prepare("SELECT a.*,b.*,c.*,
+        YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
+        LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+        LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno
+        WHERE (YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5))) AND (YEAR(date_hired) = YEAR(DATE(NOW() - INTERVAL 18 MONTH)) AND MONTH(date_hired) = MONTH(DATE(NOW() - INTERVAL 18 MONTH)) AND DAY(date_hired) >= DAY(DATE(NOW() - INTERVAL 18 MONTH))) ORDER BY a.lastname ASC");
+    $stmt18Month->execute();
+    $eighteenMonths = $stmt18Month->fetchAll();
 
-  //   $stmtRegular = $conn->prepare("SELECT a.*,b.*,c.*,
-  //       YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
-  //       LEFT JOIN contractinfo b ON a.id=b.emp_id
-  //       LEFT JOIN otherpersonalinfo c ON a.id=c.emp_id
-  //       WHERE (YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5))) AND (YEAR(date_hired) = YEAR(DATE(NOW() - INTERVAL 6 MONTH)) AND MONTH(date_hired) = MONTH(DATE(NOW() - INTERVAL 6 MONTH)) AND DAY(date_hired) >= DAY(DATE(NOW() - INTERVAL 6 MONTH))) ORDER BY a.lastname ASC");
-  //   $stmtRegular->execute();
-  //   $regulars = $stmtRegular->fetchAll();
+    $stmtRegular = $conn->prepare("SELECT a.*,b.*,c.*,
+        YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5)) as age FROM tbl_employee a
+        LEFT JOIN contractinfo b ON a.employeeno=b.employeeno
+        LEFT JOIN otherpersonalinfo c ON a.employeeno=c.employeeno
+        WHERE (YEAR(CURRENT_TIMESTAMP) - YEAR(c.dateofbirth) - (RIGHT(CURRENT_TIMESTAMP, 5) < RIGHT(c.dateofbirth, 5))) AND (YEAR(date_hired) = YEAR(DATE(NOW() - INTERVAL 6 MONTH)) AND MONTH(date_hired) = MONTH(DATE(NOW() - INTERVAL 6 MONTH)) AND DAY(date_hired) >= DAY(DATE(NOW() - INTERVAL 6 MONTH))) ORDER BY a.lastname ASC");
+    $stmtRegular->execute();
+    $regulars = $stmtRegular->fetchAll();
     
-  //   require 'Exception.php';
-  //   require 'PHPMailer.php';
-  //   require 'SMTP.php';
-  //   require 'PHPMailerAutoload.php';
+    require 'Exception.php';
+    require 'PHPMailer.php';
+    require 'SMTP.php';
+    require 'PHPMailerAutoload.php';
 
-  //   $mail = new PHPMailer();
-  //   $mail->IsSMTP();
-  //   $mail->SMTPDebug = 0;
-  //   $mail->SMTPAuth = true;
-  //   $mail->SMTPSecure = 'ssl';
-  //   $mail->Host = "smtp.gmail.com";
-  //   $mail->Port = 465;
-  //   $mail->IsHTML(true);
-  //   $mail->Username = "pmcmailchimp@gmail.com";
-  //   $mail->Password = "qyegdvkzvbjihbou";
-  //   $mail->SetFrom("no-reply@panamed.com.ph", "");
+    $mail = new PHPMailer();
+    $mail->IsSMTP();
+    $mail->SMTPDebug = 0;
+    $mail->SMTPAuth = true;
+    $mail->SMTPSecure = 'ssl';
+    $mail->Host = "smtp.gmail.com";
+    $mail->Port = 465;
+    $mail->IsHTML(true);
+    $mail->Username = "pmcmailchimp@gmail.com";
+    $mail->Password = "qyegdvkzvbjihbou";
+    $mail->SetFrom("no-reply@panamed.com.ph", "");
 
-  //   if(count($regulars) > 0 ) {
-  //     $namesRegulars = array();
-  //     $message = "<strong>Due for Evaluation - Regularization</strong><br />"; 
-  //     foreach($regulars as $regular) {
-  //       $message .= "<strong>Name: </strong>". " " .$regular['firstname']. " " .$regular['lastname']. "<br /><strong>Regularization Date: </strong>". date('Y-m-d', strtotime("+6 months", strtotime($regular['date_hired']))). "<br /><br />";
-  //     }
+    if(count($regulars) > 0 ) {
+      $namesRegulars = array();
+      $message = "<strong>Due for Evaluation - Regularization</strong><br />"; 
+      foreach($regulars as $regular) {
+        $message .= "<strong>Name: </strong>". " " .$regular['firstname']. " " .$regular['lastname']. "<br /><strong>Regularization Date: </strong>". date('Y-m-d', strtotime("+6 months", strtotime($regular['date_hired']))). "<br /><br />";
+      }
 
-  //     // Send notification for regularization evaluation of employees
-  //     $mail->Subject = "Due for Evaluation - Regularization";
-  //     $mail->Body = $message;
-  //     $mail->isHTML(true);
-  //     // $dept_head_email = $row2['dept_head_email'];
-  //     $mail->AddAddress('bumacodejhay@gmail.com');
-  //     if(!$mail->Send()) {
-  //       echo "Mailer Error: " . $mail->ErrorInfo;
-  //     } else {
-  //       echo "Success";
-  //     }
-  //   }
-  //   if(count($eighteenMonths) > 0 ) {
-  //     $namesEighteenMonths = array();
-  //     $message = "<strong>Due for Evaluation - 18th month Evaluation</strong><br />"; 
-  //     foreach($eighteenMonths as $eighteenMonth) {
-  //       $message .= "<strong>Name: </strong>". " " .$eighteenMonth['firstname']. " " .$eighteenMonth['lastname']. "<br /><strong>18th Month on: </strong>". date('Y-m-d', strtotime("+18 months", strtotime($eighteenMonth['date_hired']))). "<br /><br />";
-  //     }
+      // Send notification for regularization evaluation of employees
+      $mail->Subject = "Due for Evaluation - Regularization";
+      $mail->Body = $message;
+      $mail->isHTML(true);
+      // $dept_head_email = $row2['dept_head_email'];
+      $mail->AddAddress('bumacodejhay@gmail.com');
+      if(!$mail->Send()) {
+        echo "Mailer Error: " . $mail->ErrorInfo;
+      } else {
+        echo "Success";
+      }
+    }
+    if(count($eighteenMonths) > 0 ) {
+      $namesEighteenMonths = array();
+      $message = "<strong>Due for Evaluation - 18th month Evaluation</strong><br />"; 
+      foreach($eighteenMonths as $eighteenMonth) {
+        $message .= "<strong>Name: </strong>". " " .$eighteenMonth['firstname']. " " .$eighteenMonth['lastname']. "<br /><strong>18th Month on: </strong>". date('Y-m-d', strtotime("+18 months", strtotime($eighteenMonth['date_hired']))). "<br /><br />";
+      }
 
-  //     // Send notification for 18 month evaluation of employees
-  //     $mail->Subject = "Due for Evaluation - 18th month Evaluation";
-  //     $mail->Body = $message;
-  //     $mail->isHTML(true);
-  //     // $dept_head_email = $row2['dept_head_email'];
-  //     $mail->AddAddress('bumacodejhay@gmail.com');
-  //     if(!$mail->Send()) {
-  //       echo "Mailer Error: " . $mail->ErrorInfo;
-  //     } else {
-  //       echo "Success";
-  //     }
-  //   }
+      // Send notification for 18 month evaluation of employees
+      $mail->Subject = "Due for Evaluation - 18th month Evaluation";
+      $mail->Body = $message;
+      $mail->isHTML(true);
+      // $dept_head_email = $row2['dept_head_email'];
+      $mail->AddAddress('bumacodejhay@gmail.com');
+      if(!$mail->Send()) {
+        echo "Mailer Error: " . $mail->ErrorInfo;
+      } else {
+        echo "Success";
+      }
+    }
 
-  // }
+  }
 
 
 }
@@ -934,9 +934,9 @@ if(isset($_GET['generateEmployeeNumber'])){
 if(isset($_GET['updateEmployeeMasterfile'])){
   $x->updateEmployeeMasterfile();
 }
-// if(isset($_GET['sendNotificationEvaluation'])){
-//   $x->sendNotificationEvaluation();
-// }
+if(isset($_GET['sendNotificationEvaluation'])){
+  $x->sendNotificationEvaluation();
+}
 
 
 

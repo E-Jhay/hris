@@ -10,7 +10,7 @@
   <h6 class="admin_tab" id="master_employer" onclick="goto('previousemployer.php')"><i class="fas fa-lg fa-building"></i><span class="admin_tab_name">Previous Employer</span></h6>
   <h6 class="admin_tab" id="master_medical" onclick="goto('medical.php')"><i class="fas fa-lg fa-notes-medical"></i><span class="admin_tab_name">Medical</span></h6>
   <h6 class="admin_tab" id="master_file" onclick="goto('file_attach.php')"><i class="fas fa-lg fa-file"></i><span class="admin_tab_name">File</span></h6>
-  <h6 class="admin_tab" id="master_additional_documents" onclick="goto('additional_documents.php')"><i class="fas fa-lg fa-file"></i><span class="admin_tab_name">Additional Documents</span></h6>
+  <!-- <h6 class="admin_tab" id="master_additional_documents" onclick="goto('additional_documents.php')"><i class="fas fa-lg fa-file"></i><span class="admin_tab_name">Additional Documents</span></h6> -->
   <h6 class="admin_tab" id="master_performance_evaluaion" onclick="goto('performance_evaluation.php')"><i class="fas fa-lg fa-file"></i><span class="admin_tab_name">Performance Evaluation</span></h6>
   <br><br>
   <h6 class="admin_tab" id="" onclick="goto('employee.php')"><i class="fas fa-md fa-arrow-circle-left"></i><span class="admin_tab_name">Back to list</span></h6>

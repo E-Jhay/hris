@@ -232,6 +232,7 @@ $(document).ready(function(){
               "bPaginate": true,
               "bLengthChange": true,
               "pagination": true,
+              "scrollX": true,
               "ajax" : "controller/controller.org.php?load_locations",
               "columns" : [
                     
